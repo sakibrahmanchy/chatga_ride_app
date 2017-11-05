@@ -23,6 +23,7 @@ package com.demoriderctg.arif.demorider;
         import android.view.inputmethod.EditorInfo;
         import android.widget.AdapterView;
         import android.widget.AutoCompleteTextView;
+        import android.widget.Button;
         import android.widget.EditText;
         import android.widget.ImageView;
         import android.widget.TextView;
@@ -108,11 +109,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private static final float DEFAULT_ZOOM = 15f;
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
-            new LatLng(23.710610, 90.434909), new LatLng(23.888281, 90.390876));
+            new LatLng(54.69726685890506,-2.7379201682812226), new LatLng(55.38942944437183, -1.2456105979687226));
+    String CurrentLocation;
 
 
     //widgets
     private AutoCompleteTextView mSearchText;
+    private AutoCompleteTextView mSearchTextDestination;
+    private Button sendButton;
     private ImageView mGps;
 
     //vars
@@ -133,8 +137,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map_activity);
         mSearchText = (AutoCompleteTextView) findViewById(R.id.input_search);
+        mSearchTextDestination =(AutoCompleteTextView) findViewById(R.id.input_search2);
         mGps = (ImageView) findViewById(R.id.ic_gps);
-
+        sendButton = (Button) findViewById(R.id.btnSend);
         getLocationPermission();
 
     }
@@ -148,14 +153,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 .addApi(Places.PLACE_DETECTION_API)
                 .enableAutoManage(this, this)
                 .build();
-
+        mSearchTextDestination.setOnItemClickListener(mAutocompleteClickListener);
         mSearchText.setOnItemClickListener(mAutocompleteClickListener);
 
         mPlaceAutocompleteAdapter = new PlaceAutocompleteAdapter(this, mGoogleApiClient,
                 LAT_LNG_BOUNDS, null);
 
         mSearchText.setAdapter(mPlaceAutocompleteAdapter);
-
+        mSearchTextDestination.setAdapter(mPlaceAutocompleteAdapter);
         mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
@@ -178,6 +183,21 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             public void onClick(View view) {
                 Log.d(TAG, "onClick: clicked gps icon");
                 getDeviceLocation();
+                mSearchText.setText("");
+                mSearchText.setText(CurrentLocation);
+            }
+        });
+
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Getting URL to the Google Directions API
+                String url = getDirectionsUrl(source, dest);
+
+                DownloadTask downloadTask = new DownloadTask();
+
+                // Start downloading json data from Google Directions API
+                downloadTask.execute(url);
             }
         });
 
@@ -223,7 +243,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         if(task.isSuccessful()){
                             Log.d(TAG, "onComplete: found location!");
                             Location currentLocation = (Location) task.getResult();
-                         ;
+                            CurrentLocation = currentLocation.getProvider();
                             markerPoints.add(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
 
                             moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
@@ -346,23 +366,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             try{
                 mPlace = new PlaceInfo();
                 mPlace.setName(place.getName().toString());
-                Log.d(TAG, "onResult: name: " + place.getName());
                 mPlace.setAddress(place.getAddress().toString());
-                Log.d(TAG, "onResult: address: " + place.getAddress());
-//                mPlace.setAttributions(place.getAttributions().toString());
-//                Log.d(TAG, "onResult: attributions: " + place.getAttributions());
                 mPlace.setId(place.getId());
-                Log.d(TAG, "onResult: id:" + place.getId());
                 mPlace.setLatlng(place.getLatLng());
-                Log.d(TAG, "onResult: latlng: " + place.getLatLng());
                 mPlace.setRating(place.getRating());
-                Log.d(TAG, "onResult: rating: " + place.getRating());
                 mPlace.setPhoneNumber(place.getPhoneNumber().toString());
-                Log.d(TAG, "onResult: phone number: " + place.getPhoneNumber());
                 mPlace.setWebsiteUri(place.getWebsiteUri());
-                Log.d(TAG, "onResult: website uri: " + place.getWebsiteUri());
 
-                Log.d(TAG, "onResult: place: " + mPlace.toString());
             }catch (NullPointerException e){
                 Log.e(TAG, "onResult: NullPointerException: " + e.getMessage() );
             }
@@ -380,12 +390,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 getDeviceLocation();
 
                 // Getting URL to the Google Directions API
-                String url = getDirectionsUrl(source, dest);
+           //     String url = getDirectionsUrl(source, dest);
 
-                DownloadTask downloadTask = new DownloadTask();
+            //    DownloadTask downloadTask = new DownloadTask();
 
                 // Start downloading json data from Google Directions API
-                downloadTask.execute(url);
+           //     downloadTask.execute(url);
 
             }
          //  moveCamera(new LatLng(place.getViewport().getCenter().latitude,
