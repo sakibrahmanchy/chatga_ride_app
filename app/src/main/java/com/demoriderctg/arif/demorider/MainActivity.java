@@ -27,11 +27,21 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 private  void init(){
-  Button btnmp =(Button)findViewById(R.id.btnMap);
-    btnmp.setOnClickListener(new View.OnClickListener() {
+
+  Button btnLogin =(Button)findViewById(R.id.btnLogin);
+
+    /*btnmp.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(MainActivity.this, MapActivity.class);
+            startActivity(intent);
+        }
+    });*/
+
+    btnLogin.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
         }
     });

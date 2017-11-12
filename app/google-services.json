@@ -1,0 +1,130 @@
+{
+  "project_info": {
+    "project_number": "707764250103",
+    "firebase_url": "https://chatgaa-ride.firebaseio.com",
+    "project_id": "chatgaa-ride",
+    "storage_bucket": "chatgaa-ride.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:707764250103:android:8203d3208c02abc9",
+        "android_client_info": {
+          "package_name": "com.majidsoft.navigationsample"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "707764250103-tgftliar5l3b1breftvclibru5t3gikn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUlumoP9HNAHy8lSTHVWavcrihYe0vNm8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:707764250103:android:9eec2ce744ea791f",
+        "android_client_info": {
+          "package_name": "com.demoriderctg.arif.demorider"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "707764250103-mdl6jl8h9sn44d6jaqbj2c8s6uvgi3g1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.demoriderctg.arif.demorider",
+            "certificate_hash": "96b2359b60a55a36dbf9cbb7881e77c4bec51cd9"
+          }
+        },
+        {
+          "client_id": "707764250103-tgftliar5l3b1breftvclibru5t3gikn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUlumoP9HNAHy8lSTHVWavcrihYe0vNm8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "707764250103-tgftliar5l3b1breftvclibru5t3gikn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:707764250103:android:43e934ca0523aac1",
+        "android_client_info": {
+          "package_name": "com.example.sakibrahman.googlemaptest1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "707764250103-no9mvucgtfh4cctafkl1nt3236hk0t77.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sakibrahman.googlemaptest1",
+            "certificate_hash": "96b2359b60a55a36dbf9cbb7881e77c4bec51cd9"
+          }
+        },
+        {
+          "client_id": "707764250103-tgftliar5l3b1breftvclibru5t3gikn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUlumoP9HNAHy8lSTHVWavcrihYe0vNm8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "707764250103-tgftliar5l3b1breftvclibru5t3gikn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
