@@ -46,6 +46,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "707764250103-nasqtkfdktsi5okogjbdviqav2pcvkms.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.demoriderctg.arif.demorider",
+            "certificate_hash": "21670a33d1dcdcbda138c602ae737d4dc7baaa78"
+          }
+        },
+        {
           "client_id": "707764250103-mdl6jl8h9sn44d6jaqbj2c8s6uvgi3g1.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

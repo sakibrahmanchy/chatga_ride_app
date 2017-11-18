@@ -23,7 +23,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         if(isServiceOk()){
-            init();
+            Intent intent = new Intent(MainActivity.this, MapActivity.class);
+            startActivity(intent);
+
+          //  init();
         }
     }
 private  void init(){

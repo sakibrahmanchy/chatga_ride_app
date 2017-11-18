@@ -75,7 +75,7 @@ public class PlaceAutocompleteAdapter
      * The autocomplete filter used to restrict queries to a specific set of place types.
      */
     private AutocompleteFilter mPlaceFilter;
-
+    public Context mContext;
     /**
      * Initializes with a resource for text rows and autocomplete query bounds.
      *
@@ -87,6 +87,7 @@ public class PlaceAutocompleteAdapter
         mGoogleApiClient = googleApiClient;
         mBounds = bounds;
         mPlaceFilter = filter;
+        this.mContext = context;
     }
 
     /**
