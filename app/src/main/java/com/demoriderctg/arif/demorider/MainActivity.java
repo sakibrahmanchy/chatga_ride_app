@@ -23,7 +23,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         if(isServiceOk()){
-            Intent intent = new Intent(MainActivity.this, MapActivity.class);
+           // Intent intent = new Intent(MainActivity.this, MapActivity.class);
+            Intent intent = new Intent(MainActivity.this, UserCheckActivity.class);
             startActivity(intent);
 
           //  init();
