@@ -19,19 +19,24 @@ public class RegistrationModel {
 
     @SerializedName("first_name")
     private String firstName;
-    @SerializedName("last_name")
+    @SerializedName("success")
+    private String success;
+    @SerializedName("lastName")
     private String lastName;
 
     @SerializedName("email")
     private String email;
+
     @SerializedName("phone_number")
     private String phoneNumber;
     @SerializedName("device_token")
     private String deviceToken;
     @SerializedName("gender")
     private String gender;
-    @SerializedName("birth_date")
+
+    @SerializedName("birthDate")
     private String birthDate;
+
     public RegistrationModel(String success,String firstName, String lastName, String email, String phoneNumber, String deviceToken, String gender, String birthDate) {
         this.firstName = firstName;
         this.lastName = lastName;

@@ -45,6 +45,7 @@ public interface ApiInterface {
                                    @Query("client_id") String clientId,
                                    @Query("client_secret") String clientSecret);
 
+
     @POST("api/v1/client")
     @FormUrlEncoded
     Call<RegistrationModel> signUpClient(@Field("first_name") String firstName,
@@ -59,5 +60,12 @@ public interface ApiInterface {
 //    @POST("/api/v1/client?")
 //    @FormUrlEncoded
 //    Call<RegistrationModel> signUpClient2();
+=======
+                                 @Field("birth_date") Date birthDate,
+                                 @Field("gender") String gender);
+
+    @POST("/api/v1/client?")
+    @FormUrlEncoded
+    Call<RegistrationModel> signUpClient2();
 
 }
