@@ -12,6 +12,8 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
+import ContactWithFirebase.Main;
+
 public class MainActivity extends AppCompatActivity {
 
 
@@ -29,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
 
           //  init();
         }
+
+        Main main = new Main();
+        main.CreateNewRiderFirebase();
     }
 private  void init(){
 
