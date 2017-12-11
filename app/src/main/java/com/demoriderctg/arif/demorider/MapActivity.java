@@ -16,8 +16,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -117,6 +120,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private SharedPreferences sharedpreferences;
     public static final String MyPREFERENCES = "MyPrefs" ;
 
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+
     //vars
     private Boolean mLocationPermissionsGranted = false;
     private GoogleMap mMap;
@@ -139,8 +145,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map_activity);
-     //   mSearchText = (AutoCompleteTextView) findViewById(R.id.input_search);
-     //   mSearchTextDestination =(AutoCompleteTextView) findViewById(R.id.input_search2);
+
+       drawerLayout = (DrawerLayout) findViewById(R.id.drawLayout);
+       actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,R.string.app_name,R.string.app_name);
+       drawerLayout.addDrawerListener(actionBarDrawerToggle);
+       actionBarDrawerToggle.syncState();
+        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);;
 
         sourceText = (TextView) findViewById(R.id.sourceText);
         destinationText =(TextView) findViewById(R.id.destinationText);
@@ -511,6 +521,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
+
+
+
+    //Menu
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(actionBarDrawerToggle.onOptionsItemSelected(item)){
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
 
 
