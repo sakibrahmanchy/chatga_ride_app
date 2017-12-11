@@ -7,6 +7,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import __Firebase.CallBackInstance.CallBackListener;
+import __Firebase.CallBackInstance.ICallbackMain;
 import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseWrapper;
 
@@ -18,9 +19,9 @@ public class GetCurrentRiderHistoryModel {
 
     private long HistoryID;
     private long ClientID;
-    private CallBackListener callBackListener = null;
+    private ICallbackMain callBackListener = null;
 
-    public GetCurrentRiderHistoryModel(long HistoryID, long ClientID, CallBackListener callBackListener){
+    public GetCurrentRiderHistoryModel(long HistoryID, long ClientID, ICallbackMain callBackListener){
         this.HistoryID = HistoryID;
         this.ClientID = ClientID;
         this.callBackListener = callBackListener;
@@ -31,12 +32,14 @@ public class GetCurrentRiderHistoryModel {
     private void Request(){
 
         final FirebaseWrapper firebaseWrapper = FirebaseWrapper.getInstance();
-        firebaseWrapper.FirebaseRootReference.child(FirebaseConstant.HISTORY)
-                .orderByChild(FirebaseConstant.CLIENT_HISTORY).equalTo(ClientID + FirebaseConstant.JOIN + HistoryID).addValueEventListener(new ValueEventListener() {
+        firebaseWrapper.FirebaseRootReference.child(FirebaseConstant.HISTORY).orderByChild(FirebaseConstant.CLIENT_HISTORY).equalTo(ClientID + FirebaseConstant.JOIN + HistoryID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.getChildren().iterator().hasNext()) {
-                    firebaseWrapper.getCurrentRidingHistoryModelInstance().LoadData(dataSnapshot.getChildren().iterator().next());
+
+                if(dataSnapshot.exists() && dataSnapshot.hasChildren()) {
+                    if (dataSnapshot.getChildren().iterator().hasNext()) {
+                        firebaseWrapper.getCurrentRidingHistoryModelInstance().LoadData(dataSnapshot.getChildren().iterator().next());
+                    }
                 }
             }
 
@@ -46,14 +49,12 @@ public class GetCurrentRiderHistoryModel {
             }
         });
 
-        firebaseWrapper.FirebaseRootReference.child(FirebaseConstant.HISTORY)
-                .orderByChild(FirebaseConstant.CLIENT_HISTORY).equalTo(ClientID + FirebaseConstant.JOIN + HistoryID).addListenerForSingleValueEvent(new ValueEventListener() {
+        firebaseWrapper.FirebaseRootReference.child(FirebaseConstant.HISTORY).orderByChild(FirebaseConstant.CLIENT_HISTORY).equalTo(ClientID + FirebaseConstant.JOIN + HistoryID).addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.d(FirebaseConstant.RIDING_HISTORY_LOADED, firebaseWrapper.getCurrentRidingHistoryModelInstance().HistoryID + "");
             }
-
             public void onCancelled(DatabaseError databaseError) {
                 Log.d(FirebaseConstant.RIDING_HISTORY_LOADED, databaseError.toString());
             }

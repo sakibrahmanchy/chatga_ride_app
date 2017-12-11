@@ -32,7 +32,7 @@ public class FirebaseRequest extends AppCompatActivity {
         thread.start();
     }
 
-    public void RequestForRide(final Pair<Double, Double> Source, final Pair<Double, Double> Destination, final CallBackListener callBackListener){
+    public void RequestForRide(final Pair<Double, Double> Source, final Pair<Double, Double> Destination, final ICallbackMain callBackListener){
 
         Thread thread = new Thread(){
             @Override
@@ -43,10 +43,17 @@ public class FirebaseRequest extends AppCompatActivity {
         thread.start();
     }
 
-    public void SentNotificationToRider(RiderModel Rider){
+    public void SentNotificationToRider(final RiderModel Rider, final ClientModel Client, final Pair<Double, Double> Source, final Pair<Double, Double> Destination, ICallbackMain callbackListener){
 
-        SentNotificationToRider pendingTask = new SentNotificationToRider(this);
-        pendingTask.execute("1104006", "1104006", "1104006", "1104006", "1104006", "1104006");
+        SentNotificationToRider pendingTask = new SentNotificationToRider(this, callbackListener);
+        pendingTask.execute(
+                    Long.toString(Client.ClientID),
+                    Long.toString(Rider.RiderID),
+                    Double.toString(Source.first),
+                    Double.toString(Source.second),
+                    Double.toString(Destination.first),
+                    Double.toString(Destination.second)
+                );
         finish();
     }
 
@@ -61,7 +68,7 @@ public class FirebaseRequest extends AppCompatActivity {
         thread.start();
     }
 
-    public void GetRiderLocation(final RiderModel Rider, final CallBackListener callBackListener){
+    public void GetRiderLocation(final RiderModel Rider, final ICallbackMain callBackListener){
 
         Thread thread = new Thread(){
             @Override
@@ -72,7 +79,7 @@ public class FirebaseRequest extends AppCompatActivity {
         thread.start();
     }
 
-    public void GetCurrentRiderHistoryModel(final long HistoryID, final long ClientID, final CallBackListener callBackListener){
+    public void GetCurrentRiderHistoryModel(final long HistoryID, final long ClientID, final ICallbackMain callBackListener){
 
         Thread thread = new Thread(){
           @Override

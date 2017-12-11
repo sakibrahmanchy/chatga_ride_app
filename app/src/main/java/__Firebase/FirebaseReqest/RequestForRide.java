@@ -8,6 +8,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import __Firebase.CallBackInstance.CallBackListener;
+import __Firebase.CallBackInstance.ICallbackMain;
 import __Firebase.FirebaseModel.RiderModel;
 import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseWrapper;
@@ -18,11 +19,11 @@ import __Firebase.FirebaseWrapper;
 
 public class RequestForRide {
 
-    private CallBackListener callBackListener = null;
+    private ICallbackMain callBackListener = null;
     private Pair<Double, Double> Source;
     private Pair<Double, Double> Destination;
 
-    public RequestForRide(Pair<Double, Double> Source, Pair<Double, Double> Destination, CallBackListener callBackListener){
+    public RequestForRide(Pair<Double, Double> Source, Pair<Double, Double> Destination, ICallbackMain callBackListener){
         this.Source = Source;
         this.Destination = Destination;
         this.callBackListener = callBackListener;
@@ -37,10 +38,13 @@ public class RequestForRide {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot snp: dataSnapshot.getChildren()){
-                    RiderModel riderModel = new RiderModel();
-                    riderModel.LoadData(snp);
-                    //MainActivity.firebaseWrapper.getRiderViewModelInstance().FindNearestRider(riderModel);
+
+                if(dataSnapshot.exists() && dataSnapshot.hasChildren()) {
+                    for (DataSnapshot snp : dataSnapshot.getChildren()) {
+                        RiderModel riderModel = new RiderModel();
+                        riderModel.LoadData(snp);
+                        FirebaseWrapper.getInstance().getRiderViewModelInstance().FindNearestRider(riderModel);
+                    }
                 }
             }
 
@@ -54,15 +58,13 @@ public class RequestForRide {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //Log.d(FirebaseConstant.NEAREST_RIDER, MainActivity.firebaseWrapper.getRiderViewModelInstance().NearestRider.RiderID + "");
                 if (callBackListener != null){
-                    callBackListener.onRequestForRide(true);
+                    callBackListener.OnRequestForRide(true);
                 }
             }
-
             public void onCancelled(DatabaseError databaseError) {
                 Log.d(FirebaseConstant.NEAREST_RIDER_ERROR, databaseError.toString());
-                callBackListener.onRequestForRide(false);
+                callBackListener.OnRequestForRide(false);
             }
         });
     }
