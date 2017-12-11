@@ -43,7 +43,6 @@ public class RegistrationModel {
         this.success=success;
     }
 
-
     public String getFirstName() {
         return firstName;
     }
