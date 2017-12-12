@@ -37,6 +37,8 @@ public class CurrentRidingHistoryModel {
     public int RideCanceledByRider;
 
     public CurrentRidingHistoryModel(){
+        this.StartingLocation = new Location();
+        this.EndingLocation = new Location();
     }
 
     public CurrentRidingHistoryModel(long _HistoryID, long _ClientID, long  _RiderID, String _Client_History, String _Rider_History, Pair<Double, Double> _StartingLocation, Pair<Double, Double> _EndingLocation, long _CostSoFar, int _IsRideStart, int _IsRideFinished, int _RideCanceledByClient, int _RideCanceledByRider){

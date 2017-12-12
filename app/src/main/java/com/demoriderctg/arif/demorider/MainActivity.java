@@ -15,6 +15,8 @@ import com.google.android.gms.common.GoogleApiAvailability;
 
 import ContactWithFirebase.Main;
 import __Firebase.FirebaseModel.ClientModel;
+import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
+import __Firebase.FirebaseModel.RiderModel;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,6 +41,21 @@ public class MainActivity extends AppCompatActivity {
         //ClientModel clientModel = new ClientModel();
         //clientModel.ClientID = 20001;
         //main.GetCurrentRiderHistoryModel(clientModel, 30001);
+        RiderModel riderModel = new RiderModel();
+        riderModel.RiderID = 10001;
+
+        ClientModel clientModel = new ClientModel();
+        clientModel.ClientID = 20001;
+
+        CurrentRidingHistoryModel currentRidingHistoryModel = new CurrentRidingHistoryModel();
+        currentRidingHistoryModel.HistoryID = 30001;
+        currentRidingHistoryModel.RideCanceledByClient = 1;
+
+        //main.RequestForRiderLocation(riderModel);
+        //main.GetCurrentRidingHistoryID(clientModel);
+        //main.ChangeDestinationLocation(currentRidingHistoryModel, clientModel, Pair.create(8787d, 7878d));
+        //main.SetRidingCostSoFar(clientModel, 987654332);
+        //main.CancelRideByClient(currentRidingHistoryModel, clientModel);
     }
 
     private  void init(){

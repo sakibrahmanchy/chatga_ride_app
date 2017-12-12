@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import __Firebase.CallBackInstance.CallBackListener;
+import __Firebase.CallBackInstance.ICallbackMain;
 import __Firebase.FirebaseModel.RiderModel;
 import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseWrapper;
@@ -20,9 +21,9 @@ import __Firebase.FirebaseWrapper;
 public class RequestForRiderLocation {
 
     private RiderModel Rider = null;
-    private CallBackListener callBackListener = null;
+    private ICallbackMain callBackListener = null;
 
-    public RequestForRiderLocation(RiderModel Rider, CallBackListener callBackListener){
+    public RequestForRiderLocation(RiderModel Rider, ICallbackMain callBackListener){
         this.Rider = Rider;
         this.callBackListener = callBackListener;
 
@@ -42,7 +43,6 @@ public class RequestForRiderLocation {
                 if(dataSnapshot.exists()) {
                     if (dataSnapshot.getChildren().iterator().hasNext()) {
                         DataSnapshot dsp = dataSnapshot.getChildren().iterator().next();
-
                         if (dsp.getChildren().iterator().hasNext()) {
 
                             Map<String, Object> RequestForUpdateLocation = new HashMap<>();

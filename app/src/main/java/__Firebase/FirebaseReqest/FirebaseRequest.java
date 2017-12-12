@@ -57,7 +57,7 @@ public class FirebaseRequest extends AppCompatActivity {
         finish();
     }
 
-    public void CancelRideByClient(final CurrentRidingHistoryModel HistoryModel, final ClientModel Client, final CallBackListener callBackListener){
+    public void CancelRideByClient(final CurrentRidingHistoryModel HistoryModel, final ClientModel Client, final ICallbackMain callBackListener){
 
         Thread thread = new Thread(){
             @Override
@@ -90,18 +90,18 @@ public class FirebaseRequest extends AppCompatActivity {
         thread.start();
     }
 
-    public void SetRidingCostSoFar(final long ClientId, final long Cost, final CallBackListener callBackListener){
+    public void SetRidingCostSoFar(final ClientModel Client, final ICallbackMain callBackListener){
 
         Thread thread = new Thread(){
             @Override
             public void run(){
-                new SetRidingCostSoFar(ClientId, Cost, callBackListener);
+                new SetRidingCostSoFar(Client, callBackListener);
             }
         };
         thread.start();
     }
 
-    public void ChangeDestinationLocation(final CurrentRidingHistoryModel HistoryModel, final ClientModel ClientModel, final CallBackListener callBackListener){
+    public void ChangeDestinationLocation(final CurrentRidingHistoryModel HistoryModel, final ClientModel ClientModel, final ICallbackMain callBackListener){
 
         Thread thread = new Thread(){
             @Override
@@ -112,7 +112,7 @@ public class FirebaseRequest extends AppCompatActivity {
         thread.start();
     }
 
-    public void GetCurrentRidingHistoryID(final ClientModel Client, final CallBackListener callBackListener){
+    public void GetCurrentRidingHistoryID(final ClientModel Client, final ICallbackMain callBackListener){
 
         Thread thread = new Thread(){
             @Override
@@ -123,18 +123,18 @@ public class FirebaseRequest extends AppCompatActivity {
         thread.start();
     }
 
-    public void UpdateCostForCurrentRide(final ClientModel Client, final long Cost, final CallBackListener callBackListener){
+    public void UpdateCostForCurrentRide(final ClientModel Client, final ICallbackMain callBackListener){
 
         Thread thread = new Thread(){
             @Override
             public void run(){
-                new UpdateCostForCurrentRide(Client, Cost, callBackListener);
+                new UpdateCostForCurrentRide(Client, callBackListener);
             }
         };
         thread.start();
     }
 
-    public void RequestForRiderLocation(final RiderModel Rider, final CallBackListener callBackListener){
+    public void RequestForRiderLocation(final RiderModel Rider, final ICallbackMain callBackListener){
 
         Thread thread = new Thread(){
             @Override

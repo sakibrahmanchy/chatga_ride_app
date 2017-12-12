@@ -7,6 +7,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 
 import __Firebase.CallBackInstance.CallBackListener;
+import __Firebase.CallBackInstance.ICallbackMain;
+import __Firebase.FirebaseModel.ClientModel;
 import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseWrapper;
 
@@ -16,13 +18,11 @@ import __Firebase.FirebaseWrapper;
 
 public class SetRidingCostSoFar {
 
-    private long ClientID;
-    private long Cost;
-    private CallBackListener callBackListener = null;
+    private ClientModel Client = null;
+    private ICallbackMain callBackListener = null;
 
-    public SetRidingCostSoFar(long ClientID, long Cost, CallBackListener callBackListener){
-        this.Cost = Cost;
-        this.ClientID = ClientID;
+    public SetRidingCostSoFar(ClientModel Client, ICallbackMain callBackListener){
+        this.Client = Client;
         this.callBackListener = callBackListener;
 
         Request();
@@ -31,15 +31,14 @@ public class SetRidingCostSoFar {
     public void Request(){
 
         FirebaseWrapper firebaseWrapper = FirebaseWrapper.getInstance();
-        firebaseWrapper.FirebaseRootReference.child(FirebaseConstant.CLIENT)
-                .orderByChild(FirebaseConstant.CLIENT_ID).equalTo(ClientID).addListenerForSingleValueEvent(new ValueEventListener() {
+        firebaseWrapper.FirebaseRootReference.child(FirebaseConstant.CLIENT).orderByChild(FirebaseConstant.CLIENT_ID).equalTo(Client.ClientID).addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 if(dataSnapshot.getChildren().iterator().hasNext()) {
                     HashMap<String, Object> CostSoFar = new HashMap<>();
-                    CostSoFar.put(FirebaseConstant.COST_OF_CURRENT_RIDE, Cost);
+                    CostSoFar.put(FirebaseConstant.COST_OF_CURRENT_RIDE, Client.CostOfCurrentRide);
                     dataSnapshot.getChildren().iterator().next().getRef().updateChildren(CostSoFar);
                 }
             }

@@ -9,6 +9,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 
 import __Firebase.CallBackInstance.CallBackListener;
+import __Firebase.CallBackInstance.ICallbackMain;
 import __Firebase.FirebaseModel.ClientModel;
 import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
 import __Firebase.FirebaseUtility.FirebaseConstant;
@@ -22,9 +23,9 @@ public class CancelRideByClient {
 
     private CurrentRidingHistoryModel HistoryModel = null;
     private ClientModel Client = null;
-    private CallBackListener callBackListener = null;
+    private ICallbackMain callBackListener = null;
 
-    public CancelRideByClient(CurrentRidingHistoryModel HistoryModel, ClientModel Client, CallBackListener callBackListener){
+    public CancelRideByClient(CurrentRidingHistoryModel HistoryModel, ClientModel Client, ICallbackMain callBackListener){
         this.HistoryModel = HistoryModel;
         this.Client = Client;
         this.callBackListener = callBackListener;
@@ -45,12 +46,16 @@ public class CancelRideByClient {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.getChildren().iterator().hasNext()) {
-                    HashMap<String, Object> CancelRideByRider = new HashMap<>();
-                    CancelRideByRider.put(FirebaseConstant.CANCEL_RIDE_BY_CLIENT, FirebaseConstant.SET_CANCEL_RIDE_BY_CLIENT);
-                    dataSnapshot.getChildren().iterator().next().getRef().updateChildren(CancelRideByRider);
 
-                    Log.d(FirebaseConstant.CANCEL_RIDE_BY_CLIENT, FirebaseConstant.CANCEL_RIDE_BY_CLIENT);
+                if(dataSnapshot.exists() && dataSnapshot.hasChildren()) {
+                    if (dataSnapshot.getChildren().iterator().hasNext()) {
+
+                        HashMap<String, Object> CancelRideByRider = new HashMap<>();
+                        CancelRideByRider.put(FirebaseConstant.CANCEL_RIDE_BY_CLIENT, HistoryModel.RideCanceledByClient);
+                        dataSnapshot.getChildren().iterator().next().getRef().updateChildren(CancelRideByRider);
+
+                        Log.d(FirebaseConstant.CANCEL_RIDE_BY_CLIENT, FirebaseConstant.CANCEL_RIDE_BY_CLIENT);
+                    }
                 }
             }
 

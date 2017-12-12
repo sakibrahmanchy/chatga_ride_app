@@ -9,6 +9,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 
 import __Firebase.CallBackInstance.CallBackListener;
+import __Firebase.CallBackInstance.ICallbackMain;
 import __Firebase.FirebaseModel.ClientModel;
 import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseWrapper;
@@ -19,14 +20,12 @@ import __Firebase.FirebaseWrapper;
 
 public class UpdateCostForCurrentRide {
 
-    private CallBackListener callBackListener = null;
+    private ICallbackMain callBackListener = null;
     private ClientModel Client = null;
-    private long Cost = 0;
 
-    public UpdateCostForCurrentRide(ClientModel Client, long Cost, CallBackListener callBackListener){
+    public UpdateCostForCurrentRide(ClientModel Client, ICallbackMain callBackListener){
         this.Client = Client;
         this.callBackListener = callBackListener;
-        this.Cost = Cost;
 
         Request();
     }
@@ -38,13 +37,18 @@ public class UpdateCostForCurrentRide {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d(FirebaseConstant.COST_OF_CURRENT_RIDE, FirebaseConstant.COST_OF_CURRENT_RIDE);
-                HashMap<String, Object> UpdatedCost = new HashMap<>();
-                UpdatedCost.put(FirebaseConstant.CURRENT_RIDING_HISTORY_ID, Cost);
-                DataSnapshot snp = dataSnapshot.getChildren().iterator().next();
-                snp.getRef().updateChildren(UpdatedCost);
-            }
 
+                if(dataSnapshot.exists() && dataSnapshot.hasChildren()) {
+                    if(dataSnapshot.getChildren().iterator().hasNext()) {
+                        HashMap<String, Object> UpdatedCost = new HashMap<>();
+                        UpdatedCost.put(FirebaseConstant.COST_OF_CURRENT_RIDE, Client.CostOfCurrentRide);
+                        DataSnapshot snp = dataSnapshot.getChildren().iterator().next();
+                        snp.getRef().updateChildren(UpdatedCost);
+
+                        Log.d(FirebaseConstant.COST_OF_CURRENT_RIDE, FirebaseConstant.COST_OF_CURRENT_RIDE);
+                    }
+                }
+            }
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.d(FirebaseConstant.COST_OF_CURRENT_RIDE, databaseError.toString());
