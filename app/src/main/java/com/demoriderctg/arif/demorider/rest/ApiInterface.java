@@ -9,6 +9,8 @@ import com.demoriderctg.arif.demorider.models.ApiModels.RegistrationModel;
 import com.demoriderctg.arif.demorider.models.ApiModels.User;
 import com.demoriderctg.arif.demorider.models.ApiModels.UserCheckResponse;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -29,21 +31,12 @@ public interface ApiInterface {
     @GET("api/v1/user_exists")
     Call<UserCheckResponse> checkUser(@Query("phoneNumber") String phoneNumber);
 
-    @GET("api/v1/client/")
-    Call<User> getUserDetails(@Query("phoneNumber") String phoneNumber, @Header("Authorization") String authHeader);
 
-    @POST("oauth/token")
-    @FormUrlEncoded
-    Call<AuthToken> getAuthToken(@Field("client_id") String clientId,
-                                 @Field("client_secret") String clientSecret,
-                                 @Field("grant_type") String grantType,
-                                 @Field("username") String username,
-                                 @Field("password") String password);
-
-    @GET("/access_token")
+    @GET("access_token")
     Call<AuthToken> getAccessToken(@Query("phone_number") String phoneNumber,
-                                   @Query("client_id") String clientId,
-                                   @Query("client_secret") String clientSecret);
+                                      @Query("client_id") String clientId,
+                                      @Query("client_secret") String clientSecret);
+
 
     @POST("api/v1/client")
     @FormUrlEncoded
@@ -56,8 +49,5 @@ public interface ApiInterface {
                                  @Field("birth_date") String birthDate,
                                  @Field("gender") String gender);
 
-//    @POST("/api/v1/client?")
-//    @FormUrlEncoded
-//    Call<RegistrationModel> signUpClient2();
 
 }

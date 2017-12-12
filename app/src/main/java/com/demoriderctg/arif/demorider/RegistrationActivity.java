@@ -38,10 +38,12 @@ import com.demoriderctg.arif.demorider.models.ApiModels.UserCheckResponse;
 import com.demoriderctg.arif.demorider.rest.ApiClient;
 import com.demoriderctg.arif.demorider.rest.ApiInterface;
 
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -141,10 +143,12 @@ public class RegistrationActivity extends Activity {
         mEmailView.setError(null);
         mPasswordView.setError(null);
         Username.setError(null);
+
         email = mEmailView.getText().toString();
         password = mPasswordView.getText().toString();
         userName = Username.getText().toString();
         phoneNumber = mPhoneNumber.getText().toString();
+
         String confrimPassowrd = mConfirmPasswordView.getText().toString();
         int selectedId = mGender.getCheckedRadioButtonId();
 
@@ -229,6 +233,7 @@ public class RegistrationActivity extends Activity {
                         Snackbar.LENGTH_SHORT).show();
                 dialog.dismiss();
                 switch(statusCode){
+
                     case 201:
                         String responseCode = response.body().getSuccess();
                         Snackbar.make(findViewById(android.R.id.content), responseCode,
@@ -250,12 +255,24 @@ public class RegistrationActivity extends Activity {
 
 
                         } catch (Exception e) {
-                            Snackbar.make(findViewById(android.R.id.content), e.getMessage(),
+                            Snackbar.make(findViewById(android.R.id.content), e.getMessage(), Snackbar.LENGTH_LONG).show();
+                        }
+                    case 200:
+                        responseCode = response.body().getSuccess().toString();
+                        if(responseCode.equals("user-found")){
+                            //No phone verification required, redirect to home
+                            Intent intent = new Intent(RegistrationActivity.this, UserCheckActivity.class);
+                            intent.putExtra("phoneNumber",phoneNumber);
+                            startActivity(intent);
+
+                        }else{
+                            Snackbar.make(findViewById(android.R.id.content), "Error Verifying.",
                                     Snackbar.LENGTH_SHORT).show();
                         }
                         break;
                     case 500:
                         try {
+
                             //JSONObject error = new JSONObject(response.errorBody().string());
                             //String errorCode = error.getString("message");
                             String error = response.errorBody().string();
@@ -264,7 +281,8 @@ public class RegistrationActivity extends Activity {
 
                         } catch (Exception e) {
                             Snackbar.make(findViewById(android.R.id.content), e.getMessage(),
-                                    Snackbar.LENGTH_SHORT).show();
+
+                           Snackbar.LENGTH_SHORT).show();
                         }
                         break;
                     default:
@@ -278,6 +296,9 @@ public class RegistrationActivity extends Activity {
                             Snackbar.make(findViewById(android.R.id.content), e.getMessage(),
                                     Snackbar.LENGTH_SHORT).show();
                         }
+
+                        Snackbar.make(findViewById(android.R.id.content), "Sorry, network error.",
+                                Snackbar.LENGTH_SHORT).show();
                         break;
                 }
 //                if(status.equals("true") && statusCode == 200){

@@ -21,14 +21,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        if(isServiceOk()){
-           // Intent intent = new Intent(MainActivity.this, MapActivity.class);
-            Intent intent = new Intent(MainActivity.this, UserCheckActivity.class);
-            startActivity(intent);
-
-          //  init();
-        }
+        init();
+//        if(isServiceOk()){
+//           // Intent intent = new Intent(MainActivity.this, MapActivity.class);
+//            Intent intent = new Intent(MainActivity.this, UserCheckActivity.class);
+//            startActivity(intent);
+//
+//
+//        }
     }
 private  void init(){
 
@@ -45,7 +45,7 @@ private  void init(){
     btnLogin.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            Intent intent = new Intent(MainActivity.this, UserCheckActivity.class);
             startActivity(intent);
         }
     });
