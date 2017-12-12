@@ -3,6 +3,7 @@ package com.demoriderctg.arif.demorider;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -137,7 +138,10 @@ public class LoginActivity extends AppCompatActivity implements
         // [START initialize_auth]
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
-
+        Intent intent = getIntent();
+        String phoneNumber = intent.getStringExtra("phoneNumber");
+        mPhoneNumberField.setText(phoneNumber);
+        mStartButton.performClick();
         // Initialize phone auth callbacks
         // [START phone_auth_callbacks]
         mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
