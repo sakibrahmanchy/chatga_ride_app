@@ -12,8 +12,6 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
-import ContactWithFirebase.Main;
-
 public class MainActivity extends AppCompatActivity {
 
 
@@ -32,8 +30,8 @@ public class MainActivity extends AppCompatActivity {
           //  init();
         }
 
-        Main main = new Main();
-        main.CreateNewRiderFirebase();
+        //Main main = new Main();
+        //main.CreateNewRiderFirebase();
     }
 private  void init(){
 
@@ -50,7 +48,7 @@ private  void init(){
     btnLogin.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            Intent intent = new Intent(MainActivity.this, PhoneVerificationActivity.class);
             startActivity(intent);
         }
     });

@@ -1,4 +1,4 @@
-package com.demoriderctg.arif.demorider.models.ApiModels;
+package com.demoriderctg.arif.demorider.models.ApiModels.AccessTokenModels;
 
 import android.content.Context;
 import android.content.SharedPreferences;

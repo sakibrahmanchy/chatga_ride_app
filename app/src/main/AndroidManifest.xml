@@ -40,7 +40,7 @@
             android:name=".MapActivity"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".PhoneVerificationActivity"
             android:label="@string/title_activity_login"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             android:windowSoftInputMode="adjustNothing"/>

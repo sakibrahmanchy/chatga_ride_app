@@ -1,40 +1,31 @@
 package com.demoriderctg.arif.demorider;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.app.Activity;
-import android.app.LoaderManager.LoaderCallbacks;
-
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.AsyncTask;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.demoriderctg.arif.demorider.models.ApiModels.RegistrationModel;
-import com.demoriderctg.arif.demorider.models.ApiModels.UserCheckResponse;
+import com.demoriderctg.arif.demorider.models.ApiModels.RegistrationModels.RegistrationModel;
 import com.demoriderctg.arif.demorider.rest.ApiClient;
 import com.demoriderctg.arif.demorider.rest.ApiInterface;
 
@@ -43,11 +34,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
+import __Firebase.FirebaseWrapper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -73,23 +63,42 @@ public class RegistrationActivity extends Activity {
     private EditText Username;
     private View mProgressView;
     private View mLoginFormView;
-    private EditText mPhoneNumber;
     private RadioGroup mGender;
     private EditText mConfirmPasswordView;
-    private  String email,phoneNumber,userName,password,gender;
+    private  String email,phoneNumber,userName,password,gender,deviceToken,birthDate;
     private   ApiInterface apiService ;
     private ProgressDialog dialog;
+    private EditText birthDayText;
+    private DatePickerDialog birthDayPickerDialog;
+    private SimpleDateFormat dateFormatter;
+
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
         // Set up the login form.
+
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-        mPhoneNumber =(EditText) findViewById(R.id.phoneNumber);
         mGender = (RadioGroup) findViewById(R.id.gender_radio_group);
         mConfirmPasswordView = (EditText) findViewById(R.id.confirmPassword);
         mPasswordView = (EditText) findViewById(R.id.password);
         Username = (EditText) findViewById(R.id.userName);
+        dateFormatter = new SimpleDateFormat("YYYY-MM-DD", Locale.US);
+        phoneNumber = getIntent().getStringExtra("phoneNumber");
+
+        birthDayText = (EditText) findViewById(R.id.birthday_edittext);
+        birthDayText.setInputType(InputType.TYPE_NULL);
+        birthDayText.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                birthDayPickerDialog.show();
+            }
+        });
+
+        setDateTimeField();
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -147,7 +156,8 @@ public class RegistrationActivity extends Activity {
         email = mEmailView.getText().toString();
         password = mPasswordView.getText().toString();
         userName = Username.getText().toString();
-        phoneNumber = mPhoneNumber.getText().toString();
+        deviceToken = FirebaseWrapper.getDeviceToken();
+        birthDate = birthDayText.getText().toString();
 
         String confrimPassowrd = mConfirmPasswordView.getText().toString();
         int selectedId = mGender.getCheckedRadioButtonId();
@@ -210,6 +220,25 @@ public class RegistrationActivity extends Activity {
     }
 
 
+    private void setDateTimeField() {
+
+
+        Calendar newCalendar = Calendar.getInstance();
+
+        birthDayPickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar newDate = Calendar.getInstance();
+                Log.d(TAG, dayOfMonth+"");
+                newDate.set(year, monthOfYear, dayOfMonth);
+                birthDayText.setText(year+"-"+monthOfYear+"-"+dayOfMonth);
+            }
+
+        },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+
+    }
+
+
     public void UserRegistration(){
 
         apiService =
@@ -221,7 +250,7 @@ public class RegistrationActivity extends Activity {
         dialog.show();
 
        // Call<RegistrationModel> call = apiService.signUpClient(userName,"shaikat",email,"01815003723",password,"","",gender);
-        Call<RegistrationModel> call = apiService.signUpClient(userName,userName,email,phoneNumber,password, "12121312312","11/12/13",gender);
+        Call<RegistrationModel> call = apiService.signUpClient(userName,userName,email,phoneNumber,password, deviceToken, birthDate,gender);
 
         call.enqueue(new Callback<RegistrationModel>() {
             @Override
@@ -236,8 +265,13 @@ public class RegistrationActivity extends Activity {
 
                     case 201:
                         String responseCode = response.body().getSuccess();
-                        Snackbar.make(findViewById(android.R.id.content), responseCode,
-                                Snackbar.LENGTH_SHORT).show();
+
+                        String clientId = getString(R.string.APP_CLIENT);
+                        String clientSecret = getString(R.string.APP_CLIENT_SECRET);
+
+                        LoginHelper loginHelper = new LoginHelper(RegistrationActivity.this);
+                        loginHelper.AccessTokenCall(clientId, clientSecret,phoneNumber);
+
                         break;
                     case 406:
                         try {
@@ -272,10 +306,10 @@ public class RegistrationActivity extends Activity {
                         break;
                     case 500:
                         try {
-
                             //JSONObject error = new JSONObject(response.errorBody().string());
                             //String errorCode = error.getString("message");
                             String error = response.errorBody().string();
+                            Log.d(TAG, error);
                             Snackbar.make(findViewById(android.R.id.content), error,
                                     Snackbar.LENGTH_LONG).show();
 
@@ -288,6 +322,7 @@ public class RegistrationActivity extends Activity {
                     default:
                         try {
                             String error = response.errorBody().string();
+                            Log.d(TAG, error);
 //                            String errorCode = error.getString("message");
                             Snackbar.make(findViewById(android.R.id.content), error,
                                     Snackbar.LENGTH_SHORT).show();

@@ -1,11 +1,10 @@
-package com.demoriderctg.arif.demorider.models.ApiModels;
+package com.demoriderctg.arif.demorider.models.ApiModels.AccessTokenModels;
 
 /**
  * Created by Sakib Rahman on 11/18/2017.
  */
 
 import android.content.Context;
-import android.content.SharedPreferences;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -18,25 +17,26 @@ public class AuthToken {
     @SerializedName("status")
     private String status;
 
-    @SerializedName("data")
-    private AccessTokenData data;
+    @SerializedName("access_token")
+    private String accessToken;
 
     @SerializedName("message")
     private String message;
 
-    public AuthToken(Context context, AccessTokenData data, String status, String message) {
 
-        this.data = data;
+    public AuthToken(Context context, String accessToken, String status, String message) {
+
+        this.accessToken = accessToken;
         this.status = status;
         this.message = message;
     }
 
-    public AccessTokenData getdata() {
-        return data;
+    public String getAccessToken() {
+        return accessToken;
     }
 
-    public void setdata(AccessTokenData data) {
-        this.data = data;
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 
 
@@ -56,7 +56,6 @@ public class AuthToken {
     public void setMessage(String message) {
         this.message = message;
     }
-
 
 }
 

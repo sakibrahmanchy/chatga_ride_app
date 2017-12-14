@@ -1,4 +1,4 @@
-package com.demoriderctg.arif.demorider.models.ApiModels;
+package com.demoriderctg.arif.demorider.models.ApiModels.RegistrationModels;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -11,8 +11,6 @@ public class RegistrationModel {
     public String getSuccess() {
         return success;
     }
-
-
 
     @SerializedName("success")
     private String success;

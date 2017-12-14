@@ -1,55 +1,21 @@
 package com.demoriderctg.arif.demorider;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.app.LoaderManager.LoaderCallbacks;
 
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.AsyncTask;
-
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static android.Manifest.permission.READ_CONTACTS;
-
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -61,15 +27,8 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.util.concurrent.TimeUnit;
-
-public class LoginActivity extends AppCompatActivity implements
+public class PhoneVerificationActivity extends AppCompatActivity implements
         View.OnClickListener {
 
     private static final String TAG = "PhoneAuthActivity";
@@ -139,9 +98,9 @@ public class LoginActivity extends AppCompatActivity implements
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
         Intent intent = getIntent();
-        String phoneNumber = intent.getStringExtra("phoneNumber");
+        final String phoneNumber = intent.getStringExtra("phoneNumber");
         mPhoneNumberField.setText(phoneNumber);
-        mStartButton.performClick();
+       // mStartButton.performClick();
         // Initialize phone auth callbacks
         // [START phone_auth_callbacks]
         mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -160,36 +119,6 @@ public class LoginActivity extends AppCompatActivity implements
                 Snackbar.make(findViewById(android.R.id.content), "Verification completed.",
                         Snackbar.LENGTH_SHORT).show();
 
-                DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-                String phoneNumber = "+88"+mPhoneNumberField.getText().toString();
-                ref.child("users").orderByChild("Identifier").equalTo(phoneNumber).addListenerForSingleValueEvent(
-                        new ValueEventListener() {
-
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                                Log.i(TAG, "dataSnapshot value = " + dataSnapshot.getValue());
-
-                                if (dataSnapshot.exists()) {
-
-                                    // User Exists
-                                    // Do your stuff here if user already exists
-                                    Toast.makeText(getApplicationContext(), "Username already exists. Please try other username.", Toast.LENGTH_SHORT).show();
-
-                                } else {
-
-                                    // User Not Yet Exists
-                                    // Do your stuff here if user not yet exists
-                                }
-                            }
-                            @Override
-                            public void onCancelled (DatabaseError databaseError){
-
-                            }
-                        }
-
-                );
-
 
                 spinner.setVisibility(View.GONE);
                 // [START_EXCLUDE silenst]
@@ -200,7 +129,14 @@ public class LoginActivity extends AppCompatActivity implements
                 // Update the UI and attempt sign in with the phone credential
                 updateUI(STATE_VERIFY_SUCCESS, credential);
                 // [END_EXCLUDE]
+
                 signInWithPhoneAuthCredential(credential);
+
+                Intent intent = new Intent(PhoneVerificationActivity.this, RegistrationActivity.class);
+                intent.putExtra("phoneNumber",phoneNumber);
+                startActivity(intent);
+
+
             }
 
             @Override
@@ -478,7 +414,7 @@ public class LoginActivity extends AppCompatActivity implements
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
+            switch (view.getId()) {
             case R.id.button_start_verification:
                 if (!validatePhoneNumber()) {
                     return;

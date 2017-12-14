@@ -1,14 +1,11 @@
 package com.demoriderctg.arif.demorider;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.app.Activity;
 import android.support.design.widget.Snackbar;
-import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -16,8 +13,6 @@ import com.demoriderctg.arif.demorider.models.ApiModels.AccessTokenModels.Access
 import com.demoriderctg.arif.demorider.models.ApiModels.AccessTokenModels.AuthToken;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginModel;
-import com.demoriderctg.arif.demorider.models.ApiModels.User;
-import com.demoriderctg.arif.demorider.models.ApiModels.UserCheckResponse;
 import com.demoriderctg.arif.demorider.rest.ApiClient;
 import com.demoriderctg.arif.demorider.rest.ApiInterface;
 import com.google.gson.Gson;
@@ -27,7 +22,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.UUID;
 
 import __Firebase.FirebaseWrapper;
 import retrofit2.Call;
@@ -36,7 +30,11 @@ import retrofit2.Response;
 
 import static com.demoriderctg.arif.demorider.MainActivity.TAG;
 
-public class UserCheckActivity extends Activity {
+/**
+ * Created by Sakib Rahman on 12/13/2017.
+ */
+
+public class LoginHelper {
 
     String clientId;
     String clientSecret;
@@ -47,117 +45,20 @@ public class UserCheckActivity extends Activity {
     Button mStartButton;
 
     private ProgressDialog dialog;
-    private   ApiInterface apiService ;
+    private ApiInterface apiService ;
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
-    LoginHelper loginHelper;
+    private Context context;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_check);
-
-        pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+    public LoginHelper(Context context){
+        this.context = context;
+        pref = this.context.getSharedPreferences("MyPref", 0);
         editor = pref.edit();
-
-        mPhoneNumberField = (EditText) findViewById(R.id.field_phone_number);
-        mStartButton = (Button) findViewById(R.id.button_start_verification);
-
-        clientId = getString(R.string.APP_CLIENT);
-        clientSecret = getString(R.string.APP_CLIENT_SECRET);
-        loginHelper = new LoginHelper(this);
-
-        mStartButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                String phoneNumber = mPhoneNumberField.getText().toString();
-                if(phoneNumber.length()<11){
-                    mPhoneNumberField.setError(getString(R.string.error_invalid_phone_number));
-                }
-                else
-                UserExists(phoneNumber);
-
-            }
-        });
-
-    }
-
-    public String GenerateAppId(){
-        String uuid = UUID.randomUUID().toString();
-        return  uuid;
-    }
-
-    public void UserExists(final String phoneNumber){
-
-         apiService =
-                ApiClient.getClient().create(ApiInterface.class);
-
-        APP_ID = GenerateAppId();
-        dialog = new ProgressDialog(UserCheckActivity.this);
-        dialog.setMessage("Please Wait..");
-        dialog.show();
-
-        Call<UserCheckResponse> call = apiService.checkUser("+88"+phoneNumber);
-
-        call.enqueue(new Callback<UserCheckResponse>() {
-            @Override
-            public void onResponse(Call<UserCheckResponse> call, Response<UserCheckResponse> response) {
-
-                int statusCode = response.code();
-                dialog.dismiss();
-                switch(statusCode){
-                    case 200:
-                        String responseCode = response.body().getResponseCode().toString();
-                        if(responseCode.equals("user-found")){
-                            //No phone verification required, call for access token
-                            AccessTokenCall(clientId,clientSecret,phoneNumber);
-
-                        }else{
-
-                            Snackbar.make(findViewById(android.R.id.content), "Error Verifying.",
-                                    Snackbar.LENGTH_SHORT).show();
-                        }
-                        break;
-                    case 500:
-                        try {
-                            JSONObject error = new JSONObject(response.errorBody().string());
-                            String errorCode = error.getString("response_code");
-                            Snackbar.make(findViewById(android.R.id.content), errorCode,
-                                    Snackbar.LENGTH_SHORT).show();
-                            if(errorCode.equals("auth/user-not-found")){
-                                Snackbar.make(findViewById(android.R.id.content), phoneNumber,
-                                        Snackbar.LENGTH_SHORT).show();
-
-                                Intent intent = new Intent(UserCheckActivity.this, PhoneVerificationActivity.class);
-                                intent.putExtra("phoneNumber",phoneNumber);
-                                startActivity(intent);
-                            }
-
-                        } catch (Exception e) {
-                            Snackbar.make(findViewById(android.R.id.content), e.getMessage(),
-                                    Snackbar.LENGTH_SHORT).show();
-                        }
-                        break;
-
-                    default:
-                        Snackbar.make(findViewById(android.R.id.content), "Sorry, network error.",
-                                Snackbar.LENGTH_SHORT).show();
-                        break;
-                }
-            }
-
-            @Override
-            public void onFailure(Call<UserCheckResponse> call, Throwable t) {
-                // Log error here since request failed
-                Log.e(TAG, t.toString());
-            }
-        });
     }
 
     public void AccessTokenCall(String clientId,String clientSecret,final String phoneNumber){
 
-        dialog = new ProgressDialog(UserCheckActivity.this);
+        dialog = new ProgressDialog(context);
         dialog.setMessage("Gaining Access To App..");
         dialog.show();
         apiService =
@@ -183,9 +84,9 @@ public class UserCheckActivity extends Activity {
 
                         }else{
 
-                            Intent intent = new Intent(UserCheckActivity.this, RegistrationActivity.class);
+                            Intent intent = new Intent(context, RegistrationActivity.class);
                             intent.putExtra("phoneNumber",phoneNumber);
-                            startActivity(intent);
+                            context.startActivity(intent);
 //                            Snackbar.make(findViewById(android.R.id.content), "Error Verifying.",
 //                                    Snackbar.LENGTH_SHORT).show();
                         }
@@ -219,7 +120,7 @@ public class UserCheckActivity extends Activity {
 
     public void LoginCall(final String phoneNumber){
 
-        dialog = new ProgressDialog(this);
+        dialog = new ProgressDialog(context);
         dialog.setMessage("Logging in To App..");
         dialog.show();
 
@@ -249,8 +150,8 @@ public class UserCheckActivity extends Activity {
                             editor.putString("userData",json);
                             editor.commit();
 
-                            Intent intent = new Intent(UserCheckActivity.this, MapActivity.class);
-                            startActivity(intent);
+                            Intent intent = new Intent(context, MapActivity.class);
+                            context.startActivity(intent);
 //                            Snackbar.make(findViewById(android.R.id.content),data.getUserId(),
 //                                    Snackbar.LENGTH_SHORT).show();
 //                            Snackbar.make(findViewById(android.R.id.content),accessToken,
@@ -269,9 +170,9 @@ public class UserCheckActivity extends Activity {
                             String errorResponseCode = errorBody.getString("response_code");
                             switch(errorResponseCode){
                                 case "auth/phone-verification-required":
-                                    Intent intent = new Intent(UserCheckActivity.this, PhoneVerificationActivity.class);
+                                    Intent intent = new Intent(context, PhoneVerificationActivity.class);
                                     intent.putExtra("phoneNumber",phoneNumber);
-                                    startActivity(intent);
+                                    context.startActivity(intent);
                                     break;
                                 default:
 
@@ -310,7 +211,6 @@ public class UserCheckActivity extends Activity {
 
 
     }
-
-
 }
+
 

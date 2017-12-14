@@ -4,15 +4,13 @@ package com.demoriderctg.arif.demorider.rest;
  * Created by Sakib Rahman on 11/18/2017.
  */
 
-import com.demoriderctg.arif.demorider.models.ApiModels.AuthToken;
-import com.demoriderctg.arif.demorider.models.ApiModels.RegistrationModel;
+import com.demoriderctg.arif.demorider.models.ApiModels.AccessTokenModels.AuthToken;
+import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginModel;
+import com.demoriderctg.arif.demorider.models.ApiModels.RegistrationModels.RegistrationModel;
 import com.demoriderctg.arif.demorider.models.ApiModels.User;
 import com.demoriderctg.arif.demorider.models.ApiModels.UserCheckResponse;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -37,6 +35,11 @@ public interface ApiInterface {
                                       @Query("client_id") String clientId,
                                       @Query("client_secret") String clientSecret);
 
+    @POST("api/v1/login")
+    @FormUrlEncoded
+    Call<LoginModel> loginUser(  @Header("Authorization") String authHeader,
+                                 @Field("phone_number") String phoneNumber,
+                                 @Field("device_token") String deviceToken);
 
     @POST("api/v1/client")
     @FormUrlEncoded
