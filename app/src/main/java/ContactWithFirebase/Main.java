@@ -1,6 +1,7 @@
 package ContactWithFirebase;
 
 import android.util.Log;
+import android.util.Pair;
 
 import __Firebase.CallBackInstance.ICallbackMain;
 import __Firebase.FirebaseModel.ClientModel;
@@ -20,7 +21,7 @@ public class Main implements ICallbackMain {
     private RiderModel riderModel = null;
     private ClientModel clientModel = null;
     private CurrentRidingHistoryModel currentRidingHistoryModel = null;
-    private FirebaseRequest FirebaseRequestInstance;
+    private FirebaseRequest firebaseRequestInstance;
 
     public Main(){}
 
@@ -28,10 +29,10 @@ public class Main implements ICallbackMain {
 
         firebaseWrapper = FirebaseWrapper.getInstance();
         clientModel = firebaseWrapper.getClientModelInstance();
-        FirebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
+        firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
 
         clientModel.ClientID = 1104006;
-        clientModel.FullName = "FirebaseWrapper";
+        clientModel.FullName = "Jobayer";
         clientModel.PhoneNumber = Long.parseLong("01752062838");
 
         clientModel.DeviceToken = FirebaseWrapper.getDeviceToken();
@@ -39,12 +40,132 @@ public class Main implements ICallbackMain {
         clientModel.CostOfCurrentRide = FirebaseConstant.UNDEFINE;
         clientModel.CurrentRidingHistoryID = FirebaseConstant.UNDEFINE;
 
-        FirebaseRequestInstance.CreateClientFirstTime(clientModel, Main.this);
+        firebaseRequestInstance.CreateClientFirstTime(clientModel, Main.this);
         return true;
     }
+
+    public boolean RequestForRide(Pair<Double, Double> Source, Pair<Double, Double> Destination){
+
+        firebaseWrapper = FirebaseWrapper.getInstance();
+        firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
+        firebaseRequestInstance.RequestForRide(Source, Destination, Main.this);
+        return true;
+    }
+
+    public boolean SentNotificationToRider(/*Firebase Client Mode, rider Model*/RiderModel Rider, ClientModel Client, Pair<Double, Double> Source, Pair<Double, Double> Destination){
+
+        this.riderModel = Rider;
+        this.clientModel = Client;
+        firebaseWrapper = FirebaseWrapper.getInstance();
+        firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
+
+        firebaseRequestInstance.SentNotificationToRider(this.riderModel, this.clientModel, Source, Destination, Main.this);
+        return true;
+    }
+
+    public boolean GetRiderLocation(/*Firebase nearest rider Model*/RiderModel Rider){
+
+        firebaseWrapper = FirebaseWrapper.getInstance();
+        firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
+        this.riderModel = Rider;
+
+        firebaseRequestInstance.GetRiderLocation(this.riderModel, Main.this);
+        return true;
+    }
+
+    public boolean GetCurrentRiderHistoryModel(/*Firebase Client Model*/ClientModel Client, long HistoryId){
+
+        firebaseWrapper = FirebaseWrapper.getInstance();
+        firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
+        this.clientModel = Client;
+
+        firebaseRequestInstance.GetCurrentRiderHistoryModel(HistoryId, this.clientModel.ClientID, Main.this);
+        return true;
+    }
+
+    public boolean RequestForRiderLocation(/*Firebase Rider Model*/RiderModel Rider){
+
+        firebaseWrapper = FirebaseWrapper.getInstance();
+        firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
+        this.riderModel = Rider;
+
+        riderModel.CurrentRiderLocation.RequestForUpdateLocation = FirebaseConstant.SET_REQUEST_FOR_RIDER_LOCATION;
+        firebaseRequestInstance.RequestForRiderLocation(this.riderModel, Main.this);
+        return true;
+    }
+
+    public boolean UpdateCostForCurrentRide(/*Firebase Client Model*/ClientModel Client, long Cost){
+
+        firebaseWrapper = FirebaseWrapper.getInstance();
+        firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
+        this.clientModel = Client;
+
+        this.clientModel.CostOfCurrentRide = Cost;
+        firebaseRequestInstance.UpdateCostForCurrentRide(this.clientModel, Main.this);
+        return true;
+    }
+
+    public boolean GetCurrentRidingHistoryID(/*Firebase Client Model*/ClientModel Client){
+
+        firebaseWrapper = FirebaseWrapper.getInstance();
+        firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
+        this.clientModel = Client;
+
+        firebaseRequestInstance.GetCurrentRidingHistoryID(this.clientModel, Main.this);
+        return true;
+    }
+
+    public boolean ChangeDestinationLocation(/*Firebase Model*/ CurrentRidingHistoryModel HistoryModel, ClientModel Client, Pair<Double, Double> newEndingLocation){
+
+        firebaseWrapper = FirebaseWrapper.getInstance();
+        firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
+        this.currentRidingHistoryModel = HistoryModel;
+        this.clientModel = Client;
+
+        this.currentRidingHistoryModel.EndingLocation.Latitude = newEndingLocation.first;
+        this.currentRidingHistoryModel.EndingLocation.Longitude = newEndingLocation.second;
+
+        firebaseRequestInstance.ChangeDestinationLocation(this.currentRidingHistoryModel, this.clientModel, Main.this);
+        return true;
+    }
+
+    public boolean SetRidingCostSoFar(/*Firebase Client Model*/ClientModel Client, long Cost){
+
+        firebaseWrapper = FirebaseWrapper.getInstance();
+        firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
+        this.clientModel = Client;
+
+        this.clientModel.CostOfCurrentRide = Cost;
+        firebaseRequestInstance.SetRidingCostSoFar(this.clientModel, Main.this);
+        return true;
+    }
+
+    public boolean CancelRideByClient(/*Firebase History, Client Model*/CurrentRidingHistoryModel HistoryModel, ClientModel Client){
+
+        firebaseWrapper = FirebaseWrapper.getInstance();
+        firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
+        this.currentRidingHistoryModel = HistoryModel;
+        this.clientModel = Client;
+
+        this.currentRidingHistoryModel.RideCanceledByClient = FirebaseConstant.SET_CANCEL_RIDE_BY_CLIENT;
+        firebaseRequestInstance.CancelRideByClient(this.currentRidingHistoryModel, this.clientModel, Main.this);
+        return true;
+    }
+
+    /* Response From Server*/
 
     @Override
     public void OnCreateNewRiderFirebase(boolean value) {
         Log.d(FirebaseConstant.NEW_USER_CREATED, value + "");
+    }
+
+    @Override
+    public void OnRequestForRide(boolean value) {
+        Log.d(FirebaseConstant.RIDER_INFO, value + "");
+    }
+
+    @Override
+    public void OnSentNotificationToRider(boolean value) {
+
     }
 }

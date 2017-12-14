@@ -25,11 +25,10 @@ public class RiderViewModel {
     public void FindNearestRider(RiderModel Rider){
         if(this.NearestRider.RiderID == 0)  this.NearestRider = Rider;
         else {
-            Log.d(FirebaseConstant.SHORTEST_DISTANCE, Rider.RiderID + " : " + Rider.DistanceFromClient  + " "+ this.NearestRider.RiderID + " : " + this.NearestRider.DistanceFromClient);
-
             if(!AlreadyRequestedRider.containsKey(Rider.RiderID) && Rider.DistanceFromClient <= this.NearestRider.DistanceFromClient){
                 this.NearestRider = Rider;
             }
+            Log.d(FirebaseConstant.SHORTEST_DISTANCE, Rider.RiderID + " : " + Rider.DistanceFromClient  + " "+ this.NearestRider.RiderID + " : " + this.NearestRider.DistanceFromClient);
         }
     }
 }

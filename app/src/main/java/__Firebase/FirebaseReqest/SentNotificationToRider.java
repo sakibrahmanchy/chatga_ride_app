@@ -19,6 +19,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import __Firebase.CallBackInstance.ICallbackMain;
 import __Firebase.FirebaseUtility.FirebaseConstant;
 
 /**
@@ -29,9 +30,11 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
 
     private String path = ("https://jobayersheikhbd.000webhostapp.com/notification.php");
     private Context context;
+    private ICallbackMain callbackListener;
 
-    public SentNotificationToRider(Context context){
+    public SentNotificationToRider(Context context, ICallbackMain callbackListener){
         this.context = context;
+        this.callbackListener = callbackListener;
     }
 
     @Override
@@ -102,5 +105,6 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         Log.d(FirebaseConstant.RESPONSE_FROM_SERVER, result);
+        this.callbackListener.OnSentNotificationToRider(true);
     }
 }

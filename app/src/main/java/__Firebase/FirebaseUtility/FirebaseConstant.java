@@ -41,6 +41,7 @@ public class FirebaseConstant {
 
     public static int ONLINE_NOT_BUSY_NO_RIDE = 100;
     public static int SET_CANCEL_RIDE_BY_CLIENT = 1;
+    public static int SET_REQUEST_FOR_RIDER_LOCATION = 1;
     public static int SET = 1;
     public static int UNSET = 0;
     public static int UNDEFINE = -1;

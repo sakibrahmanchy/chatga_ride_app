@@ -6,4 +6,6 @@ package __Firebase.CallBackInstance;
 
 public interface ICallbackMain {
     void OnCreateNewRiderFirebase(boolean value);
+    void OnRequestForRide(boolean value);
+    void  OnSentNotificationToRider(boolean value);
 }

@@ -9,6 +9,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 
 import __Firebase.CallBackInstance.CallBackListener;
+import __Firebase.CallBackInstance.ICallbackMain;
 import __Firebase.FirebaseModel.ClientModel;
 import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
 import __Firebase.FirebaseUtility.FirebaseConstant;
@@ -22,9 +23,9 @@ public class ChangeDestinationLocation {
 
     private CurrentRidingHistoryModel HistoryModel = null;
     private ClientModel ClientModel = null;
-    private CallBackListener callBackListener = null;
+    private ICallbackMain callBackListener = null;
 
-    public ChangeDestinationLocation(final CurrentRidingHistoryModel HistoryModel, ClientModel ClientModel, CallBackListener callBackListener){
+    public ChangeDestinationLocation(final CurrentRidingHistoryModel HistoryModel, ClientModel ClientModel, ICallbackMain callBackListener){
         this.HistoryModel = HistoryModel;
         this.ClientModel = ClientModel;
         this.callBackListener = callBackListener;
@@ -35,10 +36,7 @@ public class ChangeDestinationLocation {
     public void Request(){
 
         FirebaseWrapper firebaseWrapper = FirebaseWrapper.getInstance();
-        firebaseWrapper.FirebaseRootReference.child(FirebaseConstant.HISTORY)
-                .orderByChild(FirebaseConstant.CLIENT_HISTORY)
-                .equalTo(ClientModel.ClientID + FirebaseConstant.JOIN + HistoryModel.HistoryID)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+        firebaseWrapper.FirebaseRootReference.child(FirebaseConstant.HISTORY).orderByChild(FirebaseConstant.CLIENT_HISTORY).equalTo(ClientModel.ClientID + FirebaseConstant.JOIN + HistoryModel.HistoryID).addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
