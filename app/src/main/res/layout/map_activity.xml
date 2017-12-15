@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/drawLayout"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+     <RelativeLayout
+         android:layout_width="match_parent"
+         android:layout_height="match_parent">
+
+         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:id="@+id/map"
+             tools:context=".MapsActivity"
+             android:name="com.google.android.gms.maps.SupportMapFragment"
+             android:layout_alignParentStart="true" />
+
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="120dp"
+             android:orientation="horizontal"
+             android:background="@color/colorPrimary"
+             android:weightSum="6"
+             android:id="@+id/linearLayout1">
+
+             <LinearLayout
+                 android:layout_width="wrap_content"
+                 android:layout_height="match_parent"
+                 android:layout_weight="2"
+                 android:orientation="horizontal">
+             </LinearLayout>
+
+             <LinearLayout
+                 android:layout_width="wrap_content"
+                 android:layout_height="match_parent"
+                 android:layout_marginTop="10dp"
+                 android:layout_marginBottom="20dp"
+                 android:layout_weight="2"
+                 android:weightSum="2"
+                 android:orientation="vertical">
+
+                 <EditText
+                     android:id="@+id/sourceText"
+                     android:layout_width="200dp"
+                     android:layout_height="20dp"
+                     android:layout_weight="0.5"
+                     android:ems="10"
+                     android:editable="false"
+                     android:textSize="15sp"
+                     android:textColor="#000"
+                     android:background="@drawable/back2"
+                     android:text="Your current location" />
+                 <EditText
+                     android:id="@+id/destinationText"
+                     android:layout_marginTop="10dp"
+                     android:layout_width="200dp"
+                     android:layout_height="20dp"
+                     android:layout_weight="0.5"
+                     android:ems="10"
+                     android:textSize="40px"
+                     android:background="@drawable/back2"
+                     android:inputType="textPersonName"
+                     android:text="Name" />
+             </LinearLayout>
+             <LinearLayout
+                 android:layout_width="wrap_content"
+                 android:layout_height="match_parent"
+                 android:layout_weight="2"
+                 android:orientation="horizontal"></LinearLayout>
+         </LinearLayout>
+
+
+         <ImageView
+             android:layout_width="40dp"
+             android:layout_height="40dp"
+             android:layout_marginRight="10dp"
+             android:scaleType="centerCrop"
+             android:id="@+id/ic_gps"
+             android:src="@drawable/ic_gps"
+             android:layout_above="@+id/btnSend"
+             android:layout_alignParentEnd="true"
+             android:layout_marginEnd="57dp"
+             android:layout_marginBottom="215dp" />
+
+         <Button
+             android:id="@+id/btnSend"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_alignParentBottom="true"
+             android:layout_marginBottom="23dp"
+             android:text="Done"
+             android:layout_alignParentEnd="true"
+             android:layout_alignParentStart="true" />
+
+         <Button
+             android:id="@+id/pickupbtn"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_alignTop="@+id/btnSend"
+             android:text="Request For Pickup"
+             android:layout_alignParentStart="true"
+             android:layout_alignParentEnd="true" />
+
+         <ProgressBar
+             android:id="@+id/progressBar"
+             style="?android:attr/progressBarStyle"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_centerHorizontal="true"
+             android:layout_centerVertical="true" />
+
+     </RelativeLayout>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header_main"
+        app:menu="@menu/activity_main_drawer" />
+
+
+</android.support.v4.widget.DrawerLayout>
