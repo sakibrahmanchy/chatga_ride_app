@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Client.iml" filepath="$PROJECT_DIR$/Client.iml" />
+      <module fileurl="file://G:\testt\Rider(1242017)\Rider-master-1-194fbff18f29f9e4c420a5640a5a6a8523af8557\Client.iml" filepath="G:\testt\Rider(1242017)\Rider-master-1-194fbff18f29f9e4c420a5640a5a6a8523af8557\Client.iml" />
       <module fileurl="file://D:\Work\ChatgaRide\Client\Rider.iml" filepath="D:\Work\ChatgaRide\Client\Rider.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Rider-master-1-194fbff18f29f9e4c420a5640a5a6a8523af8557.iml" filepath="$PROJECT_DIR$/Rider-master-1-194fbff18f29f9e4c420a5640a5a6a8523af8557.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

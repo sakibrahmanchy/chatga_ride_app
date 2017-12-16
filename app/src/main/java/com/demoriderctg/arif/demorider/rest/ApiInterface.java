@@ -5,10 +5,13 @@ package com.demoriderctg.arif.demorider.rest;
  */
 
 import com.demoriderctg.arif.demorider.models.ApiModels.AccessTokenModels.AuthToken;
+import com.demoriderctg.arif.demorider.models.ApiModels.DeviceTokenModels.UpdateDeviceTokenData;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginModel;
 import com.demoriderctg.arif.demorider.models.ApiModels.RegistrationModels.RegistrationModel;
 import com.demoriderctg.arif.demorider.models.ApiModels.User;
 import com.demoriderctg.arif.demorider.models.ApiModels.UserCheckResponse;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -34,6 +37,12 @@ public interface ApiInterface {
     Call<AuthToken> getAccessToken(@Query("phone_number") String phoneNumber,
                                       @Query("client_id") String clientId,
                                       @Query("client_secret") String clientSecret);
+
+    @POST("api/v1/user/device_token")
+    @FormUrlEncoded
+    Call<UpdateDeviceTokenData> updateDeviceToken(@Header("Authorization") String authHeader,
+                                                  @Field("phone_number") String phoneNumber,
+                                                  @Field("device_token") String deviceToken);
 
     @POST("api/v1/login")
     @FormUrlEncoded

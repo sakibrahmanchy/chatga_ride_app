@@ -233,10 +233,8 @@ public class UserCheckActivity extends Activity {
             public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
 
                 int statusCode = response.code();
-                String testStatusCode = statusCode+"";
-//                Snackbar.make(findViewById(android.R.id.content), testStatusCode,
-//                        Snackbar.LENGTH_SHORT).show();
                 dialog.dismiss();
+
                 switch(statusCode){
                     case 200:
                         String responseCode = response.body().getResponseCode();
@@ -251,15 +249,7 @@ public class UserCheckActivity extends Activity {
 
                             Intent intent = new Intent(UserCheckActivity.this, MapActivity.class);
                             startActivity(intent);
-//                            Snackbar.make(findViewById(android.R.id.content),data.getUserId(),
-//                                    Snackbar.LENGTH_SHORT).show();
-//                            Snackbar.make(findViewById(android.R.id.content),accessToken,
-//                                    Snackbar.LENGTH_SHORT).show();
 
-                        }else{
-
-//                            Snackbar.make(findViewById(android.R.id.content), "Error Verifying.",
-//                                    Snackbar.LENGTH_SHORT).show();
                         }
                         break;
                     case 500:
@@ -272,10 +262,10 @@ public class UserCheckActivity extends Activity {
                                     Intent intent = new Intent(UserCheckActivity.this, PhoneVerificationActivity.class);
                                     intent.putExtra("phoneNumber",phoneNumber);
                                     startActivity(intent);
-                                    break;
+                                break;
                                 default:
 
-                                    break;
+                                break;
                             }
 
                         } catch (JSONException e) {
@@ -291,14 +281,7 @@ public class UserCheckActivity extends Activity {
 //                                Snackbar.LENGTH_SHORT).show();
                         break;
                 }
-//                if(status.equals("true") && statusCode == 200){
-//                    Intent intent = new Intent(UserCheckActivity.this, MapActivity.class);
-//                    intent.putExtra("phoneNumber",phoneNumber);
-//                    startActivity(intent);
-//                }else{
-//                    Snackbar.make(findViewById(android.R.id.content), "Error Verifying.",
-//                            Snackbar.LENGTH_SHORT).show();
-//                }
+
             }
 
             @Override

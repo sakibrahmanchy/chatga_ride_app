@@ -1,6 +1,9 @@
 package com.demoriderctg.arif.demorider;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -13,10 +16,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import android.view.ViewGroup;
 
+import com.demoriderctg.arif.demorider.models.ApiModels.DeviceTokenModels.UpdateDeviceTokenData;
+import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
+import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginModel;
+import com.demoriderctg.arif.demorider.rest.ApiClient;
+import com.demoriderctg.arif.demorider.rest.ApiInterface;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
@@ -27,6 +36,17 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import __Firebase.FirebaseWrapper;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.demoriderctg.arif.demorider.MainActivity.TAG;
 
 public class PhoneVerificationActivity extends AppCompatActivity implements
         View.OnClickListener {
@@ -62,6 +82,8 @@ public class PhoneVerificationActivity extends AppCompatActivity implements
     private Button mResendButton;
     private Button mSignOutButton;
     private ProgressBar spinner;
+
+    private ProgressDialog dialog;
 
 
     @Override
@@ -127,14 +149,66 @@ public class PhoneVerificationActivity extends AppCompatActivity implements
 
                 // [START_EXCLUDE silent]
                 // Update the UI and attempt sign in with the phone credential
-                updateUI(STATE_VERIFY_SUCCESS, credential);
+                //updateUI(STATE_VERIFY_SUCCESS, credential);
                 // [END_EXCLUDE]
 
-                signInWithPhoneAuthCredential(credential);
+                //signInWithPhoneAuthCredential(credential);
 
-                Intent intent = new Intent(PhoneVerificationActivity.this, RegistrationActivity.class);
-                intent.putExtra("phoneNumber",phoneNumber);
-                startActivity(intent);
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref",0);
+                if(pref.getString("access_token",null)==null){
+                    signInWithPhoneAuthCredential(credential);
+                    Intent intent = new Intent(PhoneVerificationActivity.this, RegistrationActivity.class);
+                    intent.putExtra("phoneNumber",phoneNumber);
+                    startActivity(intent);
+                }else{
+
+                    dialog = new ProgressDialog(PhoneVerificationActivity.this);
+                    dialog.setMessage("Saving your new device..");
+                    dialog.show();
+
+                    ApiInterface apiService =
+                            ApiClient.getClient().create(ApiInterface.class);
+                    String authHeader = "Bearer "+pref.getString("access_token",null);
+                    String deviceToken = FirebaseWrapper.getDeviceToken();
+                    Call<UpdateDeviceTokenData> call = apiService.updateDeviceToken(authHeader,phoneNumber, deviceToken);
+
+                    call.enqueue(new Callback<UpdateDeviceTokenData>() {
+                        @Override
+                        public void onResponse(Call<UpdateDeviceTokenData> call, Response<UpdateDeviceTokenData> response) {
+
+                            int statusCode = response.code();
+                            dialog.dismiss();
+
+                            switch(statusCode){
+                                case 200:
+
+                                    boolean responseCode = response.body().getStatus();
+                                    if(responseCode){
+                                        //No phone verification required, redirect to home
+                                        Intent intent = new Intent(PhoneVerificationActivity.this, MapActivity.class);
+                                        startActivity(intent);
+
+                                    }
+                                    break;
+                                case 500:
+                                    Log.d(TAG, response.errorBody().toString());
+                                default:
+//                        Snackbar.make(findViewById(android.R.id.content), "Sorry, network error.",
+//                                Snackbar.LENGTH_SHORT).show();
+                                    break;
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<UpdateDeviceTokenData> call, Throwable t) {
+                            // Log error here since request failed
+                            Log.e(TAG, "Failuure eadfasfaaaf"+t.toString());
+                        }
+                    });
+
+                }
+
 
 
             }
@@ -270,6 +344,9 @@ public class PhoneVerificationActivity extends AppCompatActivity implements
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
+
+                            Snackbar.make(findViewById(android.R.id.content), "asasd Quota exceeded.",
+                                    Snackbar.LENGTH_SHORT).show();
 
                             FirebaseUser user = task.getResult().getUser();
                             // [START_EXCLUDE]

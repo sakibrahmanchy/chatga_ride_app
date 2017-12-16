@@ -15,7 +15,7 @@ import __Firebase.ViewModel.RiderViewModel;
  * Created by User on 11/16/2017.
  */
 
-public class FirebaseWrapper {
+public class FirebaseWrapper{
 
     private static FirebaseWrapper Instance = null;
 
