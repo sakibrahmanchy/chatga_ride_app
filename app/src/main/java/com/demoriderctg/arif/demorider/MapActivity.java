@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -18,6 +19,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -66,6 +68,7 @@ import java.util.List;
 import java.util.Locale;
 
 import ContactWithFirebase.Main;
+import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
 import __Firebase.FirebaseWrapper;
 
 
@@ -74,7 +77,7 @@ import __Firebase.FirebaseWrapper;
  */
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback,
-        GoogleApiClient.OnConnectionFailedListener{
+        GoogleApiClient.OnConnectionFailedListener,NavigationView.OnNavigationItemSelectedListener{
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -108,7 +111,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
-    private static final float DEFAULT_ZOOM = 15f;
+    private static final float DEFAULT_ZOOM = 17f;
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
             new LatLng(54.69726685890506,-2.7379201682812226), new LatLng(55.38942944437183, -1.2456105979687226));
     String CurrentLocation;
@@ -143,7 +146,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private LatLng source,dest;
     private  final int SOURCE =1;
     private  final int DESTINATION =2;
-    private String MycurrentLocation;
+    private String MycurrentLocationName;
     private  LatLng home,workplace;
     private ProgressBar spinner;
     private double latS,lons;
@@ -152,7 +155,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private LoginData loginData;
     private String phoneNumber;
     private Main main;
-
+    private LocationManager locationManager;
+    private Location currentLocation;
+    private SharedPreferences.Editor editor;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -181,10 +186,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);;
-
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
         sourceText = (TextView) findViewById(R.id.sourceText);
         destinationText =(TextView) findViewById(R.id.destinationText);
-
+         editor = sharedpreferences.edit();
         mGps = (ImageView) findViewById(R.id.ic_gps);
         sendButton = (Button) findViewById(R.id.btnSend);
         requestbtn = (Button) findViewById(R.id.pickupbtn);
@@ -192,7 +198,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         requestbtn.setVisibility(View.INVISIBLE);
         spinner=(ProgressBar)findViewById(R.id.progressBar);
         spinner.setVisibility(View.GONE);
-         main= new Main();
+
+        locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
+
+        main= new Main();
 
         //user menu
 
@@ -200,11 +209,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private void init(){
         Log.d(TAG, "init: initializing");
+        if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) &&locationManager
+                .isProviderEnabled(LocationManager.NETWORK_PROVIDER) ){
+            getDeviceLocation();
+        }
         phoneNumber = sharedpreferences.getString("userPhoneNumber","Not Found");
         //userFirstName.setText(loginData.firstName);
       //  user_PhoneNumber.setText(phoneNumber);
 
-        main.CreateNewRiderFirebase(loginData,phoneNumber);
+   //     main.CreateNewRiderFirebase(loginData,phoneNumber);
         mGoogleApiClient = new GoogleApiClient
                 .Builder(this)
                 .addApi(Places.GEO_DATA_API)
@@ -246,7 +259,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick: clicked gps icon");
-                getDeviceLocation();
+                if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) &&locationManager
+                        .isProviderEnabled(LocationManager.NETWORK_PROVIDER) ){
+                    getDeviceLocation();
+                    source= home = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+                    sourceText.setText(MycurrentLocationName);
+                    editor.putFloat("lats", (float)source.latitude);
+                    editor.putFloat("lons", (float)source.longitude);
+                    editor.putString("locationName", MycurrentLocationName);
+                    editor.commit();
+                }
+
 
             }
         });
@@ -265,7 +288,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 downloadTask.execute(url);
                 sendButton.setVisibility(View.INVISIBLE);
                 requestbtn.setVisibility(View.VISIBLE);
-                SharedPreferences.Editor editor = sharedpreferences.edit();
+
                 editor.clear();
                 editor.commit();
                 //mMap.getUiSettings().setScrollGesturesEnabled(false);
@@ -361,18 +384,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     public void onComplete(@NonNull Task task) {
                         if(task.isSuccessful()){
                             Log.d(TAG, "onComplete: found location!");
-                            Location currentLocation = (Location) task.getResult();
+                             currentLocation = (Location) task.getResult();
 
                             Geocoder myLocation = new Geocoder(MapActivity.this, Locale.getDefault());
                             try {
                                 List<Address> myList = myLocation.getFromLocation(currentLocation.getLatitude(), currentLocation.getLongitude(), 1);
                                 Address address = (Address) myList.get(0);
-                                MycurrentLocation = address.getAddressLine(0);
+                                MycurrentLocationName = address.getAddressLine(0);
 
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                            source= home = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+
                             markerPoints.add(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
 
                             moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
@@ -565,10 +588,35 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
         if(actionBarDrawerToggle.onOptionsItemSelected(item)){
             return true;
         }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_history) {
+            // Handle the camera action
+        } else if (id == R.id.nav_promotions) {
+
+        } else if (id == R.id.nav_help) {
+
+        } else if (id == R.id.nav_settings) {
+
+        } else if (id == R.id.nav_notifications) {
+
+        } else if (id == R.id.nav_about) {
+
+        }
+
+        return true;
     }
 }
 

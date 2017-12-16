@@ -120,7 +120,7 @@ public class DownloadTask extends AsyncTask<String, Void, String> {
 // Constrain the camera target to the Adelaide bounds.
 
             ShowDerectionInGoogleMap showDerectionInGoogleMap = new ShowDerectionInGoogleMap(mMap,lineOptions,source,dest);
-            showDerectionInGoogleMap.placeDirection();
+             showDerectionInGoogleMap.placeDirection();
 
         }
     }
