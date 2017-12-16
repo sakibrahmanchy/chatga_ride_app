@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Activity;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -20,6 +21,7 @@ import com.demoriderctg.arif.demorider.models.ApiModels.User;
 import com.demoriderctg.arif.demorider.models.ApiModels.UserCheckResponse;
 import com.demoriderctg.arif.demorider.rest.ApiClient;
 import com.demoriderctg.arif.demorider.rest.ApiInterface;
+import com.google.android.gms.internal.th;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -57,7 +59,7 @@ public class UserCheckActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_check);
 
-        pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+         pref = PreferenceManager.getDefaultSharedPreferences(this);
         editor = pref.edit();
 
         mPhoneNumberField = (EditText) findViewById(R.id.field_phone_number);
@@ -178,7 +180,7 @@ public class UserCheckActivity extends Activity {
                             //No phone verification required, redirect to home
                             String accessToken = response.body().getAccessToken();
                             editor.putString("access_token",accessToken);
-                            editor.commit();
+                            editor.apply();
                             LoginCall(phoneNumber);
 
                         }else{
@@ -247,7 +249,8 @@ public class UserCheckActivity extends Activity {
                             Gson gson = new Gson();
                             String json = gson.toJson(data);
                             editor.putString("userData",json);
-                            editor.commit();
+                            editor.putString("userPhoneNumber",phoneNumber);
+                            editor.apply();
 
                             Intent intent = new Intent(UserCheckActivity.this, MapActivity.class);
                             startActivity(intent);

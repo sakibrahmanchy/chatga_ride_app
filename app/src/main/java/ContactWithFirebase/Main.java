@@ -3,6 +3,8 @@ package ContactWithFirebase;
 import android.util.Log;
 import android.util.Pair;
 
+import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
+
 import __Firebase.CallBackInstance.ICallbackMain;
 import __Firebase.FirebaseModel.ClientModel;
 import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
@@ -25,15 +27,15 @@ public class Main implements ICallbackMain {
 
     public Main(){}
 
-    public boolean CreateNewRiderFirebase(/*Main Client Mode*/){
+    public boolean CreateNewRiderFirebase(LoginData loginData , String phoneNumber){
 
         firebaseWrapper = FirebaseWrapper.getInstance();
         clientModel = firebaseWrapper.getClientModelInstance();
         firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
 
-        clientModel.ClientID = 20001;
-        clientModel.FullName = "Jobayer";
-        clientModel.PhoneNumber = Long.parseLong("01752062838");
+        clientModel.ClientID =Long.parseLong(loginData.userId);
+        clientModel.FullName = loginData.firstName;
+        clientModel.PhoneNumber = Long.parseLong(phoneNumber);
 
         clientModel.DeviceToken = FirebaseWrapper.getDeviceToken();
         clientModel.IsSearchingOrOnRide = FirebaseConstant.UNSET;

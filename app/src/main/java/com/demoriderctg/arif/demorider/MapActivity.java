@@ -12,8 +12,10 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -35,6 +37,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 import com.demoriderctg.arif.demorider.models.PlaceInfo;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -120,7 +123,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private Button requestbtn;
     private RelativeLayout relativeLayoutforSource;
     private RelativeLayout relativeLayoutforDestination;
-    private  TextView sourceText;
+    private  TextView sourceText,userFirstName,user_PhoneNumber;
     private  TextView destinationText;
     private SharedPreferences sharedpreferences;
     public static final String MyPREFERENCES = "MyPrefs" ;
@@ -145,16 +148,38 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private ProgressBar spinner;
     private double latS,lons;
     MarkerOptions options = new MarkerOptions();
+    private UserInformation userInformation;
+    private LoginData loginData;
+    private String phoneNumber;
+    private Main main;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map_activity);
+        sharedpreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        userInformation = new UserInformation(this);
+        loginData = userInformation.getuserInformation();
 
-       drawerLayout = (DrawerLayout) findViewById(R.id.drawLayout);
-       actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,R.string.app_name,R.string.app_name);
-       drawerLayout.addDrawerListener(actionBarDrawerToggle);
-       actionBarDrawerToggle.syncState();
+        initializationVariable();
+
+        //   sendButton.setVisibility(View.INVISIBLE);
+
+        getLocationPermission();
+       String x = getIntent().getStringExtra("locationName");
+        if(x !=null){
+             x = getIntent().getStringExtra("SearchLocation");
+            onActivityResult1(x);
+        }
+
+    }
+
+    //All varibale are initialize here
+    private  void initializationVariable(){
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawLayout);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,R.string.app_name,R.string.app_name);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);;
 
         sourceText = (TextView) findViewById(R.id.sourceText);
@@ -167,21 +192,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         requestbtn.setVisibility(View.INVISIBLE);
         spinner=(ProgressBar)findViewById(R.id.progressBar);
         spinner.setVisibility(View.GONE);
-        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        //   sendButton.setVisibility(View.INVISIBLE);
+         main= new Main();
 
-        getLocationPermission();
-       String x = getIntent().getStringExtra("locationName");
-        if(x !=null){
-             x = getIntent().getStringExtra("SearchLocation");
-            onActivityResult1(x);
-        }
+        //user menu
 
     }
 
     private void init(){
         Log.d(TAG, "init: initializing");
+        phoneNumber = sharedpreferences.getString("userPhoneNumber","Not Found");
+        //userFirstName.setText(loginData.firstName);
+      //  user_PhoneNumber.setText(phoneNumber);
 
+        main.CreateNewRiderFirebase(loginData,phoneNumber);
         mGoogleApiClient = new GoogleApiClient
                 .Builder(this)
                 .addApi(Places.GEO_DATA_API)

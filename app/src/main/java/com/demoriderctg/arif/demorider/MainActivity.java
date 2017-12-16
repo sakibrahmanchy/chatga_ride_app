@@ -34,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
            init();
         }
 
-        Main main = new Main();
-        main.CreateNewRiderFirebase();
+      //  Main main = new Main();
+      //  main.CreateNewRiderFirebase();
         //main.RequestForRide(Pair.create(1d, 1d), Pair.create(1d, 1d));
         //ClientModel clientModel = new ClientModel();
         //clientModel.ClientID = 20001;
