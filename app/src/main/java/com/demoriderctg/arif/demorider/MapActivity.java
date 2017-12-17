@@ -217,7 +217,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         //userFirstName.setText(loginData.firstName);
       //  user_PhoneNumber.setText(phoneNumber);
 
-   //     main.CreateNewRiderFirebase(loginData,phoneNumber);
+         main.CreateNewRiderFirebase(loginData,phoneNumber);
         mGoogleApiClient = new GoogleApiClient
                 .Builder(this)
                 .addApi(Places.GEO_DATA_API)
@@ -284,9 +284,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 downloadTask.execute(url);
                 sendButton.setVisibility(View.INVISIBLE);
                 requestbtn.setVisibility(View.VISIBLE);
-
-                editor.clear();
-                editor.commit();
                 //mMap.getUiSettings().setScrollGesturesEnabled(false);
             }
         });
