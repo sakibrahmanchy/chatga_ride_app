@@ -268,11 +268,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             public void onClick(View v) {
                 // Getting URL to the Google Directions API
                 String url = getDirectionsUrl(source, dest);
-
                 DownloadTask downloadTask = new DownloadTask(mMap,source,dest);
-                DownloadTask2 downloadTask2 = new DownloadTask2(source,dest);
-                String a = downloadTask2.getDestinatin();
-
                 // Start downloading json data from Google Directions API
                 downloadTask.execute(url);
                 sendButton.setVisibility(View.INVISIBLE);
