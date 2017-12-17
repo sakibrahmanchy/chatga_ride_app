@@ -3,13 +3,13 @@ package ContactWithFirebase;
 import android.util.Log;
 import android.util.Pair;
 
-import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
+import com.demoriderctg.arif.DemoRider.models.ApiModels.LoginModels.LoginData;
 
 import __Firebase.CallBackInstance.ICallbackMain;
 import __Firebase.FirebaseModel.ClientModel;
 import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
 import __Firebase.FirebaseModel.RiderModel;
-import __Firebase.FirebaseReqest.FirebaseRequest;
+import __Firebase.FirebaseReqest.__FirebaseRequest;
 import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseWrapper;
 
@@ -23,7 +23,7 @@ public class Main implements ICallbackMain {
     private RiderModel riderModel = null;
     private ClientModel clientModel = null;
     private CurrentRidingHistoryModel currentRidingHistoryModel = null;
-    private FirebaseRequest firebaseRequestInstance;
+    private __FirebaseRequest firebaseRequestInstance;
 
     public Main(){}
 

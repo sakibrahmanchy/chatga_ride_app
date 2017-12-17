@@ -20,7 +20,7 @@ public class FirebaseWrapper {
     private static FirebaseWrapper Instance = null;
 
     public DatabaseReference FirebaseRootReference;
-    private FirebaseRequest FirebaseRequestInstance;
+    private __FirebaseRequest FirebaseRequestInstance;
     private FirebaseResponse FirebaseResponseInstance;
     private RiderViewModel RiderViewModelInstance;
     private CurrentRidingHistoryModel CurrentRidingHistoryModelInstance;
@@ -29,7 +29,7 @@ public class FirebaseWrapper {
 
     private FirebaseWrapper(){
         FirebaseRootReference = FirebaseDatabase.getInstance().getReference();
-        FirebaseRequestInstance = new FirebaseRequest();
+        FirebaseRequestInstance = new __FirebaseRequest();
         FirebaseResponseInstance = new FirebaseResponse();
         RiderViewModelInstance = new RiderViewModel();
         CurrentRidingHistoryModelInstance = new CurrentRidingHistoryModel();
@@ -44,7 +44,7 @@ public class FirebaseWrapper {
         return Instance;
     }
 
-    public FirebaseRequest getFirebaseRequestInstance() {
+    public __FirebaseRequest getFirebaseRequestInstance() {
         return FirebaseRequestInstance;
     }
 

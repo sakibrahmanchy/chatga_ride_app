@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.demoriderctg.arif.demorider">
+    package="com.demoriderctg.arif.DemoRider">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -28,7 +28,7 @@
             android:value="AIzaSyBQZGF9rTBJ9mZBDoBfvpsF17doZQ7fflc" />
 
         <activity
-            android:name=".MainActivity"
+            android:name="com.demoriderctg.arif.DemoRider.MainActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,26 +37,26 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MapActivity"
+            android:name="com.demoriderctg.arif.DemoRider.MapActivity"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
         <activity
-            android:name=".PhoneVerificationActivity"
+            android:name="com.demoriderctg.arif.DemoRider.PhoneVerificationActivity"
             android:label="@string/title_activity_login"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             android:windowSoftInputMode="adjustNothing"/>
         <activity
-            android:name=".autoComplete"
+            android:name="com.demoriderctg.arif.DemoRider.autoComplete"
             android:noHistory="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".FindingBickerActivity"
+            android:name="com.demoriderctg.arif.DemoRider.FindingBickerActivity"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
         <activity
-            android:name=".UserCheckActivity"
+            android:name="com.demoriderctg.arif.DemoRider.UserCheckActivity"
             android:label="@string/title_activity_user_check"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".RegistrationActivity"
+            android:name="com.demoriderctg.arif.DemoRider.RegistrationActivity"
             android:label="@string/title_activity_registration"></activity>
 
         <service android:name="com.demoriderctg.arif.FirebaseInstanceIDService">
