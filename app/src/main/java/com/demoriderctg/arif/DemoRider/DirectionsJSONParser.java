@@ -26,7 +26,7 @@ public class DirectionsJSONParser {
 
     JSONObject jDistance = null;
     JSONObject jDuration = null;
-    DirectionsJSONParser(JSONObject jObject) throws JSONException {
+    public DirectionsJSONParser(JSONObject jObject) throws JSONException {
         jRoutes = jObject.getJSONArray("routes");
     }
     public List<List<HashMap<String,String>>> parse( ){

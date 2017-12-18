@@ -6,6 +6,8 @@ import com.google.firebase.database.DataSnapshot;
 
 import java.util.Random;
 
+import __Firebase.FirebaseUtility.FirebaseConstant;
+
 /**
  * Created by User on 11/16/2017.
  */
@@ -70,7 +72,7 @@ public class RiderModel {
         this.OnlineBusyOnRide = riderModel.OnlineBusyOnRide;
         this.CurrentRiderLocation = riderModel.CurrentRiderLocation;
 
-        this.DistanceFromClient = this.DistanceBetweenTwoPoint(null, null);
+        this.DistanceFromClient = FirebaseConstant.INFINITE_INTEGER;
     }
 
     long DistanceBetweenTwoPoint(Pair<Double, Double> source, Pair<Double, Double> destination){

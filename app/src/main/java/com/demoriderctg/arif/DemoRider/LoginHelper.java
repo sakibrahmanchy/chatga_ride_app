@@ -8,11 +8,11 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.demoriderctg.arif.DemoRider.models.ApiModels.AccessTokenModels.AuthToken;
-import com.demoriderctg.arif.DemoRider.models.ApiModels.LoginModels.LoginData;
-import com.demoriderctg.arif.DemoRider.models.ApiModels.LoginModels.LoginModel;
-import com.demoriderctg.arif.DemoRider.rest.ApiClient;
-import com.demoriderctg.arif.DemoRider.rest.ApiInterface;
+import com.demoriderctg.arif.DemoRider.Model.ApiModels.AccessTokenModels.AuthToken;
+import com.demoriderctg.arif.DemoRider.Model.ApiModels.LoginModels.LoginData;
+import com.demoriderctg.arif.DemoRider.Model.ApiModels.LoginModels.LoginModel;
+import com.demoriderctg.arif.DemoRider.RestAPI.ApiClient;
+import com.demoriderctg.arif.DemoRider.RestAPI.ApiInterface;
 import com.google.gson.Gson;
 
 import org.json.JSONException;

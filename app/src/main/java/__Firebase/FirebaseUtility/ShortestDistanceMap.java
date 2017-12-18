@@ -1,9 +1,10 @@
-package com.demoriderctg.arif.DemoRider;
+package __Firebase.FirebaseUtility;
 
 import android.os.AsyncTask;
+import android.util.Pair;
 import android.util.Log;
 
-import com.google.android.gms.maps.GoogleMap;
+import com.demoriderctg.arif.DemoRider.DirectionsJSONParser;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONObject;
@@ -17,32 +18,46 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 
+import __Firebase.FirebaseModel.RiderModel;
+import __Firebase.ICallBackInstance.IDistanceAndDuration;
+
 /**
  * Created by Arif on 11/12/2017.
  */
 
-public class DownloadTask2 extends AsyncTask<String, Void, String> {
-    private  String distance;
-    private String duration;
-    private LatLng source,dest;
-    private GoogleMap mMap;
+public class ShortestDistanceMap extends AsyncTask<String, Void, String> {
 
-    public DownloadTask2( LatLng source, LatLng dest){
+    private String Distance;
+    private String Duration;
+    private LatLng Source, Destination;
+    private IDistanceAndDuration iDistanceAndDuration;
+    private RiderModel Rider;
 
-        this.source = source;
-        this.dest = dest;
+    public ShortestDistanceMap() { }
 
+    public void getDistanceAndTime(RiderModel Rider, Pair<Double, Double> _Source, Pair<Double, Double> _Destination, IDistanceAndDuration iDistanceAndDuration) {
 
+        this.Distance = this.Duration = null;
+        this.Source = this.Destination = null;
+
+        this.Source = new LatLng(_Source.first, _Source.second);
+        this.Destination = new LatLng(_Destination.first, _Destination.second);
+        this.iDistanceAndDuration = iDistanceAndDuration;
+        this.Rider = Rider;
+
+        String url = getDirectionsUrl(this.Source, this.Destination);
+        this.execute(url);
+        return;
     }
+
     @Override
     protected String doInBackground(String... url) {
 
-        String data = "";
-
+        String data = FirebaseConstant.Empty;
         try {
             data = downloadUrl(url[0]);
         } catch (Exception e) {
-            Log.d("Background Task", e.toString());
+            Log.d(FirebaseConstant.Exception, e.toString());
         }
         return data;
     }
@@ -50,18 +65,12 @@ public class DownloadTask2 extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
-
         ParserTask parserTask = new ParserTask();
         parserTask.execute(result);
-
     }
 
-    /**
-     * A class to parse the Google Places in JSON format
-     */
     private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
 
-        // Parsing the data in non-ui thread
         @Override
         protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
 
@@ -73,88 +82,57 @@ public class DownloadTask2 extends AsyncTask<String, Void, String> {
                 DirectionsJSONParser parser = new DirectionsJSONParser(jObject);
 
                 routes = parser.parse();
-                //Get Distance from source to destination
-                distance = parser.getDistance();
-                //GET Time to Source to Destination
-                duration = parser.getDuration();
+                Distance = parser.getDistance();
+                Duration = parser.getDuration();
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            iDistanceAndDuration.OnGetIDistanceAndDuration(Rider, Distance, Duration);
             return routes;
         }
-
     }
 
     private String getDirectionsUrl(LatLng origin, LatLng dest) {
 
-        // Origin of route
-        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
-
-        // Destination of route
-        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
-
-        // Sensor enabled
-        String sensor = "sensor=false";
-        String mode = "mode=driving";
-        // Building the parameters to the web service
-        String parameters = str_origin + "&" + str_dest + "&" + sensor + "&" + mode;
-
-        // Output format
-        String output = "json";
-
-        // Building the url to the web service
-        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
-
-
+        String Origin = FirebaseConstant.OriginEqual + origin.latitude + FirebaseConstant.Comma + origin.longitude;
+        String Destination = FirebaseConstant.DestinationEqual + dest.latitude + FirebaseConstant.Comma + dest.longitude;
+        String sensor = FirebaseConstant.Set_Sensor_False;
+        String mode = FirebaseConstant.DrivingMode;
+        String parameters = Origin + FirebaseConstant.AMPERSAND + Destination + FirebaseConstant.AMPERSAND + sensor + FirebaseConstant.AMPERSAND + mode;
+        String output = FirebaseConstant.JSON;
+        String url = FirebaseConstant.Map_Api_Direction + output + FirebaseConstant.Question + parameters;
         return url;
     }
 
-    /**
-     * A method to download json data from url
-     */
     private String downloadUrl(String strUrl) throws IOException {
-        String data = "";
+
+        String data = FirebaseConstant.Empty;
         InputStream iStream = null;
         HttpURLConnection urlConnection = null;
+
         try {
             URL url = new URL(strUrl);
-
             urlConnection = (HttpURLConnection) url.openConnection();
-
             urlConnection.connect();
-
             iStream = urlConnection.getInputStream();
-
             BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
-
             StringBuffer sb = new StringBuffer();
 
-            String line = "";
+            String line = FirebaseConstant.Empty;
             while ((line = br.readLine()) != null) {
                 sb.append(line);
             }
-
             data = sb.toString();
-
             br.close();
 
         } catch (Exception e) {
-            Log.d("Exception", e.toString());
+            Log.d(FirebaseConstant.Exception, e.toString());
         } finally {
             iStream.close();
             urlConnection.disconnect();
         }
-
-
         return data;
     }
-
-    public String  getDestinatin(){
-        String url = getDirectionsUrl(source, dest);
-        this.execute(url);
-        return this.distance;
-    }
-
 }
 
 

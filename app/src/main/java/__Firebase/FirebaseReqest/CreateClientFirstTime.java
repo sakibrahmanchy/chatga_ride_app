@@ -5,8 +5,7 @@ import android.util.Log;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 
-import __Firebase.CallBackInstance.CallBackListener;
-import __Firebase.CallBackInstance.ICallbackMain;
+import __Firebase.ICallBackInstance.ICallbackMain;
 import __Firebase.FirebaseModel.ClientModel;
 import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseWrapper;

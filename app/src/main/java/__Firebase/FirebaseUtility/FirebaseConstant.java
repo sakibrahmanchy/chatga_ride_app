@@ -39,12 +39,29 @@ public class FirebaseConstant {
     public static String EQUAL = "=";
     public static String AMPERSAND = "&";
 
+    /* For Map */
+    public static final String BASE_URL  = "http://139.59.90.128/chaatga_rider/";
+    public static final String Empty = ("");
+    public static final String Latitude = "lat";
+    public static final String Longitude = "lng";
+    public static final String Map_Api_Direction = "https://maps.googleapis.com/maps/api/directions/";
+    public static final String JSON = "json";
+    public static final String Exception = "Exception";
+    public static final String DrivingMode = "mode=driving";
+    public static final String Set_Sensor_False = "sensor=false";
+    public static final String DestinationEqual = "destination=";
+    public static final String OriginEqual = "origin=";
+    public static final String Question = "?";
+    public static final String Comma = ",";
+
     public static int ONLINE_NOT_BUSY_NO_RIDE = 100;
     public static int SET_CANCEL_RIDE_BY_CLIENT = 1;
     public static int SET_REQUEST_FOR_RIDER_LOCATION = 1;
     public static int SET = 1;
     public static int UNSET = 0;
     public static int UNDEFINE = -1;
+    public static Double INFINITE_DOUBLE = Double.MAX_VALUE;
+    public static Integer INFINITE_INTEGER = Integer.MAX_VALUE;
 
     /*Log Cat Key*/
     public static String NEW_RIDER_ERROR = "NEW_USER_ERROR";

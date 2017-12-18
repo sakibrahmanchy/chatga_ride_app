@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.demoriderctg.arif.DemoRider.AppConfig.AppConstant;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -26,22 +27,23 @@ import java.util.List;
  */
 
 public class DownloadTask extends AsyncTask<String, Void, String> {
-    private  String distance;
+
+    private String distance;
     private String duration;
-    private LatLng source,dest;
+    private LatLng source, destination;
     private GoogleMap mMap;
 
-    public DownloadTask(GoogleMap mMap,LatLng source, LatLng dest){
-        this.mMap =mMap;
-        this.source = source;
-        this.dest = dest;
+    public DownloadTask(GoogleMap mMap, LatLng source, LatLng dest) {
 
+        this.mMap = mMap;
+        this.source = source;
+        this.destination = dest;
     }
+
     @Override
     protected String doInBackground(String... url) {
 
-        String data = "";
-
+        String data = AppConstant.Empty;
         try {
             data = downloadUrl(url[0]);
         } catch (Exception e) {
@@ -56,15 +58,10 @@ public class DownloadTask extends AsyncTask<String, Void, String> {
 
         ParserTask parserTask = new ParserTask();
         parserTask.execute(result);
-
     }
 
-    /**
-     * A class to parse the Google Places in JSON format
-     */
     private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
 
-        // Parsing the data in non-ui thread
         @Override
         protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
 
@@ -76,9 +73,7 @@ public class DownloadTask extends AsyncTask<String, Void, String> {
                 DirectionsJSONParser parser = new DirectionsJSONParser(jObject);
 
                 routes = parser.parse();
-                //Get Distance from source to destination
                 distance = parser.getDistance();
-                //GET Time to Source to Destination
                 duration = parser.getDuration();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -88,7 +83,8 @@ public class DownloadTask extends AsyncTask<String, Void, String> {
 
         @Override
         protected void onPostExecute(List<List<HashMap<String, String>>> result) {
-            ArrayList points = null;
+
+            ArrayList points;
             PolylineOptions lineOptions = null;
             MarkerOptions markerOptions = new MarkerOptions();
 
@@ -101,9 +97,9 @@ public class DownloadTask extends AsyncTask<String, Void, String> {
                 for (int j = 0; j < path.size(); j++) {
                     HashMap<String, String> point = path.get(j);
 
-                    double lat = Double.parseDouble(point.get("lat"));
-                    double lng = Double.parseDouble(point.get("lng"));
-                    LatLng position = new LatLng(lat, lng);
+                    double Latitude = Double.parseDouble(point.get(AppConstant.Latitude));
+                    double Longitude = Double.parseDouble(point.get(AppConstant.Longitude));
+                    LatLng position = new LatLng(Latitude, Longitude);
 
                     points.add(position);
                 }
@@ -112,83 +108,56 @@ public class DownloadTask extends AsyncTask<String, Void, String> {
                 lineOptions.width(12);
                 lineOptions.color(Color.RED);
                 lineOptions.geodesic(true);
-
             }
             mMap.clear();
-// Drawing polyline in the Google Map for the i-th route
-
-// Constrain the camera target to the Adelaide bounds.
-
-            ShowDerectionInGoogleMap showDerectionInGoogleMap = new ShowDerectionInGoogleMap(mMap,lineOptions,source,dest);
-             showDerectionInGoogleMap.placeDirection();
-
+            ShowDerectionInGoogleMap showDerectionInGoogleMap = new ShowDerectionInGoogleMap(mMap, lineOptions, source, destination);
+            showDerectionInGoogleMap.placeDirection();
         }
     }
 
     private String getDirectionsUrl(LatLng origin, LatLng dest) {
 
-        // Origin of route
-        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
-
-        // Destination of route
-        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
-
-        // Sensor enabled
-        String sensor = "sensor=false";
-        String mode = "mode=driving";
-        // Building the parameters to the web service
-        String parameters = str_origin + "&" + str_dest + "&" + sensor + "&" + mode;
-
-        // Output format
-        String output = "json";
-
-        // Building the url to the web service
-        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
-
+        String str_origin = AppConstant.OriginEqual + origin.latitude + AppConstant.Comma + origin.longitude;
+        String str_dest = AppConstant.DestinationEqual + dest.latitude + AppConstant.Comma + dest.longitude;
+        String sensor = AppConstant.Set_Sensor_False;
+        String mode = AppConstant.DrivingMode;
+        String parameters = str_origin + AppConstant.AMPERSAND + str_dest + AppConstant.AMPERSAND + sensor + AppConstant.AMPERSAND + mode;
+        String output = AppConstant.JSON;
+        String url = AppConstant.Map_Api_Direction + output + AppConstant.Question + parameters;
 
         return url;
     }
 
-    /**
-     * A method to download json data from url
-     */
     private String downloadUrl(String strUrl) throws IOException {
-        String data = "";
+
+        String data = AppConstant.Empty;
         InputStream iStream = null;
         HttpURLConnection urlConnection = null;
+
         try {
             URL url = new URL(strUrl);
-
             urlConnection = (HttpURLConnection) url.openConnection();
-
             urlConnection.connect();
-
             iStream = urlConnection.getInputStream();
 
             BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
-
             StringBuffer sb = new StringBuffer();
 
-            String line = "";
+            String line = AppConstant.Empty;
             while ((line = br.readLine()) != null) {
                 sb.append(line);
             }
-
             data = sb.toString();
-
             br.close();
 
         } catch (Exception e) {
-            Log.d("Exception", e.toString());
+            Log.d(AppConstant.Exception, e.toString());
         } finally {
             iStream.close();
             urlConnection.disconnect();
         }
-
-
         return data;
     }
-
 }
 
 

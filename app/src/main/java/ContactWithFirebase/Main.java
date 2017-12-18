@@ -3,14 +3,16 @@ package ContactWithFirebase;
 import android.util.Log;
 import android.util.Pair;
 
-import com.demoriderctg.arif.DemoRider.models.ApiModels.LoginModels.LoginData;
+import com.demoriderctg.arif.DemoRider.Model.ApiModels.LoginModels.LoginData;
 
-import __Firebase.CallBackInstance.ICallbackMain;
+import __Firebase.ICallBackInstance.ICallbackMain;
 import __Firebase.FirebaseModel.ClientModel;
 import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
 import __Firebase.FirebaseModel.RiderModel;
 import __Firebase.FirebaseReqest.__FirebaseRequest;
 import __Firebase.FirebaseUtility.FirebaseConstant;
+import __Firebase.FirebaseUtility.FirebaseUtilMethod;
+import __Firebase.FirebaseUtility.ShortestDistanceMap;
 import __Firebase.FirebaseWrapper;
 
 /**
@@ -24,16 +26,21 @@ public class Main implements ICallbackMain {
     private ClientModel clientModel = null;
     private CurrentRidingHistoryModel currentRidingHistoryModel = null;
     private __FirebaseRequest firebaseRequestInstance;
+    private ShortestDistanceMap shortestDistanceMap = null;
 
-    public Main(){}
+    public Main(){
+        firebaseWrapper = FirebaseWrapper.getInstance();
+    }
 
     public boolean CreateNewRiderFirebase(LoginData loginData , String phoneNumber){
+
+        if(loginData == null || FirebaseUtilMethod.IsEmptyOrNull(phoneNumber))  return false;
 
         firebaseWrapper = FirebaseWrapper.getInstance();
         clientModel = firebaseWrapper.getClientModelInstance();
         firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
 
-        clientModel.ClientID =Long.parseLong(loginData.userId);
+        clientModel.ClientID = Long.parseLong(loginData.userId);
         clientModel.FullName = loginData.firstName;
         clientModel.PhoneNumber = Long.parseLong(phoneNumber);
 

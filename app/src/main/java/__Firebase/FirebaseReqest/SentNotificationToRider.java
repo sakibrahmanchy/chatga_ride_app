@@ -19,7 +19,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
-import __Firebase.CallBackInstance.ICallbackMain;
+import __Firebase.ICallBackInstance.ICallbackMain;
 import __Firebase.FirebaseUtility.FirebaseConstant;
 
 /**

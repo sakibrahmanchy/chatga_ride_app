@@ -3,8 +3,8 @@ package __Firebase.FirebaseReqest;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Pair;
 
-import __Firebase.CallBackInstance.CallBackListener;
-import __Firebase.CallBackInstance.ICallbackMain;
+import __Firebase.ICallBackInstance.CallBackListener;
+import __Firebase.ICallBackInstance.ICallbackMain;
 import __Firebase.FirebaseModel.ClientModel;
 import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
 import __Firebase.FirebaseModel.RiderModel;

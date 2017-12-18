@@ -16,7 +16,7 @@ import android.widget.AutoCompleteTextView;
 
 import com.demoriderctg.arif.Sqlite.DBHelper;
 import com.demoriderctg.arif.Sqlite.Vmhistory;
-import com.demoriderctg.arif.DemoRider.models.PlaceInfo;
+import com.demoriderctg.arif.DemoRider.Model.PlaceInfo;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;

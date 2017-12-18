@@ -1,4 +1,4 @@
-package com.demoriderctg.arif.DemoRider.models;
+package com.demoriderctg.arif.DemoRider.Model;
 
 
 

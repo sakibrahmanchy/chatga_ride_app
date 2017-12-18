@@ -1,4 +1,4 @@
-package __Firebase.CallBackInstance;
+package __Firebase.ICallBackInstance;
 
 /**
  * Created by User on 11/21/2017.

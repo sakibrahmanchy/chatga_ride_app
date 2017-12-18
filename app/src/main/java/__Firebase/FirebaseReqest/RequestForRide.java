@@ -7,8 +7,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
-import __Firebase.CallBackInstance.CallBackListener;
-import __Firebase.CallBackInstance.ICallbackMain;
+import __Firebase.FirebaseUtility.ShortestDistanceMap;
+import __Firebase.ICallBackInstance.ICallbackMain;
 import __Firebase.FirebaseModel.RiderModel;
 import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseWrapper;
@@ -22,11 +22,13 @@ public class RequestForRide {
     private ICallbackMain callBackListener = null;
     private Pair<Double, Double> Source;
     private Pair<Double, Double> Destination;
+    private ShortestDistanceMap shortestDistanceMap = null;
 
     public RequestForRide(Pair<Double, Double> Source, Pair<Double, Double> Destination, ICallbackMain callBackListener){
         this.Source = Source;
         this.Destination = Destination;
         this.callBackListener = callBackListener;
+        shortestDistanceMap = new ShortestDistanceMap();
 
         Request();
     }
@@ -43,13 +45,14 @@ public class RequestForRide {
                     for (DataSnapshot snp : dataSnapshot.getChildren()) {
                         RiderModel riderModel = new RiderModel();
                         riderModel.LoadData(snp);
-                        FirebaseWrapper.getInstance().getRiderViewModelInstance().FindNearestRider(riderModel);
+                        FirebaseWrapper.getInstance().getRiderViewModelInstance().FindNearestRider(riderModel, Source, shortestDistanceMap);
                     }
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                shortestDistanceMap = null;
                 Log.d(FirebaseConstant.NEAREST_RIDER_ERROR, databaseError.toString());
             }
         });
@@ -58,12 +61,14 @@ public class RequestForRide {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                shortestDistanceMap = null;
                 if (callBackListener != null){
                     callBackListener.OnRequestForRide(true);
                 }
             }
             public void onCancelled(DatabaseError databaseError) {
                 Log.d(FirebaseConstant.NEAREST_RIDER_ERROR, databaseError.toString());
+                shortestDistanceMap = null;
                 callBackListener.OnRequestForRide(false);
             }
         });

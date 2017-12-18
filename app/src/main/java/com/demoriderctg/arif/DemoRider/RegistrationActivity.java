@@ -25,9 +25,9 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.demoriderctg.arif.DemoRider.models.ApiModels.RegistrationModels.RegistrationModel;
-import com.demoriderctg.arif.DemoRider.rest.ApiClient;
-import com.demoriderctg.arif.DemoRider.rest.ApiInterface;
+import com.demoriderctg.arif.DemoRider.Model.ApiModels.RegistrationModels.RegistrationModel;
+import com.demoriderctg.arif.DemoRider.RestAPI.ApiClient;
+import com.demoriderctg.arif.DemoRider.RestAPI.ApiInterface;
 
 
 import org.json.JSONArray;
