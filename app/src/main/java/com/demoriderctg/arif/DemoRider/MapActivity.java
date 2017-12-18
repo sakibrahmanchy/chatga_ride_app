@@ -35,6 +35,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.demoriderctg.arif.DemoRider.RideHistory.RideHistoryActivity;
 import com.demoriderctg.arif.DemoRider.models.ApiModels.LoginModels.LoginData;
 import com.demoriderctg.arif.DemoRider.models.PlaceInfo;
 import com.google.android.gms.common.ConnectionResult;
@@ -586,6 +587,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         if (id == R.id.nav_history) {
             // Handle the camera action
+
+            Intent intent =new Intent(MapActivity.this, RideHistoryActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_promotions) {
 
         } else if (id == R.id.nav_help) {
