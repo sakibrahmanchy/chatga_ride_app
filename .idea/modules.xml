@@ -2,11 +2,15 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://D:\devClient\Client.iml" filepath="D:\devClient\Client.iml" />
-      <module fileurl="file://D:\Work\ChatgaRide\Client\Rider.iml" filepath="D:\Work\ChatgaRide\Client\Rider.iml" />
+<<<<<<< HEAD
+      <module fileurl="file://G:\testt\Rider(1242017)\Rider-master-1-194fbff18f29f9e4c420a5640a5a6a8523af8557\Rider.iml" filepath="G:\testt\Rider(1242017)\Rider-master-1-194fbff18f29f9e4c420a5640a5a6a8523af8557\Rider.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Rider-master-1-194fbff18f29f9e4c420a5640a5a6a8523af8557.iml" filepath="$PROJECT_DIR$/Rider-master-1-194fbff18f29f9e4c420a5640a5a6a8523af8557.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/devClient.iml" filepath="$PROJECT_DIR$/devClient.iml" />
-      <module fileurl="file://D:\Work\ChatgaRide\Client\devClient.iml" filepath="D:\Work\ChatgaRide\Client\devClient.iml" />
+      <module fileurl="file://G:\testt\Rider(1242017)\Rider-master-1-194fbff18f29f9e4c420a5640a5a6a8523af8557\app\app.iml" filepath="G:\testt\Rider(1242017)\Rider-master-1-194fbff18f29f9e4c420a5640a5a6a8523af8557\app\app.iml" />
+=======
+      <module fileurl="file://$PROJECT_DIR$/Rider.iml" filepath="$PROJECT_DIR$/Rider.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+>>>>>>> 194fbff18f29f9e4c420a5640a5a6a8523af8557
     </modules>
   </component>
 </project>

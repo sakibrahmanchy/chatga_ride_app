@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.demoriderctg.arif.DemoRider">
+    package="com.demoriderctg.arif.demorider">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -29,7 +29,6 @@
 
         <activity
             android:name=".MainActivity"
-            android:noHistory="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,49 +38,25 @@
         </activity>
         <activity
             android:name=".MapActivity"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".PhoneVerificationActivity"
+            android:name=".LoginActivity"
             android:label="@string/title_activity_login"
-            android:noHistory="true"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
-            android:windowSoftInputMode="adjustNothing" />
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
         <activity
             android:name=".autoComplete"
             android:noHistory="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".FindingBickerActivity"
-            android:noHistory="true"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
         <activity
             android:name=".UserCheckActivity"
-            android:noHistory="true"
             android:label="@string/title_activity_user_check"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".RegistrationActivity"
-            android:noHistory="true"
-            android:label="@string/title_activity_registration" />
-
-        <service android:name="com.demoriderctg.arif.FirebaseInstanceIDService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
-        <service android:name="com.demoriderctg.arif.FirebaseMessagingServices">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-
-        <activity android:name=".RideHistory.RideHistoryActivity"
-            android:parentActivityName=".MapActivity"
-            android:noHistory="true"
-            android:theme="@style/Theme.AppCompat.Light">
-
-
-        </activity>
+            android:label="@string/title_activity_registration"></activity>
     </application>
 
 </manifest>
