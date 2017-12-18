@@ -61,9 +61,6 @@ public class PlaceAutocompleteAdapter
      */
     private ArrayList<AutocompletePrediction> mResultList;
 
-    /**
-     * Handles autocomplete requests.
-     */
     private GoogleApiClient mGoogleApiClient;
 
     /**
