@@ -1,13 +1,12 @@
 package com.demoriderctg.arif.DemoRider.Model.ApiModels;
-
-
 /**
  * Created by Sakib Rahman on 11/18/2017.
  */
 
-        import com.google.gson.annotations.SerializedName;
+import com.google.gson.annotations.SerializedName;
 
 public class UserCheckResponse {
+
     @SerializedName("success")
     private String success;
 

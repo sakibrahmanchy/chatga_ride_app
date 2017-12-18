@@ -3,7 +3,7 @@ package com.demoriderctg.arif.DemoRider.RideHistory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.demoriderctg.arif.DemoRider.R;
+import com.demoriderctg.arif.demorider.R;
 
 public class RideHistoryActivity extends AppCompatActivity {
 

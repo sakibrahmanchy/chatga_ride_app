@@ -6,8 +6,8 @@ package com.demoriderctg.arif.Sqlite;
 
 public class Vmhistory {
     public String locationName;
-   public double letitude;
-   public double longitude;
-  public   int id;
-  public   String searchDate;
+    public double letitude;
+    public double longitude;
+    public int id;
+    public String searchDate;
 }

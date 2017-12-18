@@ -12,8 +12,6 @@ public class LoginModel {
         return success;
     }
 
-
-
     @SerializedName("success")
     private String success;
 

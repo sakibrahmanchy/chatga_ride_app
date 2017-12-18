@@ -1,14 +1,10 @@
-package com.demoriderctg.arif.demorider;
+package com.demoriderctg.arif.DemoRider;
 
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.demoriderctg.arif.demorider.DirectionsJSONParser;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.json.JSONObject;
 
@@ -18,7 +14,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -27,18 +22,19 @@ import java.util.List;
  */
 
 public class DownloadTask2 extends AsyncTask<String, Void, String> {
-    private  String distance;
+    private String distance;
     private String duration;
-    private LatLng source,dest;
+    private LatLng source, dest;
     private GoogleMap mMap;
 
-    public DownloadTask2( LatLng source, LatLng dest){
+    public DownloadTask2(LatLng source, LatLng dest) {
 
         this.source = source;
         this.dest = dest;
 
 
     }
+
     @Override
     protected String doInBackground(String... url) {
 
@@ -154,7 +150,7 @@ public class DownloadTask2 extends AsyncTask<String, Void, String> {
         return data;
     }
 
-    public String  getDestinatin(){
+    public String getDestinatin() {
         String url = getDirectionsUrl(source, dest);
         this.execute(url);
         return this.distance;

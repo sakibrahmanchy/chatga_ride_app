@@ -1,4 +1,4 @@
-package com.demoriderctg.arif.demorider;
+package com.demoriderctg.arif.DemoRider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
         import android.widget.ImageView;
         import android.widget.TextView;
+
+import com.demoriderctg.arif.demorider.R;
 
 import java.util.List;
 
@@ -32,7 +34,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
 
 
 
-    RVAdapter(List<SearchHistory> persons){
+    public RVAdapter(List<SearchHistory> persons){
         this.searchHistories = persons;
     }
 

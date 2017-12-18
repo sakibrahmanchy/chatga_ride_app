@@ -12,12 +12,10 @@ public class RegistrationModel {
         return success;
     }
 
-    @SerializedName("success")
-    private String success;
-
     @SerializedName("first_name")
     private String firstName;
-
+    @SerializedName("success")
+    private String success;
     @SerializedName("lastName")
     private String lastName;
 
@@ -26,10 +24,8 @@ public class RegistrationModel {
 
     @SerializedName("phone_number")
     private String phoneNumber;
-
     @SerializedName("device_token")
     private String deviceToken;
-
     @SerializedName("gender")
     private String gender;
 
@@ -37,7 +33,6 @@ public class RegistrationModel {
     private String birthDate;
 
     public RegistrationModel(String success, String firstName, String lastName, String email, String phoneNumber, String deviceToken, String gender, String birthDate) {
-
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -75,4 +70,5 @@ public class RegistrationModel {
     public String getBirthDate() {
         return birthDate;
     }
+
 }

@@ -1,4 +1,4 @@
-package com.demoriderctg.arif.demorider;
+package com.demoriderctg.arif.DemoRider;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

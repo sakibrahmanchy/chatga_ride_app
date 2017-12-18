@@ -1,41 +1,4 @@
-package com.demoriderctg.arif.demorider;
-
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.app.LoaderManager.LoaderCallbacks;
-
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.AsyncTask;
-
-import android.os.Build;
-import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import static android.Manifest.permission.READ_CONTACTS;
+package com.demoriderctg.arif.DemoRider;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -47,9 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.demoriderctg.arif.demorider.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
@@ -132,7 +96,7 @@ public class LoginActivity extends AppCompatActivity implements
         mResendButton.setOnClickListener(this);
         mSignOutButton.setOnClickListener(this);
 
-        spinner = (ProgressBar)findViewById(R.id.progressBar1);
+        spinner = (ProgressBar) findViewById(R.id.progressBar1);
         spinner.setVisibility(View.GONE);
         // [START initialize_auth]
         mAuth = FirebaseAuth.getInstance();
@@ -157,7 +121,7 @@ public class LoginActivity extends AppCompatActivity implements
                         Snackbar.LENGTH_SHORT).show();
 
                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-                String phoneNumber = "+88"+mPhoneNumberField.getText().toString();
+                String phoneNumber = "+88" + mPhoneNumberField.getText().toString();
                 ref.child("users").orderByChild("Identifier").equalTo(phoneNumber).addListenerForSingleValueEvent(
                         new ValueEventListener() {
 
@@ -178,8 +142,9 @@ public class LoginActivity extends AppCompatActivity implements
                                     // Do your stuff here if user not yet exists
                                 }
                             }
+
                             @Override
-                            public void onCancelled (DatabaseError databaseError){
+                            public void onCancelled(DatabaseError databaseError) {
 
                             }
                         }
@@ -282,7 +247,7 @@ public class LoginActivity extends AppCompatActivity implements
     private void startPhoneNumberVerification(String phoneNumber) {
         // [START start_phone_auth]
 
-        phoneNumber = "88"+phoneNumber;
+        phoneNumber = "88" + phoneNumber;
 
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 phoneNumber,        // Phone number to verify

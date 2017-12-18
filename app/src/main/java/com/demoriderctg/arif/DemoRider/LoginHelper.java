@@ -42,47 +42,47 @@ public class LoginHelper {
     Button mStartButton;
 
     private ProgressDialog dialog;
-    private ApiInterface apiService ;
+    private ApiInterface apiService;
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
     private Context context;
 
-    public LoginHelper(Context context){
+    public LoginHelper(Context context) {
         this.context = context;
         pref = this.context.getSharedPreferences("MyPref", 0);
         editor = pref.edit();
     }
 
-    public void AccessTokenCall(String clientId,String clientSecret,final String phoneNumber){
+    public void AccessTokenCall(String clientId, String clientSecret, final String phoneNumber) {
 
         dialog = new ProgressDialog(context);
         dialog.setMessage("Gaining Access To App..");
         dialog.show();
         apiService =
                 ApiClient.getClient().create(ApiInterface.class);
-        Call<AuthToken> call = apiService.getAccessToken(phoneNumber,clientId,clientSecret);
+        Call<AuthToken> call = apiService.getAccessToken(phoneNumber, clientId, clientSecret);
 
         call.enqueue(new Callback<AuthToken>() {
             @Override
             public void onResponse(Call<AuthToken> call, Response<AuthToken> response) {
 
                 int statusCode = response.code();
-                String testStatusCode = statusCode+"";
+                String testStatusCode = statusCode + "";
                 dialog.dismiss();
-                switch(statusCode){
+                switch (statusCode) {
                     case 200:
                         String responseCode = response.body().getStatus();
-                        if(responseCode.equals("true")){
+                        if (responseCode.equals("true")) {
                             //No phone verification required, redirect to home
                             String accessToken = response.body().getAccessToken();
-                            editor.putString("access_token",accessToken);
+                            editor.putString("access_token", accessToken);
                             editor.commit();
                             LoginCall(phoneNumber);
 
-                        }else{
+                        } else {
 
                             Intent intent = new Intent(context, RegistrationActivity.class);
-                            intent.putExtra("phoneNumber",phoneNumber);
+                            intent.putExtra("phoneNumber", phoneNumber);
                             context.startActivity(intent);
 //                            Snackbar.make(findViewById(android.R.id.content), "Error Verifying.",
 //                                    Snackbar.LENGTH_SHORT).show();
@@ -115,7 +115,7 @@ public class LoginHelper {
 
     }
 
-    public void LoginCall(final String phoneNumber){
+    public void LoginCall(final String phoneNumber) {
 
         dialog = new ProgressDialog(context);
         dialog.setMessage("Logging in To App..");
@@ -123,28 +123,28 @@ public class LoginHelper {
 
         //String deviceToken = "asfs2xfasas2xx";
         String deviceToken = FirebaseWrapper.getDeviceToken();
-        String authHeader = "Bearer "+pref.getString("access_token",null);
-        Call<LoginModel> call = apiService.loginUser(authHeader,phoneNumber, deviceToken);
+        String authHeader = "Bearer " + pref.getString("access_token", null);
+        Call<LoginModel> call = apiService.loginUser(authHeader, phoneNumber, deviceToken);
 
         call.enqueue(new Callback<LoginModel>() {
             @Override
             public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
 
                 int statusCode = response.code();
-                String testStatusCode = statusCode+"";
+                String testStatusCode = statusCode + "";
 //                Snackbar.make(findViewById(android.R.id.content), testStatusCode,
 //                        Snackbar.LENGTH_SHORT).show();
                 dialog.dismiss();
-                switch(statusCode){
+                switch (statusCode) {
                     case 200:
                         String responseCode = response.body().getResponseCode();
-                        if(responseCode.equals("auth/logged-in-successfully")){
+                        if (responseCode.equals("auth/logged-in-successfully")) {
                             //No phone verification required, redirect to home
                             LoginData data = response.body().getLoginData();
 
                             Gson gson = new Gson();
                             String json = gson.toJson(data);
-                            editor.putString("userData",json);
+                            editor.putString("userData", json);
                             editor.commit();
 
                             Intent intent = new Intent(context, MapActivity.class);
@@ -154,7 +154,7 @@ public class LoginHelper {
 //                            Snackbar.make(findViewById(android.R.id.content),accessToken,
 //                                    Snackbar.LENGTH_SHORT).show();
 
-                        }else{
+                        } else {
 
 //                            Snackbar.make(findViewById(android.R.id.content), "Error Verifying.",
 //                                    Snackbar.LENGTH_SHORT).show();
@@ -165,10 +165,10 @@ public class LoginHelper {
 
                             JSONObject errorBody = new JSONObject(response.errorBody().string());
                             String errorResponseCode = errorBody.getString("response_code");
-                            switch(errorResponseCode){
+                            switch (errorResponseCode) {
                                 case "auth/phone-verification-required":
                                     Intent intent = new Intent(context, PhoneVerificationActivity.class);
-                                    intent.putExtra("phoneNumber",phoneNumber);
+                                    intent.putExtra("phoneNumber", phoneNumber);
                                     context.startActivity(intent);
                                     break;
                                 default:
@@ -181,7 +181,6 @@ public class LoginHelper {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-
 
 
                     default:

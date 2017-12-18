@@ -1,5 +1,4 @@
-package com.demoriderctg.arif.demorider;
-
+package com.demoriderctg.arif.DemoRider;
 
 
 import android.Manifest;
@@ -22,8 +21,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -31,16 +28,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.demoriderctg.arif.demorider.models.PlaceInfo;
+import com.demoriderctg.arif.DemoRider.PlaceAutocompleteAdapter;
+import com.demoriderctg.arif.DemoRider.Model.PlaceInfo;
+import com.demoriderctg.arif.demorider.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.AutocompletePrediction;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -57,19 +51,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-
 /**
  * Created by User on 10/2/2017.
  */
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback,
-        GoogleApiClient.OnConnectionFailedListener{
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener {
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
-    ArrayList markerPoints= new ArrayList();
+    ArrayList markerPoints = new ArrayList();
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
@@ -99,7 +92,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private static final float DEFAULT_ZOOM = 15f;
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
-            new LatLng(54.69726685890506,-2.7379201682812226), new LatLng(55.38942944437183, -1.2456105979687226));
+            new LatLng(54.69726685890506, -2.7379201682812226), new LatLng(55.38942944437183, -1.2456105979687226));
     String CurrentLocation;
 
 
@@ -107,15 +100,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private Button sendButton;
     private ImageView mGps;
-    private  ImageView searchSources;
-    private  ImageView searchDestination;
+    private ImageView searchSources;
+    private ImageView searchDestination;
     private Button requestbtn;
     private RelativeLayout relativeLayoutforSource;
     private RelativeLayout relativeLayoutforDestination;
-    private  TextView sourceText;
-    private  TextView destinationText;
+    private TextView sourceText;
+    private TextView destinationText;
     private SharedPreferences sharedpreferences;
-    public static final String MyPREFERENCES = "MyPrefs" ;
+    public static final String MyPREFERENCES = "MyPrefs";
 
     //vars
     private Boolean mLocationPermissionsGranted = false;
@@ -124,47 +117,47 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private PlaceAutocompleteAdapter mPlaceAutocompleteAdapter;
     private GoogleApiClient mGoogleApiClient;
     private PlaceInfo mPlace;
-    private  String distance="arif";
-    private  String duration="arif";
-    private LatLng source,dest;
-    private  final int SOURCE =1;
-    private  final int DESTINATION =2;
+    private String distance = "arif";
+    private String duration = "arif";
+    private LatLng source, dest;
+    private final int SOURCE = 1;
+    private final int DESTINATION = 2;
     private String MycurrentLocation;
-    private  LatLng home,workplace;
+    private LatLng home, workplace;
     private ProgressBar spinner;
-    private double latS,lons;
+    private double latS, lons;
     MarkerOptions options = new MarkerOptions();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map_activity);
-     //   mSearchText = (AutoCompleteTextView) findViewById(R.id.input_search);
-     //   mSearchTextDestination =(AutoCompleteTextView) findViewById(R.id.input_search2);
+        //   mSearchText = (AutoCompleteTextView) findViewById(R.id.input_search);
+        //   mSearchTextDestination =(AutoCompleteTextView) findViewById(R.id.input_search2);
 
         sourceText = (TextView) findViewById(R.id.sourceText);
-        destinationText =(TextView) findViewById(R.id.destinationText);
+        destinationText = (TextView) findViewById(R.id.destinationText);
 
         mGps = (ImageView) findViewById(R.id.ic_gps);
         sendButton = (Button) findViewById(R.id.btnSend);
         requestbtn = (Button) findViewById(R.id.pickupbtn);
         sendButton.setVisibility(View.INVISIBLE);
         requestbtn.setVisibility(View.INVISIBLE);
-        spinner=(ProgressBar)findViewById(R.id.progressBar);
+        spinner = (ProgressBar) findViewById(R.id.progressBar);
         spinner.setVisibility(View.GONE);
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         //   sendButton.setVisibility(View.INVISIBLE);
 
         getLocationPermission();
-       String x = getIntent().getStringExtra("locationName");
-        if(x !=null){
-             x = getIntent().getStringExtra("SearchLocation");
+        String x = getIntent().getStringExtra("locationName");
+        if (x != null) {
+            x = getIntent().getStringExtra("SearchLocation");
             onActivityResult1(x);
         }
 
     }
 
-    private void init(){
+    private void init() {
         Log.d(TAG, "init: initializing");
 
         mGoogleApiClient = new GoogleApiClient
@@ -175,9 +168,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 .build();
 
 
-
         //mSearchTextDestination.setOnItemClickListener(mAutocompleteClickListenerForDestination);
-       // mSearchText.setOnItemClickListener(mAutocompleteClickListener);
+        // mSearchText.setOnItemClickListener(mAutocompleteClickListener);
 
         mPlaceAutocompleteAdapter = new PlaceAutocompleteAdapter(this, mGoogleApiClient,
                 LAT_LNG_BOUNDS, null);
@@ -186,7 +178,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 Intent i = new Intent(MapActivity.this, autoComplete.class);
-                i.putExtra("From","from");
+                i.putExtra("From", "from");
                 startActivityForResult(i, 1);
 
                 return false;
@@ -197,7 +189,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 Intent i = new Intent(MapActivity.this, autoComplete.class);
-                i.putExtra("From","to");
+                i.putExtra("From", "to");
                 startActivity(i);
 
                 return false;
@@ -219,8 +211,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 // Getting URL to the Google Directions API
                 String url = getDirectionsUrl(source, dest);
 
-                DownloadTask downloadTask = new DownloadTask(mMap,source,dest);
-                DownloadTask2 downloadTask2 = new DownloadTask2(source,dest);
+                DownloadTask downloadTask = new DownloadTask(mMap, source, dest);
+                DownloadTask2 downloadTask2 = new DownloadTask2(source, dest);
                 String a = downloadTask2.getDestinatin();
 
                 // Start downloading json data from Google Directions API
@@ -233,9 +225,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 //mMap.getUiSettings().setScrollGesturesEnabled(false);
             }
         });
-
-
-
 
 
         requestbtn.setOnClickListener(new View.OnClickListener() {
@@ -254,21 +243,21 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         hideSoftKeyboard();
     }
 
-    private void geoLocate(int position){
+    private void geoLocate(int position) {
         Log.d(TAG, "geoLocate: geolocating");
-        Toast.makeText(getApplicationContext(),"dokche",Toast.LENGTH_LONG).show();
-        if(position==1){
+        Toast.makeText(getApplicationContext(), "dokche", Toast.LENGTH_LONG).show();
+        if (position == 1) {
             String searchString = sourceText.getText().toString();
 
             Geocoder geocoder = new Geocoder(MapActivity.this);
             List<Address> list = new ArrayList<>();
-            try{
+            try {
                 list = geocoder.getFromLocationName(searchString, 1);
-            }catch (IOException e){
-                Log.e(TAG, "geoLocate: IOException: " + e.getMessage() );
+            } catch (IOException e) {
+                Log.e(TAG, "geoLocate: IOException: " + e.getMessage());
             }
 
-            if(list.size() > 0){
+            if (list.size() > 0) {
                 Address address = list.get(0);
                 sourceText.setText("");
                 sourceText.setText(address.getAddressLine(0));
@@ -276,20 +265,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), DEFAULT_ZOOM,
                         address.getAddressLine(0));
             }
-        }
-
-        else if(position==2){
+        } else if (position == 2) {
             String searchString = sourceText.getText().toString();
 
             Geocoder geocoder = new Geocoder(MapActivity.this);
             List<Address> list = new ArrayList<>();
-            try{
+            try {
                 list = geocoder.getFromLocationName(searchString, 1);
-            }catch (IOException e){
-                Log.e(TAG, "geoLocate: IOException: " + e.getMessage() );
+            } catch (IOException e) {
+                Log.e(TAG, "geoLocate: IOException: " + e.getMessage());
             }
 
-            if(list.size() > 0){
+            if (list.size() > 0) {
                 Address address = list.get(0);
 
                 Log.d(TAG, "geoLocate: found a location: " + address.toString());
@@ -302,18 +289,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
-    private void getDeviceLocation(){
+    private void getDeviceLocation() {
         Log.d(TAG, "getDeviceLocation: getting the devices current location");
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
-        try{
-            if(mLocationPermissionsGranted){
+        try {
+            if (mLocationPermissionsGranted) {
 
                 final Task location = mFusedLocationProviderClient.getLastLocation();
                 location.addOnCompleteListener(new OnCompleteListener() {
                     @Override
                     public void onComplete(@NonNull Task task) {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             Log.d(TAG, "onComplete: found location!");
                             Location currentLocation = (Location) task.getResult();
 
@@ -326,30 +313,30 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                            source= home = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+                            source = home = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                             markerPoints.add(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
 
                             moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
                                     DEFAULT_ZOOM,
                                     "My Location");
 
-                        }else{
+                        } else {
                             Log.d(TAG, "onComplete: current location is null");
                             Toast.makeText(MapActivity.this, "unable to get current location", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
             }
-        }catch (SecurityException e){
-            Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage() );
+        } catch (SecurityException e) {
+            Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage());
         }
     }
 
-    private void moveCamera(LatLng latLng, float zoom, String title){
-        Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude );
+    private void moveCamera(LatLng latLng, float zoom, String title) {
+        Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
 
-        if(!title.equals("My Location")){
+        if (!title.equals("My Location")) {
             MarkerOptions options = new MarkerOptions()
                     .position(latLng)
                     .title(title);
@@ -359,30 +346,30 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         hideSoftKeyboard();
     }
 
-    private void initMap(){
+    private void initMap() {
         Log.d(TAG, "initMap: initializing map");
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(MapActivity.this);
     }
 
-    private void getLocationPermission(){
+    private void getLocationPermission() {
         Log.d(TAG, "getLocationPermission: getting location permissions");
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION};
 
-        if(ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            if(ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                    COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                    COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 mLocationPermissionsGranted = true;
                 initMap();
-            }else{
+            } else {
                 ActivityCompat.requestPermissions(this,
                         permissions,
                         LOCATION_PERMISSION_REQUEST_CODE);
             }
-        }else{
+        } else {
             ActivityCompat.requestPermissions(this,
                     permissions,
                     LOCATION_PERMISSION_REQUEST_CODE);
@@ -394,11 +381,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         Log.d(TAG, "onRequestPermissionsResult: called.");
         mLocationPermissionsGranted = false;
 
-        switch(requestCode){
-            case LOCATION_PERMISSION_REQUEST_CODE:{
-                if(grantResults.length > 0){
-                    for(int i = 0; i < grantResults.length; i++){
-                        if(grantResults[i] != PackageManager.PERMISSION_GRANTED){
+        switch (requestCode) {
+            case LOCATION_PERMISSION_REQUEST_CODE: {
+                if (grantResults.length > 0) {
+                    for (int i = 0; i < grantResults.length; i++) {
+                        if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
                             mLocationPermissionsGranted = false;
                             Log.d(TAG, "onRequestPermissionsResult: permission failed");
                             return;
@@ -413,7 +400,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
-    private void hideSoftKeyboard(){
+    private void hideSoftKeyboard() {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
@@ -456,37 +443,37 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     protected void onActivityResult1(String activity) {
         if (activity.equals("from")) {
             // TODO Extract the data returned from the child Activity.
-            latS =  getIntent().getDoubleExtra("lat", 0.00);
+            latS = getIntent().getDoubleExtra("lat", 0.00);
 
             String locationName = getIntent().getStringExtra("locationName");
-            lons =  getIntent().getDoubleExtra("lon", 0.00);
-            source = new LatLng(latS,lons);
+            lons = getIntent().getDoubleExtra("lon", 0.00);
+            source = new LatLng(latS, lons);
             sourceText.setText(locationName);
             SharedPreferences.Editor editor = sharedpreferences.edit();
-            editor.putFloat("lats", (float)latS);
-            editor.putFloat("lons", (float)lons);
+            editor.putFloat("lats", (float) latS);
+            editor.putFloat("lons", (float) lons);
             editor.putString("locationName", locationName);
             editor.commit();
             checkLatLon();
         }
         if (activity.equals("to")) {
             // TODO Extract the data returned from the child Activity.
-            latS =  getIntent().getDoubleExtra("lat", 0.00);
+            latS = getIntent().getDoubleExtra("lat", 0.00);
 
             String locationName = getIntent().getStringExtra("locationName");
-            lons =  getIntent().getDoubleExtra("lon", 0.00);
+            lons = getIntent().getDoubleExtra("lon", 0.00);
 
             SharedPreferences.Editor editor = sharedpreferences.edit();
-            editor.putFloat("latd", (float)latS);
-            editor.putFloat("lond", (float)lons);
+            editor.putFloat("latd", (float) latS);
+            editor.putFloat("lond", (float) lons);
             editor.putString("locationNamed", locationName);
             editor.commit();
-          //  destinationText.setText(locationName);
+            //  destinationText.setText(locationName);
             checkLatLon();
         }
     }
 
-    void  checkLatLon(){
+    void checkLatLon() {
         String location = sharedpreferences.getString("locationName", "");
         double lats = sharedpreferences.getFloat("lats", (float) 0.0);
         double lons = sharedpreferences.getFloat("lons", (float) 0.0);
@@ -494,19 +481,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         double latd = sharedpreferences.getFloat("latd", (float) 0.0);
         double lond = sharedpreferences.getFloat("lond", (float) 0.0);
 
-        if(lats !=0.0){
+        if (lats != 0.0) {
             sourceText.setText("");
             sourceText.setText(location);
-            source = new LatLng(latS,lons);
+            source = new LatLng(latS, lons);
         }
-        if(latd !=0.0){
+        if (latd != 0.0) {
             destinationText.setText(locationd);
-            dest = new LatLng(latd,lond);
+            dest = new LatLng(latd, lond);
         }
-        if(source !=null && dest !=null){
+        if (source != null && dest != null) {
             sendButton.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             sendButton.setVisibility(View.INVISIBLE);
         }
     }

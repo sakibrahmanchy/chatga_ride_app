@@ -1,4 +1,4 @@
-package com.demoriderctg.arif.demorider.models.ApiModels;
+package com.demoriderctg.arif.DemoRider.Model.ApiModels;
 
 /**
  * Created by Sakib Rahman on 11/18/2017.
@@ -6,8 +6,8 @@ package com.demoriderctg.arif.demorider.models.ApiModels;
 
 import com.google.gson.annotations.SerializedName;
 
-
 public class AuthToken {
+
     @SerializedName("access_token")
     private String accessToken;
 

@@ -1,4 +1,4 @@
-package com.demoriderctg.arif.demorider;
+package com.demoriderctg.arif.DemoRider;
 
 import android.app.Activity;
 import android.content.Context;
@@ -17,7 +17,12 @@ import android.widget.AutoCompleteTextView;
 
 import com.demoriderctg.arif.Sqlite.DBHelper;
 import com.demoriderctg.arif.Sqlite.Vmhistory;
-import com.demoriderctg.arif.demorider.models.PlaceInfo;
+import com.demoriderctg.arif.DemoRider.MapActivity;
+import com.demoriderctg.arif.DemoRider.PlaceAutocompleteAdapter;
+import com.demoriderctg.arif.DemoRider.RVAdapter;
+import com.demoriderctg.arif.DemoRider.SearchHistory;
+import com.demoriderctg.arif.DemoRider.Model.PlaceInfo;
+import com.demoriderctg.arif.demorider.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -50,11 +55,13 @@ public class autoComplete extends AppCompatActivity  implements GoogleApiClient.
     Context context;
     private RecyclerView rv;
     private RecyclerView rvSearchHistory;
-    public List<SearchHistory> searchHistories,searchHistoriesList;
+    public List<SearchHistory> searchHistories, searchHistoriesList;
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
-            new LatLng(54.69726685890506,-2.7379201682812226), new LatLng(55.38942944437183, -1.2456105979687226));
-
-    //database
+            new LatLng(54.69726685890506,
+                    -2.7379201682812226),
+            new LatLng(55.38942944437183,
+                    -1.2456105979687226)
+    );
 
     private  String locationName;
     private  double latitude;
@@ -85,8 +92,6 @@ public class autoComplete extends AppCompatActivity  implements GoogleApiClient.
       //  initializeAdapter();
         initializeDataForSearch();
         initializeAdapterForSearchHistory();
-
-
     }
 
     void  init(){

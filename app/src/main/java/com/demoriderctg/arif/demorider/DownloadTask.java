@@ -1,9 +1,10 @@
-package com.demoriderctg.arif.demorider;
+package com.demoriderctg.arif.DemoRider;
 
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.demoriderctg.arif.DemoRider.ShowDerectionInGoogleMap;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -26,17 +27,18 @@ import java.util.List;
  */
 
 public class DownloadTask extends AsyncTask<String, Void, String> {
-    private  String distance;
+    private String distance;
     private String duration;
-    private LatLng source,dest;
+    private LatLng source, dest;
     private GoogleMap mMap;
 
-    public DownloadTask(GoogleMap mMap,LatLng source, LatLng dest){
-        this.mMap =mMap;
+    public DownloadTask(GoogleMap mMap, LatLng source, LatLng dest) {
+        this.mMap = mMap;
         this.source = source;
         this.dest = dest;
 
     }
+
     @Override
     protected String doInBackground(String... url) {
 
@@ -119,7 +121,7 @@ public class DownloadTask extends AsyncTask<String, Void, String> {
 
 // Constrain the camera target to the Adelaide bounds.
 
-            ShowDerectionInGoogleMap showDerectionInGoogleMap = new ShowDerectionInGoogleMap(mMap,lineOptions,source,dest);
+            ShowDerectionInGoogleMap showDerectionInGoogleMap = new ShowDerectionInGoogleMap(mMap, lineOptions, source, dest);
             showDerectionInGoogleMap.placeDirection();
 
         }

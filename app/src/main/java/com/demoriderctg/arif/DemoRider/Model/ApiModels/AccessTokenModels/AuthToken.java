@@ -11,7 +11,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class AuthToken {
 
-
     @SerializedName("status")
     private String status;
 
@@ -20,7 +19,6 @@ public class AuthToken {
 
     @SerializedName("message")
     private String message;
-
 
     public AuthToken(Context context, String accessToken, String status, String message) {
 
@@ -37,7 +35,6 @@ public class AuthToken {
         this.accessToken = accessToken;
     }
 
-
     public String getStatus() {
         return status;
     }
@@ -45,7 +42,6 @@ public class AuthToken {
     public void setStatus(String status) {
         this.status = status;
     }
-
 
     public String getMessage() {
         return message;

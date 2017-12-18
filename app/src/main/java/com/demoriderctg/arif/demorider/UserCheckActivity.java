@@ -1,19 +1,19 @@
-package com.demoriderctg.arif.demorider;
+package com.demoriderctg.arif.DemoRider;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.Activity;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.demoriderctg.arif.demorider.models.ApiModels.AuthToken;
-import com.demoriderctg.arif.demorider.models.ApiModels.UserCheckResponse;
-import com.demoriderctg.arif.demorider.rest.ApiClient;
-import com.demoriderctg.arif.demorider.rest.ApiInterface;
+import com.demoriderctg.arif.DemoRider.Model.ApiModels.UserCheckResponse;
+import com.demoriderctg.arif.DemoRider.RestAPI.ApiClient;
+import com.demoriderctg.arif.DemoRider.RestAPI.ApiInterface;
+import com.demoriderctg.arif.demorider.R;
 
 import org.json.JSONObject;
 
@@ -23,7 +23,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.demoriderctg.arif.demorider.MainActivity.TAG;
+import static com.demoriderctg.arif.DemoRider.MainActivity.TAG;
 
 public class UserCheckActivity extends Activity {
 
@@ -36,7 +36,7 @@ public class UserCheckActivity extends Activity {
     Button mStartButton;
 
     private ProgressDialog dialog;
-    private   ApiInterface apiService ;
+    private ApiInterface apiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +54,7 @@ public class UserCheckActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-                String phoneNumber = "88"+mPhoneNumberField.getText().toString();
+                String phoneNumber = "88" + mPhoneNumberField.getText().toString();
                 UserExists(phoneNumber);
 
             }
@@ -62,15 +62,14 @@ public class UserCheckActivity extends Activity {
 
     }
 
-    public String GenerateAppId(){
+    public String GenerateAppId() {
         String uuid = UUID.randomUUID().toString();
-        return  uuid;
+        return uuid;
     }
 
-    public void UserExists(final String phoneNumber){
+    public void UserExists(final String phoneNumber) {
 
-         apiService =
-                ApiClient.getClient().create(ApiInterface.class);
+        apiService = ApiClient.getClient().create(ApiInterface.class);
 
         APP_ID = GenerateAppId();
         dialog = new ProgressDialog(UserCheckActivity.this);
@@ -84,20 +83,20 @@ public class UserCheckActivity extends Activity {
             public void onResponse(Call<UserCheckResponse> call, Response<UserCheckResponse> response) {
 
                 int statusCode = response.code();
-                String testStatusCode = statusCode+"";
+                String testStatusCode = statusCode + "";
                 Snackbar.make(findViewById(android.R.id.content), testStatusCode,
                         Snackbar.LENGTH_SHORT).show();
                 dialog.dismiss();
-                switch(statusCode){
+                switch (statusCode) {
                     case 200:
                         String responseCode = response.body().getResponseCode().toString();
-                        if(responseCode.equals("user-found")){
+                        if (responseCode.equals("user-found")) {
                             //No phone verification required, redirect to home
-                           Intent intent = new Intent(UserCheckActivity.this, RegistrationActivity.class);
-                            intent.putExtra("phoneNumber",phoneNumber);
-                              startActivity(intent);
+                            Intent intent = new Intent(UserCheckActivity.this, RegistrationActivity.class);
+                            intent.putExtra("phoneNumber", phoneNumber);
+                            startActivity(intent);
 
-                        }else{
+                        } else {
                             Snackbar.make(findViewById(android.R.id.content), "Error Verifying.",
                                     Snackbar.LENGTH_SHORT).show();
                         }
@@ -136,9 +135,6 @@ public class UserCheckActivity extends Activity {
             }
         });
     }
-
-
-
 
 
 }
