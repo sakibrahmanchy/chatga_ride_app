@@ -1,4 +1,4 @@
-package com.demoriderctg.arif.DemoRider.Model.ApiModels;
+package com.demoriderctg.arif.demorider.models.ApiModels;
 
 /**
  * Created by Sakib Rahman on 11/18/2017.

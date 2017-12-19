@@ -1,4 +1,4 @@
-package com.demoriderctg.arif.DemoRider;
+package com.demoriderctg.arif.demorider;
 
 /**
  * Created by Arif on 11/21/2017.

@@ -1,4 +1,4 @@
-package com.demoriderctg.arif.DemoRider;
+package com.demoriderctg.arif.demorider;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

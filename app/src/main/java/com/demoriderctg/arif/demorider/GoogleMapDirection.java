@@ -1,6 +1,5 @@
-package com.demoriderctg.arif.DemoRider;
+package com.demoriderctg.arif.demorider;
 
-import com.demoriderctg.arif.demorider.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.UiSettings;
 import com.google.maps.DirectionsApi;

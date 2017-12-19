@@ -1,4 +1,4 @@
-package com.demoriderctg.arif.DemoRider.Model.ApiModels.AccessTokenModels;
+package com.demoriderctg.arif.demorider.models.ApiModels.AccessTokenModels;
 
 import android.content.Context;
 

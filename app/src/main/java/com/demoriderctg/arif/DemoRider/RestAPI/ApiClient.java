@@ -1,10 +1,10 @@
-package com.demoriderctg.arif.DemoRider.RestAPI;
+package com.demoriderctg.arif.demorider.RestAPI;
 
 /**
  * Created by Sakib Rahman on 11/18/2017.
  */
 
-import com.demoriderctg.arif.DemoRider.AppConfig.AppConstant;
+import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

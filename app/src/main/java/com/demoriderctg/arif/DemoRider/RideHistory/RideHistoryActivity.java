@@ -1,4 +1,4 @@
-package com.demoriderctg.arif.DemoRider.RideHistory;
+package com.demoriderctg.arif.demorider.RideHistory;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

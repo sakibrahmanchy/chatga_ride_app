@@ -1,4 +1,4 @@
-package com.demoriderctg.arif.DemoRider.Model.ApiModels.LoginModels;
+package com.demoriderctg.arif.demorider.models.ApiModels.LoginModels;
 
 import com.google.gson.annotations.SerializedName;
 

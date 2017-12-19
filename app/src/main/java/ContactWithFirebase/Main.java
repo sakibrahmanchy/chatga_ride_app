@@ -3,7 +3,7 @@ package ContactWithFirebase;
 import android.util.Log;
 import android.util.Pair;
 
-import com.demoriderctg.arif.DemoRider.Model.ApiModels.LoginModels.LoginData;
+import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 
 import __Firebase.ICallBackInstance.ICallbackMain;
 import __Firebase.FirebaseModel.ClientModel;

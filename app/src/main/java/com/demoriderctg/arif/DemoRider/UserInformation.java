@@ -1,10 +1,10 @@
-package com.demoriderctg.arif.DemoRider;
+package com.demoriderctg.arif.demorider;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.demoriderctg.arif.DemoRider.Model.ApiModels.LoginModels.LoginData;
+import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 import com.google.gson.Gson;
 
 /**

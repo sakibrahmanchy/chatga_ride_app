@@ -1,4 +1,4 @@
-package com.demoriderctg.arif.DemoRider;
+package com.demoriderctg.arif.demorider;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -8,8 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.demoriderctg.arif.DemoRider.LoginActivity;
-import com.demoriderctg.arif.DemoRider.UserCheckActivity;
+import com.demoriderctg.arif.demorider.LoginActivity;
+import com.demoriderctg.arif.demorider.UserCheckActivity;
 import com.demoriderctg.arif.demorider.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (isServiceOk()) {
             // Intent intent = new Intent(MainActivity.this, MapActivity.class);
-            Intent intent = new Intent(MainActivity.this, UserCheckActivity.class);
+             Intent intent = new Intent(MainActivity.this, UserCheckActivity.class);
             startActivity(intent);
             //  init();
         }

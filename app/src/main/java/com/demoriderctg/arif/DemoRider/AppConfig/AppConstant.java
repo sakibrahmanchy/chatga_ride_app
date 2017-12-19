@@ -1,4 +1,4 @@
-package com.demoriderctg.arif.DemoRider.AppConfig;
+package com.demoriderctg.arif.demorider.AppConfig;
 
 /**
  * Created by User on 12/17/2017.

@@ -1,4 +1,4 @@
-package com.demoriderctg.arif.DemoRider;
+package com.demoriderctg.arif.demorider;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -8,11 +8,11 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.demoriderctg.arif.DemoRider.Model.ApiModels.AccessTokenModels.AuthToken;
-import com.demoriderctg.arif.DemoRider.Model.ApiModels.LoginModels.LoginData;
-import com.demoriderctg.arif.DemoRider.Model.ApiModels.LoginModels.LoginModel;
-import com.demoriderctg.arif.DemoRider.RestAPI.ApiClient;
-import com.demoriderctg.arif.DemoRider.RestAPI.ApiInterface;
+import com.demoriderctg.arif.demorider.models.ApiModels.AccessTokenModels.AuthToken;
+import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
+import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginModel;
+import com.demoriderctg.arif.demorider.RestAPI.ApiClient;
+import com.demoriderctg.arif.demorider.RestAPI.ApiInterface;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -25,7 +25,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.demoriderctg.arif.DemoRider.MainActivity.TAG;
+import static com.demoriderctg.arif.demorider.MainActivity.TAG;
 
 /**
  * Created by Sakib Rahman on 12/13/2017.

@@ -6,7 +6,7 @@
     android:background="@color/grey_100"
     android:orientation="vertical"
     android:weightSum="4"
-    tools:context="com.demoriderctg.arif.DemoRider.LoginActivity">
+    tools:context="com.demoriderctg.arif.demorider.LoginActivity">
     <LinearLayout
         android:focusable="true"
         android:focusableInTouchMode="true"

@@ -1,9 +1,8 @@
-package com.demoriderctg.arif.DemoRider;
+package com.demoriderctg.arif.demorider;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,12 +16,7 @@ import android.widget.AutoCompleteTextView;
 
 import com.demoriderctg.arif.Sqlite.DBHelper;
 import com.demoriderctg.arif.Sqlite.Vmhistory;
-import com.demoriderctg.arif.DemoRider.MapActivity;
-import com.demoriderctg.arif.DemoRider.PlaceAutocompleteAdapter;
-import com.demoriderctg.arif.DemoRider.RVAdapter;
-import com.demoriderctg.arif.DemoRider.SearchHistory;
-import com.demoriderctg.arif.DemoRider.Model.PlaceInfo;
-import com.demoriderctg.arif.demorider.R;
+import com.demoriderctg.arif.demorider.models.PlaceInfo;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;

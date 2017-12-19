@@ -1,4 +1,4 @@
-package com.demoriderctg.arif.DemoRider.Model;
+package com.demoriderctg.arif.demorider.models;
 
 
 import android.net.Uri;

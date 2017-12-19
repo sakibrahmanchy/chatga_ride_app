@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
-import com.demoriderctg.arif.DemoRider.MainActivity;
+import com.demoriderctg.arif.demorider.MainActivity;
 import com.demoriderctg.arif.demorider.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;

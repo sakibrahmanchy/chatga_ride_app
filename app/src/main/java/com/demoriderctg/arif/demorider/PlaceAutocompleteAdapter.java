@@ -1,4 +1,4 @@
-package com.demoriderctg.arif.DemoRider;
+package com.demoriderctg.arif.demorider;
 
 /*
  * Copyright (C) 2015 Google Inc. All Rights Reserved.

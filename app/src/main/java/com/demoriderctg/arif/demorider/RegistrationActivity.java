@@ -1,15 +1,16 @@
-package com.demoriderctg.arif.DemoRider;
+package com.demoriderctg.arif.demorider;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.support.design.widget.Snackbar;
+import android.app.Activity;
+
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -24,10 +25,10 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.demoriderctg.arif.DemoRider.Model.ApiModels.RegistrationModels.RegistrationModel;
-import com.demoriderctg.arif.DemoRider.RestAPI.ApiClient;
-import com.demoriderctg.arif.DemoRider.RestAPI.ApiInterface;
-import com.demoriderctg.arif.demorider.R;
+import com.demoriderctg.arif.demorider.models.ApiModels.RegistrationModels.RegistrationModel;
+import com.demoriderctg.arif.demorider.RestAPI.ApiClient;
+import com.demoriderctg.arif.demorider.RestAPI.ApiInterface;
+
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -42,7 +43,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.Manifest.permission.READ_CONTACTS;
-import static com.demoriderctg.arif.DemoRider.MainActivity.TAG;
+import static com.demoriderctg.arif.demorider.MainActivity.TAG;
 
 /**
  * A login screen that offers login via email/password.
@@ -55,6 +56,7 @@ public class RegistrationActivity extends Activity {
     private static final int REQUEST_READ_CONTACTS = 0;
 
 
+
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
@@ -63,8 +65,8 @@ public class RegistrationActivity extends Activity {
     private View mLoginFormView;
     private RadioGroup mGender;
     private EditText mConfirmPasswordView;
-    private String email, phoneNumber, userName, password, gender, deviceToken, birthDate;
-    private ApiInterface apiService;
+    private  String email,phoneNumber,userName,password,gender,deviceToken,birthDate;
+    private   ApiInterface apiService ;
     private ProgressDialog dialog;
     private EditText birthDayText;
     private DatePickerDialog birthDayPickerDialog;
@@ -84,7 +86,7 @@ public class RegistrationActivity extends Activity {
         mConfirmPasswordView = (EditText) findViewById(R.id.confirmPassword);
         mPasswordView = (EditText) findViewById(R.id.password);
         Username = (EditText) findViewById(R.id.userName);
-        dateFormatter = new SimpleDateFormat("YYYY-MM-DD", Locale.US);
+        dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         phoneNumber = getIntent().getStringExtra("phoneNumber");
 
         birthDayText = (EditText) findViewById(R.id.birthday_edittext);
@@ -112,7 +114,7 @@ public class RegistrationActivity extends Activity {
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (attemptLogin()) {
+                if(attemptLogin()){
                     UserRegistration();
                 }
             }
@@ -121,7 +123,6 @@ public class RegistrationActivity extends Activity {
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
     }
-
     private boolean mayRequestContacts() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return true;
@@ -147,7 +148,7 @@ public class RegistrationActivity extends Activity {
 
     private boolean attemptLogin() {
 
-        boolean ok = true;
+        boolean ok=true;
         mEmailView.setError(null);
         mPasswordView.setError(null);
         Username.setError(null);
@@ -161,7 +162,7 @@ public class RegistrationActivity extends Activity {
         String confrimPassowrd = mConfirmPasswordView.getText().toString();
         int selectedId = mGender.getCheckedRadioButtonId();
 
-        if (selectedId == R.id.female_radio_btn)
+        if(selectedId == R.id.female_radio_btn)
             gender = "Female";
         else
             gender = "Male";
@@ -174,7 +175,7 @@ public class RegistrationActivity extends Activity {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
-            ok = false;
+            ok=false;
         }
 
         // Check for a confirmposword, if the user entered one.
@@ -182,14 +183,14 @@ public class RegistrationActivity extends Activity {
             mPasswordView.setError("password not match");
             focusView = mPasswordView;
             cancel = true;
-            ok = false;
+            ok=false;
         }
 
         if (TextUtils.isEmpty(userName)) {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = Username;
             cancel = true;
-            ok = false;
+            ok=false;
         }
 
         // Check for a valid email address.
@@ -197,12 +198,12 @@ public class RegistrationActivity extends Activity {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
-            ok = false;
+            ok=false;
         } else if (!isEmailValid(email)) {
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
             cancel = true;
-            ok = false;
+            ok=false;
         }
 
         return ok;
@@ -228,17 +229,17 @@ public class RegistrationActivity extends Activity {
 
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 Calendar newDate = Calendar.getInstance();
-                Log.d(TAG, dayOfMonth + "");
+                Log.d(TAG, dayOfMonth+"");
                 newDate.set(year, monthOfYear, dayOfMonth);
-                birthDayText.setText(year + "-" + monthOfYear + "-" + dayOfMonth);
+                birthDayText.setText(year+"-"+monthOfYear+"-"+dayOfMonth);
             }
 
-        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
 
     }
 
 
-    public void UserRegistration() {
+    public void UserRegistration(){
 
         apiService =
                 ApiClient.getClient().create(ApiInterface.class);
@@ -249,18 +250,18 @@ public class RegistrationActivity extends Activity {
         dialog.show();
 
         // Call<RegistrationModel> call = apiService.signUpClient(userName,"shaikat",email,"01815003723",password,"","",gender);
-        Call<RegistrationModel> call = apiService.signUpClient(userName, userName, email, phoneNumber, password, deviceToken, birthDate, gender);
+        Call<RegistrationModel> call = apiService.signUpClient(userName,userName,email,phoneNumber,password, deviceToken, birthDate,gender);
 
         call.enqueue(new Callback<RegistrationModel>() {
             @Override
             public void onResponse(Call<RegistrationModel> call, Response<RegistrationModel> response) {
 
                 int statusCode = response.code();
-                String testStatusCode = statusCode + "";
+                String testStatusCode = statusCode+"";
                 Snackbar.make(findViewById(android.R.id.content), testStatusCode,
                         Snackbar.LENGTH_SHORT).show();
                 dialog.dismiss();
-                switch (statusCode) {
+                switch(statusCode){
 
                     case 201:
                         String responseCode = response.body().getSuccess();
@@ -269,7 +270,7 @@ public class RegistrationActivity extends Activity {
                         String clientSecret = getString(R.string.APP_CLIENT_SECRET);
 
                         LoginHelper loginHelper = new LoginHelper(RegistrationActivity.this);
-                        loginHelper.AccessTokenCall(clientId, clientSecret, phoneNumber);
+                        loginHelper.AccessTokenCall(clientId, clientSecret,phoneNumber);
 
                         break;
                     case 406:
@@ -280,7 +281,7 @@ public class RegistrationActivity extends Activity {
                             for (int i = 0; i < errors.length(); i++) {
                                 JSONObject jsonObj = errors.getJSONObject(i);
                                 String k = jsonObj.keys().next();
-                                Log.i("Info", jsonObj.getString(k));
+                                Log.i("Info",  jsonObj.getString(k));
 
                                 Snackbar.make(findViewById(android.R.id.content), jsonObj.getString(k),
                                         Snackbar.LENGTH_LONG).show();
@@ -292,13 +293,13 @@ public class RegistrationActivity extends Activity {
                         }
                     case 200:
                         responseCode = response.body().getSuccess().toString();
-                        if (responseCode.equals("user-found")) {
+                        if(responseCode.equals("user-found")){
                             //No phone verification required, redirect to home
                             Intent intent = new Intent(RegistrationActivity.this, UserCheckActivity.class);
-                            intent.putExtra("phoneNumber", phoneNumber);
+                            intent.putExtra("phoneNumber",phoneNumber);
                             startActivity(intent);
 
-                        } else {
+                        }else{
                             Snackbar.make(findViewById(android.R.id.content), "Error Verifying.",
                                     Snackbar.LENGTH_SHORT).show();
                         }
@@ -352,6 +353,7 @@ public class RegistrationActivity extends Activity {
             }
         });
     }
-}
 
+
+}
 

@@ -1,10 +1,10 @@
-package com.demoriderctg.arif.DemoRider;
+package com.demoriderctg.arif.demorider;
 
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.demoriderctg.arif.DemoRider.ShowDerectionInGoogleMap;
+import com.demoriderctg.arif.demorider.ShowDerectionInGoogleMap;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;

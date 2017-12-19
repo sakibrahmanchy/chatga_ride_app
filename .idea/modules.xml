@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Client.iml" filepath="$PROJECT_DIR$/Client.iml" />
-      <module fileurl="file://D:\devClient\Client.iml" filepath="D:\devClient\Client.iml" />
-      <module fileurl="file://D:\Work\ChatgaRide\Client\Rider.iml" filepath="D:\Work\ChatgaRide\Client\Rider.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://D:\Work\ChatgaRide\Client\devClient.iml" filepath="D:\Work\ChatgaRide\Client\devClient.iml" />
+      <module fileurl="file://$PROJECT_DIR$/devClient.iml" filepath="$PROJECT_DIR$/devClient.iml" />
     </modules>
   </component>
 </project>
