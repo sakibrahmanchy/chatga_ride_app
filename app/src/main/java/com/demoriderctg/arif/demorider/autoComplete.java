@@ -49,13 +49,11 @@ public class autoComplete extends AppCompatActivity  implements GoogleApiClient.
     Context context;
     private RecyclerView rv;
     private RecyclerView rvSearchHistory;
-    public List<SearchHistory> searchHistories, searchHistoriesList;
+    public List<SearchHistory> searchHistories,searchHistoriesList;
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
-            new LatLng(54.69726685890506,
-                    -2.7379201682812226),
-            new LatLng(55.38942944437183,
-                    -1.2456105979687226)
-    );
+            new LatLng(54.69726685890506,-2.7379201682812226), new LatLng(55.38942944437183, -1.2456105979687226));
+
+    //database
 
     private  String locationName;
     private  double latitude;
@@ -69,23 +67,25 @@ public class autoComplete extends AppCompatActivity  implements GoogleApiClient.
         mSearchText = (AutoCompleteTextView) findViewById(R.id.input_search);
         LocationName="";
         activatyName =  getIntent().getStringExtra("From");
-       // rv = (RecyclerView)findViewById(R.id.rv);
-      //  rv.setHasFixedSize(true);
-       LinearLayoutManager llm = new LinearLayoutManager(context);
-      //  rv.setLayoutManager(llm);
+        // rv = (RecyclerView)findViewById(R.id.rv);
+        //  rv.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(context);
+        //  rv.setLayoutManager(llm);
 
         rvSearchHistory = (RecyclerView)findViewById(R.id.rvSearchHistory);
         rvSearchHistory.setHasFixedSize(true);
         rvSearchHistory.setLayoutManager(llm);
         mydb = new DBHelper(this);
-       // mydb.crateTable();
-       // mydb.deleteAllHistory();
+        // mydb.crateTable();
+        // mydb.deleteAllHistory();
         vmhistories = mydb.getAllSearchList();
         init();
-      //  initializeData();
-      //  initializeAdapter();
+        //  initializeData();
+        //  initializeAdapter();
         initializeDataForSearch();
         initializeAdapterForSearchHistory();
+
+
     }
 
     void  init(){
@@ -194,14 +194,10 @@ public class autoComplete extends AppCompatActivity  implements GoogleApiClient.
     @Override
     public void onBackPressed()
     {
-       finish();
+        finish();
     }
 
-    private void initializeData(){
-        searchHistories = new ArrayList<>();
-        searchHistories.add(new SearchHistory("Emma Wilson", "23 years old", R.mipmap.home));
-        searchHistories.add(new SearchHistory("Emma Wilson", "23 years old", R.drawable.ic_gps));
-    }
+
 
     private void initializeDataForSearch(){
         searchHistoriesList = new ArrayList<>();
@@ -214,12 +210,12 @@ public class autoComplete extends AppCompatActivity  implements GoogleApiClient.
 
     }
     private void initializeAdapter(){
-        RVAdapter adapter = new RVAdapter(searchHistories);
+        RVAdapter adapter = new RVAdapter(searchHistories, this, activatyName);
         rv.setAdapter(adapter);
     }
 
     private void initializeAdapterForSearchHistory(){
-        RVAdapter adapter = new RVAdapter(searchHistoriesList);
+        RVAdapter adapter = new RVAdapter(searchHistoriesList,this,activatyName);
         rvSearchHistory.setAdapter(adapter);
     }
 
@@ -231,10 +227,10 @@ public class autoComplete extends AppCompatActivity  implements GoogleApiClient.
             vmhistory =vmhistories.get(i);
             if(vmhistory.letitude==latitude){
                 flag=1;
-               break;
+                break;
             }
         }
         if(flag==0)
-        mydb.insertContact(locationName,latitude,longitude,searchTime);
+            mydb.insertContact(locationName,latitude,longitude,searchTime);
     }
 }

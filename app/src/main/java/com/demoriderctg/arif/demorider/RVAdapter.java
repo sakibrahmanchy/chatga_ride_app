@@ -9,8 +9,6 @@ import android.view.ViewGroup;
         import android.widget.ImageView;
         import android.widget.TextView;
 
-import com.demoriderctg.arif.demorider.R;
-
 import java.util.List;
 
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> {
@@ -34,7 +32,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
 
 
 
-    public RVAdapter(List<SearchHistory> persons){
+    public RVAdapter(List<SearchHistory> persons, autoComplete autoComplete, String activatyName){
         this.searchHistories = persons;
     }
 
