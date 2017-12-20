@@ -1,0 +1,265 @@
+Index: app/src/main/java/com/demoriderctg/arif/DemoRider/DownloadTask.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.demoriderctg.arif.DemoRider;\n\nimport android.graphics.Color;\nimport android.os.AsyncTask;\nimport android.util.Log;\n\nimport com.demoriderctg.arif.DemoRider.AppConfig.AppConstant;\nimport com.google.android.gms.maps.GoogleMap;\nimport com.google.android.gms.maps.model.LatLng;\nimport com.google.android.gms.maps.model.MarkerOptions;\nimport com.google.android.gms.maps.model.PolylineOptions;\n\nimport org.json.JSONObject;\n\nimport java.io.BufferedReader;\nimport java.io.IOException;\nimport java.io.InputStream;\nimport java.io.InputStreamReader;\nimport java.net.HttpURLConnection;\nimport java.net.URL;\nimport java.util.ArrayList;\nimport java.util.HashMap;\nimport java.util.List;\n\n/**\n * Created by Arif on 11/12/2017.\n */\n\npublic class DownloadTask extends AsyncTask<String, Void, String> {\n\n    private String distance;\n    private String duration;\n    private LatLng source, destination;\n    private GoogleMap mMap;\n\n    public DownloadTask(GoogleMap mMap, LatLng source, LatLng dest) {\n\n        this.mMap = mMap;\n        this.source = source;\n        this.destination = dest;\n    }\n\n    @Override\n    protected String doInBackground(String... url) {\n\n        String data = AppConstant.Empty;\n        try {\n            data = downloadUrl(url[0]);\n        } catch (Exception e) {\n            Log.d(\"Background Task\", e.toString());\n        }\n        return data;\n    }\n\n    @Override\n    protected void onPostExecute(String result) {\n        super.onPostExecute(result);\n\n        ParserTask parserTask = new ParserTask();\n        parserTask.execute(result);\n    }\n\n    private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {\n\n        @Override\n        protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {\n\n            JSONObject jObject;\n            List<List<HashMap<String, String>>> routes = null;\n\n            try {\n                jObject = new JSONObject(jsonData[0]);\n                DirectionsJSONParser parser = new DirectionsJSONParser(jObject);\n\n                routes = parser.parse();\n                distance = parser.getDistance();\n                duration = parser.getDuration();\n            } catch (Exception e) {\n                e.printStackTrace();\n            }\n            return routes;\n        }\n\n        @Override\n        protected void onPostExecute(List<List<HashMap<String, String>>> result) {\n\n            ArrayList points;\n            PolylineOptions lineOptions = null;\n            MarkerOptions markerOptions = new MarkerOptions();\n\n            for (int i = 0; i < result.size(); i++) {\n                points = new ArrayList();\n                lineOptions = new PolylineOptions();\n\n                List<HashMap<String, String>> path = result.get(i);\n\n                for (int j = 0; j < path.size(); j++) {\n                    HashMap<String, String> point = path.get(j);\n\n                    double Latitude = Double.parseDouble(point.get(AppConstant.Latitude));\n                    double Longitude = Double.parseDouble(point.get(AppConstant.Longitude));\n                    LatLng position = new LatLng(Latitude, Longitude);\n\n                    points.add(position);\n                }\n\n                lineOptions.addAll(points);\n                lineOptions.width(12);\n                lineOptions.color(Color.RED);\n                lineOptions.geodesic(true);\n            }\n            mMap.clear();\n            ShowDerectionInGoogleMap showDerectionInGoogleMap = new ShowDerectionInGoogleMap(mMap, lineOptions, source, destination);\n            showDerectionInGoogleMap.placeDirection();\n        }\n    }\n\n    private String getDirectionsUrl(LatLng origin, LatLng dest) {\n\n        String str_origin = AppConstant.OriginEqual + origin.latitude + AppConstant.Comma + origin.longitude;\n        String str_dest = AppConstant.DestinationEqual + dest.latitude + AppConstant.Comma + dest.longitude;\n        String sensor = AppConstant.Set_Sensor_False;\n        String mode = AppConstant.DrivingMode;\n        String parameters = str_origin + AppConstant.AMPERSAND + str_dest + AppConstant.AMPERSAND + sensor + AppConstant.AMPERSAND + mode;\n        String output = AppConstant.JSON;\n        String url = AppConstant.Map_Api_Direction + output + AppConstant.Question + parameters;\n\n        return url;\n    }\n\n    private String downloadUrl(String strUrl) throws IOException {\n\n        String data = AppConstant.Empty;\n        InputStream iStream = null;\n        HttpURLConnection urlConnection = null;\n\n        try {\n            URL url = new URL(strUrl);\n            urlConnection = (HttpURLConnection) url.openConnection();\n            urlConnection.connect();\n            iStream = urlConnection.getInputStream();\n\n            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));\n            StringBuffer sb = new StringBuffer();\n\n            String line = AppConstant.Empty;\n            while ((line = br.readLine()) != null) {\n                sb.append(line);\n            }\n            data = sb.toString();\n            br.close();\n\n        } catch (Exception e) {\n            Log.d(AppConstant.Exception, e.toString());\n        } finally {\n            iStream.close();\n            urlConnection.disconnect();\n        }\n        return data;\n    }\n}\n\n\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/demoriderctg/arif/DemoRider/DownloadTask.java	(date 1513714043000)
++++ app/src/main/java/com/demoriderctg/arif/DemoRider/DownloadTask.java	(revision )
+@@ -1,10 +1,10 @@
+-package com.demoriderctg.arif.DemoRider;
++package com.demoriderctg.arif.demorider;
+ 
+ import android.graphics.Color;
+ import android.os.AsyncTask;
+ import android.util.Log;
+ 
+-import com.demoriderctg.arif.DemoRider.AppConfig.AppConstant;
++import com.demoriderctg.arif.demorider.ShowDerectionInGoogleMap;
+ import com.google.android.gms.maps.GoogleMap;
+ import com.google.android.gms.maps.model.LatLng;
+ import com.google.android.gms.maps.model.MarkerOptions;
+@@ -27,23 +27,23 @@
+  */
+ 
+ public class DownloadTask extends AsyncTask<String, Void, String> {
+-
+     private String distance;
+     private String duration;
+-    private LatLng source, destination;
++    private LatLng source, dest;
+     private GoogleMap mMap;
+ 
+     public DownloadTask(GoogleMap mMap, LatLng source, LatLng dest) {
+-
+         this.mMap = mMap;
+         this.source = source;
+-        this.destination = dest;
++        this.dest = dest;
++
+     }
+ 
+     @Override
+     protected String doInBackground(String... url) {
+ 
+-        String data = AppConstant.Empty;
++        String data = "";
++
+         try {
+             data = downloadUrl(url[0]);
+         } catch (Exception e) {
+@@ -58,10 +58,15 @@
+ 
+         ParserTask parserTask = new ParserTask();
+         parserTask.execute(result);
++
+     }
+ 
++    /**
++     * A class to parse the Google Places in JSON format
++     */
+     private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
+ 
++        // Parsing the data in non-ui thread
+         @Override
+         protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
+ 
+@@ -73,7 +78,9 @@
+                 DirectionsJSONParser parser = new DirectionsJSONParser(jObject);
+ 
+                 routes = parser.parse();
++                //Get Distance from source to destination
+                 distance = parser.getDistance();
++                //GET Time to Source to Destination
+                 duration = parser.getDuration();
+             } catch (Exception e) {
+                 e.printStackTrace();
+@@ -83,8 +90,7 @@
+ 
+         @Override
+         protected void onPostExecute(List<List<HashMap<String, String>>> result) {
+-
+-            ArrayList points;
++            ArrayList points = null;
+             PolylineOptions lineOptions = null;
+             MarkerOptions markerOptions = new MarkerOptions();
+ 
+@@ -97,9 +103,9 @@
+                 for (int j = 0; j < path.size(); j++) {
+                     HashMap<String, String> point = path.get(j);
+ 
+-                    double Latitude = Double.parseDouble(point.get(AppConstant.Latitude));
+-                    double Longitude = Double.parseDouble(point.get(AppConstant.Longitude));
+-                    LatLng position = new LatLng(Latitude, Longitude);
++                    double lat = Double.parseDouble(point.get("lat"));
++                    double lng = Double.parseDouble(point.get("lng"));
++                    LatLng position = new LatLng(lat, lng);
+ 
+                     points.add(position);
+                 }
+@@ -108,56 +114,83 @@
+                 lineOptions.width(12);
+                 lineOptions.color(Color.RED);
+                 lineOptions.geodesic(true);
++
+             }
+             mMap.clear();
+-            ShowDerectionInGoogleMap showDerectionInGoogleMap = new ShowDerectionInGoogleMap(mMap, lineOptions, source, destination);
++// Drawing polyline in the Google Map for the i-th route
++
++// Constrain the camera target to the Adelaide bounds.
++
++            ShowDerectionInGoogleMap showDerectionInGoogleMap = new ShowDerectionInGoogleMap(mMap, lineOptions, source, dest);
+             showDerectionInGoogleMap.placeDirection();
++
+         }
+     }
+ 
+     private String getDirectionsUrl(LatLng origin, LatLng dest) {
+ 
+-        String str_origin = AppConstant.OriginEqual + origin.latitude + AppConstant.Comma + origin.longitude;
+-        String str_dest = AppConstant.DestinationEqual + dest.latitude + AppConstant.Comma + dest.longitude;
+-        String sensor = AppConstant.Set_Sensor_False;
+-        String mode = AppConstant.DrivingMode;
+-        String parameters = str_origin + AppConstant.AMPERSAND + str_dest + AppConstant.AMPERSAND + sensor + AppConstant.AMPERSAND + mode;
+-        String output = AppConstant.JSON;
+-        String url = AppConstant.Map_Api_Direction + output + AppConstant.Question + parameters;
++        // Origin of route
++        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
++
++        // Destination of route
++        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
++
++        // Sensor enabled
++        String sensor = "sensor=false";
++        String mode = "mode=driving";
++        // Building the parameters to the web service
++        String parameters = str_origin + "&" + str_dest + "&" + sensor + "&" + mode;
++
++        // Output format
++        String output = "json";
++
++        // Building the url to the web service
++        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
++
+ 
+         return url;
+     }
+ 
++    /**
++     * A method to download json data from url
++     */
+     private String downloadUrl(String strUrl) throws IOException {
+-
+-        String data = AppConstant.Empty;
++        String data = "";
+         InputStream iStream = null;
+         HttpURLConnection urlConnection = null;
+-
+         try {
+             URL url = new URL(strUrl);
++
+             urlConnection = (HttpURLConnection) url.openConnection();
++
+             urlConnection.connect();
++
+             iStream = urlConnection.getInputStream();
+ 
+             BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
++
+             StringBuffer sb = new StringBuffer();
+ 
+-            String line = AppConstant.Empty;
++            String line = "";
+             while ((line = br.readLine()) != null) {
+                 sb.append(line);
+             }
++
+             data = sb.toString();
++
+             br.close();
+ 
+         } catch (Exception e) {
+-            Log.d(AppConstant.Exception, e.toString());
++            Log.d("Exception", e.toString());
+         } finally {
+             iStream.close();
+             urlConnection.disconnect();
+         }
++
++
+         return data;
+     }
++
+ }
+ 
+ 
+Index: app/src/main/java/com/demoriderctg/arif/DemoRider/autoComplete.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.demoriderctg.arif.DemoRider;\n\nimport android.app.Activity;\nimport android.content.Context;\nimport android.content.Intent;\nimport android.support.annotation.NonNull;\nimport android.support.v7.app.AppCompatActivity;\nimport android.os.Bundle;\nimport android.support.v7.widget.LinearLayoutManager;\nimport android.support.v7.widget.RecyclerView;\nimport android.util.Log;\nimport android.view.View;\nimport android.view.inputmethod.InputMethodManager;\nimport android.widget.AdapterView;\nimport android.widget.AutoCompleteTextView;\n\nimport com.demoriderctg.arif.Sqlite.DBHelper;\nimport com.demoriderctg.arif.Sqlite.Vmhistory;\nimport com.demoriderctg.arif.DemoRider.Model.PlaceInfo;\nimport com.google.android.gms.common.ConnectionResult;\nimport com.google.android.gms.common.api.GoogleApiClient;\nimport com.google.android.gms.common.api.PendingResult;\nimport com.google.android.gms.common.api.ResultCallback;\nimport com.google.android.gms.location.places.AutocompletePrediction;\nimport com.google.android.gms.location.places.Place;\nimport com.google.android.gms.location.places.PlaceBuffer;\nimport com.google.android.gms.location.places.Places;\nimport com.google.android.gms.maps.model.LatLng;\nimport com.google.android.gms.maps.model.LatLngBounds;\n\nimport java.util.ArrayList;\nimport java.util.Date;\nimport java.util.List;\n\npublic class autoComplete extends AppCompatActivity  implements GoogleApiClient.OnConnectionFailedListener {\n\n    private PlaceAutocompleteAdapter mPlaceAutocompleteAdapter;\n    private GoogleApiClient mGoogleApiClient;\n\n    private AutoCompleteTextView mSearchText;\n    private AutoCompleteTextView mSearchTextDestination;\n    private PlaceInfo mPlace;\n    public static LatLng source,dest;\n    private  String LocationName=\"\";\n    private  String lat;\n    private  String lon;\n    private String activatyName;\n    private DBHelper mydb;\n    Context context;\n    private RecyclerView rv;\n    private RecyclerView rvSearchHistory;\n    public List<SearchHistory> searchHistories,searchHistoriesList;\n    private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(\n            new LatLng(54.69726685890506,-2.7379201682812226), new LatLng(55.38942944437183, -1.2456105979687226));\n\n    //database\n\n    private  String locationName;\n    private  double latitude;\n    private  double longitude;\n    private  String searchTime;\n    ArrayList<Vmhistory>vmhistories;\n    @Override\n    protected void onCreate(Bundle savedInstanceState) {\n        super.onCreate(savedInstanceState);\n        setContentView(R.layout.auto_complete_search);\n        mSearchText = (AutoCompleteTextView) findViewById(R.id.input_search);\n        LocationName=\"\";\n        activatyName =  getIntent().getStringExtra(\"From\");\n       // rv = (RecyclerView)findViewById(R.id.rv);\n      //  rv.setHasFixedSize(true);\n       LinearLayoutManager llm = new LinearLayoutManager(context);\n      //  rv.setLayoutManager(llm);\n\n        rvSearchHistory = (RecyclerView)findViewById(R.id.rvSearchHistory);\n        rvSearchHistory.setHasFixedSize(true);\n        rvSearchHistory.setLayoutManager(llm);\n        mydb = new DBHelper(this);\n       // mydb.crateTable();\n       // mydb.deleteAllHistory();\n        vmhistories = mydb.getAllSearchList();\n        init();\n      //  initializeData();\n      //  initializeAdapter();\n        initializeDataForSearch();\n        initializeAdapterForSearchHistory();\n\n\n    }\n\n    void  init(){\n\n        mGoogleApiClient = new GoogleApiClient\n                .Builder(this)\n                .addApi(Places.GEO_DATA_API)\n                .addApi(Places.PLACE_DETECTION_API)\n                .enableAutoManage(this, autoComplete.this)\n                .build();\n        mSearchText.setOnItemClickListener(mAutocompleteClickListener);\n        mPlaceAutocompleteAdapter = new PlaceAutocompleteAdapter(this, mGoogleApiClient,\n                LAT_LNG_BOUNDS, null);\n        mSearchText.setAdapter(mPlaceAutocompleteAdapter);\n\n    }\n\n    @Override\n    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {\n\n    }\n\n    private AdapterView.OnItemClickListener mAutocompleteClickListener = new AdapterView.OnItemClickListener() {\n        @Override\n        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {\n\n            final AutocompletePrediction item = mPlaceAutocompleteAdapter.getItem(i);\n            //Hidding Keyboard\n            InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);\n            imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);\n\n            final String placeId = item.getPlaceId();\n\n            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi\n                    .getPlaceById(mGoogleApiClient, placeId);\n\n            placeResult.setResultCallback(mUpdatePlaceDetailsCallback);\n\n\n        }\n    };\n\n    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback = new ResultCallback<PlaceBuffer>() {\n        @Override\n        public void onResult(@NonNull PlaceBuffer places) {\n\n\n\n//            if(!places.getStatus().isSuccess()){\n//\n//                places.release();\n//                return;\n//            }\n            final Place place = places.get(0);\n\n            try{\n\n                mPlace = new PlaceInfo();\n                mPlace.setName(place.getName().toString());\n                mPlace.setAddress(place.getAddress().toString());\n                mPlace.setId(place.getId());\n                mPlace.setLatlng(place.getLatLng());\n                mPlace.setRating(place.getRating());\n                mPlace.setPhoneNumber(place.getPhoneNumber().toString());\n                mPlace.setWebsiteUri(place.getWebsiteUri());\n\n                source =place.getLatLng();\n                lat =\"\"+source.latitude;\n                lon=\"\"+source.longitude;\n                LocationName =mSearchText.getText().toString();\n\n                //database\n                locationName=LocationName;\n                latitude=source.latitude;\n                longitude=source.longitude;\n                Date date = new Date();\n                searchTime=date.toString();\n\n                places.release();\n\n                Intent i = new Intent(autoComplete.this, MapActivity.class);\n                i.putExtra(\"lat\",source.latitude);\n                i.putExtra(\"lon\",source.longitude);\n                i.putExtra(\"locationName\",LocationName);\n                if(activatyName.equals(\"from\")){\n                    i.putExtra(\"SearchLocation\",\"from\");\n                }\n                if(activatyName.equals(\"to\")){\n                    i.putExtra(\"SearchLocation\",\"to\");\n                }\n\n                insertHistoryTable();\n                setResult(Activity.RESULT_OK, i);\n                i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);\n                startActivity(i);\n                finish();\n\n\n            }catch (NullPointerException e){\n                Log.d(\"\", \"onResult: NullPointerException: \" + e.getMessage() );\n            }\n        }\n\n    };\n\n    @Override\n    public void onBackPressed()\n    {\n       finish();\n    }\n\n    private void initializeData(){\n        searchHistories = new ArrayList<>();\n        searchHistories.add(new SearchHistory(\"Emma Wilson\", \"23 years old\", R.mipmap.home));\n        searchHistories.add(new SearchHistory(\"Emma Wilson\", \"23 years old\", R.drawable.ic_gps));\n    }\n\n    private void initializeDataForSearch(){\n        searchHistoriesList = new ArrayList<>();\n        for (int i=0; i<vmhistories.size();i++){\n            Vmhistory vmhistory =new Vmhistory();\n            vmhistory =vmhistories.get(i);\n            searchHistoriesList.add(new SearchHistory(vmhistory.locationName, \"Dhaka\", R.mipmap.bike));\n        }\n\n\n    }\n    private void initializeAdapter(){\n        RVAdapter adapter = new RVAdapter(searchHistories);\n        rv.setAdapter(adapter);\n    }\n\n    private void initializeAdapterForSearchHistory(){\n        RVAdapter adapter = new RVAdapter(searchHistoriesList);\n        rvSearchHistory.setAdapter(adapter);\n    }\n\n    private void   insertHistoryTable(){\n        Vmhistory vmhistory =new Vmhistory();\n        int flag=0;\n        for (int i=0; i<vmhistories.size();i++){\n\n            vmhistory =vmhistories.get(i);\n            if(vmhistory.letitude==latitude){\n                flag=1;\n               break;\n            }\n        }\n        if(flag==0)\n        mydb.insertContact(locationName,latitude,longitude,searchTime);\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/demoriderctg/arif/DemoRider/autoComplete.java	(date 1513714043000)
++++ app/src/main/java/com/demoriderctg/arif/DemoRider/autoComplete.java	(revision )
+@@ -1,4 +1,4 @@
+-package com.demoriderctg.arif.DemoRider;
++package com.demoriderctg.arif.demorider;
+ 
+ import android.app.Activity;
+ import android.content.Context;
+@@ -16,7 +16,7 @@
+ 
+ import com.demoriderctg.arif.Sqlite.DBHelper;
+ import com.demoriderctg.arif.Sqlite.Vmhistory;
+-import com.demoriderctg.arif.DemoRider.Model.PlaceInfo;
++import com.demoriderctg.arif.demorider.models.PlaceInfo;
+ import com.google.android.gms.common.ConnectionResult;
+ import com.google.android.gms.common.api.GoogleApiClient;
+ import com.google.android.gms.common.api.PendingResult;
+@@ -49,11 +49,13 @@
+     Context context;
+     private RecyclerView rv;
+     private RecyclerView rvSearchHistory;
+-    public List<SearchHistory> searchHistories,searchHistoriesList;
++    public List<SearchHistory> searchHistories, searchHistoriesList;
+     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
+-            new LatLng(54.69726685890506,-2.7379201682812226), new LatLng(55.38942944437183, -1.2456105979687226));
+-
+-    //database
++            new LatLng(54.69726685890506,
++                    -2.7379201682812226),
++            new LatLng(55.38942944437183,
++                    -1.2456105979687226)
++    );
+ 
+     private  String locationName;
+     private  double latitude;
+@@ -84,8 +86,6 @@
+       //  initializeAdapter();
+         initializeDataForSearch();
+         initializeAdapterForSearchHistory();
+-
+-
+     }
+ 
+     void  init(){
+Index: app/src/main/java/com/demoriderctg/arif/DemoRider/DirectionsJSONParser.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.demoriderctg.arif.DemoRider;\n\nimport com.google.android.gms.maps.model.LatLng;\n\nimport org.json.JSONArray;\nimport org.json.JSONException;\nimport org.json.JSONObject;\n\nimport java.util.ArrayList;\nimport java.util.HashMap;\nimport java.util.List;\n\n/**\n * Created by anupamchugh on 27/11/15.\n */\n\npublic class DirectionsJSONParser {\n\n   private  String Distance ;\n    private String Duration;\n    /** Receives a JSONObject and returns a list of lists containing latitude and longitude */\n    List<List<HashMap<String, String>>> routes = new ArrayList<List<HashMap<String,String>>>() ;\n    JSONArray jRoutes = null;\n    JSONArray jLegs = null;\n    JSONArray jSteps = null;\n\n    JSONObject jDistance = null;\n    JSONObject jDuration = null;\n    public DirectionsJSONParser(JSONObject jObject) throws JSONException {\n        jRoutes = jObject.getJSONArray(\"routes\");\n    }\n    public List<List<HashMap<String,String>>> parse( ){\n\n\n\n        try {\n            /** Traversing all routes */\n            for(int i=0;i<jRoutes.length();i++){\n                jLegs = ( (JSONObject)jRoutes.get(i)).getJSONArray(\"legs\");\n                List path = new ArrayList<HashMap<String, String>>();\n\n                /** Traversing all legs */\n                for(int j=0;j<jLegs.length();j++){\n\n                    jSteps = ( (JSONObject)jLegs.get(j)).getJSONArray(\"steps\");\n\n                    /** Traversing all steps */\n                    for(int k=0;k<jSteps.length();k++){\n                        String polyline = \"\";\n                        polyline = (String)((JSONObject)((JSONObject)jSteps.get(k)).get(\"polyline\")).get(\"points\");\n                        List list = decodePoly(polyline);\n\n                        /** Traversing all points */\n                        for(int l=0;l <list.size();l++){\n                            HashMap<String, String> hm = new HashMap<String, String>();\n                            hm.put(\"lat\", Double.toString(((LatLng)list.get(l)).latitude) );\n                            hm.put(\"lng\", Double.toString(((LatLng)list.get(l)).longitude) );\n                            path.add(hm);\n                        }\n                    }\n                    routes.add(path);\n                }\n            }\n\n        } catch (JSONException e) {\n            e.printStackTrace();\n        }catch (Exception e){\n        }\n\n        return routes;\n    }\n\n    /**\n     * Method to decode polyline points\n     * Courtesy : http://jeffreysambells.com/2010/05/27/decoding-polylines-from-google-maps-direction-api-with-java\n     * */\n    private List decodePoly(String encoded) {\n\n        List poly = new ArrayList();\n        int index = 0, len = encoded.length();\n        int lat = 0, lng = 0;\n\n        while (index < len) {\n            int b, shift = 0, result = 0;\n            do {\n                b = encoded.charAt(index++) - 63;\n                result |= (b & 0x1f) << shift;\n                shift += 5;\n            } while (b >= 0x20);\n            int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));\n            lat += dlat;\n\n            shift = 0;\n            result = 0;\n            do {\n                b = encoded.charAt(index++) - 63;\n                result |= (b & 0x1f) << shift;\n                shift += 5;\n            } while (b >= 0x20);\n            int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));\n            lng += dlng;\n\n            LatLng p = new LatLng((((double) lat / 1E5)),\n                    (((double) lng / 1E5)));\n            poly.add(p);\n        }\n\n        return poly;\n    }\n    //get Distance;\n    public String getDistance() throws JSONException {\n\n        for(int i=0; i<jRoutes.length(); i++){\n            jLegs = ( (JSONObject)jRoutes.get(i)).getJSONArray(\"legs\");\n            for(int j=0; j<jLegs.length(); j++){\n                if(j==0){\n                    jDistance = ((JSONObject) jLegs.get(j)).getJSONObject(\"distance\");\n                    HashMap<String, String> hmDistance = new HashMap<String, String>();\n                    Distance= jDistance.getString(\"text\");\n                    return Distance;\n                }\n            }\n        }\n        return null;\n    }\n\n    //get Duration\n\n    public  String getDuration() throws JSONException {\n        for(int i=0; i<jRoutes.length(); i++){\n            jLegs = ( (JSONObject)jRoutes.get(i)).getJSONArray(\"legs\");\n            for(int j=0; j<jLegs.length(); j++){\n                    if(j==0){\n                    jDuration = ((JSONObject) jLegs.get(j)).getJSONObject(\"duration\");\n                    Duration= jDuration.getString(\"text\");\n                    return  Duration;\n                }\n            }\n        }\n        return null;\n    }\n\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/demoriderctg/arif/DemoRider/DirectionsJSONParser.java	(date 1513714043000)
++++ app/src/main/java/com/demoriderctg/arif/DemoRider/DirectionsJSONParser.java	(revision )
+@@ -1,4 +1,6 @@
+-package com.demoriderctg.arif.DemoRider;
++package com.demoriderctg.arif.demorider;
++
++import android.util.Log;
+ 
+ import com.google.android.gms.maps.model.LatLng;
+ 
