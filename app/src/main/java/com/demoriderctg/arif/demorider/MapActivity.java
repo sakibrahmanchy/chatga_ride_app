@@ -12,6 +12,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -20,6 +21,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.Pair;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,6 +36,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 import com.demoriderctg.arif.demorider.models.PlaceInfo;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -59,6 +62,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import ContactWithFirebase.Main;
 
 
 /**
@@ -135,12 +140,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private LatLng source,dest;
     private  final int SOURCE =1;
     private  final int DESTINATION =2;
-    private String MycurrentLocation;
+    private String MycurrentLocation,phonemumber;
     private  LatLng home,workplace;
     private ProgressBar spinner;
     private double latS,lons;
     MarkerOptions options = new MarkerOptions();
-
+    private LoginData loginData;
+    private UserInformation userInformation;
+    private Main main;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,6 +159,20 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         actionBarDrawerToggle.syncState();
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);;
 
+        InitializationAll();
+
+        getLocationPermission();
+        String x = getIntent().getStringExtra("locationName");
+        if(x !=null){
+            x = getIntent().getStringExtra("SearchLocation");
+            onActivityResult1(x);
+        }
+
+    }
+
+
+
+    private void InitializationAll(){
         sourceText = (TextView) findViewById(R.id.sourceText);
         destinationText =(TextView) findViewById(R.id.destinationText);
 
@@ -162,16 +183,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         requestbtn.setVisibility(View.INVISIBLE);
         spinner=(ProgressBar)findViewById(R.id.progressBar);
         spinner.setVisibility(View.GONE);
-        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        sharedpreferences = this.getSharedPreferences("MyPref", 0);
         //   sendButton.setVisibility(View.INVISIBLE);
+        userInformation = new UserInformation(this);
+        main = new Main();
 
-        getLocationPermission();
-        String x = getIntent().getStringExtra("locationName");
-        if(x !=null){
-            x = getIntent().getStringExtra("SearchLocation");
-            onActivityResult1(x);
-        }
-
+        loginData = userInformation.getuserInformation();
+        phonemumber = sharedpreferences.getString("phone_number","");
+       //Calling Main Client Model
+        main.CreateNewRiderFirebase(loginData,phonemumber);
     }
 
     private void init(){
@@ -237,9 +257,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 downloadTask.execute(url);
                 sendButton.setVisibility(View.INVISIBLE);
                 requestbtn.setVisibility(View.VISIBLE);
-                SharedPreferences.Editor editor = sharedpreferences.edit();
-                editor.clear();
-                editor.commit();
                 //mMap.getUiSettings().setScrollGesturesEnabled(false);
             }
         });
@@ -256,8 +273,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 mGps.setVisibility(View.INVISIBLE);
                 mMap.getUiSettings().setScrollGesturesEnabled(false);
 
-                Intent i = new Intent(MapActivity.this, FindingBickerActivity.class);
-                startActivity(i);
+                Double SourceLat = source.latitude;
+                Double SourceLan = source.longitude;
+                Double DestinationLat = dest.latitude;
+                Double DestinationLan = dest.longitude;
+
+                Pair Source = Pair.create(SourceLat,SourceLan);
+                Pair Destination = Pair.create(DestinationLat,DestinationLan);
+                Main main = new Main();
+                main.RequestForRide(Source, Destination);
+
+
             }
         });
 

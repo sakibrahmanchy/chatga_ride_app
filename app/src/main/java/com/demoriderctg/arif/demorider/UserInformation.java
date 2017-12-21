@@ -20,8 +20,8 @@ public class UserInformation {
 
     public UserInformation(Context context) {
         gson = new Gson();
+        sharedpreferences = context.getSharedPreferences("MyPref", 0); // 0 - for private mode
 
-        sharedpreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     LoginData getuserInformation() {

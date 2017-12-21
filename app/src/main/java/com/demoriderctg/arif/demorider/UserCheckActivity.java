@@ -245,6 +245,8 @@ public class UserCheckActivity extends Activity {
                             Gson gson = new Gson();
                             String json = gson.toJson(data);
                             editor.putString("userData",json);
+                            editor.putString("phone_number",phoneNumber);
+
                             editor.commit();
 
                             Intent intent = new Intent(UserCheckActivity.this, MapActivity.class);

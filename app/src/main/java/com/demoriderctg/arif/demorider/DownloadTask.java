@@ -119,12 +119,17 @@ public class DownloadTask extends AsyncTask<String, Void, String> {
             mMap.clear();
 // Drawing polyline in the Google Map for the i-th route
 
-// Constrain the camera target to the Adelaide bounds.
 
-            ShowDerectionInGoogleMap showDerectionInGoogleMap = new ShowDerectionInGoogleMap(mMap, lineOptions, source, dest);
-            showDerectionInGoogleMap.placeDirection();
+// Constrain the camera target to the Adelaide bounds.
+            if(lineOptions !=null){
+                ShowDerectionInGoogleMap showDerectionInGoogleMap = new ShowDerectionInGoogleMap(mMap, lineOptions, source, dest);
+                showDerectionInGoogleMap.placeDirection();
+            }
+
 
         }
+
+
     }
 
     private String getDirectionsUrl(LatLng origin, LatLng dest) {
