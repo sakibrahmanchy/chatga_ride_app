@@ -148,6 +148,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private LoginData loginData;
     private UserInformation userInformation;
     private Main main;
+    public  long back_pressed;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -559,6 +560,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (back_pressed + 1000 > System.currentTimeMillis()){
+            super.onBackPressed();
+        }
+        else{
+            Toast.makeText(getBaseContext(),
+                    "Press once again to exit!", Toast.LENGTH_SHORT)
+                    .show();
+        }
+        back_pressed = System.currentTimeMillis();
     }
 }
 

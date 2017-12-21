@@ -29,6 +29,7 @@
 
         <activity
             android:name=".MainActivity"
+            android:noHistory="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -42,6 +43,7 @@
         <activity
             android:name=".PhoneVerificationActivity"
             android:label="@string/title_activity_login"
+            android:noHistory="true"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             android:windowSoftInputMode="adjustNothing"/>
         <activity
@@ -53,10 +55,12 @@
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
         <activity
             android:name=".UserCheckActivity"
+            android:noHistory="true"
             android:label="@string/title_activity_user_check"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".RegistrationActivity"
+            android:noHistory="true"
             android:label="@string/title_activity_registration"></activity>
 
         <service android:name="com.demoriderctg.arif.FirebaseInstanceIDService">
