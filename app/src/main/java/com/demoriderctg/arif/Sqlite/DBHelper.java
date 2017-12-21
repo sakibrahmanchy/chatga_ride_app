@@ -29,9 +29,15 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // TODO Auto-generated method stub
         db.execSQL(
-                "create table SearchHistory " +
-                        "(id integer primary key, LocationName text,Latitude real,Longitude real, SearchTime text)"
+                "CREATE TABLE SearchHistory2(\n" +
+                        "   id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+                        "   LocationName           TEXT      NOT NULL,\n" +
+                        "   Latitude            REAL       NOT NULL,\n" +
+                        "   SearchTime        TEXT,\n" +
+                        "   Longitude         REAL\n" +
+                        ")"
         );
+        //  crateTable();
     }
 
     @Override
@@ -40,30 +46,30 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS SearchHistory");
         onCreate(db);
     }
- public  void crateTable(){
-     SQLiteDatabase db = this.getWritableDatabase();
-     db.execSQL(
-           "CREATE TABLE SearchHistory2(\n" +
-                   "   id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
-                   "   LocationName           TEXT      NOT NULL,\n" +
-                   "   Latitude            REAL       NOT NULL,\n" +
-                   "   SearchTime        TEXT,\n" +
-                   "   Longitude         REAL\n" +
-                   ")"
-     );
- }
+    public  void crateTable(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL(
+                "CREATE TABLE SearchHistory2(\n" +
+                        "   id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+                        "   LocationName           TEXT      NOT NULL,\n" +
+                        "   Latitude            REAL       NOT NULL,\n" +
+                        "   SearchTime        TEXT,\n" +
+                        "   Longitude         REAL\n" +
+                        ")"
+        );
+    }
 
     public boolean insertContact (String LocationName, double Latitude, double Longitude, String SearchTime) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-            ContentValues contentValues = new ContentValues();
-            contentValues.put("LocationName", LocationName);
-            contentValues.put("Latitude", Latitude);
-            contentValues.put("Longitude", Longitude);
-            contentValues.put("SearchTime", SearchTime);
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("LocationName", LocationName);
+        contentValues.put("Latitude", Latitude);
+        contentValues.put("Longitude", Longitude);
+        contentValues.put("SearchTime", SearchTime);
 
-            db.insert("SearchHistory2", null, contentValues);
-            return true;
+        db.insert("SearchHistory2", null, contentValues);
+        return true;
 
     }
 
@@ -103,6 +109,24 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
+    public  Vmhistory getById (String searchText) {
+
+        Vmhistory vmhistory = new Vmhistory();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery( "select * from SearchHistory2 where LocationName ="+searchText, null );
+        res.moveToFirst();
+
+        while(res.isAfterLast() == false){
+            vmhistory.locationName=(res.getString(res.getColumnIndex(CONTACTS_COLUMN_LOCATIONNAME)));
+            vmhistory.letitude=(res.getDouble(res.getColumnIndex(CONTACTS_COLUMN_LATITUDE)));
+            vmhistory.longitude=(res.getDouble(res.getColumnIndex(CONTACTS_COLUMN_LONGITUDE)));
+            vmhistory.id=(res.getInt(res.getColumnIndex(CONTACTS_COLUMN_ID)));
+            vmhistory.searchDate=(res.getString(res.getColumnIndex(CONTACTS_COLUMN_SEARCHTIME)));
+            res.moveToNext();
+        }
+        return vmhistory;
+    }
+
     public ArrayList<Vmhistory> getAllSearchList() {
         ArrayList<Vmhistory> search_list = new ArrayList<Vmhistory>();
 
@@ -112,7 +136,7 @@ public class DBHelper extends SQLiteOpenHelper {
         res.moveToFirst();
 
         while(res.isAfterLast() == false){
-             Vmhistory vmhistory = new Vmhistory();
+            Vmhistory vmhistory = new Vmhistory();
             vmhistory.locationName=(res.getString(res.getColumnIndex(CONTACTS_COLUMN_LOCATIONNAME)));
             vmhistory.letitude=(res.getDouble(res.getColumnIndex(CONTACTS_COLUMN_LATITUDE)));
             vmhistory.longitude=(res.getDouble(res.getColumnIndex(CONTACTS_COLUMN_LONGITUDE)));
