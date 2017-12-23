@@ -149,6 +149,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private UserInformation userInformation;
     private Main main;
     public  long back_pressed;
+    private  ConnectionCheck connectionCheck;
+    private SharedPreferences.Editor editor ;
+    private String activityChangeForSearch=null;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -163,11 +166,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         InitializationAll();
 
         getLocationPermission();
-        String x = getIntent().getStringExtra("locationName");
-        if(x !=null){
-            x = getIntent().getStringExtra("SearchLocation");
-            onActivityResult1(x);
+        activityChangeForSearch = getIntent().getStringExtra("locationName");
+        if(activityChangeForSearch !=null){
+            activityChangeForSearch = getIntent().getStringExtra("SearchLocation");
+            onActivityResult1(activityChangeForSearch);
         }
+
+
 
     }
 
@@ -187,6 +192,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         sharedpreferences = this.getSharedPreferences("MyPref", 0);
         //   sendButton.setVisibility(View.INVISIBLE);
         userInformation = new UserInformation(this);
+        connectionCheck = new ConnectionCheck(this);
+        editor= sharedpreferences.edit();
         main = new Main();
 
         loginData = userInformation.getuserInformation();
@@ -205,7 +212,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 .enableAutoManage(this, this)
                 .build();
 
+           if(connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected() && activityChangeForSearch==null){
+               getDeviceLocation();
 
+           }
 
         //mSearchTextDestination.setOnItemClickListener(mAutocompleteClickListenerForDestination);
         // mSearchText.setOnItemClickListener(mAutocompleteClickListener);
@@ -238,8 +248,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mGps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "onClick: clicked gps icon");
-                getDeviceLocation();
+                if(connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected()){
+                    getDeviceLocation();
+
+                }
+
+                else {
+                    connectionCheck.showGPSDisabledAlertToUser();
+                }
 
             }
         });
@@ -365,7 +381,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             }
                             source= home = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                             markerPoints.add(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
-
+                            editor.putFloat("lats",(float) source.latitude);
+                            editor.putFloat("lons",(float) source.longitude);
+                            sharedpreferences.getString("locationName", "Your Current Location");
+                            editor.commit();
                             moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
                                     DEFAULT_ZOOM,
                                     "My Location");
@@ -499,7 +518,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             lons =  getIntent().getDoubleExtra("lon", 0.00);
 
             sourceText.setText(locationName);
-            SharedPreferences.Editor editor = sharedpreferences.edit();
             editor.putFloat("lats", (float)latS);
             editor.putFloat("lons", (float)lons);
             editor.putString("locationName", locationName);
@@ -512,7 +530,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             String locationName = getIntent().getStringExtra("locationName");
             lons =  getIntent().getDoubleExtra("lon", 0.00);
-
             SharedPreferences.Editor editor = sharedpreferences.edit();
             editor.putFloat("latd", (float)latS);
             editor.putFloat("lond", (float)lons);
