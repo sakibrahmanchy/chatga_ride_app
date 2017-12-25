@@ -1,0 +1,32 @@
+Index: app/src/main/java/com/demoriderctg/arif/DemoRider/FindingBickerActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.demoriderctg.arif.DemoRider;\n\nimport android.support.v7.app.AppCompatActivity;\nimport android.os.Bundle;\n\nimport com.demoriderctg.arif.DemoRider.R;\n\npublic class FindingBickerActivity extends AppCompatActivity {\n\n   private  GetCurrentLocation getCurrentLocation;\n    @Override\n    protected void onCreate(Bundle savedInstanceState) {\n        super.onCreate(savedInstanceState);\n        setContentView(R.layout.activity_finding_bicker);\n\n        getCurrentLocation = new GetCurrentLocation(this);\n\n\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/demoriderctg/arif/DemoRider/FindingBickerActivity.java	(date 1513714043000)
++++ app/src/main/java/com/demoriderctg/arif/DemoRider/FindingBickerActivity.java	(revision )
+@@ -1,20 +1,15 @@
+-package com.demoriderctg.arif.DemoRider;
++package com.demoriderctg.arif.demorider;
+ 
+ import android.support.v7.app.AppCompatActivity;
+ import android.os.Bundle;
+ 
+-import com.demoriderctg.arif.DemoRider.R;
++import com.demoriderctg.arif.demorider.R;
+ 
+ public class FindingBickerActivity extends AppCompatActivity {
+ 
+-   private  GetCurrentLocation getCurrentLocation;
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_finding_bicker);
+-
+-        getCurrentLocation = new GetCurrentLocation(this);
+-
+-
+     }
+ }
