@@ -56,6 +56,7 @@ public interface ApiInterface {
                                          @Field("last_name") String lastName,
                                          @Field("email") String email,
                                          @Field("phone_number") String phoneNumber,
+                                         @Field("password") String password,
                                          @Field("device_token") String deviceToken,
                                          @Field("birth_date") String birthDate,
                                          @Field("gender") String gender);

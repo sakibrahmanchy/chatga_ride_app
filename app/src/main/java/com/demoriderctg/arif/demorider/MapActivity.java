@@ -171,8 +171,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         InitializationAll();
 
-
-
         getLocationPermission();
         activityChangeForSearch = getIntent().getStringExtra("locationName");
         if(activityChangeForSearch !=null){
@@ -193,6 +191,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         userFirstName = (TextView) findViewById(R.id.userNameProfile);
         userPhoneNumber = (TextView) findViewById(R.id.use_Phonemuber);
 
+
         mGps = (ImageView) findViewById(R.id.ic_gps);
         sendButton = (Button) findViewById(R.id.btnSend);
         requestbtn = (Button) findViewById(R.id.pickupbtn);
@@ -210,11 +209,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         loginData = userInformation.getuserInformation();
         phonemumber = sharedpreferences.getString("phone_number","");
 
-
-        //userFirstName.setText( loginData.firstName);
-        //userPhoneNumber.setText(phonemumber);
-
-        //Calling Main Client Model
         main.CreateNewRiderFirebase(loginData,phonemumber);
     }
 
@@ -232,7 +226,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                getDeviceLocation();
 
            }
-
 
 
         //mSearchTextDestination.setOnItemClickListener(mAutocompleteClickListenerForDestination);

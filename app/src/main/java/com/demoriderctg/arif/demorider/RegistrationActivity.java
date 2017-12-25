@@ -14,13 +14,20 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
+
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+
+import android.widget.TextView;
 
 import com.demoriderctg.arif.demorider.models.ApiModels.RegistrationModels.RegistrationModel;
 import com.demoriderctg.arif.demorider.RestAPI.ApiClient;
@@ -81,9 +88,9 @@ public class RegistrationActivity extends Activity {
 
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         mGender = (RadioGroup) findViewById(R.id.gender_radio_group);
-
         firstName = (EditText) findViewById(R.id.userFirstName);
         lastName =  (EditText) findViewById(R.id.userLastName);
+
         dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         phoneNumber = getIntent().getStringExtra("phoneNumber");
 
@@ -108,12 +115,8 @@ public class RegistrationActivity extends Activity {
             }
         });
 
-
-
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-
-
     }
     private boolean mayRequestContacts() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
@@ -163,6 +166,7 @@ public class RegistrationActivity extends Activity {
         if (TextUtils.isEmpty(userFirstName)) {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = firstName;
+
             cancel = true;
             ok=false;
         }
