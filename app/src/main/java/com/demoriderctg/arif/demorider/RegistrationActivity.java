@@ -14,6 +14,9 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
+
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,6 +26,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+
 import android.widget.TextView;
 
 import com.demoriderctg.arif.demorider.models.ApiModels.RegistrationModels.RegistrationModel;
@@ -60,12 +64,13 @@ public class RegistrationActivity extends Activity {
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
-    private EditText Username;
+    private EditText firstName;
+    private EditText lastName;
     private View mProgressView;
     private View mLoginFormView;
     private RadioGroup mGender;
     private EditText mConfirmPasswordView;
-    private  String email,phoneNumber,userName,password,gender,deviceToken,birthDate;
+    private  String email,phoneNumber, userFirstName,userLastName,password,gender,deviceToken,birthDate;
     private   ApiInterface apiService ;
     private ProgressDialog dialog;
     private EditText birthDayText;
@@ -83,9 +88,9 @@ public class RegistrationActivity extends Activity {
 
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         mGender = (RadioGroup) findViewById(R.id.gender_radio_group);
-        mConfirmPasswordView = (EditText) findViewById(R.id.confirmPassword);
-        mPasswordView = (EditText) findViewById(R.id.password);
-        Username = (EditText) findViewById(R.id.userName);
+        firstName = (EditText) findViewById(R.id.userFirstName);
+        lastName =  (EditText) findViewById(R.id.userLastName);
+
         dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         phoneNumber = getIntent().getStringExtra("phoneNumber");
 
@@ -99,16 +104,6 @@ public class RegistrationActivity extends Activity {
         });
 
         setDateTimeField();
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
-            }
-        });
 
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
@@ -150,16 +145,14 @@ public class RegistrationActivity extends Activity {
 
         boolean ok=true;
         mEmailView.setError(null);
-        mPasswordView.setError(null);
-        Username.setError(null);
+        firstName.setError(null);
 
         email = mEmailView.getText().toString();
-        password = mPasswordView.getText().toString();
-        userName = Username.getText().toString();
+        userFirstName = firstName.getText().toString();
+        userLastName = lastName.getText().toString();
         deviceToken = FirebaseWrapper.getDeviceToken();
         birthDate = birthDayText.getText().toString();
 
-        String confrimPassowrd = mConfirmPasswordView.getText().toString();
         int selectedId = mGender.getCheckedRadioButtonId();
 
         if(selectedId == R.id.female_radio_btn)
@@ -170,25 +163,10 @@ public class RegistrationActivity extends Activity {
         boolean cancel = false;
         View focusView = null;
 
-        // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
-            ok=false;
-        }
-
-        // Check for a confirmposword, if the user entered one.
-        if (!password.equals(confrimPassowrd)) {
-            mPasswordView.setError("password not match");
-            focusView = mPasswordView;
-            cancel = true;
-            ok=false;
-        }
-
-        if (TextUtils.isEmpty(userName)) {
+        if (TextUtils.isEmpty(userFirstName)) {
             mEmailView.setError(getString(R.string.error_field_required));
-            focusView = Username;
+            focusView = firstName;
+
             cancel = true;
             ok=false;
         }
@@ -249,8 +227,8 @@ public class RegistrationActivity extends Activity {
         dialog.setMessage("Please Wait..");
         dialog.show();
 
-        // Call<RegistrationModel> call = apiService.signUpClient(userName,"shaikat",email,"01815003723",password,"","",gender);
-        Call<RegistrationModel> call = apiService.signUpClient(userName,userName,email,phoneNumber,password, deviceToken, birthDate,gender);
+        // Call<RegistrationModel> call = apiService.signUpClient(userFirstName,"shaikat",email,"01815003723",password,"","",gender);
+        Call<RegistrationModel> call = apiService.signUpClient(userFirstName, userLastName,email,phoneNumber, deviceToken, birthDate,gender);
 
         call.enqueue(new Callback<RegistrationModel>() {
             @Override

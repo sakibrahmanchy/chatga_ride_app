@@ -12,79 +12,64 @@
 
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/map"
-            tools:context=".MapsActivity"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_alignParentStart="true" />
+            android:layout_alignBottom="@+id/btnSend"
+            android:layout_alignParentStart="true"
+            tools:context=".MapsActivity" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:orientation="horizontal"
-            android:background="@color/colorPrimary"
-            android:weightSum="6"
-            android:id="@+id/linearLayout1">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:orientation="horizontal">
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="20dp"
-                android:layout_weight="2"
-                android:weightSum="2"
-                android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="20dp"
+            android:weightSum="2"
+            android:id="@+id/linearLayout1"
+            android:padding= "10dp">
 
                 <EditText
                     android:id="@+id/sourceText"
-                    android:layout_width="200dp"
-                    android:layout_height="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:ems="10"
+                    android:background="@android:color/white"
                     android:editable="false"
-                    android:textSize="15sp"
-                    android:textColor="#000"
-                    android:background="@drawable/back2"
-                    android:text="Your current location" />
+                    android:ems="10"
+                    android:hint="Your current location"
+                    android:textSize="18sp"
+                    android:padding="10dp"
+                    android:drawableRight="@drawable/places_ic_search"
+                    />
+
                 <EditText
                     android:id="@+id/destinationText"
-                    android:layout_marginTop="10dp"
-                    android:layout_width="200dp"
-                    android:layout_height="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="0.5"
+                    android:background="@android:color/darker_gray"
                     android:ems="10"
-                    android:textSize="40px"
-                    android:background="@drawable/back2"
                     android:inputType="textPersonName"
-                    android:text="Name" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:orientation="horizontal"></LinearLayout>
+                    android:hint="Your Destination"
+                    android:textSize="18sp"
+                    android:padding="10dp"
+                    android:elevation="3dp"
+                    android:drawableRight="@drawable/places_ic_search"/>
+
         </LinearLayout>
 
 
-        <ImageView
-            android:layout_width="40dp"
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_marginRight="10dp"
             android:scaleType="centerCrop"
             android:id="@+id/ic_gps"
-            android:src="@drawable/ic_gps"
+            android:src="@drawable/quantum_ic_bigtop_updates_white_24"
             android:layout_above="@+id/btnSend"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="57dp"
-            android:layout_marginBottom="215dp" />
+            android:layout_alignParentEnd="true"/>
+
 
         <Button
             android:id="@+id/btnSend"
@@ -94,7 +79,10 @@
             android:layout_marginBottom="23dp"
             android:text="Done"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentStart="true" />
+
+            android:layout_alignParentStart="true"
+            android:theme="@style/ThemeOverlay.MyDarkButton"
+            android:layout_margin="5dp"/>
 
         <Button
             android:id="@+id/pickupbtn"
@@ -103,7 +91,11 @@
             android:layout_alignTop="@+id/btnSend"
             android:text="Request For Pickup"
             android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true" />
+
+            android:layout_alignParentEnd="true"
+            android:theme="@style/ThemeOverlay.MyDarkButton"
+            android:layout_margin="5dp"/>
+
 
         <ProgressBar
             android:id="@+id/progressBar"

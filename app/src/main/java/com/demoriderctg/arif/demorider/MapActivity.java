@@ -15,6 +15,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -147,6 +149,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     MarkerOptions options = new MarkerOptions();
     private LoginData loginData;
     private UserInformation userInformation;
+
+    TextView userFirstName;
+    TextView userPhoneNumber;
+
     private Main main;
     public  long back_pressed;
     private  ConnectionCheck connectionCheck;
@@ -182,6 +188,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         sourceText = (TextView) findViewById(R.id.sourceText);
         destinationText =(TextView) findViewById(R.id.destinationText);
 
+        userFirstName = (TextView) findViewById(R.id.userNameProfile);
+        userPhoneNumber = (TextView) findViewById(R.id.use_Phonemuber);
+
+
         mGps = (ImageView) findViewById(R.id.ic_gps);
         sendButton = (Button) findViewById(R.id.btnSend);
         requestbtn = (Button) findViewById(R.id.pickupbtn);
@@ -198,7 +208,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         loginData = userInformation.getuserInformation();
         phonemumber = sharedpreferences.getString("phone_number","");
-       //Calling Main Client Model
+
         main.CreateNewRiderFirebase(loginData,phonemumber);
     }
 
@@ -216,6 +226,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                getDeviceLocation();
 
            }
+
 
         //mSearchTextDestination.setOnItemClickListener(mAutocompleteClickListenerForDestination);
         // mSearchText.setOnItemClickListener(mAutocompleteClickListener);

@@ -4,14 +4,15 @@
 
     <!-- View background color -->
     <solid
-        android:color="@color/cast_intro_overlay_button_background_color" >
+        android:color="@android:color/white" >
 
     </solid>
 
     <!-- View border color and width -->
     <stroke
         android:width="2dp"
-        android:color="@color/cast_intro_overlay_button_background_color" >
+
+        android:color="@android:color/white" >
     </stroke>
 
     <!-- The radius makes the corners rounded -->
