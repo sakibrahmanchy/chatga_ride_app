@@ -6,17 +6,15 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Activity;
 import android.support.design.widget.Snackbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.demoriderctg.arif.demorider.models.ApiModels.AccessTokenModels.AccessTokenData;
+import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
 import com.demoriderctg.arif.demorider.models.ApiModels.AccessTokenModels.AuthToken;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginModel;
-import com.demoriderctg.arif.demorider.models.ApiModels.User;
 import com.demoriderctg.arif.demorider.models.ApiModels.UserCheckResponse;
 import com.demoriderctg.arif.demorider.RestAPI.ApiClient;
 import com.demoriderctg.arif.demorider.RestAPI.ApiInterface;
@@ -26,7 +24,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.UUID;
 
 import __Firebase.FirebaseWrapper;

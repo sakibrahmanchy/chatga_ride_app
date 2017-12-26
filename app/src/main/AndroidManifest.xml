@@ -37,7 +37,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MapActivity"
+            android:name=".GoogleMap.MapActivity"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".PhoneVerificationActivity"

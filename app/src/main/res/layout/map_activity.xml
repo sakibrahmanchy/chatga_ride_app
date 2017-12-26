@@ -26,7 +26,7 @@
             android:orientation="vertical"
             android:layout_margin="20dp"
             android:weightSum="2"
-            android:id="@+id/linearLayout1"
+            android:id="@+id/searchLinearLayout"
             android:padding= "10dp">
 
                 <EditText
@@ -37,6 +37,7 @@
                     android:background="@android:color/white"
                     android:editable="false"
                     android:ems="10"
+                    android:selectAllOnFocus="true"
                     android:hint="Your current location"
                     android:textSize="18sp"
                     android:padding="10dp"
@@ -50,6 +51,7 @@
                     android:layout_weight="0.5"
                     android:background="@android:color/darker_gray"
                     android:ems="10"
+                    android:selectAllOnFocus="true"
                     android:inputType="textPersonName"
                     android:hint="Your Destination"
                     android:textSize="18sp"

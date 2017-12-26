@@ -1,6 +1,5 @@
 package com.demoriderctg.arif.demorider;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,14 +15,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import android.view.ViewGroup;
 
+import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
 import com.demoriderctg.arif.demorider.models.ApiModels.DeviceTokenModels.UpdateDeviceTokenData;
-import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
-import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginModel;
 import com.demoriderctg.arif.demorider.RestAPI.ApiClient;
 import com.demoriderctg.arif.demorider.RestAPI.ApiInterface;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -36,17 +33,11 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.google.gson.Gson;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import __Firebase.FirebaseWrapper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.demoriderctg.arif.demorider.MainActivity.TAG;
 
 public class PhoneVerificationActivity extends AppCompatActivity implements
         View.OnClickListener {

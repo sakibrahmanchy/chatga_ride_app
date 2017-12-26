@@ -1,4 +1,4 @@
-package com.demoriderctg.arif.demorider;
+package com.demoriderctg.arif.demorider.GoogleMap;
 
 import android.util.Log;
 

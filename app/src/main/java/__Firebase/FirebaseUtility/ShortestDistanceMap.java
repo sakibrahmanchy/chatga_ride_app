@@ -4,7 +4,7 @@ import android.os.AsyncTask;
 import android.util.Pair;
 import android.util.Log;
 
-import com.demoriderctg.arif.demorider.DirectionsJSONParser;
+import com.demoriderctg.arif.demorider.GoogleMap.DirectionsJSONParser;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONObject;
