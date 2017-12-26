@@ -9,4 +9,5 @@ public interface ICallbackMain {
     void OnRequestForRide(boolean value);
     void OnSentNotificationToRider(boolean value);
     void OnIsClientAlreadyCreated(boolean value);
+    void OnNearestRiderFound(boolean value);
 }

@@ -227,8 +227,8 @@ public class RegistrationActivity extends Activity {
         dialog.setMessage("Please Wait..");
         dialog.show();
 
-        // Call<RegistrationModel> call = apiService.signUpClient(userFirstName,"shaikat",email,"01815003723",password,"","",gender);
-        Call<RegistrationModel> call = apiService.signUpClient(userFirstName, userLastName,email,phoneNumber, deviceToken, birthDate,gender);
+        String password = "";
+        Call<RegistrationModel> call = apiService.signUpClient(userFirstName, userLastName,email,phoneNumber, password, deviceToken, birthDate,gender);
 
         call.enqueue(new Callback<RegistrationModel>() {
             @Override

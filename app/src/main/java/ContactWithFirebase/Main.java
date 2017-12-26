@@ -26,7 +26,7 @@ public class Main implements ICallbackMain {
     private ClientModel clientModel = null;
     private CurrentRidingHistoryModel currentRidingHistoryModel = null;
     private __FirebaseRequest firebaseRequestInstance;
-    private ShortestDistanceMap shortestDistanceMap = null;
+    private Pair<Double, Double> Source = null, Destination = null;
 
     public Main(){
         firebaseWrapper = FirebaseWrapper.getInstance();
@@ -66,6 +66,9 @@ public class Main implements ICallbackMain {
 
         firebaseWrapper = FirebaseWrapper.getInstance();
         firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
+        this.Source = Source;
+        this.Destination = Destination;
+
         firebaseRequestInstance.RequestForRide(Source, Destination, Main.this);
         return true;
     }
@@ -179,17 +182,30 @@ public class Main implements ICallbackMain {
 
     @Override
     public void OnRequestForRide(boolean value) {
-        Log.d(FirebaseConstant.RIDER_INFO, value + "");
+        Log.d(FirebaseConstant.RIDER_INFO, Boolean.toString(value));
     }
 
     @Override
     public void OnSentNotificationToRider(boolean value) {
-
+        Log.d(FirebaseConstant.NOTIFICATION_SEND, FirebaseConstant.NOTIFICATION_SEND);
     }
 
     @Override
     public void OnIsClientAlreadyCreated(boolean value) {
         if(value == true)   return;
         firebaseRequestInstance.CreateClientFirstTime(clientModel, Main.this);
+    }
+
+    @Override
+    public void OnNearestRiderFound(boolean value) {
+        if(value == true){
+            this.SentNotificationToRider(
+                    FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider,
+                    firebaseWrapper.getClientModelInstance(),
+                    this.Source,
+                    this.Destination
+            );
+            Log.d(FirebaseConstant.NEAREST_RIDER_FOUND, FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider.FullName);
+        }
     }
 }

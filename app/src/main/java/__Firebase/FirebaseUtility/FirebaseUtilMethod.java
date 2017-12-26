@@ -12,7 +12,7 @@ public class FirebaseUtilMethod {
     }
 
     public static boolean IsEmptyOrNull(String data){
-        if(data == null || data.isEmpty())  return true;
+        if(data == null || data.trim().isEmpty())  return true;
         return false;
     }
 }

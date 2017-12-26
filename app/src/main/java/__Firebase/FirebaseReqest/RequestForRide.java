@@ -7,11 +7,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
-import __Firebase.FirebaseUtility.ShortestDistanceMap;
-import __Firebase.ICallBackInstance.ICallbackMain;
 import __Firebase.FirebaseModel.RiderModel;
 import __Firebase.FirebaseUtility.FirebaseConstant;
+import __Firebase.FirebaseUtility.ShortestDistanceMap;
 import __Firebase.FirebaseWrapper;
+import __Firebase.ICallBackInstance.ICallbackMain;
 
 /**
  * Created by User on 11/23/2017.
@@ -24,7 +24,7 @@ public class RequestForRide {
     private Pair<Double, Double> Destination;
     private ShortestDistanceMap shortestDistanceMap = null;
 
-    public RequestForRide(Pair<Double, Double> Source, Pair<Double, Double> Destination, ICallbackMain callBackListener){
+    public RequestForRide(Pair<Double, Double> Source, Pair<Double, Double> Destination, ICallbackMain callBackListener) {
         this.Source = Source;
         this.Destination = Destination;
         this.callBackListener = callBackListener;
@@ -33,7 +33,7 @@ public class RequestForRide {
         Request();
     }
 
-    public void Request(){
+    public void Request() {
 
         FirebaseWrapper firebaseWrapper = FirebaseWrapper.getInstance();
         firebaseWrapper.FirebaseRootReference.child(FirebaseConstant.RIDER).orderByChild(FirebaseConstant.ONLINE_BUSY_RIDE).equalTo(FirebaseConstant.ONLINE_NOT_BUSY_NO_RIDE).addValueEventListener(new ValueEventListener() {
@@ -41,11 +41,18 @@ public class RequestForRide {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                if(dataSnapshot.exists() && dataSnapshot.hasChildren()) {
+                if (dataSnapshot.exists() && dataSnapshot.hasChildren()) {
+
+                    FirebaseWrapper.getInstance().getRiderViewModelInstance().NumberOfRiderFound = (int)dataSnapshot.getChildrenCount();
                     for (DataSnapshot snp : dataSnapshot.getChildren()) {
                         RiderModel riderModel = new RiderModel();
                         riderModel.LoadData(snp);
-                        FirebaseWrapper.getInstance().getRiderViewModelInstance().FindNearestRider(riderModel, Source, shortestDistanceMap);
+                        FirebaseWrapper.getInstance().getRiderViewModelInstance().FindNearestRider(
+                                riderModel,
+                                Source,
+                                shortestDistanceMap,
+                                callBackListener
+                        );
                     }
                 }
             }
@@ -61,11 +68,9 @@ public class RequestForRide {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                shortestDistanceMap = null;
-                if (callBackListener != null){
-                    callBackListener.OnRequestForRide(true);
-                }
+                callBackListener.OnRequestForRide(true);
             }
+
             public void onCancelled(DatabaseError databaseError) {
                 Log.d(FirebaseConstant.NEAREST_RIDER_ERROR, databaseError.toString());
                 shortestDistanceMap = null;
