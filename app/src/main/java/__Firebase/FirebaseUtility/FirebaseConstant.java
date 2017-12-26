@@ -68,9 +68,11 @@ public class FirebaseConstant {
     public static String NEW_USER_ERROR = "NEW_USER_ERROR";
     public static String NEAREST_RIDER_ERROR = "NEAREST_RIDER_ERROR";
     public static String NEAREST_RIDER = "NEAREST_RIDER";
+    public static String NOTIFICATION_SEND = "NOTIFICATION_SEND";
     public static String NEW_USER_CREATED = "NEW_USER_CREATED";
     public static String LOCATION_ERROR = "LOCATION_ERROR";
     public static String RIDER_INFO = "RIDER_INFO";
+    public static String NEAREST_RIDER_FOUND = "NEAREST_RIDER_FOUND";
     public static String SHORTEST_DISTANCE = "SHORTEST_DISTANCE";
     public static String ALL_RIDER_LOADED = "ALL_RIDER_LOADED";
     public static String CLIENT_LOADED = "CLIENT_LOADED";

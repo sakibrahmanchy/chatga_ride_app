@@ -8,9 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.demoriderctg.arif.demorider.LoginActivity;
-import com.demoriderctg.arif.demorider.UserCheckActivity;
-import com.demoriderctg.arif.demorider.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
@@ -23,23 +20,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-<<<<<<< HEAD
-        init();
-//        if (isServiceOk()) {
-//            // Intent intent = new Intent(MainActivity.this, MapActivity.class);
-//             Intent intent = new Intent(MainActivity.this, UserCheckActivity.class);
-//            startActivity(intent);
-//             init();
-//        }
-=======
-
         if (isServiceOk()) {
             // Intent intent = new Intent(MainActivity.this, MapActivity.class);
-             Intent intent = new Intent(MainActivity.this, UserCheckActivity.class);
+            Intent intent = new Intent(MainActivity.this, UserCheckActivity.class);
             startActivity(intent);
             //  init();
         }
->>>>>>> 4ead3c2223803e8b90637f168f25fd4afd9af1dd
     }
 
     private void init() {
@@ -55,11 +41,7 @@ public class MainActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-<<<<<<< HEAD
-                Intent intent = new Intent(MainActivity.this, UserCheckActivity.class);
-=======
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
->>>>>>> 4ead3c2223803e8b90637f168f25fd4afd9af1dd
                 startActivity(intent);
             }
         });
