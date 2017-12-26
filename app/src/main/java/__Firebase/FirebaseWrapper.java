@@ -7,8 +7,8 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import __Firebase.FirebaseModel.ClientModel;
 import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
 import __Firebase.FirebaseModel.RiderModel;
-import __Firebase.FirebaseReqest.*;
-import __Firebase.FirebaseResponse.*;
+import __Firebase.FirebaseReqest.__FirebaseRequest;
+import __Firebase.FirebaseResponse.FirebaseResponse;
 import __Firebase.ViewModel.RiderViewModel;
 
 /**
@@ -17,7 +17,7 @@ import __Firebase.ViewModel.RiderViewModel;
 
 public class FirebaseWrapper {
 
-    private static FirebaseWrapper Instance = null;
+    private volatile static FirebaseWrapper Instance = null;
 
     public DatabaseReference FirebaseRootReference;
     private __FirebaseRequest FirebaseRequestInstance;
@@ -27,7 +27,7 @@ public class FirebaseWrapper {
     private RiderModel RiderModelInstance;
     private ClientModel ClientModel;
 
-    private FirebaseWrapper(){
+    private FirebaseWrapper() {
         FirebaseRootReference = FirebaseDatabase.getInstance().getReference();
         FirebaseRequestInstance = new __FirebaseRequest();
         FirebaseResponseInstance = new FirebaseResponse();
@@ -37,9 +37,12 @@ public class FirebaseWrapper {
         ClientModel = new ClientModel();
     }
 
-    public static FirebaseWrapper getInstance(){
-        if(Instance == null){
-            Instance = new FirebaseWrapper();
+    public static FirebaseWrapper getInstance() {
+        if (Instance == null) {
+            synchronized (FirebaseWrapper.class) {
+                if (Instance == null)
+                    Instance = new FirebaseWrapper();
+            }
         }
         return Instance;
     }
@@ -68,7 +71,7 @@ public class FirebaseWrapper {
         return CurrentRidingHistoryModelInstance;
     }
 
-    public static String getDeviceToken(){
-        return  FirebaseInstanceId.getInstance().getToken().toString();
+    public static String getDeviceToken() {
+        return FirebaseInstanceId.getInstance().getToken().toString();
     }
 }
