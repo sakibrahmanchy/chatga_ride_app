@@ -4,8 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/devClient.iml" filepath="$PROJECT_DIR$/devClient.iml" />
-      <module fileurl="file://D:\Android\Projects\devClient-master-4ead3c2223803e8b90637f168f25fd4afd9af1dd\devClient.iml" filepath="D:\Android\Projects\devClient-master-4ead3c2223803e8b90637f168f25fd4afd9af1dd\devClient.iml" />
-      <module fileurl="file://D:\devClient\devClient-master-4ead3c2223803e8b90637f168f25fd4afd9af1dd.iml" filepath="D:\devClient\devClient-master-4ead3c2223803e8b90637f168f25fd4afd9af1dd.iml" />
     </modules>
   </component>
 </project>
