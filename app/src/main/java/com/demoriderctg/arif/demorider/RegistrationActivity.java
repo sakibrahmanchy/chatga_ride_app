@@ -228,7 +228,7 @@ public class RegistrationActivity extends Activity {
         dialog.show();
 
         String password = "";
-        Call<RegistrationModel> call = apiService.signUpClient(userFirstName, userLastName,email,phoneNumber, password, deviceToken, birthDate,gender);
+        Call<RegistrationModel> call = apiService.signUpClient(userFirstName, userLastName,email,phoneNumber, password, deviceToken, birthDate);
 
         call.enqueue(new Callback<RegistrationModel>() {
             @Override

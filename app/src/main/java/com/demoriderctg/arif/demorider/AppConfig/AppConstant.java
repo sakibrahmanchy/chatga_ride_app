@@ -1,5 +1,8 @@
 package com.demoriderctg.arif.demorider.AppConfig;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+
 /**
  * Created by User on 12/17/2017.
  */
@@ -28,4 +31,8 @@ public class AppConstant {
 
     /*Message for Toast*/
     public static final String GOOGLE_PLAY_SERVICE_MSG = "you can not make request";
+
+    /*Latlon bound*/
+    public static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
+            new LatLng(90.1474141289,23.6245050799), new LatLng(90.599381674, 23.9678033413));
 }

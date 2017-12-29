@@ -33,18 +33,19 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".MapActivity"
+            android:name=".GoogleMap.MapActivity"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".PhoneVerificationActivity"
             android:label="@string/title_activity_login"
             android:noHistory="true"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
-            android:windowSoftInputMode="adjustNothing"/>
+            android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".autoComplete"
             android:noHistory="true"
@@ -54,26 +55,26 @@
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
         <activity
             android:name=".UserCheckActivity"
-            android:noHistory="true"
             android:label="@string/title_activity_user_check"
+            android:noHistory="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".RegistrationActivity"
-            android:noHistory="true"
-            android:label="@string/title_activity_registration"></activity>
+            android:label="@string/title_activity_registration"
+            android:noHistory="true" />
 
         <service android:name="com.demoriderctg.arif.FirebaseInstanceIDService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-
         <service android:name="com.demoriderctg.arif.FirebaseMessagingServices">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
+        <activity android:name=".FavoritePlaces.FavoritePlacesActivity"></activity>
     </application>
 
 </manifest>

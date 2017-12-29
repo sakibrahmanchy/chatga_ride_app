@@ -113,6 +113,7 @@
     <string name="nav_settings">Settings</string>
     <string name="nav_help">Help</string>
     <string name="nav_about_us">About</string>
+    <string name="nav_favorite_place">Fovorite Places</string>
 
     <string name="activity_title_about_us">About Us</string>
     <string name="activity_title_privacy_policy">Privacy Policy</string>
@@ -120,4 +121,6 @@
     <string name="action_logout">Logout</string>
     <string name="action_mark_all_read">Mark All as Read</string>
     <string name="privacy_policy">Privacy Policy</string>
+
+    <string name="title_activity_favorite_places">FavoritePlacesActivity</string>
 </resources>

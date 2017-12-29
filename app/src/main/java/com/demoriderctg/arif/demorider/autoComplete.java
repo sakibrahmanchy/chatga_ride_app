@@ -16,6 +16,8 @@ import android.widget.AutoCompleteTextView;
 
 import com.demoriderctg.arif.Sqlite.DBHelper;
 import com.demoriderctg.arif.Sqlite.Vmhistory;
+import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
+import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
 import com.demoriderctg.arif.demorider.models.PlaceInfo;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -50,8 +52,9 @@ public class autoComplete extends AppCompatActivity  implements GoogleApiClient.
     private RecyclerView rv;
     private RecyclerView rvSearchHistory;
     public List<SearchHistory> searchHistories,searchHistoriesList;
-    private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
-            new LatLng(54.69726685890506,-2.7379201682812226), new LatLng(55.38942944437183, -1.2456105979687226));
+
+    private AppConstant appConstant;
+
 
     //database
 
@@ -98,7 +101,7 @@ public class autoComplete extends AppCompatActivity  implements GoogleApiClient.
                 .build();
         mSearchText.setOnItemClickListener(mAutocompleteClickListener);
         mPlaceAutocompleteAdapter = new PlaceAutocompleteAdapter(this, mGoogleApiClient,
-                LAT_LNG_BOUNDS, null);
+                appConstant.LAT_LNG_BOUNDS, null);
         mSearchText.setAdapter(mPlaceAutocompleteAdapter);
 
     }

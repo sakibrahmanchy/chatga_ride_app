@@ -1,10 +1,9 @@
-package com.demoriderctg.arif.demorider;
+package com.demoriderctg.arif.demorider.GoogleMap;
 
 
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -12,11 +11,11 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.internal.NavigationMenu;
+import android.support.design.internal.NavigationMenuItemView;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -30,32 +29,35 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.demoriderctg.arif.demorider.DownloadTask2;
+import com.demoriderctg.arif.demorider.FavoritePlaces.FavoritePlacesActivity;
+import com.demoriderctg.arif.demorider.PlaceAutocompleteAdapter;
+import com.demoriderctg.arif.demorider.R;
+import com.demoriderctg.arif.demorider.UserInformation;
+import com.demoriderctg.arif.demorider.autoComplete;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 import com.demoriderctg.arif.demorider.models.PlaceInfo;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.AutocompletePrediction;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -73,7 +75,7 @@ import ContactWithFirebase.Main;
  */
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback,
-        GoogleApiClient.OnConnectionFailedListener{
+        GoogleApiClient.OnConnectionFailedListener,NavigationView.OnNavigationItemSelectedListener{
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -85,6 +87,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         Log.d(TAG, "onMapReady: map is ready");
         mMap = googleMap;
+
 
         if (mLocationPermissionsGranted) {
             //  getDeviceLocation();
@@ -98,6 +101,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
 
             init();
+
+
+
             Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
         }
     }
@@ -146,18 +152,20 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private  LatLng home,workplace;
     private ProgressBar spinner;
     private double latS,lons;
-    MarkerOptions options = new MarkerOptions();
     private LoginData loginData;
     private UserInformation userInformation;
-
+    private MarkerOptions options ;
     TextView userFirstName;
     TextView userPhoneNumber;
+    private  Address address;
 
     private Main main;
     public  long back_pressed;
-    private  ConnectionCheck connectionCheck;
+    private ConnectionCheck connectionCheck;
     private SharedPreferences.Editor editor ;
     private String activityChangeForSearch=null;
+    private MapMarkerDragging mapMarkerDragging;
+    private LinearLayout linearLayout;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -180,6 +188,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
 
+
     }
 
 
@@ -190,13 +199,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         userFirstName = (TextView) findViewById(R.id.userNameProfile);
         userPhoneNumber = (TextView) findViewById(R.id.use_Phonemuber);
-
+        linearLayout = (LinearLayout)findViewById(R.id.searchLinearLayout) ;
 
         mGps = (ImageView) findViewById(R.id.ic_gps);
         sendButton = (Button) findViewById(R.id.btnSend);
         requestbtn = (Button) findViewById(R.id.pickupbtn);
         sendButton.setVisibility(View.INVISIBLE);
         requestbtn.setVisibility(View.INVISIBLE);
+        linearLayout.setVisibility(View.VISIBLE);
         spinner=(ProgressBar)findViewById(R.id.progressBar);
         spinner.setVisibility(View.GONE);
         sharedpreferences = this.getSharedPreferences("MyPref", 0);
@@ -205,6 +215,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         connectionCheck = new ConnectionCheck(this);
         editor= sharedpreferences.edit();
         main = new Main();
+        options= new MarkerOptions();
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+
 
         loginData = userInformation.getuserInformation();
         phonemumber = sharedpreferences.getString("phone_number","");
@@ -226,6 +241,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                getDeviceLocation();
 
            }
+
+
 
 
         //mSearchTextDestination.setOnItemClickListener(mAutocompleteClickListenerForDestination);
@@ -259,6 +276,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mGps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                linearLayout.setVisibility(View.VISIBLE);
                 if(connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected()){
                     getDeviceLocation();
 
@@ -274,18 +292,24 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Getting URL to the Google Directions API
-                String url = getDirectionsUrl(source, dest);
 
-                DownloadTask downloadTask = new DownloadTask(mMap,source,dest);
-                DownloadTask2 downloadTask2 = new DownloadTask2(source,dest);
-                String a = downloadTask2.getDestinatin();
+                if(connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected()){
+                    // Getting URL to the Google Directions API
+                    String url = getDirectionsUrl(source, dest);
 
-                // Start downloading json data from Google Directions API
-                downloadTask.execute(url);
-                sendButton.setVisibility(View.INVISIBLE);
-                requestbtn.setVisibility(View.VISIBLE);
-                //mMap.getUiSettings().setScrollGesturesEnabled(false);
+                    DownloadTask downloadTask = new DownloadTask(mMap,source,dest);
+                    DownloadTask2 downloadTask2 = new DownloadTask2(source,dest);
+                    String a = downloadTask2.getDestinatin();
+
+                    // Start downloading json data from Google Directions API
+                    downloadTask.execute(url);
+                    sendButton.setVisibility(View.INVISIBLE);
+                    requestbtn.setVisibility(View.VISIBLE);
+                    //mMap.getUiSettings().setScrollGesturesEnabled(false);
+                }
+                else{
+                    Toast.makeText(MapActivity.this, "Connection Lost", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -296,22 +320,83 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         requestbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                spinner.setVisibility(View.VISIBLE);
-                requestbtn.setVisibility(View.INVISIBLE);
-                mGps.setVisibility(View.INVISIBLE);
-                mMap.getUiSettings().setScrollGesturesEnabled(false);
 
-                Double SourceLat = source.latitude;
-                Double SourceLan = source.longitude;
-                Double DestinationLat = dest.latitude;
-                Double DestinationLan = dest.longitude;
+                if(connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected()){
+                    spinner.setVisibility(View.VISIBLE);
+                    requestbtn.setVisibility(View.INVISIBLE);
+                    mGps.setVisibility(View.INVISIBLE);
+                    mMap.getUiSettings().setScrollGesturesEnabled(false);
+                    linearLayout.setVisibility(View.INVISIBLE);
+                    Double SourceLat = source.latitude;
+                    Double SourceLan = source.longitude;
+                    Double DestinationLat = dest.latitude;
+                    Double DestinationLan = dest.longitude;
 
-                Pair Source = Pair.create(SourceLat,SourceLan);
-                Pair Destination = Pair.create(DestinationLat,DestinationLan);
-                Main main = new Main();
-                main.RequestForRide(Source, Destination);
+                    Pair Source = Pair.create(SourceLat,SourceLan);
+                    Pair Destination = Pair.create(DestinationLat,DestinationLan);
+                    Main main = new Main();
+                    main.RequestForRide(Source, Destination);
+                }
+                else{
+                    Toast.makeText(MapActivity.this, "Connection Lost", Toast.LENGTH_SHORT).show();
+                }
 
 
+
+            }
+        });
+
+
+        mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+
+            @Override
+            public void onMarkerDragStart(Marker marker) {
+                // TODO Auto-generated method stub
+                // Here your code
+                Toast.makeText(getApplicationContext(), "Dragging Start",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onMarkerDragEnd(Marker marker) {
+                // TODO Auto-generated method stub
+                if(connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected()){
+                    String markerOption = marker.getSnippet();
+                    Geocoder myLocation = new Geocoder(getApplicationContext(), Locale.getDefault());
+                    try {
+                        List<Address> myList = myLocation.getFromLocation(marker.getPosition().latitude,marker.getPosition().longitude, 1);
+                        address = (Address) myList.get(0);
+
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if(markerOption.equals("Home")){
+                        editor.putFloat("lats", (float) marker.getPosition().latitude);
+                        editor.putFloat("lons", (float) marker.getPosition().longitude);
+                        editor.putString("locationName", address.getAddressLine(0));
+                        editor.commit();
+                    }
+                    else{
+                        editor.putFloat("latd", (float) marker.getPosition().latitude);
+                        editor.putFloat("lond", (float)marker.getPosition().longitude);
+                        editor.putString("locationNamed", address.getAddressLine(0));
+                        editor.commit();
+                    }
+                    checkLatLon();
+                }
+                else{
+                    Toast.makeText(MapActivity.this, "Connection Lost", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onMarkerDrag(Marker marker) {
+                // TODO Auto-generated method stub
+                // Toast.makeText(MainActivity.this, "Dragging",
+                // Toast.LENGTH_SHORT).show();
+                System.out.println("Draagging");
             }
         });
 
@@ -369,7 +454,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private void getDeviceLocation(){
         Log.d(TAG, "getDeviceLocation: getting the devices current location");
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
+        requestbtn.setVisibility(View.INVISIBLE);
+        mMap.clear();
         try{
             if(mLocationPermissionsGranted){
 
@@ -391,14 +477,28 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                 e.printStackTrace();
                             }
                             source= home = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-                            markerPoints.add(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
                             editor.putFloat("lats",(float) source.latitude);
                             editor.putFloat("lons",(float) source.longitude);
-                            sharedpreferences.getString("locationName", "Your Current Location");
+                            editor.putString("locationName", MycurrentLocation);
+                            sourceText.setText(MycurrentLocation);
+                            editor.putFloat("latd",(float) 0.0);
+                            editor.putFloat("lond",(float) 0.0);
+                            editor.putString("locationNamed", "");
                             editor.commit();
-                            moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
+
+                            mMap.addMarker(new MarkerOptions()
+                                    .position(new LatLng(source.latitude, source.longitude))
+                                    .title("Destination")
+                                    .draggable(true)
+                                    .snippet("Work")
+                                    .icon(BitmapDescriptorFactory
+                                            .defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                           // mapMarkerDragging = new MapMarkerDragging(MapActivity.this,source,dest,mMap);
+                                    moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
                                     DEFAULT_ZOOM,
                                     "My Location");
+                                    checkLatLon();
+
 
                         }else{
                             Log.d(TAG, "onComplete: current location is null");
@@ -551,24 +651,24 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
-    void  checkLatLon(){
+     public void  checkLatLon(){
         String location = sharedpreferences.getString("locationName", "");
         double lats = sharedpreferences.getFloat("lats", (float) 0.0);
         double lons = sharedpreferences.getFloat("lons", (float) 0.0);
         String locationd = sharedpreferences.getString("locationNamed", "");
         double latd = sharedpreferences.getFloat("latd", (float) 0.0);
         double lond = sharedpreferences.getFloat("lond", (float) 0.0);
-
+         sourceText.setText(location);
+         destinationText.setText(locationd);
         if(lats !=0.0){
-            sourceText.setText("");
-            sourceText.setText(location);
+
             source = new LatLng(lats,lons);
         }
         if(latd !=0.0){
-            destinationText.setText(locationd);
+
             dest = new LatLng(latd,lond);
         }
-        if(source !=null && dest !=null){
+        if(lats !=0.0 && latd !=0.0){
             sendButton.setVisibility(View.VISIBLE);
         }
         else {
@@ -580,7 +680,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
     //Menu
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -596,11 +695,30 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             super.onBackPressed();
         }
         else{
+         //   Intent intent = getIntent();
+         //   finish();
+         //   startActivity(intent);
             Toast.makeText(getBaseContext(),
                     "Press once again to exit!", Toast.LENGTH_SHORT)
                     .show();
         }
         back_pressed = System.currentTimeMillis();
+    }
+
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        Toast.makeText(getApplicationContext(),""+item.getItemId(),Toast.LENGTH_SHORT).show();
+        switch (item.getItemId()) {
+            case R.id.nav_notifications:
+              Intent intent = new Intent(MapActivity.this, FavoritePlacesActivity.class);
+              startActivity(intent);
+                break;
+            default:
+                break;
+        }
+
+        return true;
     }
 }
 
