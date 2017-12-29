@@ -249,7 +249,6 @@ public class RegistrationActivity extends Activity {
 
                         LoginHelper loginHelper = new LoginHelper(RegistrationActivity.this);
                         loginHelper.AccessTokenCall(clientId, clientSecret,phoneNumber);
-
                         break;
                     case 406:
                         try {
