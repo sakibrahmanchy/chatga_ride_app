@@ -28,7 +28,7 @@ import __Firebase.FirebaseUtility.FirebaseConstant;
 
 public class SentNotificationToRider extends AsyncTask<String, Void, String> {
 
-    private String path = ("https://jobayersheikhbd.000webhostapp.com/notification.php");
+    private String path = ("http://139.59.90.128/notification.php");
     private Context context;
     private ICallbackMain callbackListener;
 
