@@ -68,7 +68,11 @@ public class RequestForRide {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                callBackListener.OnRequestForRide(true);
+                if(dataSnapshot.exists()){
+                    callBackListener.OnRequestForRide(true);
+                } else {
+                    callBackListener.OnRequestForRide(false);
+                }
             }
 
             public void onCancelled(DatabaseError databaseError) {
