@@ -39,7 +39,7 @@ public class RiderModel {
     public long CurrentRidingHistoryID;
     public int OnlineBusyOnRide;
     public RiderLocation CurrentRiderLocation;
-    public long DistanceFromClient;
+    public double DistanceFromClient;
 
     public RiderModel(){
         this.CurrentRiderLocation = new RiderLocation();

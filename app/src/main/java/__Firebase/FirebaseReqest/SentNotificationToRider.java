@@ -45,12 +45,25 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... params) {
 
-        String clientId = params[0];
-        String riderId = params[1];
-        String sourceLatitude = params[2];
-        String sourceLongitude = params[3];
-        String destinationLatitude = params[4];
-        String destinationLongitude = params[5];
+        String clientId = FirebaseConstant.Empty,
+                riderId = FirebaseConstant.Empty,
+                sourceLatitude = FirebaseConstant.Empty,
+                sourceLongitude = FirebaseConstant.Empty,
+                destinationLatitude = FirebaseConstant.Empty,
+                destinationLongitude = FirebaseConstant.Empty;
+
+        try{
+            clientId = params[0];
+            riderId = params[1];
+            sourceLatitude = params[2];
+            sourceLongitude = params[3];
+            destinationLatitude = params[4];
+            destinationLongitude = params[5];
+        }catch (ExceptionInInitializerError e){
+            e.printStackTrace();
+        }
+
+
 
         try{
             URL url = new URL(path);

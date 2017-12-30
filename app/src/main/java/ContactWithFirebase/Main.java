@@ -5,6 +5,9 @@ import android.util.Pair;
 
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 
+import java.util.ArrayList;
+
+import __Firebase.FirebaseReqest.FindNearestRider;
 import __Firebase.ICallBackInstance.ICallbackMain;
 import __Firebase.FirebaseModel.ClientModel;
 import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
@@ -181,8 +184,11 @@ public class Main implements ICallbackMain {
     }
 
     @Override
-    public void OnRequestForRide(boolean value) {
-        Log.d(FirebaseConstant.RIDER_INFO, Boolean.toString(value));
+    public void OnRequestForRide(ArrayList<RiderModel> RiderList) {
+        if(RiderList != null && RiderList.size() > 0){
+            firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
+            new FindNearestRider(RiderList, this.Source, this);
+        }
     }
 
     @Override
@@ -199,13 +205,13 @@ public class Main implements ICallbackMain {
     @Override
     public void OnNearestRiderFound(boolean value) {
         if(value == true){
+            Log.d(FirebaseConstant.NEAREST_RIDER_FOUND, FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider.FullName);
             this.SentNotificationToRider(
                     FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider,
                     firebaseWrapper.getClientModelInstance(),
                     this.Source,
                     this.Destination
             );
-            Log.d(FirebaseConstant.NEAREST_RIDER_FOUND, FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider.FullName);
         }
     }
 }
