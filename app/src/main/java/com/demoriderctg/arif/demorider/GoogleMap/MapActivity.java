@@ -338,7 +338,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     Pair Source = Pair.create(SourceLat,SourceLan);
                     Pair Destination = Pair.create(DestinationLat,DestinationLan);
                     Main main = new Main();
-                    main.RequestForRide(Source, Destination);
+                    main.RequestForRide(Source, Destination, srcLocation, destLocation);
                 }
                 else{
                     Toast.makeText(MapActivity.this, "Connection Lost", Toast.LENGTH_SHORT).show();
