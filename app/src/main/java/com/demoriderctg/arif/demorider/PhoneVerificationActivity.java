@@ -146,7 +146,7 @@ public class PhoneVerificationActivity extends AppCompatActivity implements
                 //signInWithPhoneAuthCredential(credential);
 
                 SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref",0);
-                if(pref.getString("access_token",null)==null){
+                if(pref.getString("userData",null)==null){
                     signInWithPhoneAuthCredential(credential);
                     Intent intent = new Intent(PhoneVerificationActivity.this, RegistrationActivity.class);
                     intent.putExtra("phoneNumber",phoneNumber);
