@@ -7,6 +7,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import __Firebase.FirebaseModel.RiderModel;
 import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseUtility.ShortestDistanceMap;
@@ -22,13 +25,12 @@ public class RequestForRide {
     private ICallbackMain callBackListener = null;
     private Pair<Double, Double> Source;
     private Pair<Double, Double> Destination;
-    private ShortestDistanceMap shortestDistanceMap = null;
+    private ArrayList<RiderModel> RiderList = null;
 
     public RequestForRide(Pair<Double, Double> Source, Pair<Double, Double> Destination, ICallbackMain callBackListener) {
         this.Source = Source;
         this.Destination = Destination;
         this.callBackListener = callBackListener;
-        shortestDistanceMap = new ShortestDistanceMap();
 
         Request();
     }
@@ -42,24 +44,18 @@ public class RequestForRide {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 if (dataSnapshot.exists() && dataSnapshot.hasChildren()) {
+                    RiderList = new ArrayList<>();
 
-                    FirebaseWrapper.getInstance().getRiderViewModelInstance().NumberOfRiderFound = (int)dataSnapshot.getChildrenCount();
                     for (DataSnapshot snp : dataSnapshot.getChildren()) {
                         RiderModel riderModel = new RiderModel();
                         riderModel.LoadData(snp);
-                        FirebaseWrapper.getInstance().getRiderViewModelInstance().FindNearestRider(
-                                riderModel,
-                                Source,
-                                shortestDistanceMap,
-                                callBackListener
-                        );
+                        RiderList.add(riderModel);
                     }
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                shortestDistanceMap = null;
                 Log.d(FirebaseConstant.NEAREST_RIDER_ERROR, databaseError.toString());
             }
         });
@@ -69,16 +65,15 @@ public class RequestForRide {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    callBackListener.OnRequestForRide(true);
+                    callBackListener.OnRequestForRide(RiderList);
                 } else {
-                    callBackListener.OnRequestForRide(false);
+                    callBackListener.OnRequestForRide(RiderList);
                 }
             }
 
             public void onCancelled(DatabaseError databaseError) {
                 Log.d(FirebaseConstant.NEAREST_RIDER_ERROR, databaseError.toString());
-                shortestDistanceMap = null;
-                callBackListener.OnRequestForRide(false);
+                callBackListener.OnRequestForRide(RiderList);
             }
         });
     }

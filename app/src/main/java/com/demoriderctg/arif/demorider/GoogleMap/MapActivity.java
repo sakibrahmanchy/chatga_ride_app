@@ -166,6 +166,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private String activityChangeForSearch=null;
     private MapMarkerDragging mapMarkerDragging;
     private LinearLayout linearLayout;
+
+    private  String sourceLocationName,destinationLocationName;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -331,11 +333,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     Double SourceLan = source.longitude;
                     Double DestinationLat = dest.latitude;
                     Double DestinationLan = dest.longitude;
-
+                    String srcLocation = sourceLocationName;
+                    String destLocation = destinationLocationName;
                     Pair Source = Pair.create(SourceLat,SourceLan);
                     Pair Destination = Pair.create(DestinationLat,DestinationLan);
                     Main main = new Main();
-                    main.RequestForRide(Source, Destination);
+                    main.RequestForRide(Source, Destination, srcLocation, destLocation);
                 }
                 else{
                     Toast.makeText(MapActivity.this, "Connection Lost", Toast.LENGTH_SHORT).show();

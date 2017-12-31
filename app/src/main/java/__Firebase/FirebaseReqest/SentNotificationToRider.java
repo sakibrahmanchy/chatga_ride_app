@@ -19,8 +19,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
-import __Firebase.ICallBackInstance.ICallbackMain;
 import __Firebase.FirebaseUtility.FirebaseConstant;
+import __Firebase.ICallBackInstance.ICallbackMain;
 
 /**
  * Created by User on 12/2/2017.
@@ -32,7 +32,7 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
     private Context context;
     private ICallbackMain callbackListener;
 
-    public SentNotificationToRider(Context context, ICallbackMain callbackListener){
+    public SentNotificationToRider(Context context, ICallbackMain callbackListener) {
         this.context = context;
         this.callbackListener = callbackListener;
     }
@@ -45,16 +45,37 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... params) {
 
-        String clientId = params[0];
-        String riderId = params[1];
-        String sourceLatitude = params[2];
-        String sourceLongitude = params[3];
-        String destinationLatitude = params[4];
-        String destinationLongitude = params[5];
+        String clientId = FirebaseConstant.Empty;
+        String clientName = FirebaseConstant.Empty;
+        String clientPhone = FirebaseConstant.Empty;
+        String riderId = FirebaseConstant.Empty;
+        String riderDeviceToken = FirebaseConstant.Empty;
+        String sourceName = FirebaseConstant.Empty;
+        String destinationName = FirebaseConstant.Empty;
+        String sourceLatitude = FirebaseConstant.Empty;
+        String sourceLongitude = FirebaseConstant.Empty;
+        String destinationLatitude = FirebaseConstant.Empty;
+        String destinationLongitude = FirebaseConstant.Empty;
 
-        try{
+        try {
+            clientId = params[0];
+            clientName = params[1];
+            clientPhone = params[2];
+            riderId = params[3];
+            riderDeviceToken = params[4];
+            sourceName = params[5];
+            destinationName = params[6];
+            sourceLatitude = params[7];
+            sourceLongitude = params[8];
+            destinationLatitude = params[9];
+            destinationLongitude = params[10];
+        } catch (ExceptionInInitializerError e) {
+            e.printStackTrace();
+        }
+
+        try {
             URL url = new URL(path);
-            HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
+            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod(FirebaseConstant.REQUEST_METHOD);
             httpURLConnection.setDoOutput(true);
             OutputStream OS = httpURLConnection.getOutputStream();
@@ -62,7 +83,12 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
             BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(OS, FirebaseConstant.UTF_8));
 
             String data = URLEncoder.encode("clientId", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(clientId, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
+                    URLEncoder.encode("clientName", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(clientName, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
+                    URLEncoder.encode("clientPhone", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(clientPhone, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
                     URLEncoder.encode("riderId", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(riderId, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
+                    URLEncoder.encode("riderDeviceToken", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(riderDeviceToken, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
+                    URLEncoder.encode("sourceName", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(sourceName, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
+                    URLEncoder.encode("destinationName", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(destinationName, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
                     URLEncoder.encode("sourceLatitude", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(sourceLatitude, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
                     URLEncoder.encode("sourceLongitude", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(sourceLongitude, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
                     URLEncoder.encode("destinationLatitude", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(destinationLatitude, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
@@ -89,7 +115,7 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
             inputStream.close();
             return responseStrBuilder.toString();
 
-        }catch(MalformedURLException e){
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();

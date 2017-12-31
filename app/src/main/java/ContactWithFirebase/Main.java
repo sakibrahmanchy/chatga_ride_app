@@ -5,6 +5,9 @@ import android.util.Pair;
 
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 
+import java.util.ArrayList;
+
+import __Firebase.FirebaseReqest.FindNearestRider;
 import __Firebase.ICallBackInstance.ICallbackMain;
 import __Firebase.FirebaseModel.ClientModel;
 import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
@@ -27,6 +30,7 @@ public class Main implements ICallbackMain {
     private CurrentRidingHistoryModel currentRidingHistoryModel = null;
     private __FirebaseRequest firebaseRequestInstance;
     private Pair<Double, Double> Source = null, Destination = null;
+    private String SourceName, DestinationName;
 
     public Main(){
         firebaseWrapper = FirebaseWrapper.getInstance();
@@ -62,25 +66,27 @@ public class Main implements ICallbackMain {
         return true;
     }
 
-    public boolean RequestForRide(Pair<Double, Double> Source, Pair<Double, Double> Destination){
+    public boolean RequestForRide(Pair<Double, Double> Source, Pair<Double, Double> Destination, String _SourceName, String _DestinationName){
 
         firebaseWrapper = FirebaseWrapper.getInstance();
         firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
         this.Source = Source;
         this.Destination = Destination;
+        this.SourceName = _SourceName;
+        this.DestinationName = _DestinationName;
 
         firebaseRequestInstance.RequestForRide(Source, Destination, Main.this);
         return true;
     }
 
-    public boolean SentNotificationToRider(/*Firebase Client Mode, rider Model*/RiderModel Rider, ClientModel Client, Pair<Double, Double> Source, Pair<Double, Double> Destination){
+    public boolean SentNotificationToRider(/*Firebase Client Mode, rider Model*/RiderModel Rider, ClientModel Client, Pair<Double, Double> Source, Pair<Double, Double> Destination, String SourceName, String DestinationName){
 
         this.riderModel = Rider;
         this.clientModel = Client;
         firebaseWrapper = FirebaseWrapper.getInstance();
         firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
 
-        firebaseRequestInstance.SentNotificationToRider(this.riderModel, this.clientModel, Source, Destination, Main.this);
+        firebaseRequestInstance.SentNotificationToRider(this.riderModel, this.clientModel, Source, Destination, SourceName, DestinationName, Main.this);
         return true;
     }
 
@@ -181,8 +187,11 @@ public class Main implements ICallbackMain {
     }
 
     @Override
-    public void OnRequestForRide(boolean value) {
-        Log.d(FirebaseConstant.RIDER_INFO, Boolean.toString(value));
+    public void OnRequestForRide(ArrayList<RiderModel> RiderList) {
+        if(RiderList != null && RiderList.size() > 0){
+            firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
+            new FindNearestRider(RiderList, this.Source, this);
+        }
     }
 
     @Override
@@ -199,13 +208,16 @@ public class Main implements ICallbackMain {
     @Override
     public void OnNearestRiderFound(boolean value) {
         if(value == true){
+            Log.d(FirebaseConstant.NEAREST_RIDER_FOUND, FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider.FullName);
+
             this.SentNotificationToRider(
                     FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider,
                     firebaseWrapper.getClientModelInstance(),
                     this.Source,
-                    this.Destination
+                    this.Destination,
+                    this.SourceName,
+                    this.DestinationName
             );
-            Log.d(FirebaseConstant.NEAREST_RIDER_FOUND, FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider.FullName);
         }
     }
 }
