@@ -166,6 +166,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private String activityChangeForSearch=null;
     private MapMarkerDragging mapMarkerDragging;
     private LinearLayout linearLayout;
+
+    private  String sourceLocationName,destinationLocationName;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -652,14 +654,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
      public void  checkLatLon(){
-        String location = sharedpreferences.getString("locationName", "");
+         sourceLocationName = sharedpreferences.getString("locationName", "");
         double lats = sharedpreferences.getFloat("lats", (float) 0.0);
         double lons = sharedpreferences.getFloat("lons", (float) 0.0);
-        String locationd = sharedpreferences.getString("locationNamed", "");
+        destinationLocationName= sharedpreferences.getString("locationNamed", "");
         double latd = sharedpreferences.getFloat("latd", (float) 0.0);
         double lond = sharedpreferences.getFloat("lond", (float) 0.0);
-         sourceText.setText(location);
-         destinationText.setText(locationd);
+         sourceText.setText(sourceLocationName);
+         destinationText.setText(destinationLocationName);
         if(lats !=0.0){
 
             source = new LatLng(lats,lons);
