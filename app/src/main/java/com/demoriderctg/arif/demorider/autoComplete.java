@@ -23,6 +23,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.AutocompletePrediction;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
@@ -63,6 +64,8 @@ public class autoComplete extends AppCompatActivity  implements GoogleApiClient.
     private  double longitude;
     private  String searchTime;
     ArrayList<Vmhistory>vmhistories;
+    AutocompleteFilter filter =
+            new AutocompleteFilter.Builder().setCountry("BD").build();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,7 +104,8 @@ public class autoComplete extends AppCompatActivity  implements GoogleApiClient.
                 .build();
         mSearchText.setOnItemClickListener(mAutocompleteClickListener);
         mPlaceAutocompleteAdapter = new PlaceAutocompleteAdapter(this, mGoogleApiClient,
-                appConstant.LAT_LNG_BOUNDS, null);
+                appConstant.LAT_LNG_BOUNDS, filter);
+        mPlaceAutocompleteAdapter.setBounds(appConstant.LAT_LNG_BOUNDS);
         mSearchText.setAdapter(mPlaceAutocompleteAdapter);
 
     }

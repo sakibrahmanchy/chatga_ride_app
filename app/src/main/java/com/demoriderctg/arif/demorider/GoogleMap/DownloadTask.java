@@ -111,7 +111,7 @@ public class DownloadTask extends AsyncTask<String, Void, String> {
 
                 lineOptions.addAll(points);
                 lineOptions.width(12);
-                lineOptions.color(Color.RED);
+                lineOptions.color(Color.BLACK);
                 lineOptions.geodesic(true);
 
             }
