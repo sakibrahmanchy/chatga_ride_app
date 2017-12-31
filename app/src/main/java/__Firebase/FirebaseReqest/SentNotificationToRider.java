@@ -67,8 +67,8 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
             destinationName = params[6];
             sourceLatitude = params[7];
             sourceLongitude = params[8];
-            destinationLatitude = params[8];
-            destinationLongitude = params[9];
+            destinationLatitude = params[9];
+            destinationLongitude = params[10];
         } catch (ExceptionInInitializerError e) {
             e.printStackTrace();
         }

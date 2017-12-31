@@ -334,7 +334,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     Double DestinationLat = dest.latitude;
                     Double DestinationLan = dest.longitude;
                     String srcLocation = sourceLocationName;
-                    String destLocation =destinationLocationName;
+                    String destLocation = destinationLocationName;
                     Pair Source = Pair.create(SourceLat,SourceLan);
                     Pair Destination = Pair.create(DestinationLat,DestinationLan);
                     Main main = new Main();
