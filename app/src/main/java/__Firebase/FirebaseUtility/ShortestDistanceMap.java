@@ -43,8 +43,6 @@ public class ShortestDistanceMap {
         this.iDistanceAndDuration = iDistanceAndDuration;
         this.Rider = Rider;
 
-        //String url = getDirectionsUrl(this.Source, this.Destination);
-
         Thread thread = new Thread(){
             @Override
             public void run(){
