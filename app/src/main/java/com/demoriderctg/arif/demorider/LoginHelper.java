@@ -77,6 +77,7 @@ public class LoginHelper {
                             //No phone verification required, redirect to home
                             String accessToken = response.body().getAccessToken();
                             editor.putString("access_token", accessToken);
+
                             editor.commit();
                             LoginCall(phoneNumber);
 
