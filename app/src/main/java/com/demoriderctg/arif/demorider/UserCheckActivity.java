@@ -182,6 +182,7 @@ public class UserCheckActivity extends Activity {
 
                             Intent intent = new Intent(UserCheckActivity.this, RegistrationActivity.class);
                             intent.putExtra("phoneNumber",phoneNumber);
+                            intent.putExtra("loginStatus","REGISTRATION_REQUIRED");
                             startActivity(intent);
 //                            Snackbar.make(findViewById(android.R.id.content), "Error Verifying.",
 //                                    Snackbar.LENGTH_SHORT).show();
@@ -242,8 +243,7 @@ public class UserCheckActivity extends Activity {
                             Gson gson = new Gson();
                             String json = gson.toJson(data);
                             editor.putString("userData",json);
-                            editor.putString("phone_number",phoneNumber);
-
+                            editor.putString("phoneNumber",phoneNumber);
                             editor.commit();
 
                             Intent intent = new Intent(UserCheckActivity.this, MapActivity.class);
@@ -260,6 +260,7 @@ public class UserCheckActivity extends Activity {
                                 case "auth/phone-verification-required":
                                     Intent intent = new Intent(UserCheckActivity.this, PhoneVerificationActivity.class);
                                     intent.putExtra("phoneNumber",phoneNumber);
+                                    intent.putExtra("loginStatus","PHONE_VERIFICATION_REQUIRED");
                                     startActivity(intent);
                                     break;
                                 default:

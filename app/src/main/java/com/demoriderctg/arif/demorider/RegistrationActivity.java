@@ -268,10 +268,11 @@ public class RegistrationActivity extends Activity {
                         } catch (Exception e) {
                             Snackbar.make(findViewById(android.R.id.content), e.getMessage(), Snackbar.LENGTH_LONG).show();
                         }
+                        break;
                     case 200:
                         responseCode = response.body().getSuccess().toString();
                         if(responseCode.equals("user-found")){
-                            //No phone verification required, redirect to home
+
                             Intent intent = new Intent(RegistrationActivity.this, UserCheckActivity.class);
                             intent.putExtra("phoneNumber",phoneNumber);
                             startActivity(intent);

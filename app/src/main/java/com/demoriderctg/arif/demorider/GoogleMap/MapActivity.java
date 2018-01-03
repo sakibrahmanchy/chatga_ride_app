@@ -224,7 +224,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
         loginData = userInformation.getuserInformation();
-        phonemumber = sharedpreferences.getString("phone_number","");
+        phonemumber = userInformation.getRiderPhoneNumber();
 
         main.CreateNewRiderFirebase(loginData,phonemumber);
     }

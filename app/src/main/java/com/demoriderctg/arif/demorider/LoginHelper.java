@@ -77,6 +77,7 @@ public class LoginHelper {
                             //No phone verification required, redirect to home
                             String accessToken = response.body().getAccessToken();
                             editor.putString("access_token", accessToken);
+
                             editor.commit();
                             LoginCall(phoneNumber);
 
@@ -84,6 +85,7 @@ public class LoginHelper {
 
                             Intent intent = new Intent(context, RegistrationActivity.class);
                             intent.putExtra("phoneNumber", phoneNumber);
+                            intent.putExtra("loginStatus","REGISTRATION_REQUIRED");
                             context.startActivity(intent);
 //                            Snackbar.make(findViewById(android.R.id.content), "Error Verifying.",
 //                                    Snackbar.LENGTH_SHORT).show();
@@ -146,6 +148,7 @@ public class LoginHelper {
                             Gson gson = new Gson();
                             String json = gson.toJson(data);
                             editor.putString("userData", json);
+                            editor.putString("phoneNumber",phoneNumber);
                             editor.commit();
 
                             Intent intent = new Intent(context, MapActivity.class);
@@ -170,6 +173,7 @@ public class LoginHelper {
                                 case "auth/phone-verification-required":
                                     Intent intent = new Intent(context, PhoneVerificationActivity.class);
                                     intent.putExtra("phoneNumber", phoneNumber);
+                                    intent.putExtra("loginStatus","PHONE_VERIFICATION_REQUIRED");
                                     context.startActivity(intent);
                                     break;
                                 default:
