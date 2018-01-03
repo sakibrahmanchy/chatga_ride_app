@@ -54,55 +54,44 @@ public class LoginHelper {
         editor = pref.edit();
     }
 
-    public void AccessTokenCall(String clientId, String clientSecret, final String phoneNumber) {
+    public void AccessTokenCall(String clientId,String clientSecret,final String phoneNumber){
 
         dialog = new ProgressDialog(context);
         dialog.setMessage("Gaining Access To App..");
         dialog.show();
         apiService =
                 ApiClient.getClient().create(ApiInterface.class);
-        Call<AuthToken> call = apiService.getAccessToken(phoneNumber, clientId, clientSecret);
+        Call<AuthToken> call = apiService.getAccessToken(phoneNumber,clientId,clientSecret);
 
         call.enqueue(new Callback<AuthToken>() {
             @Override
             public void onResponse(Call<AuthToken> call, Response<AuthToken> response) {
 
                 int statusCode = response.code();
-                String testStatusCode = statusCode + "";
+                String testStatusCode = statusCode+"";
                 dialog.dismiss();
-                switch (statusCode) {
+                switch(statusCode){
                     case 200:
                         String responseCode = response.body().getStatus();
-                        if (responseCode.equals("true")) {
+                        if(responseCode.equals("true")){
                             //No phone verification required, redirect to home
                             String accessToken = response.body().getAccessToken();
-                            editor.putString("access_token", accessToken);
-
+                            editor.putString("access_token",accessToken);
                             editor.commit();
                             LoginCall(phoneNumber);
 
-                        } else {
-
-                            Intent intent = new Intent(context, RegistrationActivity.class);
-                            intent.putExtra("phoneNumber", phoneNumber);
+                        }else{
+                            Intent intent = new Intent(context, PhoneVerificationActivity.class);
+                            intent.putExtra("phoneNumber",phoneNumber);
                             intent.putExtra("loginStatus","REGISTRATION_REQUIRED");
                             context.startActivity(intent);
-//                            Snackbar.make(findViewById(android.R.id.content), "Error Verifying.",
-//                                    Snackbar.LENGTH_SHORT).show();
                         }
                         break;
-                    case 500:
-                        try {
-
-                        } catch (Exception e) {
-//                            Snackbar.make(findViewById(android.R.id.content), e.getMessage(),
-//                                    Snackbar.LENGTH_SHORT).show();
-                        }
-                        break;
-
                     default:
-//                        Snackbar.make(findViewById(android.R.id.content), "Sorry, network error.",
-//                                Snackbar.LENGTH_SHORT).show();
+                        Intent intent = new Intent(context, PhoneVerificationActivity.class);
+                        intent.putExtra("phoneNumber",phoneNumber);
+                        intent.putExtra("loginStatus","REGISTRATION_REQUIRED");
+                        context.startActivity(intent);
                         break;
                 }
 
@@ -118,61 +107,55 @@ public class LoginHelper {
 
     }
 
-    public void LoginCall(final String phoneNumber) {
+    public void LoginCall(final String phoneNumber){
 
         dialog = new ProgressDialog(context);
         dialog.setMessage("Logging in To App..");
         dialog.show();
 
-        //String deviceToken = "asfs2xfasas2xx";
         String deviceToken = FirebaseWrapper.getDeviceToken();
-        String authHeader = "Bearer " + pref.getString("access_token", null);
-        Call<LoginModel> call = apiService.loginUser(authHeader, phoneNumber, deviceToken);
+        String authHeader = "Bearer "+pref.getString("access_token",null);
+        Call<LoginModel> call = apiService.loginUser(authHeader,phoneNumber, deviceToken);
 
         call.enqueue(new Callback<LoginModel>() {
             @Override
             public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
 
                 int statusCode = response.code();
-                String testStatusCode = statusCode + "";
-//                Snackbar.make(findViewById(android.R.id.content), testStatusCode,
-//                        Snackbar.LENGTH_SHORT).show();
                 dialog.dismiss();
-                switch (statusCode) {
+
+                switch(statusCode){
                     case 200:
                         String responseCode = response.body().getResponseCode();
-                        if (responseCode.equals("auth/logged-in-successfully")) {
+                        if(responseCode.equals("auth/logged-in-successfully")){
                             //No phone verification required, redirect to home
                             LoginData data = response.body().getLoginData();
 
                             Gson gson = new Gson();
                             String json = gson.toJson(data);
-                            editor.putString("userData", json);
+                            editor.putString("userData",json);
                             editor.putString("phoneNumber",phoneNumber);
                             editor.commit();
 
                             Intent intent = new Intent(context, MapActivity.class);
                             context.startActivity(intent);
-//                            Snackbar.make(findViewById(android.R.id.content),data.getUserId(),
-//                                    Snackbar.LENGTH_SHORT).show();
-//                            Snackbar.make(findViewById(android.R.id.content),accessToken,
-//                                    Snackbar.LENGTH_SHORT).show();
 
-                        } else {
-
-//                            Snackbar.make(findViewById(android.R.id.content), "Error Verifying.",
-//                                    Snackbar.LENGTH_SHORT).show();
+                        }else{
+                            Intent intent = new Intent(context, PhoneVerificationActivity.class);
+                            intent.putExtra("phoneNumber",phoneNumber);
+                            intent.putExtra("loginStatus","PHONE_VERIFICATION_REQUIRED");
+                            context.startActivity(intent);
                         }
                         break;
-                    case 500:
+                    default:
                         try {
 
                             JSONObject errorBody = new JSONObject(response.errorBody().string());
                             String errorResponseCode = errorBody.getString("response_code");
-                            switch (errorResponseCode) {
+                            switch(errorResponseCode){
                                 case "auth/phone-verification-required":
                                     Intent intent = new Intent(context, PhoneVerificationActivity.class);
-                                    intent.putExtra("phoneNumber", phoneNumber);
+                                    intent.putExtra("phoneNumber",phoneNumber);
                                     intent.putExtra("loginStatus","PHONE_VERIFICATION_REQUIRED");
                                     context.startActivity(intent);
                                     break;
@@ -186,30 +169,15 @@ public class LoginHelper {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-
-
-                    default:
-//                        Snackbar.make(findViewById(android.R.id.content), "Sorry, network error.",
-//                                Snackbar.LENGTH_SHORT).show();
                         break;
                 }
-//                if(status.equals("true") && statusCode == 200){
-//                    Intent intent = new Intent(UserCheckActivity.this, MapActivity.class);
-//                    intent.putExtra("phoneNumber",phoneNumber);
-//                    startActivity(intent);
-//                }else{
-//                    Snackbar.make(findViewById(android.R.id.content), "Error Verifying.",
-//                            Snackbar.LENGTH_SHORT).show();
-//                }
             }
-
             @Override
             public void onFailure(Call<LoginModel> call, Throwable t) {
                 // Log error here since request failed
                 Log.e(TAG, t.toString());
             }
         });
-
 
     }
 }
