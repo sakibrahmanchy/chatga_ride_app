@@ -35,4 +35,5 @@ public class AppConstant {
     /*Latlon bound*/
     public static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
             new LatLng(90.1474141289,23.6245050799), new LatLng(90.599381674, 23.9678033413));
+
 }

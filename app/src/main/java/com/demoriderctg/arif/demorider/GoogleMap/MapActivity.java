@@ -46,10 +46,14 @@ import com.demoriderctg.arif.demorider.autoComplete;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 import com.demoriderctg.arif.demorider.models.PlaceInfo;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -158,6 +162,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     TextView userFirstName;
     TextView userPhoneNumber;
     private  Address address;
+    private  int PLACE_PICKER_REQUEST = 1;
+    private  int PLACE_PICKER_REQUEST_DESTINATION = 2;
 
     private Main main;
     public  long back_pressed;
@@ -166,6 +172,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private String activityChangeForSearch=null;
     private MapMarkerDragging mapMarkerDragging;
     private LinearLayout linearLayout;
+    private  String HomeLocationName;
+    private  String DestinationLocationName;
 
     private  String sourceLocationName,destinationLocationName;
     @Override
@@ -182,12 +190,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         InitializationAll();
 
         getLocationPermission();
+        /*
         activityChangeForSearch = getIntent().getStringExtra("locationName");
         if(activityChangeForSearch !=null){
             activityChangeForSearch = getIntent().getStringExtra("SearchLocation");
             onActivityResult1(activityChangeForSearch);
         }
-
+*/
 
 
 
@@ -246,35 +255,40 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
 
-
-        //mSearchTextDestination.setOnItemClickListener(mAutocompleteClickListenerForDestination);
-        // mSearchText.setOnItemClickListener(mAutocompleteClickListener);
-
         mPlaceAutocompleteAdapter = new PlaceAutocompleteAdapter(this, mGoogleApiClient,
                 LAT_LNG_BOUNDS, null);
 
-        sourceText.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                Intent i = new Intent(MapActivity.this, autoComplete.class);
-                i.putExtra("From","from");
-                startActivityForResult(i, 1);
 
-                return false;
+
+        sourceText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+
+                try {
+                    startActivityForResult(builder.build(MapActivity.this), PLACE_PICKER_REQUEST);
+                } catch (GooglePlayServicesRepairableException e) {
+                    e.printStackTrace();
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
-        destinationText.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                Intent i = new Intent(MapActivity.this, autoComplete.class);
-                i.putExtra("From","to");
-                startActivity(i);
+destinationText.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
 
-                return false;
-            }
-        });
-
+        try {
+            startActivityForResult(builder.build(MapActivity.this), PLACE_PICKER_REQUEST_DESTINATION);
+        } catch (GooglePlayServicesRepairableException e) {
+            e.printStackTrace();
+        } catch (GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+        }
+    }
+});
         mGps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -375,16 +389,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         e.printStackTrace();
                     }
                     if(markerOption.equals("Home")){
-                        editor.putFloat("lats", (float) marker.getPosition().latitude);
-                        editor.putFloat("lons", (float) marker.getPosition().longitude);
-                        editor.putString("locationName", address.getAddressLine(0));
-                        editor.commit();
+                        source = marker.getPosition();
+                        HomeLocationName =address.getAddressLine(0);
+                        sourceText.setText(HomeLocationName);
                     }
                     else{
-                        editor.putFloat("latd", (float) marker.getPosition().latitude);
-                        editor.putFloat("lond", (float)marker.getPosition().longitude);
-                        editor.putString("locationNamed", address.getAddressLine(0));
-                        editor.commit();
+                        dest = marker.getPosition();
+                        DestinationLocationName =address.getAddressLine(0);
+                        destinationText.setText(DestinationLocationName);
                     }
                     checkLatLon();
                 }
@@ -474,20 +486,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             try {
                                 List<Address> myList = myLocation.getFromLocation(currentLocation.getLatitude(), currentLocation.getLongitude(), 1);
                                 Address address = (Address) myList.get(0);
-                                MycurrentLocation = address.getAddressLine(0);
+                                HomeLocationName = address.getAddressLine(0);
+                                sourceText.setText(HomeLocationName);
 
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                            source= home = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-                            editor.putFloat("lats",(float) source.latitude);
-                            editor.putFloat("lons",(float) source.longitude);
-                            editor.putString("locationName", MycurrentLocation);
-                            sourceText.setText(MycurrentLocation);
-                            editor.putFloat("latd",(float) 0.0);
-                            editor.putFloat("lond",(float) 0.0);
-                            editor.putString("locationNamed", "");
-                            editor.commit();
+                            source=  new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+
 
                             mMap.addMarker(new MarkerOptions()
                                     .position(new LatLng(source.latitude, source.longitude))
@@ -500,7 +506,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                     moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
                                     DEFAULT_ZOOM,
                                     "My Location");
-                                    checkLatLon();
+                                    //checkLatLon();
 
 
                         }else{
@@ -623,63 +629,49 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    protected void onActivityResult1(String activity) {
-        if (activity.equals("from")) {
-            // TODO Extract the data returned from the child Activity.
-            latS =  getIntent().getDoubleExtra("lat", 0.00);
-
-            String locationName = getIntent().getStringExtra("locationName");
-            lons =  getIntent().getDoubleExtra("lon", 0.00);
-
-            sourceText.setText(locationName);
-            editor.putFloat("lats", (float)latS);
-            editor.putFloat("lons", (float)lons);
-            editor.putString("locationName", locationName);
-            editor.commit();
-            checkLatLon();
-        }
-        if (activity.equals("to")) {
-            // TODO Extract the data returned from the child Activity.
-            latS =  getIntent().getDoubleExtra("lat", 0.00);
-
-            String locationName = getIntent().getStringExtra("locationName");
-            lons =  getIntent().getDoubleExtra("lon", 0.00);
-            SharedPreferences.Editor editor = sharedpreferences.edit();
-            editor.putFloat("latd", (float)latS);
-            editor.putFloat("lond", (float)lons);
-            editor.putString("locationNamed", locationName);
-            editor.commit();
-            //  destinationText.setText(locationName);
-            checkLatLon();
-        }
-    }
 
      public void  checkLatLon(){
-        String location = sharedpreferences.getString("locationName", "");
-        double lats = sharedpreferences.getFloat("lats", (float) 0.0);
-        double lons = sharedpreferences.getFloat("lons", (float) 0.0);
-        String locationd = sharedpreferences.getString("locationNamed", "");
-        double latd = sharedpreferences.getFloat("latd", (float) 0.0);
-        double lond = sharedpreferences.getFloat("lond", (float) 0.0);
-         sourceText.setText(location);
-         destinationText.setText(locationd);
-        if(lats !=0.0){
 
-            source = new LatLng(lats,lons);
-        }
-        if(latd !=0.0){
+        if(source !=null && dest !=null){
 
-            dest = new LatLng(latd,lond);
-        }
-        if(lats !=0.0 && latd !=0.0){
             sendButton.setVisibility(View.VISIBLE);
         }
+
         else {
             sendButton.setVisibility(View.INVISIBLE);
         }
     }
 
 
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PLACE_PICKER_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlacePicker.getPlace(data, this);
+
+                HomeLocationName =  place.getAddress().toString();
+                source = place.getLatLng();
+                sourceText.setText(HomeLocationName);
+                checkLatLon();
+
+            }
+        }
+
+        if (requestCode == PLACE_PICKER_REQUEST_DESTINATION) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlacePicker.getPlace(data, this);
+
+                DestinationLocationName =  place.getAddress().toString();
+                dest = place.getLatLng();
+                destinationText.setText(DestinationLocationName);
+                checkLatLon();
+
+            }
+        }
+
+
+
+    }
 
 
     //Menu
