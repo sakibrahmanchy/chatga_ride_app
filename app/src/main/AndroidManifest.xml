@@ -74,7 +74,10 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".FavoritePlaces.FavoritePlacesActivity"></activity>
+        <activity android:name=".FavoritePlaces.FavoritePlacesActivity" />
+        <activity
+            android:name=".Dailog.SearchingDriver"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

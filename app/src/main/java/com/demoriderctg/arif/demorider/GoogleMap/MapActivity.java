@@ -37,6 +37,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.demoriderctg.arif.demorider.Dailog.SearchingDriver;
 import com.demoriderctg.arif.demorider.DownloadTask2;
 import com.demoriderctg.arif.demorider.FavoritePlaces.FavoritePlacesActivity;
 import com.demoriderctg.arif.demorider.PlaceAutocompleteAdapter;
@@ -74,9 +75,7 @@ import java.util.Locale;
 import ContactWithFirebase.Main;
 
 
-/**
- * Created by User on 10/2/2017.
- */
+
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.OnConnectionFailedListener,NavigationView.OnNavigationItemSelectedListener{
@@ -177,15 +176,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         InitializationAll();
 
         getLocationPermission();
-        /*
-        activityChangeForSearch = getIntent().getStringExtra("locationName");
-        if(activityChangeForSearch !=null){
-            activityChangeForSearch = getIntent().getStringExtra("SearchLocation");
-            onActivityResult1(activityChangeForSearch);
-        }
-*/
-
-
 
     }
 
@@ -338,6 +328,8 @@ destinationText.setOnClickListener(new View.OnClickListener() {
                     Pair Destination = Pair.create(DestinationLat,DestinationLan);
                     Main main = new Main();
                     main.RequestForRide(Source, Destination, HomeLocationName, DestinationLocationName);
+                    Intent intent = new Intent(MapActivity.this, SearchingDriver.class);
+                    startActivity(intent);
                 }
                 else{
                     Toast.makeText(MapActivity.this, "Connection Lost", Toast.LENGTH_SHORT).show();
