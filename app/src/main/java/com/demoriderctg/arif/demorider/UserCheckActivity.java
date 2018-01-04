@@ -91,7 +91,7 @@ public class UserCheckActivity extends Activity {
         dialog.setMessage("Please Wait..");
         dialog.show();
 
-        Call<UserCheckResponse> call = apiService.checkUser("+88"+phoneNumber);
+        Call<UserCheckResponse> call = apiService.checkUser("88"+phoneNumber);
 
         call.enqueue(new Callback<UserCheckResponse>() {
             @Override
