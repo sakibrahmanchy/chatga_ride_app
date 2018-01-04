@@ -127,15 +127,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private Button sendButton;
     private ImageView mGps;
-    private  ImageView searchSources;
-    private  ImageView searchDestination;
     private Button requestbtn;
-    private RelativeLayout relativeLayoutforSource;
-    private RelativeLayout relativeLayoutforDestination;
     private  TextView sourceText;
     private  TextView destinationText;
     private SharedPreferences sharedpreferences;
-    public static final String MyPREFERENCES = "MyPrefs" ;
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
@@ -146,16 +141,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private PlaceAutocompleteAdapter mPlaceAutocompleteAdapter;
     private GoogleApiClient mGoogleApiClient;
-    private PlaceInfo mPlace;
-    private  String distance="arif";
-    private  String duration="arif";
     private LatLng source,dest;
-    private  final int SOURCE =1;
-    private  final int DESTINATION =2;
-    private String MycurrentLocation,phonemumber;
-    private  LatLng home,workplace;
+    private String phonemumber;
     private ProgressBar spinner;
-    private double latS,lons;
     private LoginData loginData;
     private UserInformation userInformation;
     private MarkerOptions options ;
@@ -170,12 +158,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private ConnectionCheck connectionCheck;
     private SharedPreferences.Editor editor ;
     private String activityChangeForSearch=null;
-    private MapMarkerDragging mapMarkerDragging;
+
     private LinearLayout linearLayout;
     private  String HomeLocationName;
     private  String DestinationLocationName;
 
-    private  String sourceLocationName,destinationLocationName;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -347,12 +334,10 @@ destinationText.setOnClickListener(new View.OnClickListener() {
                     Double SourceLan = source.longitude;
                     Double DestinationLat = dest.latitude;
                     Double DestinationLan = dest.longitude;
-                    String srcLocation = sourceLocationName;
-                    String destLocation = destinationLocationName;
                     Pair Source = Pair.create(SourceLat,SourceLan);
                     Pair Destination = Pair.create(DestinationLat,DestinationLan);
                     Main main = new Main();
-                    main.RequestForRide(Source, Destination, "aad", "asd");
+                    main.RequestForRide(Source, Destination, HomeLocationName, DestinationLocationName);
                 }
                 else{
                     Toast.makeText(MapActivity.this, "Connection Lost", Toast.LENGTH_SHORT).show();
@@ -418,53 +403,6 @@ destinationText.setOnClickListener(new View.OnClickListener() {
         hideSoftKeyboard();
     }
 
-    private void geoLocate(int position){
-        Log.d(TAG, "geoLocate: geolocating");
-        Toast.makeText(getApplicationContext(),"dokche",Toast.LENGTH_LONG).show();
-        if(position==1){
-            String searchString = sourceText.getText().toString();
-
-            Geocoder geocoder = new Geocoder(MapActivity.this);
-            List<Address> list = new ArrayList<>();
-            try{
-                list = geocoder.getFromLocationName(searchString, 1);
-            }catch (IOException e){
-                Log.e(TAG, "geoLocate: IOException: " + e.getMessage() );
-            }
-
-            if(list.size() > 0){
-                Address address = list.get(0);
-                sourceText.setText("");
-                sourceText.setText(address.getAddressLine(0));
-                home = new LatLng(address.getLatitude(), address.getLongitude());
-                moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), DEFAULT_ZOOM,
-                        address.getAddressLine(0));
-            }
-        }
-
-        else if(position==2){
-            String searchString = sourceText.getText().toString();
-
-            Geocoder geocoder = new Geocoder(MapActivity.this);
-            List<Address> list = new ArrayList<>();
-            try{
-                list = geocoder.getFromLocationName(searchString, 1);
-            }catch (IOException e){
-                Log.e(TAG, "geoLocate: IOException: " + e.getMessage() );
-            }
-
-            if(list.size() > 0){
-                Address address = list.get(0);
-
-                Log.d(TAG, "geoLocate: found a location: " + address.toString());
-                //Toast.makeText(this, address.toString(), Toast.LENGTH_SHORT).show();
-                workplace = new LatLng(address.getLatitude(), address.getLongitude());
-                moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), DEFAULT_ZOOM,
-                        address.getAddressLine(0));
-            }
-        }
-
-    }
 
     private void getDeviceLocation(){
         Log.d(TAG, "getDeviceLocation: getting the devices current location");
