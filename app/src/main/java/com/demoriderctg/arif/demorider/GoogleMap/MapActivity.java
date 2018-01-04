@@ -289,11 +289,7 @@ destinationText.setOnClickListener(new View.OnClickListener() {
                 if(connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected()){
                     // Getting URL to the Google Directions API
                     String url = getDirectionsUrl(source, dest);
-
                     DownloadTask downloadTask = new DownloadTask(mMap,source,dest);
-                    DownloadTask2 downloadTask2 = new DownloadTask2(source,dest);
-                    String a = downloadTask2.getDestinatin();
-
                     // Start downloading json data from Google Directions API
                     downloadTask.execute(url);
                     sendButton.setVisibility(View.INVISIBLE);
@@ -315,11 +311,7 @@ destinationText.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
                 if(connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected()){
-                    spinner.setVisibility(View.VISIBLE);
-                    requestbtn.setVisibility(View.INVISIBLE);
-                    mGps.setVisibility(View.INVISIBLE);
-                    mMap.getUiSettings().setScrollGesturesEnabled(false);
-                    linearLayout.setVisibility(View.INVISIBLE);
+
                     Double SourceLat = source.latitude;
                     Double SourceLan = source.longitude;
                     Double DestinationLat = dest.latitude;
@@ -328,6 +320,7 @@ destinationText.setOnClickListener(new View.OnClickListener() {
                     Pair Destination = Pair.create(DestinationLat,DestinationLan);
                     Main main = new Main();
                     main.RequestForRide(Source, Destination, HomeLocationName, DestinationLocationName);
+                    mMap.clear();
                     Intent intent = new Intent(MapActivity.this, SearchingDriver.class);
                     startActivity(intent);
                 }
