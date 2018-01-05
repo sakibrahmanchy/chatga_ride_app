@@ -324,8 +324,6 @@ destinationText.setOnClickListener(new View.OnClickListener() {
                     Double DestinationLan = dest.longitude;
                     Pair Source = Pair.create(SourceLat,SourceLan);
                     Pair Destination = Pair.create(DestinationLat,DestinationLan);
-                    main.RequestForRide(Source, Destination, "aad", "asd");
-                    Main main = new Main();
                     main.RequestForRide(Source, Destination, HomeLocationName, DestinationLocationName);
                     Intent intent = new Intent(MapActivity.this, SearchingDriver.class);
                     startActivity(intent);

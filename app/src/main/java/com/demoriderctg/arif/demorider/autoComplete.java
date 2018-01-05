@@ -81,10 +81,10 @@ public class autoComplete extends AppCompatActivity  implements GoogleApiClient.
         rvSearchHistory = (RecyclerView)findViewById(R.id.rvSearchHistory);
         rvSearchHistory.setHasFixedSize(true);
         rvSearchHistory.setLayoutManager(llm);
-        //mydb = new DBHelper(this);
+        mydb = new DBHelper(this);
         // mydb.crateTable();
         // mydb.deleteAllHistory();
-        //vmhistories = mydb.getAllSearchList();
+        vmhistories = mydb.getAllSearchList();
         init();
         //  initializeData();
         //  initializeAdapter();
@@ -184,7 +184,7 @@ public class autoComplete extends AppCompatActivity  implements GoogleApiClient.
                     i.putExtra("SearchLocation","to");
                 }
 
-                //insertHistoryTable();
+                insertHistoryTable();
                 setResult(Activity.RESULT_OK, i);
                 i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(i);
