@@ -61,6 +61,7 @@ public class __FirebaseRequest extends AppCompatActivity {
                     Long.toString(Client.ClientID),
                     Client.FullName,
                     Long.toString(Client.PhoneNumber),
+                    Client.DeviceToken,
                     Long.toString(Rider.RiderID),
                     Rider.DeviceToken.toString(),
                     SourceName,
@@ -71,6 +72,17 @@ public class __FirebaseRequest extends AppCompatActivity {
                     Double.toString(Destination.second)
                 );
         finish();
+    }
+
+    public void SetDeviceTokenToRiderTable(final ClientModel Client, final ICallbackMain callBackListener){
+
+        Thread thread = new Thread(){
+            @Override
+            public void run(){
+                new SetDeviceTokenToRiderTable(Client, callBackListener);
+            }
+        };
+        thread.start();
     }
 
     public void CancelRideByClient(final CurrentRidingHistoryModel HistoryModel, final ClientModel Client, final ICallbackMain callBackListener){

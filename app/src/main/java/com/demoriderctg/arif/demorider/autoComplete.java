@@ -63,7 +63,7 @@ public class autoComplete extends AppCompatActivity  implements GoogleApiClient.
     private  double latitude;
     private  double longitude;
     private  String searchTime;
-    ArrayList<Vmhistory>vmhistories;
+    ArrayList<Vmhistory>vmhistories = new ArrayList<>();
     AutocompleteFilter filter =
             new AutocompleteFilter.Builder().setCountry("BD").build();
     @Override

@@ -45,9 +45,11 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... params) {
 
+        String actionType = FirebaseConstant.CLIENT_TO_RIDER;
         String clientId = FirebaseConstant.Empty;
         String clientName = FirebaseConstant.Empty;
         String clientPhone = FirebaseConstant.Empty;
+        String clientDeviceToken = FirebaseConstant.Empty;
         String riderId = FirebaseConstant.Empty;
         String riderDeviceToken = FirebaseConstant.Empty;
         String sourceName = FirebaseConstant.Empty;
@@ -61,14 +63,15 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
             clientId = params[0];
             clientName = params[1];
             clientPhone = params[2];
-            riderId = params[3];
-            riderDeviceToken = params[4];
-            sourceName = params[5];
-            destinationName = params[6];
-            sourceLatitude = params[7];
-            sourceLongitude = params[8];
-            destinationLatitude = params[9];
-            destinationLongitude = params[10];
+            clientDeviceToken = params[3];
+            riderId = params[4];
+            riderDeviceToken = params[5];
+            sourceName = params[6];
+            destinationName = params[7];
+            sourceLatitude = params[8];
+            sourceLongitude = params[9];
+            destinationLatitude = params[10];
+            destinationLongitude = params[11];
         } catch (ExceptionInInitializerError e) {
             e.printStackTrace();
         }
@@ -82,9 +85,11 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
 
             BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(OS, FirebaseConstant.UTF_8));
 
-            String data = URLEncoder.encode("clientId", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(clientId, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
+            String data = URLEncoder.encode("actionType", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(actionType, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
+                    URLEncoder.encode("clientId", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(clientId, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
                     URLEncoder.encode("clientName", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(clientName, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
                     URLEncoder.encode("clientPhone", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(clientPhone, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
+                    URLEncoder.encode("clientDeviceToken", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(clientDeviceToken, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
                     URLEncoder.encode("riderId", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(riderId, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
                     URLEncoder.encode("riderDeviceToken", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(riderDeviceToken, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
                     URLEncoder.encode("sourceName", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(sourceName, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
