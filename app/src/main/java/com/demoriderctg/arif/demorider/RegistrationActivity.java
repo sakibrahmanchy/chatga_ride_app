@@ -314,14 +314,6 @@ public class RegistrationActivity extends Activity {
                                 Snackbar.LENGTH_SHORT).show();
                         break;
                 }
-//                if(status.equals("true") && statusCode == 200){
-//                    Intent intent = new Intent(UserCheckActivity.this, MapActivity.class);
-//                    intent.putExtra("phoneNumber",phoneNumber);
-//                    startActivity(intent);
-//                }else{
-//                    Snackbar.make(findViewById(android.R.id.content), "Error Verifying.",
-//                            Snackbar.LENGTH_SHORT).show();
-//                }
             }
 
             @Override

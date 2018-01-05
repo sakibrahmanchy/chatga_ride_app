@@ -80,7 +80,7 @@ public class MapMarkerDragging {
                    editor.putString("locationNamed", currentLocation);
                    editor.commit();
                }
-               mapActivity.checkLatLon();
+             //  mapActivity.checkLatLon();
            }
 
            @Override

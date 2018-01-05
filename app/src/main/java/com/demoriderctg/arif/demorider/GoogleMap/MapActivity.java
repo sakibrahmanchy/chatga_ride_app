@@ -37,6 +37,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.demoriderctg.arif.demorider.Dailog.SearchingDriver;
 import com.demoriderctg.arif.demorider.DownloadTask2;
 import com.demoriderctg.arif.demorider.FavoritePlaces.FavoritePlacesActivity;
 import com.demoriderctg.arif.demorider.PlaceAutocompleteAdapter;
@@ -46,10 +47,14 @@ import com.demoriderctg.arif.demorider.autoComplete;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 import com.demoriderctg.arif.demorider.models.PlaceInfo;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -70,9 +75,7 @@ import java.util.Locale;
 import ContactWithFirebase.Main;
 
 
-/**
- * Created by User on 10/2/2017.
- */
+
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.OnConnectionFailedListener,NavigationView.OnNavigationItemSelectedListener{
@@ -123,15 +126,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private Button sendButton;
     private ImageView mGps;
-    private  ImageView searchSources;
-    private  ImageView searchDestination;
     private Button requestbtn;
-    private RelativeLayout relativeLayoutforSource;
-    private RelativeLayout relativeLayoutforDestination;
     private  TextView sourceText;
     private  TextView destinationText;
     private SharedPreferences sharedpreferences;
-    public static final String MyPREFERENCES = "MyPrefs" ;
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
@@ -142,32 +140,28 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private PlaceAutocompleteAdapter mPlaceAutocompleteAdapter;
     private GoogleApiClient mGoogleApiClient;
-    private PlaceInfo mPlace;
-    private  String distance="arif";
-    private  String duration="arif";
     private LatLng source,dest;
-    private  final int SOURCE =1;
-    private  final int DESTINATION =2;
-    private String MycurrentLocation,phonemumber;
-    private  LatLng home,workplace;
+    private String phonemumber;
     private ProgressBar spinner;
-    private double latS,lons;
     private LoginData loginData;
     private UserInformation userInformation;
     private MarkerOptions options ;
     TextView userFirstName;
     TextView userPhoneNumber;
     private  Address address;
+    private  int PLACE_PICKER_REQUEST = 1;
+    private  int PLACE_PICKER_REQUEST_DESTINATION = 2;
 
     private Main main;
     public  long back_pressed;
     private ConnectionCheck connectionCheck;
     private SharedPreferences.Editor editor ;
     private String activityChangeForSearch=null;
-    private MapMarkerDragging mapMarkerDragging;
-    private LinearLayout linearLayout;
 
-    private  String sourceLocationName,destinationLocationName;
+    private LinearLayout linearLayout;
+    private  String HomeLocationName;
+    private  String DestinationLocationName;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -182,14 +176,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         InitializationAll();
 
         getLocationPermission();
-        activityChangeForSearch = getIntent().getStringExtra("locationName");
-        if(activityChangeForSearch !=null){
-            activityChangeForSearch = getIntent().getStringExtra("SearchLocation");
-            onActivityResult1(activityChangeForSearch);
-        }
-
-
-
 
     }
 
@@ -244,35 +230,40 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
 
-
-        //mSearchTextDestination.setOnItemClickListener(mAutocompleteClickListenerForDestination);
-        // mSearchText.setOnItemClickListener(mAutocompleteClickListener);
-
         mPlaceAutocompleteAdapter = new PlaceAutocompleteAdapter(this, mGoogleApiClient,
                 LAT_LNG_BOUNDS, null);
 
-        sourceText.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                Intent i = new Intent(MapActivity.this, autoComplete.class);
-                i.putExtra("From","from");
-                startActivityForResult(i, 1);
 
-                return false;
+
+        sourceText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+
+                try {
+                    startActivityForResult(builder.build(MapActivity.this), PLACE_PICKER_REQUEST);
+                } catch (GooglePlayServicesRepairableException e) {
+                    e.printStackTrace();
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
-        destinationText.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                Intent i = new Intent(MapActivity.this, autoComplete.class);
-                i.putExtra("From","to");
-                startActivity(i);
+destinationText.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
 
-                return false;
-            }
-        });
-
+        try {
+            startActivityForResult(builder.build(MapActivity.this), PLACE_PICKER_REQUEST_DESTINATION);
+        } catch (GooglePlayServicesRepairableException e) {
+            e.printStackTrace();
+        } catch (GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+        }
+    }
+});
         mGps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -331,11 +322,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     Double SourceLan = source.longitude;
                     Double DestinationLat = dest.latitude;
                     Double DestinationLan = dest.longitude;
-                    String srcLocation = sourceLocationName;
-                    String destLocation = destinationLocationName;
                     Pair Source = Pair.create(SourceLat,SourceLan);
                     Pair Destination = Pair.create(DestinationLat,DestinationLan);
                     main.RequestForRide(Source, Destination, "aad", "asd");
+                    Main main = new Main();
+                    main.RequestForRide(Source, Destination, HomeLocationName, DestinationLocationName);
+                    Intent intent = new Intent(MapActivity.this, SearchingDriver.class);
+                    startActivity(intent);
                 }
                 else{
                     Toast.makeText(MapActivity.this, "Connection Lost", Toast.LENGTH_SHORT).show();
@@ -372,16 +365,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         e.printStackTrace();
                     }
                     if(markerOption.equals("Home")){
-                        editor.putFloat("lats", (float) marker.getPosition().latitude);
-                        editor.putFloat("lons", (float) marker.getPosition().longitude);
-                        editor.putString("locationName", address.getAddressLine(0));
-                        editor.commit();
+                        source = marker.getPosition();
+                        HomeLocationName =address.getAddressLine(0);
+                        sourceText.setText(HomeLocationName);
                     }
                     else{
-                        editor.putFloat("latd", (float) marker.getPosition().latitude);
-                        editor.putFloat("lond", (float)marker.getPosition().longitude);
-                        editor.putString("locationNamed", address.getAddressLine(0));
-                        editor.commit();
+                        dest = marker.getPosition();
+                        DestinationLocationName =address.getAddressLine(0);
+                        destinationText.setText(DestinationLocationName);
                     }
                     checkLatLon();
                 }
@@ -403,53 +394,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         hideSoftKeyboard();
     }
 
-    private void geoLocate(int position){
-        Log.d(TAG, "geoLocate: geolocating");
-        Toast.makeText(getApplicationContext(),"dokche",Toast.LENGTH_LONG).show();
-        if(position==1){
-            String searchString = sourceText.getText().toString();
-
-            Geocoder geocoder = new Geocoder(MapActivity.this);
-            List<Address> list = new ArrayList<>();
-            try{
-                list = geocoder.getFromLocationName(searchString, 1);
-            }catch (IOException e){
-                Log.e(TAG, "geoLocate: IOException: " + e.getMessage() );
-            }
-
-            if(list.size() > 0){
-                Address address = list.get(0);
-                sourceText.setText("");
-                sourceText.setText(address.getAddressLine(0));
-                home = new LatLng(address.getLatitude(), address.getLongitude());
-                moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), DEFAULT_ZOOM,
-                        address.getAddressLine(0));
-            }
-        }
-
-        else if(position==2){
-            String searchString = sourceText.getText().toString();
-
-            Geocoder geocoder = new Geocoder(MapActivity.this);
-            List<Address> list = new ArrayList<>();
-            try{
-                list = geocoder.getFromLocationName(searchString, 1);
-            }catch (IOException e){
-                Log.e(TAG, "geoLocate: IOException: " + e.getMessage() );
-            }
-
-            if(list.size() > 0){
-                Address address = list.get(0);
-
-                Log.d(TAG, "geoLocate: found a location: " + address.toString());
-                //Toast.makeText(this, address.toString(), Toast.LENGTH_SHORT).show();
-                workplace = new LatLng(address.getLatitude(), address.getLongitude());
-                moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), DEFAULT_ZOOM,
-                        address.getAddressLine(0));
-            }
-        }
-
-    }
 
     private void getDeviceLocation(){
         Log.d(TAG, "getDeviceLocation: getting the devices current location");
@@ -471,20 +415,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             try {
                                 List<Address> myList = myLocation.getFromLocation(currentLocation.getLatitude(), currentLocation.getLongitude(), 1);
                                 Address address = (Address) myList.get(0);
-                                MycurrentLocation = address.getAddressLine(0);
+                                HomeLocationName = address.getAddressLine(0);
+                                sourceText.setText(HomeLocationName);
 
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                            source= home = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-                            editor.putFloat("lats",(float) source.latitude);
-                            editor.putFloat("lons",(float) source.longitude);
-                            editor.putString("locationName", MycurrentLocation);
-                            sourceText.setText(MycurrentLocation);
-                            editor.putFloat("latd",(float) 0.0);
-                            editor.putFloat("lond",(float) 0.0);
-                            editor.putString("locationNamed", "");
-                            editor.commit();
+                            source=  new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+
 
                             mMap.addMarker(new MarkerOptions()
                                     .position(new LatLng(source.latitude, source.longitude))
@@ -497,7 +435,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                     moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
                                     DEFAULT_ZOOM,
                                     "My Location");
-                                    checkLatLon();
+                                    //checkLatLon();
 
 
                         }else{
@@ -620,63 +558,49 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    protected void onActivityResult1(String activity) {
-        if (activity.equals("from")) {
-            // TODO Extract the data returned from the child Activity.
-            latS =  getIntent().getDoubleExtra("lat", 0.00);
-
-            String locationName = getIntent().getStringExtra("locationName");
-            lons =  getIntent().getDoubleExtra("lon", 0.00);
-
-            sourceText.setText(locationName);
-            editor.putFloat("lats", (float)latS);
-            editor.putFloat("lons", (float)lons);
-            editor.putString("locationName", locationName);
-            editor.commit();
-            checkLatLon();
-        }
-        if (activity.equals("to")) {
-            // TODO Extract the data returned from the child Activity.
-            latS =  getIntent().getDoubleExtra("lat", 0.00);
-
-            String locationName = getIntent().getStringExtra("locationName");
-            lons =  getIntent().getDoubleExtra("lon", 0.00);
-            SharedPreferences.Editor editor = sharedpreferences.edit();
-            editor.putFloat("latd", (float)latS);
-            editor.putFloat("lond", (float)lons);
-            editor.putString("locationNamed", locationName);
-            editor.commit();
-            //  destinationText.setText(locationName);
-            checkLatLon();
-        }
-    }
 
      public void  checkLatLon(){
-        String location = sharedpreferences.getString("locationName", "");
-        double lats = sharedpreferences.getFloat("lats", (float) 0.0);
-        double lons = sharedpreferences.getFloat("lons", (float) 0.0);
-        String locationd = sharedpreferences.getString("locationNamed", "");
-        double latd = sharedpreferences.getFloat("latd", (float) 0.0);
-        double lond = sharedpreferences.getFloat("lond", (float) 0.0);
-         sourceText.setText(location);
-         destinationText.setText(locationd);
-        if(lats !=0.0){
 
-            source = new LatLng(lats,lons);
-        }
-        if(latd !=0.0){
+        if(source !=null && dest !=null){
 
-            dest = new LatLng(latd,lond);
-        }
-        if(lats !=0.0 && latd !=0.0){
             sendButton.setVisibility(View.VISIBLE);
         }
+
         else {
             sendButton.setVisibility(View.INVISIBLE);
         }
     }
 
 
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PLACE_PICKER_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlacePicker.getPlace(data, this);
+
+                HomeLocationName =  place.getAddress().toString();
+                source = place.getLatLng();
+                sourceText.setText(HomeLocationName);
+                checkLatLon();
+
+            }
+        }
+
+        if (requestCode == PLACE_PICKER_REQUEST_DESTINATION) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlacePicker.getPlace(data, this);
+
+                DestinationLocationName =  place.getAddress().toString();
+                dest = place.getLatLng();
+                destinationText.setText(DestinationLocationName);
+                checkLatLon();
+
+            }
+        }
+
+
+
+    }
 
 
     //Menu

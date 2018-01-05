@@ -29,13 +29,12 @@
             android:id="@+id/searchLinearLayout"
             android:padding= "10dp">
 
-                <EditText
+                <TextView
                     android:id="@+id/sourceText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:background="@android:color/white"
-                    android:editable="false"
                     android:ems="10"
                     android:selectAllOnFocus="true"
                     android:hint="Your current location"
@@ -44,7 +43,7 @@
                     android:drawableRight="@drawable/places_ic_search"
                     />
 
-                <EditText
+                <TextView
                     android:id="@+id/destinationText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
