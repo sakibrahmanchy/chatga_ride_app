@@ -1,22 +1,24 @@
 package ContactWithFirebase;
 
+import android.content.Context;
 import android.util.Log;
 import android.util.Pair;
+import android.widget.Toast;
 
+import com.demoriderctg.arif.demorider.MainActivity;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 
 import java.util.ArrayList;
 
-import __Firebase.FirebaseReqest.FindNearestRider;
-import __Firebase.ICallBackInstance.ICallbackMain;
 import __Firebase.FirebaseModel.ClientModel;
 import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
 import __Firebase.FirebaseModel.RiderModel;
+import __Firebase.FirebaseReqest.FindNearestRider;
 import __Firebase.FirebaseReqest.__FirebaseRequest;
 import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseUtility.FirebaseUtilMethod;
-import __Firebase.FirebaseUtility.ShortestDistanceMap;
 import __Firebase.FirebaseWrapper;
+import __Firebase.ICallBackInstance.ICallbackMain;
 
 /**
  * Created by User on 12/9/2017.
@@ -31,14 +33,28 @@ public class Main implements ICallbackMain {
     private __FirebaseRequest firebaseRequestInstance;
     private Pair<Double, Double> Source = null, Destination = null;
     private String SourceName, DestinationName;
+    private Context context = null;
 
-    public Main(){
+    public Main(Context context) {
+        this.context = context;
         firebaseWrapper = FirebaseWrapper.getInstance();
     }
 
     public boolean CreateNewRiderFirebase(LoginData loginData , String phoneNumber){
 
-        if(loginData == null || FirebaseUtilMethod.IsEmptyOrNull(phoneNumber))  return false;
+        if (MainActivity.check) {
+            loginData = new LoginData(
+                    "Jobayer",
+                    "sheikh",
+                    FirebaseWrapper.getDeviceToken(),
+                    null,
+                    null,
+                    "1010"
+            );
+            phoneNumber = new String("01752062838");
+        }
+
+        if (loginData == null || FirebaseUtilMethod.IsEmptyOrNull(phoneNumber)) return false;
 
         firebaseWrapper = FirebaseWrapper.getInstance();
         clientModel = firebaseWrapper.getClientModelInstance();
@@ -87,6 +103,19 @@ public class Main implements ICallbackMain {
         firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
 
         firebaseRequestInstance.SentNotificationToRider(this.riderModel, this.clientModel, Source, Destination, SourceName, DestinationName, Main.this);
+        return true;
+    }
+
+    public boolean SetDeviceTokenToRiderTable(/*Firebase Rider Model*/ ClientModel Client, String deviceToken) {
+
+        if (Client == null || Client.ClientID < 1 || FirebaseUtilMethod.IsEmptyOrNull(deviceToken))
+            return false;
+
+        this.firebaseWrapper = FirebaseWrapper.getInstance();
+        this.clientModel = Client;
+        this.clientModel.DeviceToken = deviceToken;
+
+        firebaseWrapper.getFirebaseRequestInstance().SetDeviceTokenToRiderTable(this.clientModel, Main.this);
         return true;
     }
 
@@ -201,7 +230,13 @@ public class Main implements ICallbackMain {
 
     @Override
     public void OnIsClientAlreadyCreated(boolean value) {
-        if(value == true)   return;
+        if (value == true) {
+            SetDeviceTokenToRiderTable(
+                    FirebaseWrapper.getInstance().getClientModelInstance(),
+                    FirebaseWrapper.getDeviceToken()
+            );
+            return;
+        }
         firebaseRequestInstance.CreateClientFirstTime(clientModel, Main.this);
     }
 
@@ -218,6 +253,13 @@ public class Main implements ICallbackMain {
                     this.SourceName,
                     this.DestinationName
             );
+        } else if (context != null) {
+            Toast.makeText(context, FirebaseConstant.NO_RIDER_FOUND, Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void OnSetDeviceTokenToRiderTable(boolean value) {
+        Log.d(FirebaseConstant.DEVICE_TOKEN_UPDATE, Boolean.toString(value));
     }
 }

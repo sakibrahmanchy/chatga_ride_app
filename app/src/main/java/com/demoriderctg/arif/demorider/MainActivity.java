@@ -8,9 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.demoriderctg.arif.demorider.LoginActivity;
-import com.demoriderctg.arif.demorider.UserCheckActivity;
-import com.demoriderctg.arif.demorider.R;
+import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
@@ -18,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "Mainactivity";
     private static final int ERROR_DIALOG_REQUEST = 9001;
+    public static boolean check = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,14 +42,19 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, MapActivity.class);
                 startActivity(intent);
+
             }
         });*/
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, UserCheckActivity.class);
-
-                startActivity(intent);
+                if (!check) {
+                    Intent intent = new Intent(MainActivity.this, UserCheckActivity.class);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(MainActivity.this, MapActivity.class);
+                    startActivity(intent);
+                }
             }
         });
     }

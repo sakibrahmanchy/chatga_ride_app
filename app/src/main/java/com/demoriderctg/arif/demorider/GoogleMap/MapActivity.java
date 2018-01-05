@@ -216,17 +216,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         userInformation = new UserInformation(this);
         connectionCheck = new ConnectionCheck(this);
         editor= sharedpreferences.edit();
-        main = new Main();
+        main = new Main(this);
         options= new MarkerOptions();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
-
         loginData = userInformation.getuserInformation();
         phonemumber = userInformation.getRiderPhoneNumber();
 
-        main.CreateNewRiderFirebase(loginData,phonemumber);
+        main.CreateNewRiderFirebase(loginData, phonemumber);
     }
 
     private void init(){
@@ -337,7 +335,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     String destLocation = destinationLocationName;
                     Pair Source = Pair.create(SourceLat,SourceLan);
                     Pair Destination = Pair.create(DestinationLat,DestinationLan);
-                    Main main = new Main();
                     main.RequestForRide(Source, Destination, "aad", "asd");
                 }
                 else{

@@ -32,10 +32,10 @@ public class ShowDerectionInGoogleMap {
                 .position(source));
 
         mMap.addPolyline(polylineOptions);
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        builder.include(source).include(destination);
-
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(builder.build(), 320);
-        mMap.moveCamera(cameraUpdate);
+//        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+//        builder.include(source).include(destination);
+//
+//        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(builder.build(), 320);
+//        mMap.moveCamera(cameraUpdate);
     }
 }
