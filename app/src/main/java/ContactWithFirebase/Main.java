@@ -42,7 +42,7 @@ public class Main implements ICallbackMain {
 
     public boolean CreateNewRiderFirebase(LoginData loginData , String phoneNumber){
 
-        if (MainActivity.check) {
+        if (!MainActivity.check) {
             loginData = new LoginData(
                     "Jobayer",
                     "sheikh",

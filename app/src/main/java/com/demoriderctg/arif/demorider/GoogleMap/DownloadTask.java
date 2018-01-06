@@ -1,5 +1,7 @@
 package com.demoriderctg.arif.demorider.GoogleMap;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -30,11 +32,14 @@ public class DownloadTask extends AsyncTask<String, Void, String> {
     private String duration;
     private LatLng source, dest;
     private GoogleMap mMap;
+    private ProgressDialog dailog;
+    private Context mContext;
 
-    public DownloadTask(GoogleMap mMap, LatLng source, LatLng dest) {
+    public DownloadTask(Context context, GoogleMap mMap, LatLng source, LatLng dest) {
         this.mMap = mMap;
         this.source = source;
         this.dest = dest;
+        this.mContext=context;
 
     }
 
@@ -71,7 +76,6 @@ public class DownloadTask extends AsyncTask<String, Void, String> {
 
             JSONObject jObject;
             List<List<HashMap<String, String>>> routes = null;
-
             try {
                 jObject = new JSONObject(jsonData[0]);
                 DirectionsJSONParser parser = new DirectionsJSONParser(jObject);
@@ -123,6 +127,7 @@ public class DownloadTask extends AsyncTask<String, Void, String> {
             if(lineOptions !=null){
                 ShowDerectionInGoogleMap showDerectionInGoogleMap = new ShowDerectionInGoogleMap(mMap, lineOptions, source, dest);
                 showDerectionInGoogleMap.placeDirection();
+
             }
 
 
