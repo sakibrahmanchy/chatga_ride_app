@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.demoriderctg.arif.demorider.MainActivity;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
+import com.google.maps.model.Distance;
 
 import java.util.ArrayList;
 
@@ -42,7 +43,7 @@ public class Main implements ICallbackMain {
 
     public boolean CreateNewRiderFirebase(LoginData loginData , String phoneNumber){
 
-        if (!MainActivity.check) {
+        if (MainActivity.check) {
             loginData = new LoginData(
                     "Jobayer",
                     "sheikh",
@@ -96,6 +97,8 @@ public class Main implements ICallbackMain {
     }
 
     public boolean SentNotificationToRider(/*Firebase Client Mode, rider Model*/RiderModel Rider, ClientModel Client, Pair<Double, Double> Source, Pair<Double, Double> Destination, String SourceName, String DestinationName){
+
+        if(Rider == null || Client == null || Source == null || Destination == null)    return false;
 
         this.riderModel = Rider;
         this.clientModel = Client;

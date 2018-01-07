@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -12,12 +11,8 @@ import android.widget.Toast;
 
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
 import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
-import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
 import com.demoriderctg.arif.demorider.InternetConnection.ConnectionCheck;
 import com.demoriderctg.arif.demorider.InternetConnection.InternetCheckActivity;
-import com.demoriderctg.arif.demorider.LoginActivity;
-import com.demoriderctg.arif.demorider.UserCheckActivity;
-import com.demoriderctg.arif.demorider.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
@@ -35,31 +30,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         connectionCheck = new ConnectionCheck(this);
 
-        if(!connectionCheck.isNetworkConnected()){
+        if (!connectionCheck.isNetworkConnected()) {
             Intent intent = new Intent(this, InternetCheckActivity.class);
             startActivityForResult(intent, AppConstant.INTERNET_CHECK);
-        }
-        else if(!connectionCheck.isGpsEnable()){
+        } else if (!connectionCheck.isGpsEnable()) {
             connectionCheck.showGPSDisabledAlertToUser();
-        }
-        else{
+        } else {
             pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
             if (pref.getString("userData", null) != null) {
                 Intent intent = new Intent(MainActivity.this, MapActivity.class);
                 startActivity(intent);
                 finish();
+            } else {
+                if (isServiceOk()) {
+                    init();
+                }
             }
-            else
-            {
-                        if (isServiceOk()) {
-
-                              init();
-                         }
-
-            }
-
         }
-
     }
 
     private void init() {
@@ -76,9 +63,13 @@ public class MainActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!check) {
                     Intent intent = new Intent(MainActivity.this, UserCheckActivity.class);
                     startActivity(intent);
-
+                } else {
+                    Intent intent = new Intent(MainActivity.this, MapActivity.class);
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -99,9 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         if (requestCode == AppConstant.INTERNET_CHECK) {
-
             if (resultCode == RESULT_OK) {
                 Intent intent = getIntent();
                 finish();
@@ -109,5 +98,4 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
 }

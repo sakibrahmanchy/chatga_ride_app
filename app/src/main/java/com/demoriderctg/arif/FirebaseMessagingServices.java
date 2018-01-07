@@ -28,11 +28,11 @@ public class FirebaseMessagingServices extends FirebaseMessagingService {
         NotificationModel notificationModel = FirebaseWrapper.getInstance().getNotificationModelInstance();
 
         if (remoteMessage.getData().size() > 0) {
-            notificationModel.title = remoteMessage.getData().get("title");
-            notificationModel.body = remoteMessage.getData().get("body");
-            notificationModel.riderId = Long.parseLong(remoteMessage.getData().get("riderId"));
-            notificationModel.riderName = remoteMessage.getData().get("riderName");
-            notificationModel.riderPhone = remoteMessage.getData().get("riderPhone");
+            notificationModel.title = remoteMessage.getData().containsKey("title") ? remoteMessage.getData().get("title") : FirebaseConstant.Empty;
+             notificationModel.body = remoteMessage.getData().containsKey("body") ? remoteMessage.getData().get("body") : FirebaseConstant.Empty;
+            notificationModel.riderId = Long.parseLong(remoteMessage.getData().containsKey("riderId") ? remoteMessage.getData().get("riderId") : "0");
+            notificationModel.riderName = remoteMessage.getData().containsKey("riderName") ? remoteMessage.getData().get("riderName") : "0";
+            notificationModel.riderPhone = remoteMessage.getData().containsKey("riderPhone") ? remoteMessage.getData().get("riderPhone") : "0";
         }
 
         Intent intent = new Intent(this, MainActivity.class);
