@@ -23,6 +23,7 @@ public class AppConstant {
     public static final String AMPERSAND = "&";
     public static final String Question = "?";
     public static final String Comma = ",";
+    public static  int INTERNET_CHECK=0;
 
 
     /* Log Tag, Message */

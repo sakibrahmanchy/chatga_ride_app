@@ -9,7 +9,10 @@ import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
 import __Firebase.FirebaseModel.RiderModel;
 import __Firebase.FirebaseReqest.__FirebaseRequest;
 import __Firebase.FirebaseResponse.FirebaseResponse;
+import __Firebase.FirebaseResponse.NotificationModel;
 import __Firebase.ViewModel.RiderViewModel;
+
+import static com.google.android.gms.internal.zzagz.runOnUiThread;
 
 /**
  * Created by User on 11/16/2017.
@@ -26,15 +29,21 @@ public class FirebaseWrapper {
     private CurrentRidingHistoryModel CurrentRidingHistoryModelInstance;
     private RiderModel RiderModelInstance;
     private ClientModel ClientModel;
+    private NotificationModel NotificationModel;
 
     private FirebaseWrapper() {
-        FirebaseRootReference = FirebaseDatabase.getInstance().getReference();
-        FirebaseRequestInstance = new __FirebaseRequest();
-        FirebaseResponseInstance = new FirebaseResponse();
-        RiderViewModelInstance = new RiderViewModel();
-        CurrentRidingHistoryModelInstance = new CurrentRidingHistoryModel();
-        RiderModelInstance = new RiderModel();
-        ClientModel = new ClientModel();
+        runOnUiThread(new Runnable() {
+            public void run() {
+                FirebaseRootReference = FirebaseDatabase.getInstance().getReference();
+                FirebaseRequestInstance = new __FirebaseRequest();
+                FirebaseResponseInstance = new FirebaseResponse();
+                RiderViewModelInstance = new RiderViewModel();
+                CurrentRidingHistoryModelInstance = new CurrentRidingHistoryModel();
+                RiderModelInstance = new RiderModel();
+                ClientModel = new ClientModel();
+                NotificationModel = new NotificationModel();
+            }
+        });
     }
 
     public static FirebaseWrapper getInstance() {
@@ -69,6 +78,10 @@ public class FirebaseWrapper {
 
     public CurrentRidingHistoryModel getCurrentRidingHistoryModelInstance() {
         return CurrentRidingHistoryModelInstance;
+    }
+
+    public NotificationModel getNotificationModelInstance() {
+        return NotificationModel;
     }
 
     public static String getDeviceToken() {

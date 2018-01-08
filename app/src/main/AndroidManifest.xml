@@ -26,10 +26,8 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCUlumoP9HNAHy8lSTHVWavcrihYe0vNm8" />
-
         <activity
             android:name=".MainActivity"
-            android:noHistory="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -78,6 +76,7 @@
         <activity
             android:name=".Dailog.SearchingDriver"
             android:theme="@style/AppTheme" />
+        <activity android:name=".InternetConnection.InternetCheckActivity"></activity>
     </application>
 
 </manifest>

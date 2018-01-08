@@ -51,7 +51,7 @@ public class ShowDerectionInGoogleMap {
         builder.include(source).include(destination);
 
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(builder.build(), 320);
-        mMap.moveCamera(cameraUpdate);
+        mMap.animateCamera(cameraUpdate);
     }
 
     public Bitmap resizedMarker(int height, int width){

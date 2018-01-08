@@ -14,4 +14,5 @@ public interface ICallbackMain {
     void OnSentNotificationToRider(boolean value);
     void OnIsClientAlreadyCreated(boolean value);
     void OnNearestRiderFound(boolean value);
+    void OnSetDeviceTokenToRiderTable(boolean value);
 }

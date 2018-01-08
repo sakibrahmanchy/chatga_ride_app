@@ -1,5 +1,6 @@
 package com.demoriderctg.arif.demorider.GoogleMap;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -31,13 +32,15 @@ public class DownloadTask extends AsyncTask<String, Void, String> {
     private String duration;
     private LatLng source, dest;
     private GoogleMap mMap;
-    private Context context;
+    private ProgressDialog dailog;
+    private Context mContext;
 
-    public DownloadTask(Context context,GoogleMap mMap, LatLng source, LatLng dest) {
+    public DownloadTask(Context context, GoogleMap mMap, LatLng source, LatLng dest) {
         this.mMap = mMap;
         this.source = source;
         this.dest = dest;
-        this.context = context;
+        this.mContext=context;
+
     }
 
     @Override
@@ -73,7 +76,6 @@ public class DownloadTask extends AsyncTask<String, Void, String> {
 
             JSONObject jObject;
             List<List<HashMap<String, String>>> routes = null;
-
             try {
                 jObject = new JSONObject(jsonData[0]);
                 DirectionsJSONParser parser = new DirectionsJSONParser(jObject);
@@ -123,8 +125,9 @@ public class DownloadTask extends AsyncTask<String, Void, String> {
 
 // Constrain the camera target to the Adelaide bounds.
             if(lineOptions !=null){
-                ShowDerectionInGoogleMap showDerectionInGoogleMap = new ShowDerectionInGoogleMap(context, mMap, lineOptions, source, dest);
+                ShowDerectionInGoogleMap showDerectionInGoogleMap = new ShowDerectionInGoogleMap(mMap, lineOptions, source, dest);
                 showDerectionInGoogleMap.placeDirection();
+
             }
 
 

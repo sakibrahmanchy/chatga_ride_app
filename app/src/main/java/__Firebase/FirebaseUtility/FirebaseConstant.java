@@ -38,6 +38,7 @@ public class FirebaseConstant {
     public static String REQUEST_METHOD = "POST";
     public static String EQUAL = "=";
     public static String AMPERSAND = "&";
+    public static String DEVICE_TOKEN = "DeviceToken";
 
     /* For Map */
     public static final String BASE_URL  = "http://139.59.90.128/chaatga_rider/";
@@ -81,6 +82,15 @@ public class FirebaseConstant {
     public static String UPDATE_LOCATION = "UPDATE_LOCATION";
     public static String GET_UPDATE_LOCATION = "GET_UPDATE_LOCATION";
     public static String RESPONSE_FROM_SERVER = "RESPONSE_FROM_SERVER";
+    public static String FIREBASE_REG_TOKEN = "FIREBASE_REG_TOKEN";
+    public static String DEVICE_TOKEN_UPDATE = "DEVICE_TOKEN_UPDATE";
+    public static String RECEIVED_NOTIFICATION = "RECEIVED_NOTIFICATION";
+
+    /*Toast Message*/
+    public static String NO_RIDER_FOUND = "No rider found";
+
+    /*Notification Action Type*/
+    public static String CLIENT_TO_RIDER = "3021";
 
     public FirebaseConstant(){
     }

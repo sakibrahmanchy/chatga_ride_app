@@ -2,11 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Client.iml" filepath="$PROJECT_DIR$/Client.iml" />
+      <module fileurl="file://D:\devClient\Client.iml" filepath="D:\devClient\Client.iml" />
       <module fileurl="file://D:\Android\Projects\devClient-master-4ead3c2223803e8b90637f168f25fd4afd9af1dd\Client.iml" filepath="D:\Android\Projects\devClient-master-4ead3c2223803e8b90637f168f25fd4afd9af1dd\Client.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://D:\Work\ChatgaRide\Client\devClient.iml" filepath="D:\Work\ChatgaRide\Client\devClient.iml" />
       <module fileurl="file://D:\Android\Projects\devClient-master-4ead3c2223803e8b90637f168f25fd4afd9af1dd\devClient.iml" filepath="D:\Android\Projects\devClient-master-4ead3c2223803e8b90637f168f25fd4afd9af1dd\devClient.iml" />
-      <module fileurl="file://$PROJECT_DIR$/devClient-master-4ead3c2223803e8b90637f168f25fd4afd9af1dd.iml" filepath="$PROJECT_DIR$/devClient-master-4ead3c2223803e8b90637f168f25fd4afd9af1dd.iml" />
       <module fileurl="file://D:\Work\ChatgaRide\Client\devClient-master-4ead3c2223803e8b90637f168f25fd4afd9af1dd.iml" filepath="D:\Work\ChatgaRide\Client\devClient-master-4ead3c2223803e8b90637f168f25fd4afd9af1dd.iml" />
       <module fileurl="file://D:\devClient\devClient-master-4ead3c2223803e8b90637f168f25fd4afd9af1dd.iml" filepath="D:\devClient\devClient-master-4ead3c2223803e8b90637f168f25fd4afd9af1dd.iml" />
     </modules>

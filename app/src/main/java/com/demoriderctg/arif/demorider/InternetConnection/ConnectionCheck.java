@@ -1,4 +1,4 @@
-package com.demoriderctg.arif.demorider.GoogleMap;
+package com.demoriderctg.arif.demorider.InternetConnection;
 
 import android.content.Context;
 import android.content.DialogInterface;

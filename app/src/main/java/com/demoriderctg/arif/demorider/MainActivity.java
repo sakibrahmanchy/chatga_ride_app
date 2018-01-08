@@ -9,10 +9,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
 import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
-import com.demoriderctg.arif.demorider.LoginActivity;
-import com.demoriderctg.arif.demorider.UserCheckActivity;
-import com.demoriderctg.arif.demorider.R;
+import com.demoriderctg.arif.demorider.InternetConnection.ConnectionCheck;
+import com.demoriderctg.arif.demorider.InternetConnection.InternetCheckActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
@@ -20,27 +20,33 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "Mainactivity";
     private static final int ERROR_DIALOG_REQUEST = 9001;
+    public static boolean check = true;
     private SharedPreferences pref;
+    private ConnectionCheck connectionCheck;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
-        if (pref.getString("userData", null) != null) {
-            Intent intent = new Intent(MainActivity.this, MapActivity.class);
-            startActivity(intent);
+        connectionCheck = new ConnectionCheck(this);
+
+        if (!connectionCheck.isNetworkConnected()) {
+            Intent intent = new Intent(this, InternetCheckActivity.class);
+            startActivityForResult(intent, AppConstant.INTERNET_CHECK);
+        } else if (!connectionCheck.isGpsEnable()) {
+            connectionCheck.showGPSDisabledAlertToUser();
+        } else {
+            pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+            if (pref.getString("userData", null) != null) {
+                Intent intent = new Intent(MainActivity.this, MapActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+                if (isServiceOk()) {
+                    init();
+                }
+            }
         }
-        else
-        init();
-//        if (isServiceOk()) {
-//            // Intent intent = new Intent(MainActivity.this, MapActivity.class);
-//             Intent intent = new Intent(MainActivity.this, UserCheckActivity.class);
-//            startActivity(intent);
-//             init();
-//        }
-
-
     }
 
     private void init() {
@@ -51,14 +57,19 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, MapActivity.class);
                 startActivity(intent);
+
             }
         });*/
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, UserCheckActivity.class);
-
-                startActivity(intent);
+                if (!check) {
+                    Intent intent = new Intent(MainActivity.this, UserCheckActivity.class);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(MainActivity.this, MapActivity.class);
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -75,5 +86,16 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "you can not make request", Toast.LENGTH_SHORT).show();
         }
         return false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == AppConstant.INTERNET_CHECK) {
+            if (resultCode == RESULT_OK) {
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+            }
+        }
     }
 }

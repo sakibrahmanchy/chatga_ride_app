@@ -4,19 +4,16 @@ package com.demoriderctg.arif.demorider.GoogleMap;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.internal.NavigationMenu;
-import android.support.design.internal.NavigationMenuItemView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -26,28 +23,26 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.Pair;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
 import com.demoriderctg.arif.demorider.Dailog.SearchingDriver;
-import com.demoriderctg.arif.demorider.DownloadTask2;
 import com.demoriderctg.arif.demorider.FavoritePlaces.FavoritePlacesActivity;
+import com.demoriderctg.arif.demorider.InternetConnection.ConnectionCheck;
+import com.demoriderctg.arif.demorider.InternetConnection.InternetCheckActivity;
 import com.demoriderctg.arif.demorider.PlaceAutocompleteAdapter;
 import com.demoriderctg.arif.demorider.R;
+import com.demoriderctg.arif.demorider.UserCheckActivity;
 import com.demoriderctg.arif.demorider.UserInformation;
-import com.demoriderctg.arif.demorider.autoComplete;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
-import com.demoriderctg.arif.demorider.models.PlaceInfo;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -163,6 +158,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private LinearLayout linearLayout;
     private  String HomeLocationName;
     private  String DestinationLocationName;
+    private  ProgressDialog dailog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -204,17 +200,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         userInformation = new UserInformation(this);
         connectionCheck = new ConnectionCheck(this);
         editor= sharedpreferences.edit();
-        main = new Main();
+        main = new Main(this);
         options= new MarkerOptions();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
-
         loginData = userInformation.getuserInformation();
         phonemumber = userInformation.getRiderPhoneNumber();
 
-        main.CreateNewRiderFirebase(loginData,phonemumber);
+        main.CreateNewRiderFirebase(loginData, phonemumber);
     }
 
     private void init(){
@@ -272,13 +266,17 @@ destinationText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 linearLayout.setVisibility(View.VISIBLE);
-                if(connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected()){
-                    getDeviceLocation();
+                if(!connectionCheck.isNetworkConnected()){
 
+                    Intent intent = new Intent(MapActivity.this, InternetCheckActivity.class);
+                    startActivityForResult(intent, AppConstant.INTERNET_CHECK);
+                }
+                else if(!connectionCheck.isGpsEnable()){
+                    connectionCheck.showGPSDisabledAlertToUser();
                 }
 
                 else {
-                    connectionCheck.showGPSDisabledAlertToUser();
+                   getDeviceLocation();
                 }
 
             }
@@ -288,23 +286,23 @@ destinationText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if(connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected()){
-                    // Getting URL to the Google Directions API
+                if(!connectionCheck.isNetworkConnected()){
+
+                    Intent intent = new Intent(MapActivity.this, InternetCheckActivity.class);
+                    startActivityForResult(intent, AppConstant.INTERNET_CHECK);
+                }
+                else if(!connectionCheck.isGpsEnable()){
+                    connectionCheck.showGPSDisabledAlertToUser();
+                }
+
+                else {
                     String url = getDirectionsUrl(source, dest);
-
-                    DownloadTask downloadTask = new DownloadTask(getApplicationContext(), mMap,source,dest);
-                    DownloadTask2 downloadTask2 = new DownloadTask2(source,dest);
-                    String a = downloadTask2.getDestinatin();
-
-                    // Start downloading json data from Google Directions API
+                    DownloadTask downloadTask = new DownloadTask(MapActivity.this,mMap,source,dest);
                     downloadTask.execute(url);
                     sendButton.setVisibility(View.INVISIBLE);
                     requestbtn.setVisibility(View.VISIBLE);
-                    //mMap.getUiSettings().setScrollGesturesEnabled(false);
                 }
-                else{
-                    Toast.makeText(MapActivity.this, "Connection Lost", Toast.LENGTH_SHORT).show();
-                }
+
             }
         });
 
@@ -317,19 +315,15 @@ destinationText.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
                 if(connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected()){
-                    spinner.setVisibility(View.VISIBLE);
-                    requestbtn.setVisibility(View.INVISIBLE);
-                    mGps.setVisibility(View.INVISIBLE);
-                    mMap.getUiSettings().setScrollGesturesEnabled(false);
-                    linearLayout.setVisibility(View.INVISIBLE);
+
                     Double SourceLat = source.latitude;
                     Double SourceLan = source.longitude;
                     Double DestinationLat = dest.latitude;
                     Double DestinationLan = dest.longitude;
                     Pair Source = Pair.create(SourceLat,SourceLan);
                     Pair Destination = Pair.create(DestinationLat,DestinationLan);
-                    Main main = new Main();
                     main.RequestForRide(Source, Destination, HomeLocationName, DestinationLocationName);
+                    mMap.clear();
                     Intent intent = new Intent(MapActivity.this, SearchingDriver.class);
                     startActivity(intent);
                 }
@@ -455,7 +449,7 @@ destinationText.setOnClickListener(new View.OnClickListener() {
 
     private void moveCamera(LatLng latLng, float zoom, String title){
         Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude );
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
 
         if(!title.equals("My Location")){
             MarkerOptions options = new MarkerOptions()
@@ -647,8 +641,6 @@ destinationText.setOnClickListener(new View.OnClickListener() {
 
         return true;
     }
-
-
 }
 
 
