@@ -7,6 +7,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -290,7 +292,7 @@ destinationText.setOnClickListener(new View.OnClickListener() {
                     // Getting URL to the Google Directions API
                     String url = getDirectionsUrl(source, dest);
 
-                    DownloadTask downloadTask = new DownloadTask(mMap,source,dest);
+                    DownloadTask downloadTask = new DownloadTask(getApplicationContext(), mMap,source,dest);
                     DownloadTask2 downloadTask2 = new DownloadTask2(source,dest);
                     String a = downloadTask2.getDestinatin();
 
@@ -645,6 +647,8 @@ destinationText.setOnClickListener(new View.OnClickListener() {
 
         return true;
     }
+
+
 }
 
 
