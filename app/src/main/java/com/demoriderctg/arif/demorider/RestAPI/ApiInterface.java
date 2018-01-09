@@ -8,6 +8,7 @@ import com.demoriderctg.arif.demorider.models.ApiModels.AccessTokenModels.AuthTo
 import com.demoriderctg.arif.demorider.models.ApiModels.DeviceTokenModels.UpdateDeviceTokenData;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginModel;
 import com.demoriderctg.arif.demorider.models.ApiModels.RegistrationModels.RegistrationModel;
+import com.demoriderctg.arif.demorider.models.ApiModels.RideHistory.RideHistoryResponse;
 import com.demoriderctg.arif.demorider.models.ApiModels.User;
 import com.demoriderctg.arif.demorider.models.ApiModels.UserCheckResponse;
 
@@ -60,5 +61,16 @@ public interface ApiInterface {
                                          @Field("device_token") String deviceToken,
                                          @Field("birth_date") String birthDate);
 
+    @POST("api/v1/client")
+    @FormUrlEncoded
+    Call<RideHistoryResponse> createRideHistory(@Field("clientId") int clientId,
+                                                @Field("riderId") int riderId,
+                                                @Field("start_time") String startTime,
+                                                @Field("end_time") String endTime,
+                                                @Field("pick_point_latitude") String pickPointLat,
+                                                @Field("pick_point_longitude") String pickPointLon,
+                                                @Field("destination_point_latitude") String destinationPointLat,
+                                                @Field("destination_point_longitude") String destinationPointLon,
+                                                @Field("initial_approx_cost") String initialApproxCost);
 
 }
