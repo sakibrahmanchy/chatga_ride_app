@@ -32,17 +32,16 @@ public class ShowDerectionInGoogleMap {
     private LatLng source,destination;
     private Context context;
 
-    ShowDerectionInGoogleMap(Context context, GoogleMap mMap, PolylineOptions lineOptions,LatLng src, LatLng dest){
+    ShowDerectionInGoogleMap( GoogleMap mMap, PolylineOptions lineOptions,LatLng src, LatLng dest){
         this.mMap = mMap;
         this.polylineOptions=lineOptions;
         this.source=src;
         this.destination=dest;
-        this.context = context;
     }
 
     public  void placeDirection(){
         mMap.addMarker(new MarkerOptions()
-                .position(destination).icon(BitmapDescriptorFactory.fromBitmap(resizedMarker(200,200) )));
+                .position(destination));//.icon(BitmapDescriptorFactory.fromBitmap(resizedMarker(200,200) )));
         mMap.addMarker(new MarkerOptions()
                 .position(source).title("DESTINATION"));
 
