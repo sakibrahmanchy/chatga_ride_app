@@ -14,6 +14,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -34,6 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
+import com.demoriderctg.arif.demorider.Dailog.BottomSheetDailogRide;
 import com.demoriderctg.arif.demorider.Dailog.SearchingDriver;
 import com.demoriderctg.arif.demorider.FavoritePlaces.FavoritePlacesActivity;
 import com.demoriderctg.arif.demorider.InternetConnection.ConnectionCheck;
@@ -296,43 +298,29 @@ destinationText.setOnClickListener(new View.OnClickListener() {
                 }
 
                 else {
+
+                    AppConstant.SOURCE = source;
+                    AppConstant.DESTINATION=dest;
+                    AppConstant.SOURCE_NAME=HomeLocationName;
+                    AppConstant.DESTINATION_NAME=DestinationLocationName;
+
                     String url = getDirectionsUrl(source, dest);
                     DownloadTask downloadTask = new DownloadTask(MapActivity.this,mMap,source,dest);
                     downloadTask.execute(url);
                     sendButton.setVisibility(View.INVISIBLE);
                     requestbtn.setVisibility(View.VISIBLE);
+
                 }
 
             }
         });
 
 
-
-
-
         requestbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if(connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected()){
-
-                    Double SourceLat = source.latitude;
-                    Double SourceLan = source.longitude;
-                    Double DestinationLat = dest.latitude;
-                    Double DestinationLan = dest.longitude;
-                    Pair Source = Pair.create(SourceLat,SourceLan);
-                    Pair Destination = Pair.create(DestinationLat,DestinationLan);
-                    main.RequestForRide(Source, Destination, HomeLocationName, DestinationLocationName);
-                    mMap.clear();
-                    Intent intent = new Intent(MapActivity.this, SearchingDriver.class);
-                    startActivity(intent);
-                }
-                else{
-                    Toast.makeText(MapActivity.this, "Connection Lost", Toast.LENGTH_SHORT).show();
-                }
-
-
-
+                final BottomSheetDialogFragment myBottomSheet = BottomSheetDailogRide.newInstance("Modal Bottom Sheet");
+                myBottomSheet.show(getSupportFragmentManager(), myBottomSheet.getTag());
             }
         });
 
@@ -558,6 +546,7 @@ destinationText.setOnClickListener(new View.OnClickListener() {
 
      public void  checkLatLon(){
 
+        requestbtn.setVisibility(View.INVISIBLE);
         if(source !=null && dest !=null){
 
             sendButton.setVisibility(View.VISIBLE);
@@ -612,6 +601,10 @@ destinationText.setOnClickListener(new View.OnClickListener() {
 
     @Override
     public void onBackPressed() {
+
+         mMap.clear();
+         requestbtn.setVisibility(View.INVISIBLE);
+         sendButton.setVisibility(View.VISIBLE);
         if (back_pressed + 1000 > System.currentTimeMillis()){
             super.onBackPressed();
         }

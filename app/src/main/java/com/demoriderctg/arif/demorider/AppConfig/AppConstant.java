@@ -24,6 +24,9 @@ public class AppConstant {
     public static final String Question = "?";
     public static final String Comma = ",";
     public static  int INTERNET_CHECK=0;
+    public static LatLng SOURCE,DESTINATION;
+    public static String SOURCE_NAME="";
+    public static String DESTINATION_NAME="";
 
 
     /* Log Tag, Message */
