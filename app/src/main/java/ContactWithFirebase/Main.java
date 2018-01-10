@@ -96,7 +96,7 @@ public class Main implements ICallbackMain {
         return true;
     }
 
-    public boolean SentNotificationToRider(/*Firebase Client Mode, rider Model*/RiderModel Rider, ClientModel Client, Pair<Double, Double> Source, Pair<Double, Double> Destination, String SourceName, String DestinationName){
+    public boolean SentNotificationToRider(/*Firebase Client Mode, rider Model*/RiderModel Rider, ClientModel Client, Pair<Double, Double> Source, Pair<Double, Double> Destination, String SourceName, String DestinationName, String ShortestTime, String ShortestDistance){
 
         if(Rider == null || Client == null || Source == null || Destination == null)    return false;
 
@@ -105,7 +105,7 @@ public class Main implements ICallbackMain {
         firebaseWrapper = FirebaseWrapper.getInstance();
         firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
 
-        firebaseRequestInstance.SentNotificationToRider(this.riderModel, this.clientModel, Source, Destination, SourceName, DestinationName, Main.this);
+        firebaseRequestInstance.SentNotificationToRider(this.riderModel, this.clientModel, Source, Destination, SourceName, DestinationName, ShortestTime, ShortestDistance, Main.this);
         return true;
     }
 
@@ -244,7 +244,7 @@ public class Main implements ICallbackMain {
     }
 
     @Override
-    public void OnNearestRiderFound(boolean value) {
+    public void OnNearestRiderFound(boolean value, String shortestTime, String shortestDistance) {
         if(value == true){
             Log.d(FirebaseConstant.NEAREST_RIDER_FOUND, FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider.FullName);
 
@@ -254,7 +254,9 @@ public class Main implements ICallbackMain {
                     this.Source,
                     this.Destination,
                     this.SourceName,
-                    this.DestinationName
+                    this.DestinationName,
+                    shortestTime,
+                    shortestDistance
             );
         } else if (context != null) {
             Toast.makeText(context, FirebaseConstant.NO_RIDER_FOUND, Toast.LENGTH_LONG).show();
