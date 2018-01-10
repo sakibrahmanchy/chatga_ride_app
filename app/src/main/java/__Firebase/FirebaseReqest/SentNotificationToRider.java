@@ -54,6 +54,8 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
         String riderDeviceToken = FirebaseConstant.Empty;
         String sourceName = FirebaseConstant.Empty;
         String destinationName = FirebaseConstant.Empty;
+        String shortestTime = FirebaseConstant.Empty;
+        String shortestDistance = FirebaseConstant.Empty;
         String sourceLatitude = FirebaseConstant.Empty;
         String sourceLongitude = FirebaseConstant.Empty;
         String destinationLatitude = FirebaseConstant.Empty;
@@ -68,10 +70,12 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
             riderDeviceToken = params[5];
             sourceName = params[6];
             destinationName = params[7];
-            sourceLatitude = params[8];
-            sourceLongitude = params[9];
-            destinationLatitude = params[10];
-            destinationLongitude = params[11];
+            shortestTime = params[8];
+            shortestDistance = params[9];
+            sourceLatitude = params[10];
+            sourceLongitude = params[11];
+            destinationLatitude = params[12];
+            destinationLongitude = params[13];
         } catch (ExceptionInInitializerError e) {
             e.printStackTrace();
         }
@@ -94,6 +98,8 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
                     URLEncoder.encode("riderDeviceToken", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(riderDeviceToken, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
                     URLEncoder.encode("sourceName", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(sourceName, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
                     URLEncoder.encode("destinationName", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(destinationName, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
+                    URLEncoder.encode("shortestTime", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(shortestTime, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
+                    URLEncoder.encode("shortestDistance", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(shortestDistance, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
                     URLEncoder.encode("sourceLatitude", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(sourceLatitude, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
                     URLEncoder.encode("sourceLongitude", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(sourceLongitude, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
                     URLEncoder.encode("destinationLatitude", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(destinationLatitude, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
