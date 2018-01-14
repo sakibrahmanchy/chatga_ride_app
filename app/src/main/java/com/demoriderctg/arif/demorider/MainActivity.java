@@ -1,7 +1,10 @@
 package com.demoriderctg.arif.demorider;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     public static boolean check = false;
     private SharedPreferences pref;
     private ConnectionCheck connectionCheck;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,4 +102,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+
 }

@@ -115,7 +115,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
-    private static final float DEFAULT_ZOOM = 15f;
+
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
             new LatLng(54.69726685890506,-2.7379201682812226), new LatLng(55.38942944437183, -1.2456105979687226));
     String CurrentLocation;
@@ -349,16 +349,21 @@ destinationText.setOnClickListener(new View.OnClickListener() {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    if(markerOption.equals("Home")){
-                        source = marker.getPosition();
-                        HomeLocationName =address.getAddressLine(0);
-                        sourceText.setText(HomeLocationName);
+                    try {
+                        if(markerOption.equals("Home")){
+                            source = marker.getPosition();
+                            HomeLocationName =address.getAddressLine(0);
+                            sourceText.setText(HomeLocationName);
+                        }
+                        else{
+                            dest = marker.getPosition();
+                            DestinationLocationName =address.getAddressLine(0);
+                            destinationText.setText(DestinationLocationName);
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
-                    else{
-                        dest = marker.getPosition();
-                        DestinationLocationName =address.getAddressLine(0);
-                        destinationText.setText(DestinationLocationName);
-                    }
+
                     checkLatLon();
                 }
                 else{
@@ -418,7 +423,7 @@ destinationText.setOnClickListener(new View.OnClickListener() {
                                             .defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
                            // mapMarkerDragging = new MapMarkerDragging(MapActivity.this,source,dest,mMap);
                                     moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
-                                    DEFAULT_ZOOM,
+                                    AppConstant.DEFAULT_ZOOM,
                                     "My Location");
                                     //checkLatLon();
 
