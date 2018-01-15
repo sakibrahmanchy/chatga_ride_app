@@ -26,6 +26,7 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCUlumoP9HNAHy8lSTHVWavcrihYe0vNm8" />
+
         <activity
             android:name=".MainActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
@@ -75,8 +76,11 @@
         <activity android:name=".FavoritePlaces.FavoritePlacesActivity" />
         <activity
             android:name=".Dailog.SearchingDriver"
+            android:noHistory="true"
             android:theme="@style/AppTheme" />
-        <activity android:name=".InternetConnection.InternetCheckActivity"></activity>
+        <activity android:name=".InternetConnection.InternetCheckActivity" />
+        <activity android:name=".OnrideMode.OnrideModeActivity"></activity>
+        <service android:name=".OnLocationChange.GPS_Service"/>
     </application>
 
 </manifest>

@@ -25,6 +25,7 @@ public class FindNearestRider implements IDistanceAndDuration {
     private FirebaseWrapper firebaseWrapper = null;
     private RiderModel Rider = null;
     private ICallbackMain callBackListener = null;
+    private String _ShortestTime, _ShortestDistance;
 
     public FindNearestRider(ArrayList<RiderModel> RiderList, Pair<Double, Double> _Source, final ICallbackMain callBackListener) {
         this.RiderList = RiderList;
@@ -33,6 +34,8 @@ public class FindNearestRider implements IDistanceAndDuration {
         this.firebaseWrapper = FirebaseWrapper.getInstance();
         this.Rider = firebaseWrapper.getRiderViewModelInstance().NearestRider;
         this.callBackListener = callBackListener;
+        this._ShortestTime = FirebaseConstant.Empty;
+        this._ShortestDistance = FirebaseConstant.Empty;
 
         Request();
     }
@@ -55,16 +58,20 @@ public class FindNearestRider implements IDistanceAndDuration {
 
         if (FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider.RiderID == 0) {
             FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider = _Rider;
+            this._ShortestTime = Duration;
+            this._ShortestDistance = Distance;
         } else {
             if (!firebaseWrapper.getRiderViewModelInstance().AlreadyRequestedRider.containsKey(_Rider.RiderID) &&
                     FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider.DistanceFromClient >= _Rider.DistanceFromClient) {
                 FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider = _Rider;
+                this._ShortestTime = Duration;
+                this._ShortestDistance = Distance;
             }
             Log.d(FirebaseConstant.SHORTEST_DISTANCE, Rider.RiderID + " : " + Rider.DistanceFromClient + " " + this.Rider.RiderID + " : " + this.Rider.DistanceFromClient);
         }
 
         if (this.numberOfRider == 0) {
-            this.callBackListener.OnNearestRiderFound(true);
+            this.callBackListener.OnNearestRiderFound(true, _ShortestTime, _ShortestDistance);
         }
     }
 }

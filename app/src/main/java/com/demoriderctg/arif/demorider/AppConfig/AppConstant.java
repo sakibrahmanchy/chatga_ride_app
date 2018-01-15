@@ -24,6 +24,13 @@ public class AppConstant {
     public static final String Question = "?";
     public static final String Comma = ",";
     public static  int INTERNET_CHECK=0;
+    public static LatLng SOURCE,DESTINATION;
+    public static String SOURCE_NAME="";
+    public static String DESTINATION_NAME="";
+    public static final float DEFAULT_ZOOM = 14f;
+    public static final int IS_RIDE_FINISH=0;
+    public static LatLng OnchangeDeviceLOcation = null;
+
 
 
     /* Log Tag, Message */

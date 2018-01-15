@@ -6,7 +6,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
+import android.support.design.widget.BottomSheetDialogFragment;
 
+import com.demoriderctg.arif.demorider.Dailog.BottomSheetDailogRide;
 import com.demoriderctg.arif.demorider.R;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -31,7 +33,6 @@ public class ShowDerectionInGoogleMap {
     private  MarkerOptions markerOptions;
     private LatLng source,destination;
     private Context context;
-
     ShowDerectionInGoogleMap( GoogleMap mMap, PolylineOptions lineOptions,LatLng src, LatLng dest){
         this.mMap = mMap;
         this.polylineOptions=lineOptions;
@@ -44,19 +45,13 @@ public class ShowDerectionInGoogleMap {
                 .position(destination));//.icon(BitmapDescriptorFactory.fromBitmap(resizedMarker(200,200) )));
         mMap.addMarker(new MarkerOptions()
                 .position(source).title("DESTINATION"));
-
         mMap.addPolyline(polylineOptions);
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         builder.include(source).include(destination);
-
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(builder.build(), 320);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(builder.build(), 500);
         mMap.animateCamera(cameraUpdate);
+
     }
 
-    public Bitmap resizedMarker(int height, int width){
-        BitmapDrawable bitmapdraw=(BitmapDrawable) context.getResources().getDrawable(R.drawable.pickup_marker);
-        Bitmap b=bitmapdraw.getBitmap();
-        Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
-        return smallMarker;
-    }
+
 }

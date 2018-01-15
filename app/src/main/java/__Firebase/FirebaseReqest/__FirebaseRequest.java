@@ -54,7 +54,7 @@ public class __FirebaseRequest extends AppCompatActivity {
         thread.start();
     }
 
-    public void SentNotificationToRider(final RiderModel Rider, final ClientModel Client, final Pair<Double, Double> Source, final Pair<Double, Double> Destination, final String SourceName, String DestinationName, ICallbackMain callbackListener){
+    public void SentNotificationToRider(final RiderModel Rider, final ClientModel Client, final Pair<Double, Double> Source, final Pair<Double, Double> Destination, final String SourceName, String DestinationName, String ShortestTime, String ShortestDistance, ICallbackMain callbackListener){
 
         SentNotificationToRider pendingTask = new SentNotificationToRider(this, callbackListener);
         pendingTask.execute(
@@ -66,6 +66,8 @@ public class __FirebaseRequest extends AppCompatActivity {
                     Rider.DeviceToken.toString(),
                     SourceName,
                     DestinationName,
+                    ShortestTime,
+                    ShortestDistance,
                     Double.toString(Source.first),
                     Double.toString(Source.second),
                     Double.toString(Destination.first),
