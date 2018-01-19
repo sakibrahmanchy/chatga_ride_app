@@ -11,6 +11,7 @@ import com.demoriderctg.arif.demorider.models.ApiModels.RegistrationModels.Regis
 import com.demoriderctg.arif.demorider.models.ApiModels.RideHistory.RideHistoryResponse;
 import com.demoriderctg.arif.demorider.models.ApiModels.User;
 import com.demoriderctg.arif.demorider.models.ApiModels.UserCheckResponse;
+import com.demoriderctg.arif.demorider.models.ApiModels.UserDiscounts.UserDiscounts;
 
 import org.json.JSONObject;
 
@@ -61,7 +62,7 @@ public interface ApiInterface {
                                          @Field("device_token") String deviceToken,
                                          @Field("birth_date") String birthDate);
 
-    @POST("api/v1/client")
+    @POST("api/v1/ride/history")
     @FormUrlEncoded
     Call<RideHistoryResponse> createRideHistory(@Field("clientId") int clientId,
                                                 @Field("riderId") int riderId,
@@ -73,4 +74,6 @@ public interface ApiInterface {
                                                 @Field("destination_point_longitude") String destinationPointLon,
                                                 @Field("initial_approx_cost") String initialApproxCost);
 
+    @GET("api/v1/user_discounts")
+    Call<UserDiscounts> getUserDiscounts(@Query("user_id") String userId);
 }
