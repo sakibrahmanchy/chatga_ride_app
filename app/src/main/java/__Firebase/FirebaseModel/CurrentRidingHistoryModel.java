@@ -4,6 +4,8 @@ import android.util.Pair;
 
 import com.google.firebase.database.DataSnapshot;
 
+import __Firebase.FirebaseUtility.FirebaseConstant;
+
 /**
  * Created by User on 11/16/2017.
  */
@@ -73,5 +75,23 @@ public class CurrentRidingHistoryModel {
         this.IsRideFinished = currentRidingHistoryModel.IsRideFinished;
         this.RideCanceledByClient = currentRidingHistoryModel.RideCanceledByClient;
         this.RideCanceledByRider = currentRidingHistoryModel.RideCanceledByRider;
+    }
+
+    public void ClearData(){
+
+        this.HistoryID = FirebaseConstant.UNDEFINE;
+        this.ClientID = FirebaseConstant.UNDEFINE;
+        this.RiderID = FirebaseConstant.UNDEFINE;
+        this.Client_History = FirebaseConstant.Empty;
+        this.Rider_History = FirebaseConstant.Empty;
+        this.StartingLocation.Longitude = FirebaseConstant.UNDEFINE;
+        this.StartingLocation.Latitude = FirebaseConstant.UNDEFINE;
+        this.EndingLocation.Longitude = FirebaseConstant.UNDEFINE;
+        this.EndingLocation.Latitude = FirebaseConstant.UNDEFINE;
+        this.CostSoFar = FirebaseConstant.UNDEFINE;
+        this.IsRideStart = FirebaseConstant.UNDEFINE;
+        this.IsRideFinished = FirebaseConstant.UNDEFINE;
+        this.RideCanceledByClient = FirebaseConstant.UNDEFINE;
+        this.RideCanceledByRider = FirebaseConstant.UNDEFINE;
     }
 }

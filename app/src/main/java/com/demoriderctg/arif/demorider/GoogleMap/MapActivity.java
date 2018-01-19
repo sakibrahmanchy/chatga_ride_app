@@ -1,7 +1,6 @@
 package com.demoriderctg.arif.demorider.GoogleMap;
 
 
-
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -22,7 +21,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -36,13 +34,12 @@ import android.widget.Toast;
 
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
 import com.demoriderctg.arif.demorider.Dailog.BottomSheetDailogRide;
-import com.demoriderctg.arif.demorider.Dailog.SearchingDriver;
 import com.demoriderctg.arif.demorider.FavoritePlaces.FavoritePlacesActivity;
 import com.demoriderctg.arif.demorider.InternetConnection.ConnectionCheck;
 import com.demoriderctg.arif.demorider.InternetConnection.InternetCheckActivity;
+import com.demoriderctg.arif.demorider.MainActivity;
 import com.demoriderctg.arif.demorider.PlaceAutocompleteAdapter;
 import com.demoriderctg.arif.demorider.R;
-import com.demoriderctg.arif.demorider.UserCheckActivity;
 import com.demoriderctg.arif.demorider.UserInformation;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 import com.google.android.gms.common.ConnectionResult;
@@ -74,16 +71,16 @@ import java.util.Locale;
 import ContactWithFirebase.Main;
 
 
-
-
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback,
-        GoogleApiClient.OnConnectionFailedListener,NavigationView.OnNavigationItemSelectedListener{
+        GoogleApiClient.OnConnectionFailedListener, NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
-    ArrayList markerPoints= new ArrayList();
+
+    ArrayList markerPoints = new ArrayList();
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
@@ -105,7 +102,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             init();
 
 
-
             Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
         }
     }
@@ -117,7 +113,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private static final float DEFAULT_ZOOM = 15f;
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
-            new LatLng(54.69726685890506,-2.7379201682812226), new LatLng(55.38942944437183, -1.2456105979687226));
+            new LatLng(54.69726685890506, -2.7379201682812226), new LatLng(55.38942944437183, -1.2456105979687226));
     String CurrentLocation;
 
 
@@ -126,8 +122,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private Button sendButton;
     private ImageView mGps;
     private Button requestbtn;
-    private  TextView sourceText;
-    private  TextView destinationText;
+    private TextView sourceText;
+    private TextView destinationText;
     private SharedPreferences sharedpreferences;
 
     private DrawerLayout drawerLayout;
@@ -139,28 +135,30 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private PlaceAutocompleteAdapter mPlaceAutocompleteAdapter;
     private GoogleApiClient mGoogleApiClient;
-    private LatLng source,dest;
+    private LatLng source, dest;
     private String phonemumber;
     private ProgressBar spinner;
     private LoginData loginData;
     private UserInformation userInformation;
-    private MarkerOptions options ;
+    private MarkerOptions options;
     TextView userFirstName;
     TextView userPhoneNumber;
-    private  Address address;
-    private  int PLACE_PICKER_REQUEST = 1;
-    private  int PLACE_PICKER_REQUEST_DESTINATION = 2;
+    private Address address;
+    private int PLACE_PICKER_REQUEST = 1;
+    private int PLACE_PICKER_REQUEST_DESTINATION = 2;
 
     private Main main;
-    public  long back_pressed;
+    public long back_pressed;
     private ConnectionCheck connectionCheck;
-    private SharedPreferences.Editor editor ;
-    private String activityChangeForSearch=null;
+    private SharedPreferences.Editor editor;
+    private String activityChangeForSearch = null;
 
     private LinearLayout linearLayout;
-    private  String HomeLocationName;
-    private  String DestinationLocationName;
-    private  ProgressDialog dailog;
+    private String HomeLocationName;
+    private String DestinationLocationName;
+    private ProgressDialog dailog;
+
+    private boolean IS_INITIALIZE = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -168,10 +166,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         setContentView(R.layout.map_activity);
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawLayout);
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,R.string.app_name,R.string.app_name);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.app_name, R.string.app_name);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
-        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);;
+        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         InitializationAll();
 
@@ -180,14 +178,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
 
-
-    private void InitializationAll(){
+    private void InitializationAll() {
         sourceText = (TextView) findViewById(R.id.sourceText);
-        destinationText =(TextView) findViewById(R.id.destinationText);
+        destinationText = (TextView) findViewById(R.id.destinationText);
 
         userFirstName = (TextView) findViewById(R.id.userNameProfile);
         userPhoneNumber = (TextView) findViewById(R.id.use_Phonemuber);
-        linearLayout = (LinearLayout)findViewById(R.id.searchLinearLayout) ;
+        linearLayout = (LinearLayout) findViewById(R.id.searchLinearLayout);
 
         mGps = (ImageView) findViewById(R.id.ic_gps);
         sendButton = (Button) findViewById(R.id.btnSend);
@@ -195,25 +192,28 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         sendButton.setVisibility(View.INVISIBLE);
         requestbtn.setVisibility(View.INVISIBLE);
         linearLayout.setVisibility(View.VISIBLE);
-        spinner=(ProgressBar)findViewById(R.id.progressBar);
+        spinner = (ProgressBar) findViewById(R.id.progressBar);
         spinner.setVisibility(View.GONE);
         sharedpreferences = this.getSharedPreferences("MyPref", 0);
         //   sendButton.setVisibility(View.INVISIBLE);
         userInformation = new UserInformation(this);
         connectionCheck = new ConnectionCheck(this);
-        editor= sharedpreferences.edit();
-        main = new Main(this);
-        options= new MarkerOptions();
+        editor = sharedpreferences.edit();
+        main = new Main();
+        options = new MarkerOptions();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         loginData = userInformation.getuserInformation();
         phonemumber = userInformation.getRiderPhoneNumber();
 
-        main.CreateNewRiderFirebase(loginData, phonemumber);
+        if(MainActivity.IS_MAP_INITIALIZE == false) {
+            MainActivity.IS_MAP_INITIALIZE = true;
+            main.CreateNewRiderFirebase(loginData, phonemumber);
+        }
     }
 
-    private void init(){
+    private void init() {
         Log.d(TAG, "init: initializing");
 
         mGoogleApiClient = new GoogleApiClient
@@ -223,16 +223,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 .enableAutoManage(this, this)
                 .build();
 
-           if(connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected() && activityChangeForSearch==null){
-               getDeviceLocation();
+        if (connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected() && activityChangeForSearch == null) {
+            getDeviceLocation();
 
-           }
-
+        }
 
 
         mPlaceAutocompleteAdapter = new PlaceAutocompleteAdapter(this, mGoogleApiClient,
                 LAT_LNG_BOUNDS, null);
-
 
 
         sourceText.setOnClickListener(new View.OnClickListener() {
@@ -250,35 +248,32 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
 
-destinationText.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+        destinationText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
 
-        try {
-            startActivityForResult(builder.build(MapActivity.this), PLACE_PICKER_REQUEST_DESTINATION);
-        } catch (GooglePlayServicesRepairableException e) {
-            e.printStackTrace();
-        } catch (GooglePlayServicesNotAvailableException e) {
-            e.printStackTrace();
-        }
-    }
-});
+                try {
+                    startActivityForResult(builder.build(MapActivity.this), PLACE_PICKER_REQUEST_DESTINATION);
+                } catch (GooglePlayServicesRepairableException e) {
+                    e.printStackTrace();
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         mGps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 linearLayout.setVisibility(View.VISIBLE);
-                if(!connectionCheck.isNetworkConnected()){
+                if (!connectionCheck.isNetworkConnected()) {
 
                     Intent intent = new Intent(MapActivity.this, InternetCheckActivity.class);
                     startActivityForResult(intent, AppConstant.INTERNET_CHECK);
-                }
-                else if(!connectionCheck.isGpsEnable()){
+                } else if (!connectionCheck.isGpsEnable()) {
                     connectionCheck.showGPSDisabledAlertToUser();
-                }
-
-                else {
-                   getDeviceLocation();
+                } else {
+                    getDeviceLocation();
                 }
 
             }
@@ -288,24 +283,21 @@ destinationText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if(!connectionCheck.isNetworkConnected()){
+                if (!connectionCheck.isNetworkConnected()) {
 
                     Intent intent = new Intent(MapActivity.this, InternetCheckActivity.class);
                     startActivityForResult(intent, AppConstant.INTERNET_CHECK);
-                }
-                else if(!connectionCheck.isGpsEnable()){
+                } else if (!connectionCheck.isGpsEnable()) {
                     connectionCheck.showGPSDisabledAlertToUser();
-                }
-
-                else {
+                } else {
 
                     AppConstant.SOURCE = source;
-                    AppConstant.DESTINATION=dest;
-                    AppConstant.SOURCE_NAME=HomeLocationName;
-                    AppConstant.DESTINATION_NAME=DestinationLocationName;
+                    AppConstant.DESTINATION = dest;
+                    AppConstant.SOURCE_NAME = HomeLocationName;
+                    AppConstant.DESTINATION_NAME = DestinationLocationName;
 
                     String url = getDirectionsUrl(source, dest);
-                    DownloadTask downloadTask = new DownloadTask(MapActivity.this,mMap,source,dest);
+                    DownloadTask downloadTask = new DownloadTask(MapActivity.this, mMap, source, dest);
                     downloadTask.execute(url);
                     sendButton.setVisibility(View.INVISIBLE);
                     requestbtn.setVisibility(View.VISIBLE);
@@ -338,30 +330,28 @@ destinationText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onMarkerDragEnd(Marker marker) {
                 // TODO Auto-generated method stub
-                if(connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected()){
+                if (connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected()) {
                     String markerOption = marker.getSnippet();
                     Geocoder myLocation = new Geocoder(getApplicationContext(), Locale.getDefault());
                     try {
-                        List<Address> myList = myLocation.getFromLocation(marker.getPosition().latitude,marker.getPosition().longitude, 1);
+                        List<Address> myList = myLocation.getFromLocation(marker.getPosition().latitude, marker.getPosition().longitude, 1);
                         address = (Address) myList.get(0);
 
 
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    if(markerOption.equals("Home")){
+                    if (markerOption.equals("Home")) {
                         source = marker.getPosition();
-                        HomeLocationName =address.getAddressLine(0);
+                        HomeLocationName = address.getAddressLine(0);
                         sourceText.setText(HomeLocationName);
-                    }
-                    else{
+                    } else {
                         dest = marker.getPosition();
-                        DestinationLocationName =address.getAddressLine(0);
+                        DestinationLocationName = address.getAddressLine(0);
                         destinationText.setText(DestinationLocationName);
                     }
                     checkLatLon();
-                }
-                else{
+                } else {
                     Toast.makeText(MapActivity.this, "Connection Lost", Toast.LENGTH_SHORT).show();
                 }
 
@@ -380,19 +370,19 @@ destinationText.setOnClickListener(new View.OnClickListener() {
     }
 
 
-    private void getDeviceLocation(){
+    private void getDeviceLocation() {
         Log.d(TAG, "getDeviceLocation: getting the devices current location");
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         requestbtn.setVisibility(View.INVISIBLE);
         mMap.clear();
-        try{
-            if(mLocationPermissionsGranted){
+        try {
+            if (mLocationPermissionsGranted) {
 
                 final Task location = mFusedLocationProviderClient.getLastLocation();
                 location.addOnCompleteListener(new OnCompleteListener() {
                     @Override
                     public void onComplete(@NonNull Task task) {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             Log.d(TAG, "onComplete: found location!");
                             Location currentLocation = (Location) task.getResult();
 
@@ -406,7 +396,7 @@ destinationText.setOnClickListener(new View.OnClickListener() {
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                            source=  new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+                            source = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
 
 
                             mMap.addMarker(new MarkerOptions()
@@ -416,30 +406,30 @@ destinationText.setOnClickListener(new View.OnClickListener() {
                                     .snippet("Work")
                                     .icon(BitmapDescriptorFactory
                                             .defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-                           // mapMarkerDragging = new MapMarkerDragging(MapActivity.this,source,dest,mMap);
-                                    moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
+                            // mapMarkerDragging = new MapMarkerDragging(MapActivity.this,source,dest,mMap);
+                            moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
                                     DEFAULT_ZOOM,
                                     "My Location");
-                                    //checkLatLon();
+                            //checkLatLon();
 
 
-                        }else{
+                        } else {
                             Log.d(TAG, "onComplete: current location is null");
                             Toast.makeText(MapActivity.this, "unable to get current location", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
             }
-        }catch (SecurityException e){
-            Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage() );
+        } catch (SecurityException e) {
+            Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage());
         }
     }
 
-    private void moveCamera(LatLng latLng, float zoom, String title){
-        Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude );
+    private void moveCamera(LatLng latLng, float zoom, String title) {
+        Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
 
-        if(!title.equals("My Location")){
+        if (!title.equals("My Location")) {
             MarkerOptions options = new MarkerOptions()
                     .position(latLng)
                     .title(title);
@@ -449,30 +439,30 @@ destinationText.setOnClickListener(new View.OnClickListener() {
         hideSoftKeyboard();
     }
 
-    private void initMap(){
+    private void initMap() {
         Log.d(TAG, "initMap: initializing map");
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(MapActivity.this);
     }
 
-    private void getLocationPermission(){
+    private void getLocationPermission() {
         Log.d(TAG, "getLocationPermission: getting location permissions");
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION};
 
-        if(ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            if(ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                    COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                    COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 mLocationPermissionsGranted = true;
                 initMap();
-            }else{
+            } else {
                 ActivityCompat.requestPermissions(this,
                         permissions,
                         LOCATION_PERMISSION_REQUEST_CODE);
             }
-        }else{
+        } else {
             ActivityCompat.requestPermissions(this,
                     permissions,
                     LOCATION_PERMISSION_REQUEST_CODE);
@@ -484,11 +474,11 @@ destinationText.setOnClickListener(new View.OnClickListener() {
         Log.d(TAG, "onRequestPermissionsResult: called.");
         mLocationPermissionsGranted = false;
 
-        switch(requestCode){
-            case LOCATION_PERMISSION_REQUEST_CODE:{
-                if(grantResults.length > 0){
-                    for(int i = 0; i < grantResults.length; i++){
-                        if(grantResults[i] != PackageManager.PERMISSION_GRANTED){
+        switch (requestCode) {
+            case LOCATION_PERMISSION_REQUEST_CODE: {
+                if (grantResults.length > 0) {
+                    for (int i = 0; i < grantResults.length; i++) {
+                        if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
                             mLocationPermissionsGranted = false;
                             Log.d(TAG, "onRequestPermissionsResult: permission failed");
                             return;
@@ -503,7 +493,7 @@ destinationText.setOnClickListener(new View.OnClickListener() {
         }
     }
 
-    private void hideSoftKeyboard(){
+    private void hideSoftKeyboard() {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
@@ -544,19 +534,16 @@ destinationText.setOnClickListener(new View.OnClickListener() {
     }
 
 
-     public void  checkLatLon(){
+    public void checkLatLon() {
 
         requestbtn.setVisibility(View.INVISIBLE);
-        if(source !=null && dest !=null){
+        if (source != null && dest != null) {
 
             sendButton.setVisibility(View.VISIBLE);
-        }
-
-        else {
+        } else {
             sendButton.setVisibility(View.INVISIBLE);
         }
     }
-
 
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -564,7 +551,7 @@ destinationText.setOnClickListener(new View.OnClickListener() {
             if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(data, this);
 
-                HomeLocationName =  place.getAddress().toString();
+                HomeLocationName = place.getAddress().toString();
                 source = place.getLatLng();
                 sourceText.setText(HomeLocationName);
                 checkLatLon();
@@ -576,14 +563,13 @@ destinationText.setOnClickListener(new View.OnClickListener() {
             if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(data, this);
 
-                DestinationLocationName =  place.getAddress().toString();
+                DestinationLocationName = place.getAddress().toString();
                 dest = place.getLatLng();
                 destinationText.setText(DestinationLocationName);
                 checkLatLon();
 
             }
         }
-
 
 
     }
@@ -593,7 +579,7 @@ destinationText.setOnClickListener(new View.OnClickListener() {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(actionBarDrawerToggle.onOptionsItemSelected(item)){
+        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -602,16 +588,15 @@ destinationText.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onBackPressed() {
 
-         mMap.clear();
-         requestbtn.setVisibility(View.INVISIBLE);
-         sendButton.setVisibility(View.VISIBLE);
-        if (back_pressed + 1000 > System.currentTimeMillis()){
+        mMap.clear();
+        requestbtn.setVisibility(View.INVISIBLE);
+        sendButton.setVisibility(View.VISIBLE);
+        if (back_pressed + 1000 > System.currentTimeMillis()) {
             super.onBackPressed();
-        }
-        else{
-         //   Intent intent = getIntent();
-         //   finish();
-         //   startActivity(intent);
+        } else {
+            //   Intent intent = getIntent();
+            //   finish();
+            //   startActivity(intent);
             Toast.makeText(getBaseContext(),
                     "Press once again to exit!", Toast.LENGTH_SHORT)
                     .show();
@@ -622,11 +607,11 @@ destinationText.setOnClickListener(new View.OnClickListener() {
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        Toast.makeText(getApplicationContext(),""+item.getItemId(),Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "" + item.getItemId(), Toast.LENGTH_SHORT).show();
         switch (item.getItemId()) {
             case R.id.nav_notifications:
-              Intent intent = new Intent(MapActivity.this, FavoritePlacesActivity.class);
-              startActivity(intent);
+                Intent intent = new Intent(MapActivity.this, FavoritePlacesActivity.class);
+                startActivity(intent);
                 break;
             default:
                 break;

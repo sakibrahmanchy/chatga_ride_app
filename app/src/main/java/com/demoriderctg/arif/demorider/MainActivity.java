@@ -24,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences pref;
     private ConnectionCheck connectionCheck;
 
+    public static boolean IS_MAP_INITIALIZE = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

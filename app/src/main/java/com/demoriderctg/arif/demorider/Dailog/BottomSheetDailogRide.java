@@ -66,7 +66,7 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
         userProfilePic =(TextView) v.findViewById(R.id.total_cost);
         pickUpBotton = (Button) v.findViewById(R.id.pickupbtn);
         connectionCheck = new ConnectionCheck(getContext());
-        main = new Main(getContext());
+        main = new Main();
         init();
         return v;
     }

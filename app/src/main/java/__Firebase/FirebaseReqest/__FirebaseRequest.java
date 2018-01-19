@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Pair;
 
 import __Firebase.ICallBackInstance.CallBackListener;
+import __Firebase.ICallBackInstance.ICallBackFinishedRide;
 import __Firebase.ICallBackInstance.ICallbackMain;
 import __Firebase.FirebaseModel.ClientModel;
 import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
@@ -170,6 +171,16 @@ public class __FirebaseRequest extends AppCompatActivity {
             @Override
             public void run(){
                 new RequestForRiderLocation(Rider, callBackListener);
+            }
+        };
+        thread.start();
+    }
+
+    public void GetCurrentRidingCost(final ClientModel Client, final CurrentRidingHistoryModel History, final ICallBackFinishedRide iCallBackFinishedRide){
+        Thread thread = new Thread(){
+            @Override
+            public void run(){
+                new GetCurrentRidingCost(Client, History, iCallBackFinishedRide);
             }
         };
         thread.start();

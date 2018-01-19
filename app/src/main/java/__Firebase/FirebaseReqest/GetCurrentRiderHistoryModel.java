@@ -52,6 +52,7 @@ public class GetCurrentRiderHistoryModel {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                callBackListener.OnGetCurrentRiderHistoryModel(true);
                 Log.d(FirebaseConstant.RIDING_HISTORY_LOADED, firebaseWrapper.getCurrentRidingHistoryModelInstance().HistoryID + "");
             }
             public void onCancelled(DatabaseError databaseError) {
@@ -59,5 +60,4 @@ public class GetCurrentRiderHistoryModel {
             }
         });
     }
-
 }
