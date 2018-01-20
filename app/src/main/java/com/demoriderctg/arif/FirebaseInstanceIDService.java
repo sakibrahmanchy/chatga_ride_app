@@ -18,7 +18,7 @@ public class FirebaseInstanceIDService extends FirebaseInstanceIdService {
     @Override
     public void onTokenRefresh() {
         String recentToken = FirebaseInstanceId.getInstance().getToken();
-        new Main(this).SetDeviceTokenToRiderTable(
+        new Main().SetDeviceTokenToRiderTable(
                 FirebaseWrapper.getInstance().getClientModelInstance(),
                 recentToken
         );

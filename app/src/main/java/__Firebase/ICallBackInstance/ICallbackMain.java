@@ -15,4 +15,5 @@ public interface ICallbackMain {
     void OnIsClientAlreadyCreated(boolean value);
     void OnNearestRiderFound(boolean value, String shortestTime, String shortestDistance);
     void OnSetDeviceTokenToRiderTable(boolean value);
+    void OnGetCurrentRiderHistoryModel(boolean value);
 }

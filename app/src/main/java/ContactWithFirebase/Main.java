@@ -16,9 +16,12 @@ import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
 import __Firebase.FirebaseModel.RiderModel;
 import __Firebase.FirebaseReqest.FindNearestRider;
 import __Firebase.FirebaseReqest.__FirebaseRequest;
+import __Firebase.FirebaseResponse.FinalAcceptanceOfRide;
+import __Firebase.FirebaseResponse.FirebaseResponse;
 import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseUtility.FirebaseUtilMethod;
 import __Firebase.FirebaseWrapper;
+import __Firebase.ICallBackInstance.ICallBackFinishedRide;
 import __Firebase.ICallBackInstance.ICallbackMain;
 
 /**
@@ -36,8 +39,7 @@ public class Main implements ICallbackMain {
     private String SourceName, DestinationName;
     private Context context = null;
 
-    public Main(Context context) {
-        this.context = context;
+    public Main() {
         firebaseWrapper = FirebaseWrapper.getInstance();
     }
 
@@ -66,7 +68,7 @@ public class Main implements ICallbackMain {
         clientModel.PhoneNumber = Long.parseLong(phoneNumber);
 
         clientModel.DeviceToken = FirebaseWrapper.getDeviceToken();
-        clientModel.IsSearchingOrOnRide = FirebaseConstant.UNSET;
+        clientModel.IsSearchingOrOnRide = FirebaseConstant.UNDEFINE;
         clientModel.CostOfCurrentRide = FirebaseConstant.UNDEFINE;
         clientModel.CurrentRidingHistoryID = FirebaseConstant.UNDEFINE;
 
@@ -134,6 +136,8 @@ public class Main implements ICallbackMain {
 
     public boolean GetCurrentRiderHistoryModel(/*Firebase Client Model*/ClientModel Client, long HistoryId){
 
+        if(Client == null || Client.ClientID < 1 || HistoryId < 1)  return false;
+
         firebaseWrapper = FirebaseWrapper.getInstance();
         firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
         this.clientModel = Client;
@@ -150,6 +154,21 @@ public class Main implements ICallbackMain {
 
         riderModel.CurrentRiderLocation.RequestForUpdateLocation = FirebaseConstant.SET_REQUEST_FOR_RIDER_LOCATION;
         firebaseRequestInstance.RequestForRiderLocation(this.riderModel, Main.this);
+        return true;
+    }
+
+    public boolean GetCurrentRidingCost(ICallBackFinishedRide iCallBackFinishedRide){
+
+        firebaseWrapper = FirebaseWrapper.getInstance();
+        firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
+        this.currentRidingHistoryModel = firebaseWrapper.getCurrentRidingHistoryModelInstance();
+        this.clientModel = firebaseWrapper.getClientModelInstance();
+
+        firebaseRequestInstance.GetCurrentRidingCost(
+                clientModel,
+                currentRidingHistoryModel,
+                iCallBackFinishedRide
+        );
         return true;
     }
 
@@ -215,7 +234,10 @@ public class Main implements ICallbackMain {
 
     @Override
     public void OnCreateNewRiderFirebase(boolean value) {
-        Log.d(FirebaseConstant.NEW_USER_CREATED, value + "");
+        if(value == true){
+            FirebaseResponse.FinalAcceptanceOfRideResponse(FirebaseWrapper.getInstance().getClientModelInstance());
+        }
+        Log.d(FirebaseConstant.NEW_USER_CREATED, Boolean.toString(value));
     }
 
     @Override
@@ -238,6 +260,7 @@ public class Main implements ICallbackMain {
                     FirebaseWrapper.getInstance().getClientModelInstance(),
                     FirebaseWrapper.getDeviceToken()
             );
+            FirebaseResponse.FinalAcceptanceOfRideResponse(FirebaseWrapper.getInstance().getClientModelInstance());
             return;
         }
         firebaseRequestInstance.CreateClientFirstTime(clientModel, Main.this);
@@ -258,13 +281,23 @@ public class Main implements ICallbackMain {
                     shortestTime,
                     shortestDistance
             );
-        } else if (context != null) {
-            Toast.makeText(context, FirebaseConstant.NO_RIDER_FOUND, Toast.LENGTH_LONG).show();
+        } else {
+            //Toast.makeText(context, FirebaseConstant.NO_RIDER_FOUND, Toast.LENGTH_LONG).show();
         }
     }
 
     @Override
     public void OnSetDeviceTokenToRiderTable(boolean value) {
         Log.d(FirebaseConstant.DEVICE_TOKEN_UPDATE, Boolean.toString(value));
+    }
+
+    @Override
+    public void OnGetCurrentRiderHistoryModel(boolean value) {
+        if(value == true){
+            new FinalAcceptanceOfRide();
+            FirebaseResponse.RiderStartedResponse(FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance().HistoryID);
+            FirebaseResponse.RiderFinishedResponse(FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance().HistoryID);
+            FirebaseResponse.RiderCanceledByRiderResponse(FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance().HistoryID);
+        }
     }
 }
