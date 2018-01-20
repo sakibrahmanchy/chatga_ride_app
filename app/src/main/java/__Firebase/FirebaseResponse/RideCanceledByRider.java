@@ -9,12 +9,12 @@ import __Firebase.FirebaseWrapper;
  * Created by User on 1/15/2018.
  */
 
-public class RiderCanceledByRider {
+public class RideCanceledByRider {
 
     private RiderModel riderModel;
     private Map<Long, Boolean> requestedRider;
 
-    public RiderCanceledByRider(){
+    public RideCanceledByRider(){
         Response();
     }
 

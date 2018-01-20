@@ -26,7 +26,7 @@ public class SearchingDriver extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_searching_driver);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        main = new Main(this);
+        main = new Main();
         notificationModel = FirebaseWrapper.getInstance().getNotificationModelInstance();
        searchDriver();
     }

@@ -9,7 +9,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import ContactWithFirebase.Main;
 import __Firebase.FirebaseModel.ClientModel;
-import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
 import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseWrapper;
 
@@ -26,7 +25,7 @@ public class FirebaseResponse {
     public FirebaseResponse() {
     }
 
-    public static void FinalAcceptanceOfRideResponse(ClientModel Client) {
+    public static void InitialAcceptanceOfRideResponse(ClientModel Client) {
 
         ClientID = Client.ClientID;
 
@@ -75,7 +74,7 @@ public class FirebaseResponse {
         });
     }
 
-    public static void RiderStartedResponse(long historyID) {
+    public static void RideStartedResponse(long historyID) {
 
         HistoryID = historyID;
         FirebaseWrapper firebaseWrapper = FirebaseWrapper.getInstance();
@@ -118,7 +117,7 @@ public class FirebaseResponse {
         });
     }
 
-    public static void RiderFinishedResponse(long historyID) {
+    public static void RideFinishedResponse(long historyID) {
 
         HistoryID = historyID;
         FirebaseWrapper firebaseWrapper = FirebaseWrapper.getInstance();
@@ -161,7 +160,7 @@ public class FirebaseResponse {
         });
     }
 
-    public static void RiderCanceledByRiderResponse(long historyID) {
+    public static void RideCanceledByRiderResponse(long historyID) {
 
         HistoryID = historyID;
         FirebaseWrapper firebaseWrapper = FirebaseWrapper.getInstance();
@@ -182,7 +181,7 @@ public class FirebaseResponse {
                                     int data = Integer.parseInt(dataSnapshot.getValue().toString());
                                     if (data != -1) {
                                         firebaseWrapper.getCurrentRidingHistoryModelInstance().RideCanceledByRider = data;
-                                        new RiderCanceledByRider();
+                                        new RideCanceledByRider();
                                     }
                                 }
                                 Log.d(FirebaseConstant.HISTORY_ID_ADDED_TO_CLIENT, ":: " + dataSnapshot.getValue().toString());

@@ -9,12 +9,12 @@ import __Firebase.FirebaseWrapper;
  * Created by User on 1/15/2018.
  */
 
-public class FinalAcceptanceOfRide {
+public class InitialAcceptanceOfRideResponse {
 
     private NotificationModel notificationModel;
     private CurrentRidingHistoryModel currentRidingHistoryModel;
     private RiderModel riderModel;
-    public FinalAcceptanceOfRide() {
+    public InitialAcceptanceOfRideResponse() {
         Response();
     }
 
