@@ -3,11 +3,10 @@ package ContactWithFirebase;
 import android.content.Context;
 import android.util.Log;
 import android.util.Pair;
-import android.widget.Toast;
 
+import com.demoriderctg.arif.demorider.Dailog.BottomSheetDailogRide;
 import com.demoriderctg.arif.demorider.MainActivity;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
-import com.google.maps.model.Distance;
 
 import java.util.ArrayList;
 

@@ -10,23 +10,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
-import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
+import com.demoriderctg.arif.demorider.CostEstimation.CostEstimation;
 import com.demoriderctg.arif.demorider.InternetConnection.ConnectionCheck;
 import com.demoriderctg.arif.demorider.R;
+import com.google.firebase.database.ValueEventListener;
 
 import ContactWithFirebase.Main;
 import __Firebase.FirebaseResponse.NotificationModel;
-
-import static java.security.AccessController.getContext;
-import static java.security.AccessController.getContext;
-import static java.security.AccessController.getContext;
 
 /**
  * Created by Arif on 12/30/2017.
@@ -36,14 +31,15 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
 
     String mString;
     private TextView pathLocation;
-    private TextView totalCost;
-    private TextView userProfilePic;
+
+    private TextView total_cost;
     private Button pickUpBotton;
     private NotificationModel notificationModel;
     private static Context mContext;
     private ConnectionCheck connectionCheck;
     private Main main;
-
+    private long totalCost;
+    private CostEstimation costEstimation = new CostEstimation();
     public static BottomSheetDailogRide newInstance(String string) {
         BottomSheetDailogRide f = new BottomSheetDailogRide();
         Bundle args = new Bundle();
@@ -63,9 +59,13 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.cost_bottom_sheet_dailog, container, false);
         pathLocation =(TextView) v.findViewById(R.id.path_location);
-        userProfilePic =(TextView) v.findViewById(R.id.total_cost);
+        total_cost =(TextView) v.findViewById(R.id.total_cost);
         pickUpBotton = (Button) v.findViewById(R.id.pickupbtn);
         connectionCheck = new ConnectionCheck(getContext());
+        //pathLocation.setText(AppConstant.SOURCE_NAME + " To "+AppConstant.DESTINATION_NAME);
+
+        totalCost = (long)costEstimation.getTotalCost(AppConstant.DISTANCE,AppConstant.DURATION);
+        total_cost.setText(totalCost+" TK");
         main = new Main();
         init();
         return v;

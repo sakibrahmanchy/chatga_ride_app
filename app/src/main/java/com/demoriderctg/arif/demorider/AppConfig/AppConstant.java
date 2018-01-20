@@ -30,6 +30,11 @@ public class AppConstant {
     public static final float DEFAULT_ZOOM = 14f;
     public static final int IS_RIDE_FINISH=0;
     public static LatLng OnchangeDeviceLOcation = null;
+    public static final double BASE_TAKA = 20;
+    public static final double PER_KILOMITTER = 10;
+    public static final double DURATION_PER_KILOMITTER = 1;
+    public static String DISTANCE = ("");
+    public static String DURATION = ("");
 
 
 

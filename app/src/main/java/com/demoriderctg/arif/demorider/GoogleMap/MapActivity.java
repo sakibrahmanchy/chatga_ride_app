@@ -295,7 +295,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     AppConstant.DESTINATION = dest;
                     AppConstant.SOURCE_NAME = HomeLocationName;
                     AppConstant.DESTINATION_NAME = DestinationLocationName;
-
                     String url = getDirectionsUrl(source, dest);
                     DownloadTask downloadTask = new DownloadTask(MapActivity.this, mMap, source, dest);
                     downloadTask.execute(url);

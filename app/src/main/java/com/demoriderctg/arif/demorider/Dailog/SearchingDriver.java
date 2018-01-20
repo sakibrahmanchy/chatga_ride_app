@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
 import com.demoriderctg.arif.demorider.OnrideMode.OnrideModeActivity;
 import com.demoriderctg.arif.demorider.R;
+import com.google.firebase.database.ValueEventListener;
 
 import ContactWithFirebase.Main;
 import __Firebase.FirebaseResponse.NotificationModel;
@@ -26,7 +27,7 @@ public class SearchingDriver extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_searching_driver);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        main = new Main(this);
+        main = new Main();
         notificationModel = FirebaseWrapper.getInstance().getNotificationModelInstance();
        searchDriver();
     }

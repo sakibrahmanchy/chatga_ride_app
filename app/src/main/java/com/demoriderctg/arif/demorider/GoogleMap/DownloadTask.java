@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -82,9 +83,9 @@ public class DownloadTask extends AsyncTask<String, Void, String> {
 
                 routes = parser.parse();
                 //Get Distance from source to destination
-                distance = parser.getDistance();
+                AppConstant.DISTANCE = parser.getDistance();
                 //GET Time to Source to Destination
-                duration = parser.getDuration();
+                AppConstant.DURATION = parser.getDuration();
             } catch (Exception e) {
                 e.printStackTrace();
             }
