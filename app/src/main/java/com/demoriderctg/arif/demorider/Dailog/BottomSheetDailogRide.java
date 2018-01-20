@@ -2,6 +2,8 @@ package com.demoriderctg.arif.demorider.Dailog;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
@@ -10,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +20,7 @@ import android.widget.Toast;
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
 import com.demoriderctg.arif.demorider.CostEstimation.CostEstimation;
 import com.demoriderctg.arif.demorider.InternetConnection.ConnectionCheck;
+import com.demoriderctg.arif.demorider.LoginActivity;
 import com.demoriderctg.arif.demorider.R;
 import com.google.firebase.database.ValueEventListener;
 
@@ -31,7 +35,7 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
 
     String mString;
     private TextView pathLocation;
-
+    private ImageView fare_info;
     private TextView total_cost;
     private Button pickUpBotton;
     private NotificationModel notificationModel;
@@ -62,6 +66,7 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
         total_cost =(TextView) v.findViewById(R.id.total_cost);
         pickUpBotton = (Button) v.findViewById(R.id.pickupbtn);
         connectionCheck = new ConnectionCheck(getContext());
+        fare_info = (ImageView) v.findViewById(R.id.fareInfo);
         //pathLocation.setText(AppConstant.SOURCE_NAME + " To "+AppConstant.DESTINATION_NAME);
 
         totalCost = (long)costEstimation.getTotalCost(AppConstant.DISTANCE,AppConstant.DURATION);
@@ -90,6 +95,14 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
                 else{
                     Toast.makeText(getContext(), "Connection Lost", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        fare_info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FareCostInfo fareCostInfo = new FareCostInfo(getActivity());
+                fareCostInfo.show();
             }
         });
     }

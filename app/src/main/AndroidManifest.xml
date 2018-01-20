@@ -77,7 +77,7 @@
         <activity
             android:name=".Dailog.SearchingDriver"
             android:noHistory="true"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/ThemeOverlay.MyNoTitleActivity" />
         <activity android:name=".InternetConnection.InternetCheckActivity" />
         <activity android:name=".OnrideMode.OnrideModeActivity"></activity>
         <service android:name=".OnLocationChange.GPS_Service"/>
