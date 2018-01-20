@@ -15,7 +15,7 @@ import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
 import __Firebase.FirebaseModel.RiderModel;
 import __Firebase.FirebaseReqest.FindNearestRider;
 import __Firebase.FirebaseReqest.__FirebaseRequest;
-import __Firebase.FirebaseResponse.FinalAcceptanceOfRide;
+import __Firebase.FirebaseResponse.InitialAcceptanceOfRideResponse;
 import __Firebase.FirebaseResponse.FirebaseResponse;
 import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseUtility.FirebaseUtilMethod;
@@ -234,7 +234,7 @@ public class Main implements ICallbackMain {
     @Override
     public void OnCreateNewRiderFirebase(boolean value) {
         if(value == true){
-            FirebaseResponse.FinalAcceptanceOfRideResponse(FirebaseWrapper.getInstance().getClientModelInstance());
+            FirebaseResponse.InitialAcceptanceOfRideResponse(FirebaseWrapper.getInstance().getClientModelInstance());
         }
         Log.d(FirebaseConstant.NEW_USER_CREATED, Boolean.toString(value));
     }
@@ -259,7 +259,7 @@ public class Main implements ICallbackMain {
                     FirebaseWrapper.getInstance().getClientModelInstance(),
                     FirebaseWrapper.getDeviceToken()
             );
-            FirebaseResponse.FinalAcceptanceOfRideResponse(FirebaseWrapper.getInstance().getClientModelInstance());
+            FirebaseResponse.InitialAcceptanceOfRideResponse(FirebaseWrapper.getInstance().getClientModelInstance());
             return;
         }
         firebaseRequestInstance.CreateClientFirstTime(clientModel, Main.this);
@@ -293,10 +293,10 @@ public class Main implements ICallbackMain {
     @Override
     public void OnGetCurrentRiderHistoryModel(boolean value) {
         if(value == true){
-            new FinalAcceptanceOfRide();
-            FirebaseResponse.RiderStartedResponse(FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance().HistoryID);
-            FirebaseResponse.RiderFinishedResponse(FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance().HistoryID);
-            FirebaseResponse.RiderCanceledByRiderResponse(FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance().HistoryID);
+            new InitialAcceptanceOfRideResponse();
+            FirebaseResponse.RideStartedResponse(FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance().HistoryID);
+            FirebaseResponse.RideFinishedResponse(FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance().HistoryID);
+            FirebaseResponse.RideCanceledByRiderResponse(FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance().HistoryID);
         }
     }
 }
