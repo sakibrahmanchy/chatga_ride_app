@@ -5,6 +5,7 @@ package com.demoriderctg.arif.demorider.RestAPI;
  */
 
 import com.demoriderctg.arif.demorider.models.ApiModels.AccessTokenModels.AuthToken;
+import com.demoriderctg.arif.demorider.models.ApiModels.DateTimeModel.DateTimeResponse;
 import com.demoriderctg.arif.demorider.models.ApiModels.DeviceTokenModels.UpdateDeviceTokenData;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginModel;
 import com.demoriderctg.arif.demorider.models.ApiModels.RegistrationModels.RegistrationModel;
@@ -76,4 +77,8 @@ public interface ApiInterface {
 
     @GET("api/v1/user_discounts")
     Call<UserDiscounts> getUserDiscounts(@Query("user_id") String userId);
+
+    @GET("chaatga_rider/api/v1/date_time")
+    Call<DateTimeResponse> getDateTime();
+
 }
