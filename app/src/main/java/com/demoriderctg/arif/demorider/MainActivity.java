@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         connectionCheck = new ConnectionCheck(this);
-
+        new CurrentDateTime(this).getCurrentDateTime();
         if (!connectionCheck.isNetworkConnected()) {
             Intent intent = new Intent(this, InternetCheckActivity.class);
             startActivityForResult(intent, AppConstant.INTERNET_CHECK);
