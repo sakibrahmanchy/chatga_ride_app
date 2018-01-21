@@ -78,7 +78,7 @@ public interface ApiInterface {
     @GET("api/v1/user_discounts")
     Call<UserDiscounts> getUserDiscounts(@Query("user_id") String userId);
 
-    @GET("chaatga_rider/api/v1/date_time")
+    @GET("api/v1/date_time")
     Call<DateTimeResponse> getDateTime();
 
 }
