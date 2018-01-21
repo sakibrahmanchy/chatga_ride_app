@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
+import com.demoriderctg.arif.demorider.CurrentDateTimeFromServer.CurrentDateTime;
 import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
 import com.demoriderctg.arif.demorider.InternetConnection.ConnectionCheck;
 import com.demoriderctg.arif.demorider.InternetConnection.InternetCheckActivity;
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         connectionCheck = new ConnectionCheck(this);
-
+        new CurrentDateTime(this).getCurrentDateTime();
         if (!connectionCheck.isNetworkConnected()) {
             Intent intent = new Intent(this, InternetCheckActivity.class);
             startActivityForResult(intent, AppConstant.INTERNET_CHECK);
