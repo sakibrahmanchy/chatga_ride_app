@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
             if (pref.getString("userData", null) != null) {
-                new CurrentDateTime(this).getCurrentDateTime();
                 Intent intent = new Intent(MainActivity.this, MapActivity.class);
                 startActivity(intent);
                 finish();
