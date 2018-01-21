@@ -54,7 +54,7 @@ public class CurrentDateTime {
                 dialog.dismiss();
                 switch(statusCode){
                     case 200:
-
+                        long data = response.body().getData();
                         break;
                     case 500:
 
