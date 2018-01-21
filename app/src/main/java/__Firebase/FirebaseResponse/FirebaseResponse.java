@@ -1,6 +1,7 @@
 package __Firebase.FirebaseResponse;
 
 import android.util.Log;
+import android.util.Pair;
 
 import com.demoriderctg.arif.demorider.Dailog.BottomSheetDailogRide;
 import com.google.firebase.database.DataSnapshot;
@@ -11,6 +12,7 @@ import com.google.firebase.database.ValueEventListener;
 import ContactWithFirebase.Main;
 import __Firebase.FirebaseModel.ClientModel;
 import __Firebase.FirebaseUtility.FirebaseConstant;
+import __Firebase.FirebaseUtility.FirebaseUtilMethod;
 import __Firebase.FirebaseWrapper;
 
 /**
@@ -22,6 +24,7 @@ public class FirebaseResponse {
     private static boolean IS_INITIALIZED = false;
     private static long ClientID = 0;
     private static long HistoryID = 0;
+    private static long Time = 0;
 
     public FirebaseResponse() {
     }
@@ -46,11 +49,14 @@ public class FirebaseResponse {
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.exists()) {
                                     if (IS_INITIALIZED == true) {
-                                        HistoryID = dataSnapshot.getValue().toString() != null ? Long.parseLong(dataSnapshot.getValue().toString()) : 0;
+                                        Pair Data = FirebaseUtilMethod.GetHistoryAndTime(dataSnapshot.getValue().toString());
+                                        HistoryID = (long)Data.first;
+                                        Time = (long)Data.second;
                                         if (HistoryID > 0) {
                                             new Main().GetCurrentRiderHistoryModel(
                                                    FirebaseWrapper.getInstance().getClientModelInstance(),
-                                                    HistoryID
+                                                    HistoryID,
+                                                    Time
                                             );
                                         }
                                     }
@@ -93,10 +99,10 @@ public class FirebaseResponse {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.exists()) {
-                                    int data = Integer.parseInt(dataSnapshot.getValue().toString());
-                                    if (data != -1) {
-                                        firebaseWrapper.getCurrentRidingHistoryModelInstance().IsRideStart = data;
-                                        new RiderStarted();
+                                    long Time = Long.parseLong(dataSnapshot.getValue().toString());
+                                    if (Time != -1) {
+                                        firebaseWrapper.getCurrentRidingHistoryModelInstance().IsRideStart = Time;
+                                        new RiderStarted(Time);
                                     }
                                 }
                                 Log.d(FirebaseConstant.HISTORY_ID_ADDED_TO_CLIENT, ":: " + dataSnapshot.getValue().toString());
@@ -136,10 +142,10 @@ public class FirebaseResponse {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.exists()) {
-                                    int data = Integer.parseInt(dataSnapshot.getValue().toString());
-                                    if (data != -1) {
-                                        firebaseWrapper.getCurrentRidingHistoryModelInstance().IsRideFinished = data;
-                                        new RiderFinished();
+                                    long Time = Integer.parseInt(dataSnapshot.getValue().toString());
+                                    if (Time != -1) {
+                                        firebaseWrapper.getCurrentRidingHistoryModelInstance().IsRideFinished = Time;
+                                        new RiderFinished(Time);
                                     }
                                 }
                                 Log.d(FirebaseConstant.HISTORY_ID_ADDED_TO_CLIENT, ":: " + dataSnapshot.getValue().toString());
@@ -179,10 +185,10 @@ public class FirebaseResponse {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.exists()) {
-                                    int data = Integer.parseInt(dataSnapshot.getValue().toString());
-                                    if (data != -1) {
-                                        firebaseWrapper.getCurrentRidingHistoryModelInstance().RideCanceledByRider = data;
-                                        new RideCanceledByRider();
+                                    long Time = Integer.parseInt(dataSnapshot.getValue().toString());
+                                    if (Time != -1) {
+                                        firebaseWrapper.getCurrentRidingHistoryModelInstance().RideCanceledByRider = Time;
+                                        new RideCanceledByRider(Time);
                                     }
                                 }
                                 Log.d(FirebaseConstant.HISTORY_ID_ADDED_TO_CLIENT, ":: " + dataSnapshot.getValue().toString());

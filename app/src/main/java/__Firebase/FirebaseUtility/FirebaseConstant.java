@@ -40,6 +40,9 @@ public class FirebaseConstant {
     public static String EQUAL = "=";
     public static String AMPERSAND = "&";
     public static String DEVICE_TOKEN = "DeviceToken";
+    public static String TIME = "time";
+    public static String DATE = "date";
+    public static String TIME_DATE_PATTERN = "yyyy-M-dd hh:mm:ss";
 
     /* For Map */
     public static final String BASE_URL  = "http://139.59.90.128/chaatga_rider/";
@@ -64,6 +67,7 @@ public class FirebaseConstant {
     public static int UNDEFINE = -1;
     public static Double INFINITE_DOUBLE = Double.MAX_VALUE;
     public static Integer INFINITE_INTEGER = Integer.MAX_VALUE;
+    public static long ONE_MINUTE_IN_MILLISECOND = 60000;
 
     /*Log Cat Key*/
     public static String NEW_RIDER_ERROR = "NEW_USER_ERROR";
@@ -93,6 +97,13 @@ public class FirebaseConstant {
 
     /*Notification Action Type*/
     public static String CLIENT_TO_RIDER = "3021";
+    public static String GET_CURRENT_TIME = "4001";
+
+    /*Request Type*/
+    public static final int INITIAL_AC_OF_RIDE_NOTIFY = 1;
+    public static final int RIDE_ACCEPTED = 2;
+    public static final int RIDE_CANCELED_BY_RIDER = 3;
+    public static final int RIDE_FINISHED = 4;
 
     public FirebaseConstant(){
     }

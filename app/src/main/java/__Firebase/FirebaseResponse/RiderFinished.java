@@ -1,17 +1,27 @@
 package __Firebase.FirebaseResponse;
 
 import ContactWithFirebase.Main;
+import __Firebase.FirebaseUtility.FirebaseConstant;
+import __Firebase.FirebaseUtility.FirebaseUtilMethod;
 import __Firebase.FirebaseWrapper;
+import __Firebase.ICallBackInstance.ICallBackCurrentServerTime;
 import __Firebase.ICallBackInstance.ICallBackFinishedRide;
 
 /**
  * Created by User on 1/15/2018.
  */
 
-public class RiderFinished implements ICallBackFinishedRide {
+public class RiderFinished implements ICallBackFinishedRide, ICallBackCurrentServerTime {
 
-    public RiderFinished() {
-        Response();
+    private long Time;
+
+    public RiderFinished(long Time) {
+        this.Time = Time;
+        FirebaseUtilMethod.getNetworkTime(
+                FirebaseConstant.RIDE_FINISHED,
+                null,
+                this
+        );
     }
 
     private void Response() {
@@ -29,5 +39,14 @@ public class RiderFinished implements ICallBackFinishedRide {
     @Override
     public void OnFinishedRide(long FinalCost) {
         /* Get the final Cost */
+    }
+
+    @Override
+    public void OnResponseServerTime(long value, int type) {
+        if(value > 0 && type == FirebaseConstant.RIDE_FINISHED){
+            if(Math.abs(value - Time) <= FirebaseConstant.ONE_MINUTE_IN_MILLISECOND){
+                Response();
+            }
+        }
     }
 }
