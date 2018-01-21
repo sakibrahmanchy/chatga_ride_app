@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
+import com.demoriderctg.arif.demorider.CurrentDateTimeFromServer.CurrentDateTime;
 import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
 import com.demoriderctg.arif.demorider.InternetConnection.ConnectionCheck;
 import com.demoriderctg.arif.demorider.InternetConnection.InternetCheckActivity;
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
             if (pref.getString("userData", null) != null) {
+                new CurrentDateTime(this).getCurrentDateTime();
                 Intent intent = new Intent(MainActivity.this, MapActivity.class);
                 startActivity(intent);
                 finish();
