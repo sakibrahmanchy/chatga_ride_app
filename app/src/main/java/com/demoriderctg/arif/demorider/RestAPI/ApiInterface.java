@@ -9,6 +9,7 @@ import com.demoriderctg.arif.demorider.models.ApiModels.DateTimeModel.DateTimeRe
 import com.demoriderctg.arif.demorider.models.ApiModels.DeviceTokenModels.UpdateDeviceTokenData;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginModel;
 import com.demoriderctg.arif.demorider.models.ApiModels.RegistrationModels.RegistrationModel;
+import com.demoriderctg.arif.demorider.models.ApiModels.RideHistory.ClientHistoryResponse;
 import com.demoriderctg.arif.demorider.models.ApiModels.RideHistory.RideHistoryResponse;
 import com.demoriderctg.arif.demorider.models.ApiModels.User;
 import com.demoriderctg.arif.demorider.models.ApiModels.UserCheckResponse;
@@ -80,5 +81,9 @@ public interface ApiInterface {
 
     @GET("api/v1/date_time")
     Call<DateTimeResponse> getDateTime();
+
+    @GET("api/v1/client/history")
+    Call<ClientHistoryResponse>getClientHistory(@Header("Authorization") String authHeader,
+                                                @Field("client_id") String phoneNumber);
 
 }
