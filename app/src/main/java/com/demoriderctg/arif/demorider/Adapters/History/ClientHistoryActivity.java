@@ -15,6 +15,7 @@ import com.demoriderctg.arif.demorider.PhoneVerificationActivity;
 import com.demoriderctg.arif.demorider.R;
 import com.demoriderctg.arif.demorider.RestAPI.ApiClient;
 import com.demoriderctg.arif.demorider.RestAPI.ApiInterface;
+import com.demoriderctg.arif.demorider.UserInformation;
 import com.demoriderctg.arif.demorider.models.ApiModels.AccessTokenModels.AuthToken;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginModel;
@@ -45,15 +46,18 @@ public class ClientHistoryActivity extends AppCompatActivity {
     private SharedPreferences.Editor editor;
     private ArrayList<ClientHistory> clientHistories;;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private UserInformation userInformation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client_history);
-
+        pref = getApplicationContext().getSharedPreferences("MyPref", 0);
+        userInformation = new UserInformation(this);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
 
         rv = (RecyclerView) findViewById(R.id.history_recycler_view);
+      //  dialog = new ProgressDialog(this);
 
         rv.setLayoutManager(new LinearLayoutManager(this));
 
@@ -90,7 +94,7 @@ public class ClientHistoryActivity extends AppCompatActivity {
         apiService =
                 ApiClient.getClient().create(ApiInterface.class);
 
-        LoginData loginData = new LoginData();
+        LoginData loginData = userInformation.getuserInformation();
         Call<ClientHistoryResponse> call = apiService.getClientHistory(authHeader,loginData.getUserId());
 
         call.enqueue(new Callback<ClientHistoryResponse>() {
