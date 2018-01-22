@@ -83,7 +83,8 @@
 
         <service android:name=".OnLocationChange.GPS_Service" />
 
-        <activity android:name=".Adapters.History.ClientHistoryActivity"></activity>
+        <activity android:name=".Adapters.History.ClientHistoryActivity"
+            android:label="Ride Histories"></activity>
     </application>
 
 </manifest>

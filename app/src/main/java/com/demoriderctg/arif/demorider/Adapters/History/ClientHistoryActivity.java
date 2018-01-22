@@ -3,6 +3,7 @@ package com.demoriderctg.arif.demorider.Adapters.History;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -42,69 +43,84 @@ public class ClientHistoryActivity extends AppCompatActivity {
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
     private ArrayList<ClientHistory> clientHistories;;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client_history);
 
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+
         rv = (RecyclerView) findViewById(R.id.history_recycler_view);
 
         rv.setLayoutManager(new LinearLayoutManager(this));
 
-        clientHistories = new ArrayList<ClientHistory>();
-        ClientHistory history = new ClientHistory("11-12-2011","11km/20min","A,B,C","D,E,F","40TK");
-        ClientHistory history2 = new ClientHistory("11-12-2011","11km/20min","A,B,C","D,E,F","40TK");
-        clientHistories.add(history);
-        clientHistories.add(history2);
-        adapter = new HistoryAdapter(getApplicationContext(),clientHistories);
-        rv.setAdapter(adapter);
+        getClientHistory();
 
-//        dialog = new ProgressDialog(this);
-//        dialog.setMessage("Gaining Access To App..");
-//        dialog.show();
-//
-//        String deviceToken = FirebaseWrapper.getDeviceToken();
-//        String authHeader = "Bearer "+pref.getString("access_token",null);
-//
-//        apiService =
-//                ApiClient.getClient().create(ApiInterface.class);
-//
-//        //LoginData loginData = new LoginData();
-//        Call<ClientHistoryResponse> call = apiService.getClientHistory(authHeader,"8");
-//
-//        call.enqueue(new Callback<ClientHistoryResponse>() {
-//            @Override
-//            public void onResponse(Call<ClientHistoryResponse> call, Response<ClientHistoryResponse> response) {
-//
-//                int statusCode = response.code();
-//                String testStatusCode = statusCode+"";
-//                dialog.dismiss();
-//                switch(statusCode){
-//                    case 200:
-//                        boolean isSuccess = response.body().isSuccess();
-//                        if(isSuccess){
-//                            clientHistories = response.body().getData();
-//                            adapter = new HistoryAdapter(getApplicationContext(),clientHistories);
-//                            rv.setAdapter(adapter);
-//                        }else{
-//                        }
-//                        break;
-//                    default:
-//
-//                         break;
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ClientHistoryResponse> call, Throwable t) {
-//                // Log error here since request failed
-//                Log.e(TAG, t.toString());
-//            }
-//        });
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                // implement Handler to wait for 3 seconds and then update UI means update value of TextView
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        // cancle the Visual indication of a refresh
+                        swipeRefreshLayout.setRefreshing(false);
+                        // Generate a random integer number
+                        getClientHistory();
+                    }
+                }, 3000);
+            }
+        });
 
 
+    }
 
+    public void getClientHistory(){
+        dialog = new ProgressDialog(this);
+        dialog.setMessage("Gaining Access To App..");
+        dialog.show();
+
+        //String deviceToken = FirebaseWrapper.getDeviceToken();
+        String authHeader = "Bearer "+pref.getString("access_token",null);
+
+        apiService =
+                ApiClient.getClient().create(ApiInterface.class);
+
+        LoginData loginData = new LoginData();
+        Call<ClientHistoryResponse> call = apiService.getClientHistory(authHeader,loginData.getUserId());
+
+        call.enqueue(new Callback<ClientHistoryResponse>() {
+            @Override
+            public void onResponse(Call<ClientHistoryResponse> call, Response<ClientHistoryResponse> response) {
+
+                int statusCode = response.code();
+                String testStatusCode = statusCode+"";
+                dialog.dismiss();
+                switch(statusCode){
+                    case 200:
+                        boolean isSuccess = response.body().isSuccess();
+                        if(isSuccess){
+                            clientHistories = response.body().getData();
+                            adapter = new HistoryAdapter(getApplicationContext(),clientHistories);
+                            rv.setAdapter(adapter);
+                        }else{
+                        }
+                        break;
+                    default:
+
+                        break;
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ClientHistoryResponse> call, Throwable t) {
+                // Log error here since request failed
+                Log.e(TAG, t.toString());
+            }
+        });
     }
 }

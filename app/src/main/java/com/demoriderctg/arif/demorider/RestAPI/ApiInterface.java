@@ -84,6 +84,6 @@ public interface ApiInterface {
 
     @GET("api/v1/client/history")
     Call<ClientHistoryResponse>getClientHistory(@Header("Authorization") String authHeader,
-                                                @Field("client_id") String phoneNumber);
+                                                @Query("client_id") String client_id);
 
 }

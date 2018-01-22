@@ -2,6 +2,7 @@ package com.demoriderctg.arif.demorider.models.ApiModels.RideHistory;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,10 +16,10 @@ public class ClientHistoryResponse {
     @SerializedName("message")
     private String message;
     @SerializedName("data")
-    private List<ClientHistory> data;
+    private ArrayList<ClientHistory> data;
 
 
-    public ClientHistoryResponse(boolean success, String message, List<ClientHistory> data) {
+    public ClientHistoryResponse(boolean success, String message, ArrayList<ClientHistory> data) {
         this.success = success;
         this.message = message;
         this.data = data;
@@ -40,11 +41,11 @@ public class ClientHistoryResponse {
         this.message = message;
     }
 
-    public List<ClientHistory> getData() {
+    public ArrayList<ClientHistory> getData() {
         return data;
     }
 
-    public void setData(List<ClientHistory> data) {
+    public void setData(ArrayList<ClientHistory> data) {
         this.data = data;
     }
 }
