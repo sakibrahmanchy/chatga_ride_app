@@ -124,8 +124,8 @@
 
     <string name="title_activity_favorite_places">FavoritePlacesActivity</string>
     <string name="pricing_Policy">Pricing Policy</string>
-        <string name="Base_fare">Base fare        20TK</string>
+    <string name="Base_fare">Base fare        20TK</string>
     <string name="Per_Kilometer">Per Kilometer    10TK</string>
-       <string name="per_minute">Per Minute       1TK</string>
+    <string name="per_minute">Per Minute       1TK</string>
     <string name="Minimum_fare">Minimum fare      40TK</string>
 </resources>

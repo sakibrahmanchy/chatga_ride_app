@@ -114,6 +114,7 @@ public class PhoneVerificationActivity extends AppCompatActivity implements
         Intent intent = getIntent();
         phoneNumber = intent.getStringExtra("phoneNumber");
         mPhoneNumberField.setText(phoneNumber);
+
         // mStartButton.performClick();
         // Initialize phone auth callbacks
         // [START phone_auth_callbacks]

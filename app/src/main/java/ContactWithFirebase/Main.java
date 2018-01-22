@@ -217,7 +217,7 @@ public class Main implements ICallbackMain {
         return true;
     }
 
-    public boolean CancelRideByClient(/*Firebase History, Client Model*/CurrentRidingHistoryModel HistoryModel, ClientModel Client){
+    public boolean CancelRideByClient(/*Firebase HistoryAdapter, Client Model*/CurrentRidingHistoryModel HistoryModel, ClientModel Client){
 
         firebaseWrapper = FirebaseWrapper.getInstance();
         firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
