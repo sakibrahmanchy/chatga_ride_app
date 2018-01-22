@@ -52,57 +52,48 @@ public class ClientHistoryActivity extends AppCompatActivity {
 
         rv.setLayoutManager(new LinearLayoutManager(this));
 
-        clientHistories = new ArrayList<ClientHistory>();
-        ClientHistory history = new ClientHistory("11-12-2011","11km/20min","A,B,C","D,E,F","40TK");
-        ClientHistory history2 = new ClientHistory("11-12-2011","11km/20min","A,B,C","D,E,F","40TK");
-        clientHistories.add(history);
-        clientHistories.add(history2);
-        adapter = new HistoryAdapter(getApplicationContext(),clientHistories);
-        rv.setAdapter(adapter);
+        dialog = new ProgressDialog(this);
+        dialog.setMessage("Gaining Access To App..");
+        dialog.show();
 
-//        dialog = new ProgressDialog(this);
-//        dialog.setMessage("Gaining Access To App..");
-//        dialog.show();
-//
 //        String deviceToken = FirebaseWrapper.getDeviceToken();
-//        String authHeader = "Bearer "+pref.getString("access_token",null);
-//
-//        apiService =
-//                ApiClient.getClient().create(ApiInterface.class);
-//
-//        //LoginData loginData = new LoginData();
-//        Call<ClientHistoryResponse> call = apiService.getClientHistory(authHeader,"8");
-//
-//        call.enqueue(new Callback<ClientHistoryResponse>() {
-//            @Override
-//            public void onResponse(Call<ClientHistoryResponse> call, Response<ClientHistoryResponse> response) {
-//
-//                int statusCode = response.code();
-//                String testStatusCode = statusCode+"";
-//                dialog.dismiss();
-//                switch(statusCode){
-//                    case 200:
-//                        boolean isSuccess = response.body().isSuccess();
-//                        if(isSuccess){
-//                            clientHistories = response.body().getData();
-//                            adapter = new HistoryAdapter(getApplicationContext(),clientHistories);
-//                            rv.setAdapter(adapter);
-//                        }else{
-//                        }
-//                        break;
-//                    default:
-//
-//                         break;
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ClientHistoryResponse> call, Throwable t) {
-//                // Log error here since request failed
-//                Log.e(TAG, t.toString());
-//            }
-//        });
+        String authHeader = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjY0NWY4NDAxMjY5Y2ZiY2RjMTU4YmU4MmNiYTI5YmM0OWUxM2E4NmIzOGVkMTZjMTgxZWE3MDI4M2U0OTUwZTc3ZTAyNzdiY2QzMGJiMTVjIn0.eyJhdWQiOiIxIiwianRpIjoiNjQ1Zjg0MDEyNjljZmJjZGMxNThiZTgyY2JhMjliYzQ5ZTEzYTg2YjM4ZWQxNmMxODFlYTcwMjgzZTQ5NTBlNzdlMDI3N2JjZDMwYmIxNWMiLCJpYXQiOjE1MTU2MDkyOTYsIm5iZiI6MTUxNTYwOTI5NiwiZXhwIjoxNTQ3MTQ1Mjk2LCJzdWIiOiIzIiwic2NvcGVzIjpbXX0.rpHOf6HMAvEkcNvqQLM78Fdk2NTvx5074bpOsQ8hjhZOl___Fwe-o1vCNmRIwP4s5_DXo_icACkVV632qbHXgapucXW3tiFOfRv7E2YDW0gh3uT0Ast8oVeiXn0nbjZa5v_-od2HNHyrutVTMklMyFnJt8sT9NGY-pMVcuQSgQ7lPeflbUjUfN2sRk9dIrOph0jf3GfZAwqf002YFjfFhVlN0S8Hdv38CzgNkE5rnpB7r1zMkdtrXQQZRuFjkgnnoxx8jiKPpTyyRtogkfh11u09lAcDewxRvW-2BTxvia6Aui0caSE1oI4_Tn0GYKruF0gdfJmXuYJKJPJWStxBJ7XW2RVOoPKl6RRgGbwhrh3KEqudJA_xCz-68SQsL10aLkzcbU-B_Au7J9P9hKQLfXxUUVNDM1WqhRsKrQf8lqsgfpmVWJ6LYf9IDiXuELFs84I2rGfRzL82j8LJJAsFnOyd8YPsi9RqA1hnIZd0QWck4tRT5nm9jTsRiTrGap8adtkoZeupWiEi8_ycZNWJ86ViMIx6QUWRvAGvfiJ2qWWurXxwXLgdOwd5wjv33QL9tx5bB5LVA3WQXZY3GesPVT_wfY1UQV6RWZorn5WxOn_-J3iuxrmNSyFRJcqPyNWtJ2puJoUpNUKnst_rijcIzajSP8dnRGCSwrqp4XV-fig";
+        apiService =
+                ApiClient.getClient().create(ApiInterface.class);
+
+        //LoginData loginData = new LoginData();
+        Call<ClientHistoryResponse> call = apiService.getClientHistory(authHeader,"8");
+
+        call.enqueue(new Callback<ClientHistoryResponse>() {
+            @Override
+            public void onResponse(Call<ClientHistoryResponse> call, Response<ClientHistoryResponse> response) {
+
+                int statusCode = response.code();
+                String testStatusCode = statusCode+"";
+                dialog.dismiss();
+                switch(statusCode){
+                    case 200:
+                        boolean isSuccess = response.body().isSuccess();
+                        if(isSuccess){
+                            clientHistories = response.body().getData();
+                            adapter = new HistoryAdapter(getApplicationContext(),clientHistories);
+                            rv.setAdapter(adapter);
+                        }else{
+                        }
+                        break;
+                    default:
+
+                         break;
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ClientHistoryResponse> call, Throwable t) {
+                // Log error here since request failed
+                Log.e(TAG, t.toString());
+            }
+        });
 
 
 
