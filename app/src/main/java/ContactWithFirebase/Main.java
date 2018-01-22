@@ -133,15 +133,15 @@ public class Main implements ICallbackMain {
         return true;
     }
 
-    public boolean GetCurrentRiderHistoryModel(/*Firebase Client Model*/ClientModel Client, long HistoryId){
+    public boolean GetCurrentRiderHistoryModel(/*Firebase Client Model*/ClientModel Client, long HistoryId, long Time){
 
-        if(Client == null || Client.ClientID < 1 || HistoryId < 1)  return false;
+        if(Client == null || Client.ClientID < 1 || HistoryId < 1 || Time <= 0)  return false;
 
         firebaseWrapper = FirebaseWrapper.getInstance();
         firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
         this.clientModel = Client;
 
-        firebaseRequestInstance.GetCurrentRiderHistoryModel(HistoryId, this.clientModel.ClientID, Main.this);
+        firebaseRequestInstance.GetCurrentRiderHistoryModel(HistoryId, this.clientModel.ClientID, Time, Main.this);
         return true;
     }
 
@@ -291,9 +291,9 @@ public class Main implements ICallbackMain {
     }
 
     @Override
-    public void OnGetCurrentRiderHistoryModel(boolean value) {
+    public void OnGetCurrentRiderHistoryModel(boolean value, long Time) {
         if(value == true){
-            new InitialAcceptanceOfRideResponse();
+            new InitialAcceptanceOfRideResponse(Time);
             FirebaseResponse.RideStartedResponse(FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance().HistoryID);
             FirebaseResponse.RideFinishedResponse(FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance().HistoryID);
             FirebaseResponse.RideCanceledByRiderResponse(FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance().HistoryID);

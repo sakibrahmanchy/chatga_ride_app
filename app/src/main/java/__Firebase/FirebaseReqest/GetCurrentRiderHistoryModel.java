@@ -19,11 +19,13 @@ public class GetCurrentRiderHistoryModel {
     private long HistoryID;
     private long ClientID;
     private ICallbackMain callBackListener = null;
+    private long Time;
 
-    public GetCurrentRiderHistoryModel(long HistoryID, long ClientID, ICallbackMain callBackListener){
+    public GetCurrentRiderHistoryModel(long HistoryID, long ClientID, long Time, ICallbackMain callBackListener){
         this.HistoryID = HistoryID;
         this.ClientID = ClientID;
         this.callBackListener = callBackListener;
+        this.Time = Time;
 
         Request();
     }
@@ -52,7 +54,7 @@ public class GetCurrentRiderHistoryModel {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                callBackListener.OnGetCurrentRiderHistoryModel(true);
+                callBackListener.OnGetCurrentRiderHistoryModel(true, Time);
                 Log.d(FirebaseConstant.RIDING_HISTORY_LOADED, firebaseWrapper.getCurrentRidingHistoryModelInstance().HistoryID + "");
             }
             public void onCancelled(DatabaseError databaseError) {

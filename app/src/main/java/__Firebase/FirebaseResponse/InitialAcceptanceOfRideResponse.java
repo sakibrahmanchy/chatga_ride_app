@@ -3,19 +3,27 @@ package __Firebase.FirebaseResponse;
 import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
 import __Firebase.FirebaseModel.RiderModel;
 import __Firebase.FirebaseUtility.FirebaseConstant;
+import __Firebase.FirebaseUtility.FirebaseUtilMethod;
 import __Firebase.FirebaseWrapper;
+import __Firebase.ICallBackInstance.ICallBackCurrentServerTime;
 
 /**
  * Created by User on 1/15/2018.
  */
 
-public class InitialAcceptanceOfRideResponse {
+public class InitialAcceptanceOfRideResponse implements ICallBackCurrentServerTime {
 
     private NotificationModel notificationModel;
     private CurrentRidingHistoryModel currentRidingHistoryModel;
     private RiderModel riderModel;
-    public InitialAcceptanceOfRideResponse() {
-        Response();
+    private long Time;
+    public InitialAcceptanceOfRideResponse(long Time) {
+        this.Time = Time;
+        FirebaseUtilMethod.getNetworkTime(
+                FirebaseConstant.INITIAL_AC_OF_RIDE_NOTIFY,
+                null,
+                this
+        );
     }
 
     private void Response() {
@@ -32,5 +40,14 @@ public class InitialAcceptanceOfRideResponse {
         notificationModel.riderName = riderModel.FullName;
         notificationModel.riderId = currentRidingHistoryModel.RiderID;
         /*Do the other stuff*/
+    }
+
+    @Override
+    public void OnResponseServerTime(long value, int type) {
+        if(value > 0 && type == FirebaseConstant.INITIAL_AC_OF_RIDE_NOTIFY){
+            if(Math.abs(value - Time) <= FirebaseConstant.ONE_MINUTE_IN_MILLISECOND){
+                Response();
+            }
+        }
     }
 }
