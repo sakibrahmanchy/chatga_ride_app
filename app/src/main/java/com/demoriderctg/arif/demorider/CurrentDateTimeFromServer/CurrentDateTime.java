@@ -54,7 +54,7 @@ public class CurrentDateTime {
                 dialog.dismiss();
                 switch(statusCode){
                     case 200:
-
+                        time = response.body().getData();
                         break;
                     case 500:
 
@@ -72,6 +72,6 @@ public class CurrentDateTime {
                 Log.e(TAG, t.toString());
             }
         });
-        return System.currentTimeMillis();
+        return time;
     }
 }
