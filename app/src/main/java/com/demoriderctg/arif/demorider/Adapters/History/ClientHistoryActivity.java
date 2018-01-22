@@ -19,6 +19,7 @@ import com.demoriderctg.arif.demorider.models.ApiModels.AccessTokenModels.AuthTo
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginModel;
 import com.demoriderctg.arif.demorider.models.ApiModels.RideHistory.ClientHistory;
+import com.demoriderctg.arif.demorider.models.ApiModels.RideHistory.ClientHistoryResponse;
 
 
 import java.util.ArrayList;
