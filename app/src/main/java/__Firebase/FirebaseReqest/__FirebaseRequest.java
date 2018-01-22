@@ -110,12 +110,12 @@ public class __FirebaseRequest extends AppCompatActivity {
         thread.start();
     }
 
-    public void GetCurrentRiderHistoryModel(final long HistoryID, final long ClientID, final ICallbackMain callBackListener){
+    public void GetCurrentRiderHistoryModel(final long HistoryID, final long ClientID, long Time, final ICallbackMain callBackListener){
 
         Thread thread = new Thread(){
           @Override
             public void run(){
-                new GetCurrentRiderHistoryModel(HistoryID, ClientID, callBackListener);
+                new GetCurrentRiderHistoryModel(HistoryID, ClientID, Time, callBackListener);
           }
         };
         thread.start();
