@@ -3,6 +3,7 @@ package com.demoriderctg.arif.demorider.Adapters.History;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -42,16 +43,42 @@ public class ClientHistoryActivity extends AppCompatActivity {
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
     private ArrayList<ClientHistory> clientHistories;;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client_history);
 
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+
         rv = (RecyclerView) findViewById(R.id.history_recycler_view);
 
         rv.setLayoutManager(new LinearLayoutManager(this));
 
+        getClientHistory();
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                // implement Handler to wait for 3 seconds and then update UI means update value of TextView
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        // cancle the Visual indication of a refresh
+                        swipeRefreshLayout.setRefreshing(false);
+                        // Generate a random integer number
+                        getClientHistory();
+                    }
+                }, 3000);
+            }
+        });
+
+
+    }
+
+    public void getClientHistory(){
         dialog = new ProgressDialog(this);
         dialog.setMessage("Gaining Access To App..");
         dialog.show();
@@ -84,7 +111,7 @@ public class ClientHistoryActivity extends AppCompatActivity {
                         break;
                     default:
 
-                         break;
+                        break;
                 }
 
             }
@@ -95,8 +122,5 @@ public class ClientHistoryActivity extends AppCompatActivity {
                 Log.e(TAG, t.toString());
             }
         });
-
-
-
     }
 }
