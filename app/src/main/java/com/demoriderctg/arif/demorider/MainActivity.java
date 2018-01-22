@@ -63,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, MapActivity.class);
                 startActivity(intent);
-
             }
         });*/
         btnLogin.setOnClickListener(new View.OnClickListener() {
