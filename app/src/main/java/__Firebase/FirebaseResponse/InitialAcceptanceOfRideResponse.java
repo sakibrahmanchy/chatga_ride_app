@@ -1,5 +1,7 @@
 package __Firebase.FirebaseResponse;
 
+import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
+
 import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
 import __Firebase.FirebaseModel.RiderModel;
 import __Firebase.FirebaseUtility.FirebaseConstant;
@@ -30,7 +32,7 @@ public class InitialAcceptanceOfRideResponse implements ICallBackCurrentServerTi
         riderModel = FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider;
         notificationModel = FirebaseWrapper.getInstance().getNotificationModelInstance();
         currentRidingHistoryModel = FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance();
-
+        AppConstant.INITIAL_RIDE_ACCEPT = 1;
         ParseDataFromHistoryToNotification();
     }
 
@@ -39,6 +41,7 @@ public class InitialAcceptanceOfRideResponse implements ICallBackCurrentServerTi
         notificationModel.riderPhone = String.valueOf(riderModel.PhoneNumber);
         notificationModel.riderName = riderModel.FullName;
         notificationModel.riderId = currentRidingHistoryModel.RiderID;
+
         /*Do the other stuff*/
     }
 

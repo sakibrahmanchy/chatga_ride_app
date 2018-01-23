@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
 import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
 import com.demoriderctg.arif.demorider.OnrideMode.OnrideModeActivity;
 import com.demoriderctg.arif.demorider.R;
@@ -38,6 +39,7 @@ public class SearchingDriver extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(SearchingDriver.this,MapActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
        searchDriver();
@@ -60,7 +62,7 @@ public class SearchingDriver extends AppCompatActivity {
 
                     handler.post(new Runnable() {
                         public void run() {
-                            if(notificationModel.body !=null){
+                            if(AppConstant.INITIAL_RIDE_ACCEPT ==1){
                                 progressStatus=101;
                                 Intent  intent = new Intent(SearchingDriver.this,OnrideModeActivity.class);
                                 startActivity(intent);

@@ -35,6 +35,7 @@ public class AppConstant {
     public static final double DURATION_PER_KILOMITTER = 1;
     public static String DISTANCE = ("");
     public static String DURATION = ("");
+    public static int INITIAL_RIDE_ACCEPT=0;
 
 
 
