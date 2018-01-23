@@ -16,4 +16,5 @@ public interface ICallbackMain {
     void OnNearestRiderFound(boolean value, String shortestTime, String shortestDistance);
     void OnSetDeviceTokenToRiderTable(boolean value);
     void OnGetCurrentRiderHistoryModel(boolean value, long Time);
+    void OnGetCurrentRider(boolean value);
 }

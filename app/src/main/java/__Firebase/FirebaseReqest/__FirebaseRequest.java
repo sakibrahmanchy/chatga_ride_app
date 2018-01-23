@@ -9,6 +9,7 @@ import __Firebase.ICallBackInstance.ICallbackMain;
 import __Firebase.FirebaseModel.ClientModel;
 import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
 import __Firebase.FirebaseModel.RiderModel;
+import __Firebase.ICallBackInstance.IGerRiderLocation;
 
 /**
  * Created by User on 11/16/2017.
@@ -55,7 +56,7 @@ public class __FirebaseRequest extends AppCompatActivity {
         thread.start();
     }
 
-    public void SentNotificationToRider(final RiderModel Rider, final ClientModel Client, final Pair<Double, Double> Source, final Pair<Double, Double> Destination, final String SourceName, String DestinationName, String ShortestTime, String ShortestDistance, ICallbackMain callbackListener){
+    public void SentNotificationToRider(final RiderModel Rider, final ClientModel Client, final Pair<Double, Double> Source, final Pair<Double, Double> Destination, final String SourceName, String DestinationName, String ShortestTime, String ShortestDistance, long TotalCost, ICallbackMain callbackListener){
 
         SentNotificationToRider pendingTask = new SentNotificationToRider(this, callbackListener);
         pendingTask.execute(
@@ -72,7 +73,8 @@ public class __FirebaseRequest extends AppCompatActivity {
                     Double.toString(Source.first),
                     Double.toString(Source.second),
                     Double.toString(Destination.first),
-                    Double.toString(Destination.second)
+                    Double.toString(Destination.second),
+                    Long.toString(TotalCost)
                 );
         finish();
     }
@@ -99,12 +101,23 @@ public class __FirebaseRequest extends AppCompatActivity {
         thread.start();
     }
 
-    public void GetRiderLocation(final RiderModel Rider, final ICallbackMain callBackListener){
+    public void GetCurrentRider(final long RiderID, final ICallbackMain callBackListener){
 
         Thread thread = new Thread(){
             @Override
             public void run(){
-                new GetRiderLocation(Rider, callBackListener);
+                new GetCurrentRider(RiderID, callBackListener);
+            }
+        };
+        thread.start();
+    }
+
+    public void GetRiderLocation(final RiderModel Rider, final IGerRiderLocation iGerRiderLocation){
+
+        Thread thread = new Thread(){
+            @Override
+            public void run(){
+                new GetRiderLocation(Rider, iGerRiderLocation);
             }
         };
         thread.start();

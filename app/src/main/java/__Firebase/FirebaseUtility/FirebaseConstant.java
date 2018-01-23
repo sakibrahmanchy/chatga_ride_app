@@ -91,6 +91,8 @@ public class FirebaseConstant {
     public static String DEVICE_TOKEN_UPDATE = "DEVICE_TOKEN_UPDATE";
     public static String RECEIVED_NOTIFICATION = "RECEIVED_NOTIFICATION";
     public static String HISTORY_ID_ADDED_TO_CLIENT = "HISTORY_ID_ADDED_TO_CLIENT";
+    public static String RIDER_LOADED_ERROR = "RIDER_LOADED_ERROR";
+    public static String RIDER_LOADED = "RIDER_LOADED";
 
     /*Toast Message*/
     public static String NO_RIDER_FOUND = "No rider found";
