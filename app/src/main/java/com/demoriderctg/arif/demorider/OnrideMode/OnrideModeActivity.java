@@ -111,7 +111,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
                         .title("Home")
                         .snippet(AppConstant.SOURCE_NAME)
                         .alpha(.7f)
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_user_location)));
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_google_map)));
 
                 destinationMarker = mMap.addMarker(new MarkerOptions()
                         .position(new LatLng(AppConstant.DESTINATION.latitude,AppConstant.DESTINATION.longitude))
