@@ -142,7 +142,7 @@ public class FirebaseResponse {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.exists()) {
-                                    long Time = Integer.parseInt(dataSnapshot.getValue().toString());
+                                    long Time = Long.parseLong(dataSnapshot.getValue().toString());
                                     if (Time != -1) {
                                         firebaseWrapper.getCurrentRidingHistoryModelInstance().IsRideFinished = Time;
                                         new RiderFinished(Time);

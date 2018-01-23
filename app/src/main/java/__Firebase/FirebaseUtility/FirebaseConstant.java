@@ -24,7 +24,7 @@ public class FirebaseConstant {
     public static String IS_RIDE_START = "IsRideStart";
     public static String RIDE_CANCEL_BY_CLIENT = "RideCanceledByClient";
     public static String RIDE_CANCEL_BY_RIDER = "RideCanceledByRider";
-    public static String HISTORY = "HistoryAdapter";
+    public static String HISTORY = "History";
     public static String HISTORY_ID = "HistoryID";
     public static String JOIN = "_";
     public static String CLIENT_HISTORY = "Client_History";
