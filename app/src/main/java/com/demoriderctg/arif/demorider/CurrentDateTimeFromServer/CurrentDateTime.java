@@ -43,7 +43,7 @@ public class CurrentDateTime {
         dialog = new ProgressDialog(mContext);
         dialog.setMessage("Please Wait..");
         dialog.show();
-
+        time= System.currentTimeMillis();
         Call<DateTimeResponse> call = apiService.getDateTime();
 
         call.enqueue(new Callback<DateTimeResponse>() {

@@ -32,6 +32,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.demoriderctg.arif.demorider.Adapters.History.ClientHistoryActivity;
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
 import com.demoriderctg.arif.demorider.Dailog.BottomSheetDailogRide;
 import com.demoriderctg.arif.demorider.FavoritePlaces.FavoritePlacesActivity;
@@ -42,6 +43,7 @@ import com.demoriderctg.arif.demorider.PlaceAutocompleteAdapter;
 import com.demoriderctg.arif.demorider.R;
 import com.demoriderctg.arif.demorider.UserInformation;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
+import com.demoriderctg.arif.demorider.models.ApiModels.RideHistory.ClientHistory;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -611,6 +613,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             case R.id.nav_notifications:
                 Intent intent = new Intent(MapActivity.this, FavoritePlacesActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.nav_history:
+                Intent clientIntent = new Intent(MapActivity.this, ClientHistoryActivity.class);
+                startActivity(clientIntent);
                 break;
             default:
                 break;
