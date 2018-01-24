@@ -43,33 +43,35 @@ public class FirebaseResponse {
                     if (dataSnapshot.getChildren().iterator().hasNext()) {
 
                         DataSnapshot dsp = dataSnapshot.getChildren().iterator().next();
-                        dsp.getRef().child(FirebaseConstant.CURRENT_RIDING_HISTORY_ID).addValueEventListener(new ValueEventListener() {
+                        if(dsp.exists()) {
+                            dsp.getRef().child(FirebaseConstant.CURRENT_RIDING_HISTORY_ID).addValueEventListener(new ValueEventListener() {
 
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                if (dataSnapshot.exists()) {
-                                    if (IS_INITIALIZED == true) {
-                                        Pair Data = FirebaseUtilMethod.GetHistoryAndTime(dataSnapshot.getValue().toString());
-                                        HistoryID = (long)Data.first;
-                                        Time = (long)Data.second;
-                                        if (HistoryID > 0) {
-                                            new Main().GetCurrentRiderHistoryModel(
-                                                   FirebaseWrapper.getInstance().getClientModelInstance(),
-                                                    HistoryID,
-                                                    Time
-                                            );
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.exists()) {
+                                        if (IS_INITIALIZED == true) {
+                                            Pair Data = FirebaseUtilMethod.GetHistoryAndTime(dataSnapshot.getValue().toString());
+                                            HistoryID = (long) Data.first;
+                                            Time = (long) Data.second;
+                                            if (HistoryID > 0) {
+                                                new Main().GetCurrentRiderHistoryModel(
+                                                        FirebaseWrapper.getInstance().getClientModelInstance(),
+                                                        HistoryID,
+                                                        Time
+                                                );
+                                            }
                                         }
+                                        IS_INITIALIZED = true;
+                                        Log.d(FirebaseConstant.HISTORY_ID_ADDED_TO_CLIENT, ":: " + dataSnapshot.getValue().toString());
                                     }
-                                    IS_INITIALIZED = true;
-                                    Log.d(FirebaseConstant.HISTORY_ID_ADDED_TO_CLIENT, ":: " + dataSnapshot.getValue().toString());
                                 }
-                            }
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
 
-                            }
-                        });
+                                }
+                            });
+                        }
                     }
                 }
             }

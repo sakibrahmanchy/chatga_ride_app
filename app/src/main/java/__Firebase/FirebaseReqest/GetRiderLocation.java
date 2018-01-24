@@ -10,6 +10,7 @@ import __Firebase.ICallBackInstance.ICallbackMain;
 import __Firebase.FirebaseModel.RiderModel;
 import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseWrapper;
+import __Firebase.ICallBackInstance.IGerRiderLocation;
 
 /**
  * Created by User on 11/24/2017.
@@ -18,11 +19,11 @@ import __Firebase.FirebaseWrapper;
 public class GetRiderLocation {
 
     private RiderModel Rider = null;
-    private ICallbackMain callBackListener = null;
+    private IGerRiderLocation iGerRiderLocation = null;
 
-    public GetRiderLocation(RiderModel Rider, ICallbackMain callBackListener){
+    public GetRiderLocation(RiderModel Rider, IGerRiderLocation iGerRiderLocation){
         this.Rider = Rider;
-        this.callBackListener = callBackListener;
+        this.iGerRiderLocation = iGerRiderLocation;
 
         Request();
     }
@@ -38,13 +39,14 @@ public class GetRiderLocation {
                     if (dataSnapshot.getChildren().iterator().hasNext()) {
                         Double Latitude = dataSnapshot.getChildren().iterator().next().child(FirebaseConstant.CURRENT_RIDER_LOCATION).child(FirebaseConstant.LATITUDE).getValue(Double.class);
                         Double Longitude = dataSnapshot.getChildren().iterator().next().child(FirebaseConstant.CURRENT_RIDER_LOCATION).child(FirebaseConstant.LONGITUDE).getValue(Double.class);
+                        iGerRiderLocation.OnGerRiderLocation(true, Latitude, Longitude);
                     }
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                iGerRiderLocation.OnGerRiderLocation(false, 0d, 0d);
             }
         });
 
@@ -56,6 +58,7 @@ public class GetRiderLocation {
             }
 
             public void onCancelled(DatabaseError databaseError) {
+                iGerRiderLocation.OnGerRiderLocation(false, 0d, 0d);
                 Log.d(FirebaseConstant.GET_UPDATE_LOCATION, databaseError.toString());
             }
         });

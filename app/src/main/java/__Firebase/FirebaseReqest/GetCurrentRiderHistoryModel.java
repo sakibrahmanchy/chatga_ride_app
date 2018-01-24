@@ -40,6 +40,7 @@ public class GetCurrentRiderHistoryModel {
                 if(dataSnapshot.exists() && dataSnapshot.hasChildren()) {
                     if (dataSnapshot.getChildren().iterator().hasNext()) {
                         firebaseWrapper.getCurrentRidingHistoryModelInstance().LoadData(dataSnapshot.getChildren().iterator().next());
+                        callBackListener.OnGetCurrentRiderHistoryModel(true, Time);
                     }
                 }
             }
@@ -54,7 +55,6 @@ public class GetCurrentRiderHistoryModel {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                callBackListener.OnGetCurrentRiderHistoryModel(true, Time);
                 Log.d(FirebaseConstant.RIDING_HISTORY_LOADED, firebaseWrapper.getCurrentRidingHistoryModelInstance().HistoryID + "");
             }
             public void onCancelled(DatabaseError databaseError) {

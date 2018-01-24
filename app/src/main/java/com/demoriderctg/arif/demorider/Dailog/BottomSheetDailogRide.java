@@ -88,7 +88,7 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
                     Double DestinationLan = AppConstant.DESTINATION.longitude;
                     Pair Source = Pair.create(SourceLat,SourceLan);
                     Pair Destination = Pair.create(DestinationLat,DestinationLan);
-                    main.RequestForRide(Source, Destination, AppConstant.SOURCE_NAME, AppConstant.DESTINATION_NAME);
+                    main.RequestForRide(Source, Destination, AppConstant.SOURCE_NAME, AppConstant.DESTINATION_NAME, totalCost);
                     Intent intent = new Intent(getContext(), SearchingDriver.class);
                     startActivity(intent);
                 }
