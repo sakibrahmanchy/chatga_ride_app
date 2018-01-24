@@ -1,4 +1,4 @@
-package com.chaatgadrive.arif.chaatgadrive.Dailog;
+package com.demoriderctg.arif.demorider.Dailog;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -11,21 +11,18 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.chaatgadrive.arif.chaatgadrive.AppConstant.AppConstant;
-import com.chaatgadrive.arif.chaatgadrive.MainActivity;
-import com.chaatgadrive.arif.chaatgadrive.OnrideMode.OnRideModeActivity;
-import com.chaatgadrive.arif.chaatgadrive.R;
+
+import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
+import com.demoriderctg.arif.demorider.MainActivity;
+import com.demoriderctg.arif.demorider.R;
 
 import ContactWithFirebase.Main;
-import __Firebase.FirebaseModel.ClientModel;
-import __Firebase.FirebaseResponse.NotificationModel;
-import __Firebase.FirebaseWrapper;
 
 /**
  * Created by Arif on 1/17/2018.
  */
 
-public class RideFinishDailog extends Dialog implements android.view.View.OnClickListener {
+public class RideFinishDailog extends Dialog implements View.OnClickListener {
     public Activity activity;
     public Button btnOk;
     private FragmentActivity myContext;
@@ -49,15 +46,14 @@ public class RideFinishDailog extends Dialog implements android.view.View.OnClic
         btnOk = (Button) findViewById(R.id.btnOk);
         total_cost = (TextView) findViewById(R.id.total_cost);
         btnOk.setOnClickListener(this);
-        main = new Main(getContext());
-        total_cost.setText(AppConstant.TOTAL_RIDING_COST+" TK");
+        main = new Main();
+        total_cost.setText(AppConstant.FINAL_RIDE_COST+" TK");
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnOk:
-                ForceFinishedRide();
                 Intent intent = new Intent(getContext(),MainActivity.class);
                 getContext().startActivity(intent);
                 myContext.finish();
@@ -68,10 +64,5 @@ public class RideFinishDailog extends Dialog implements android.view.View.OnClic
         dismiss();
     }
 
-    private void ForceFinishedRide(){
-        Pair<Double, Double> finalDestination = Pair.create(00d, 00d);
-        long finalCost = 10101;
-        main.ForcedFinishedRide(finalCost, finalDestination);
-    }
 
 }

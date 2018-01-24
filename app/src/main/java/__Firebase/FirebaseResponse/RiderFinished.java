@@ -1,5 +1,7 @@
 package __Firebase.FirebaseResponse;
 
+import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
+
 import ContactWithFirebase.Main;
 import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseUtility.FirebaseUtilMethod;
@@ -28,7 +30,10 @@ public class RiderFinished implements ICallBackFinishedRide, ICallBackCurrentSer
         FirebaseWrapper.getInstance().getRiderViewModelInstance().ClearData(true);
         FirebaseWrapper.getInstance().getNotificationModelInstance().ClearData();
         FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance().ClearData();
-
+        AppConstant.FINISH_RIDE=true;
+        AppConstant.TREAD_FOR_FINISH_RIDE=true;
+        AppConstant.INITIAL_RIDE_ACCEPT=1;
+        AppConstant.START_RIDE=false;
         RequestForFinalCost();
     }
 
@@ -39,6 +44,7 @@ public class RiderFinished implements ICallBackFinishedRide, ICallBackCurrentSer
     @Override
     public void OnFinishedRide(long FinalCost) {
         /* Get the final Cost */
+        AppConstant.FINAL_RIDE_COST=FinalCost;
     }
 
     @Override

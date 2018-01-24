@@ -2,11 +2,14 @@ package com.demoriderctg.arif.demorider.OnrideMode;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -18,8 +21,11 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
+import com.demoriderctg.arif.demorider.Dailog.RideFinishDailog;
+import com.demoriderctg.arif.demorider.Dailog.SearchingDriver;
 import com.demoriderctg.arif.demorider.GoogleMap.GetCurrentLocation;
 import com.demoriderctg.arif.demorider.InternetConnection.ConnectionCheck;
+import com.demoriderctg.arif.demorider.MainActivity;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.demoriderctg.arif.demorider.OnLocationChange.GPS_Service;
 import com.demoriderctg.arif.demorider.R;
@@ -52,7 +58,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
     private Marker currentMarker;
     private Handler handler = new Handler();
     private GetCurrentLocation  getCurrentLocation;
-    private static int progress=0;
+    private static int progressStatus=1;
     UiSettings uiSettings;
     private Main main = null;
 
@@ -149,15 +155,60 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
 
       //  this.mMap.getUiSettings().setMyLocationButtonEnabled(false);
         this.mMap.setMyLocationEnabled(true);
-
-        currentMarker = mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(getCurrentLocation.getLatitude(),getCurrentLocation.getLongitude()))
-                .title("IN RIDE")
-                .alpha(AppConstant.DEFAULT_ZOOM)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_motorcycle)));
-
         //noinspection deprecation
         mMap.setOnMyLocationChangeListener(this);
+
+        new Thread(new Runnable() {
+            public void run() {
+                while (AppConstant.TREAD_FOR_FINISH_RIDE) {
+
+                    handler.post(new Runnable() {
+                        public void run() {
+                            if(AppConstant.FINISH_RIDE){
+                                RideFinishDailog rideFinishDailog = new RideFinishDailog(OnrideModeActivity.this);
+                                rideFinishDailog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                rideFinishDailog.show();
+                                AppConstant.FINISH_RIDE=false;
+                                AppConstant.TREAD_FOR_FINISH_RIDE=false;
+                                return;
+                            }
+                        }
+                    });
+                    try {
+                        // Sleep for 200 milliseconds.
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+
+
+        new Thread(new Runnable() {
+            public void run() {
+                while ( AppConstant.INITIAL_RIDE_ACCEPT>0) {
+
+                    handler.post(new Runnable() {
+                        public void run() {
+                            if(AppConstant.START_RIDE){
+                                AppConstant.INITIAL_RIDE_ACCEPT=0;
+                               // currentMarker.remove();
+                                return;
+                            }
+                            GetRiderCurrentLocation();
+                        }
+                    });
+                    try {
+                        // Sleep for 200 milliseconds.
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+
 
     }
 
@@ -169,9 +220,11 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
 
     @Override
     public void onMyLocationChange(Location location) {
+        /*
              if(location != null){
                  currentMarker.setPosition(new LatLng(location.getLatitude(),location.getLongitude()));
              }
+             */
     }
 
     private void GetRiderCurrentLocation(){
@@ -184,6 +237,18 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
     public void OnGerRiderLocation(boolean value, double Latitude, double Longitude) {
         if(value == true){
             /*Do stuff*/
+            /*
+            try {
+                currentMarker = mMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(Latitude,Longitude))
+                        .title("IN RIDE")
+                        .alpha(AppConstant.DEFAULT_ZOOM)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_motorcycle)));
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+*/
+
         }
     }
 }

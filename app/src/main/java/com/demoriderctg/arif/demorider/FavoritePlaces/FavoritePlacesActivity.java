@@ -99,8 +99,7 @@ public class FavoritePlacesActivity extends AppCompatActivity {
     }
 
     public boolean onOptionsItemSelected(MenuItem item){
-        Intent myIntent = new Intent(getApplicationContext(), MapActivity.class);
-        startActivityForResult(myIntent, 0);
+        finish();
         return true;
 
     }

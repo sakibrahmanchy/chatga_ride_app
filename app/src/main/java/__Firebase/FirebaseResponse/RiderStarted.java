@@ -1,5 +1,7 @@
 package __Firebase.FirebaseResponse;
 
+import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
+
 import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseUtility.FirebaseUtilMethod;
 import __Firebase.ICallBackInstance.ICallBackCurrentServerTime;
@@ -23,6 +25,7 @@ public class RiderStarted implements ICallBackCurrentServerTime {
 
     private void Response() {
         /*Do your Stuff*/
+        AppConstant.START_RIDE=true;
     }
 
     @Override

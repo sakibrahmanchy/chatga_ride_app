@@ -36,6 +36,10 @@ public class AppConstant {
     public static String DISTANCE = ("");
     public static String DURATION = ("");
     public static int INITIAL_RIDE_ACCEPT=0;
+    public static boolean FINISH_RIDE=false;
+    public static long FINAL_RIDE_COST=0;
+    public static boolean START_RIDE=false;
+    public static boolean TREAD_FOR_FINISH_RIDE=true;
 
 
 
