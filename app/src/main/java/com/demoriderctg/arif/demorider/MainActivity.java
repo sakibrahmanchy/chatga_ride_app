@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "Mainactivity";
     private static final int ERROR_DIALOG_REQUEST = 9001;
-    public static boolean check = true;
+    public static boolean check = false;
     private SharedPreferences pref;
     private ConnectionCheck connectionCheck;
 
@@ -58,14 +58,6 @@ public class MainActivity extends AppCompatActivity {
     private void init() {
 
         Button btnLogin = (Button) findViewById(R.id.btnLogin);
-        /*btnmp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MapActivity.class);
-                startActivity(intent);
-
-            }
-        });*/
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
