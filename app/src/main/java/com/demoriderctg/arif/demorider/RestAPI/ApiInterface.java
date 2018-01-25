@@ -9,6 +9,7 @@ import com.demoriderctg.arif.demorider.models.ApiModels.DateTimeModel.DateTimeRe
 import com.demoriderctg.arif.demorider.models.ApiModels.DeviceTokenModels.UpdateDeviceTokenData;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginModel;
 import com.demoriderctg.arif.demorider.models.ApiModels.RegistrationModels.RegistrationModel;
+import com.demoriderctg.arif.demorider.models.ApiModels.RideHistory.ClientHistory;
 import com.demoriderctg.arif.demorider.models.ApiModels.RideHistory.ClientHistoryResponse;
 import com.demoriderctg.arif.demorider.models.ApiModels.RideHistory.RideHistoryResponse;
 import com.demoriderctg.arif.demorider.models.ApiModels.User;
@@ -63,6 +64,10 @@ public interface ApiInterface {
                                          @Field("password") String password,
                                          @Field("device_token") String deviceToken,
                                          @Field("birth_date") String birthDate);
+
+    @GET("api/v1/client/history/specific")
+    Call<ClientHistory> getClientSpecificHistory(@Header("Authorization") String authHeader,
+                                                 @Query("history_id") int history_id);
 
     @POST("api/v1/ride/history")
     @FormUrlEncoded
