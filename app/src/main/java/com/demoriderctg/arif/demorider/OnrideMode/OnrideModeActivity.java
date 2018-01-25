@@ -193,7 +193,26 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
                         public void run() {
                             if(AppConstant.START_RIDE){
                                 AppConstant.INITIAL_RIDE_ACCEPT=0;
-                               // currentMarker.remove();
+                                mMap.clear();
+                                try{
+                                    sourceMarker= mMap.addMarker(new MarkerOptions()
+                                            .position(new LatLng(AppConstant.SOURCE.latitude,AppConstant.SOURCE.longitude))
+                                            .title("Home")
+                                            .snippet(AppConstant.SOURCE_NAME)
+                                            .alpha(.7f)
+                                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_google_map)));
+
+                                    destinationMarker = mMap.addMarker(new MarkerOptions()
+                                            .position(new LatLng(AppConstant.DESTINATION.latitude,AppConstant.DESTINATION.longitude))
+                                            .title("DESTINATION")
+                                            .snippet(AppConstant.DESTINATION_NAME)
+                                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_google_map)));
+                                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(AppConstant.SOURCE, DEFAULT_ZOOM));
+                                    MandatoryCall();
+
+                                }catch (Exception e){
+                                    e.printStackTrace();
+                                }
                                 return;
                             }
                             GetRiderCurrentLocation();
@@ -237,7 +256,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
     public void OnGerRiderLocation(boolean value, double Latitude, double Longitude) {
         if(value == true){
             /*Do stuff*/
-            /*
+
             try {
                 currentMarker = mMap.addMarker(new MarkerOptions()
                         .position(new LatLng(Latitude,Longitude))
@@ -247,7 +266,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
             }catch(Exception e){
                 e.printStackTrace();
             }
-*/
+
 
         }
     }
