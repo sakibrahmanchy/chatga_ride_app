@@ -33,13 +33,14 @@ public class GetCurrentRiderHistoryModel {
     private void Request(){
 
         final FirebaseWrapper firebaseWrapper = FirebaseWrapper.getInstance();
-        firebaseWrapper.FirebaseRootReference.child(FirebaseConstant.HISTORY).orderByChild(FirebaseConstant.CLIENT_HISTORY).equalTo(ClientID + FirebaseConstant.JOIN + HistoryID).addValueEventListener(new ValueEventListener() {
+        firebaseWrapper.FirebaseRootReference.child(FirebaseConstant.HISTORY).orderByChild(FirebaseConstant.CLIENT_HISTORY).equalTo(ClientID + FirebaseConstant.JOIN + HistoryID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 if(dataSnapshot.exists() && dataSnapshot.hasChildren()) {
                     if (dataSnapshot.getChildren().iterator().hasNext()) {
                         firebaseWrapper.getCurrentRidingHistoryModelInstance().LoadData(dataSnapshot.getChildren().iterator().next());
+                        callBackListener.OnGetCurrentRiderHistoryModel(true, Time);
                     }
                 }
             }
@@ -54,7 +55,6 @@ public class GetCurrentRiderHistoryModel {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                callBackListener.OnGetCurrentRiderHistoryModel(true, Time);
                 Log.d(FirebaseConstant.RIDING_HISTORY_LOADED, firebaseWrapper.getCurrentRidingHistoryModelInstance().HistoryID + "");
             }
             public void onCancelled(DatabaseError databaseError) {

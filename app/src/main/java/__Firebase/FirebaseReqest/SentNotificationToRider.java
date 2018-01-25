@@ -60,6 +60,7 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
         String sourceLongitude = FirebaseConstant.Empty;
         String destinationLatitude = FirebaseConstant.Empty;
         String destinationLongitude = FirebaseConstant.Empty;
+        String totalCost = FirebaseConstant.Empty;
 
         try {
             clientId = params[0];
@@ -76,6 +77,7 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
             sourceLongitude = params[11];
             destinationLatitude = params[12];
             destinationLongitude = params[13];
+            totalCost = params[14];
         } catch (ExceptionInInitializerError e) {
             e.printStackTrace();
         }
@@ -103,7 +105,8 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
                     URLEncoder.encode("sourceLatitude", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(sourceLatitude, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
                     URLEncoder.encode("sourceLongitude", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(sourceLongitude, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
                     URLEncoder.encode("destinationLatitude", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(destinationLatitude, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
-                    URLEncoder.encode("destinationLongitude", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(destinationLongitude, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND;
+                    URLEncoder.encode("destinationLongitude", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(destinationLongitude, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
+                    URLEncoder.encode("totalCost", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(totalCost, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND;
 
             bufferedWriter.write(data);
             bufferedWriter.flush();

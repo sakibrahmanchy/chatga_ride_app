@@ -22,6 +22,8 @@ import __Firebase.FirebaseUtility.FirebaseUtilMethod;
 import __Firebase.FirebaseWrapper;
 import __Firebase.ICallBackInstance.ICallBackFinishedRide;
 import __Firebase.ICallBackInstance.ICallbackMain;
+import __Firebase.ICallBackInstance.IGerRiderLocation;
+import __Firebase.ICallBackInstance.IGetCurrentRider;
 
 /**
  * Created by User on 12/9/2017.
@@ -35,7 +37,9 @@ public class Main implements ICallbackMain {
     private CurrentRidingHistoryModel currentRidingHistoryModel = null;
     private __FirebaseRequest firebaseRequestInstance;
     private Pair<Double, Double> Source = null, Destination = null;
-    private String SourceName, DestinationName;
+    private IGetCurrentRider iGetCurrentRider;
+    private static String SourceName, DestinationName;
+    private static long TotalCost;
     private Context context = null;
 
     public Main() {
@@ -84,20 +88,21 @@ public class Main implements ICallbackMain {
         return true;
     }
 
-    public boolean RequestForRide(Pair<Double, Double> Source, Pair<Double, Double> Destination, String _SourceName, String _DestinationName){
+    public boolean RequestForRide(Pair<Double, Double> Source, Pair<Double, Double> Destination, String _SourceName, String _DestinationName, long _TotalCost){
 
         firebaseWrapper = FirebaseWrapper.getInstance();
         firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
         this.Source = Source;
         this.Destination = Destination;
-        this.SourceName = _SourceName;
-        this.DestinationName = _DestinationName;
+        SourceName = _SourceName;
+        DestinationName = _DestinationName;
+        TotalCost = _TotalCost;
 
         firebaseRequestInstance.RequestForRide(Source, Destination, Main.this);
         return true;
     }
 
-    public boolean SentNotificationToRider(/*Firebase Client Mode, rider Model*/RiderModel Rider, ClientModel Client, Pair<Double, Double> Source, Pair<Double, Double> Destination, String SourceName, String DestinationName, String ShortestTime, String ShortestDistance){
+    public boolean SentNotificationToRider(/*Firebase Client Mode, rider Model*/RiderModel Rider, ClientModel Client, Pair<Double, Double> Source, Pair<Double, Double> Destination, String SourceName, String DestinationName, String ShortestTime, String ShortestDistance, long TotalCost){
 
         if(Rider == null || Client == null || Source == null || Destination == null)    return false;
 
@@ -106,7 +111,7 @@ public class Main implements ICallbackMain {
         firebaseWrapper = FirebaseWrapper.getInstance();
         firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
 
-        firebaseRequestInstance.SentNotificationToRider(this.riderModel, this.clientModel, Source, Destination, SourceName, DestinationName, ShortestTime, ShortestDistance, Main.this);
+        firebaseRequestInstance.SentNotificationToRider(this.riderModel, this.clientModel, Source, Destination, SourceName, DestinationName, ShortestTime, ShortestDistance, TotalCost, Main.this);
         return true;
     }
 
@@ -123,13 +128,22 @@ public class Main implements ICallbackMain {
         return true;
     }
 
-    public boolean GetRiderLocation(/*Firebase nearest rider Model*/RiderModel Rider){
+    public boolean GetCurrentRider(long RiderID) {
+
+        firebaseWrapper = FirebaseWrapper.getInstance();
+        firebaseWrapper.getFirebaseRequestInstance().GetCurrentRider(RiderID, Main.this);
+        return true;
+    }
+
+    public boolean GetRiderLocation(/*Firebase nearest rider Model*/RiderModel Rider, IGerRiderLocation iGerRiderLocation){
+
+        if(Rider == null || Rider.RiderID < 1 || iGerRiderLocation == null)  return false;
 
         firebaseWrapper = FirebaseWrapper.getInstance();
         firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
         this.riderModel = Rider;
 
-        firebaseRequestInstance.GetRiderLocation(this.riderModel, Main.this);
+        firebaseRequestInstance.GetRiderLocation(this.riderModel, iGerRiderLocation);
         return true;
     }
 
@@ -275,10 +289,11 @@ public class Main implements ICallbackMain {
                     firebaseWrapper.getClientModelInstance(),
                     this.Source,
                     this.Destination,
-                    this.SourceName,
-                    this.DestinationName,
+                    SourceName,
+                    DestinationName,
                     shortestTime,
-                    shortestDistance
+                    shortestDistance,
+                    TotalCost
             );
         } else {
             //Toast.makeText(context, FirebaseConstant.NO_RIDER_FOUND, Toast.LENGTH_LONG).show();
@@ -293,10 +308,21 @@ public class Main implements ICallbackMain {
     @Override
     public void OnGetCurrentRiderHistoryModel(boolean value, long Time) {
         if(value == true){
-            new InitialAcceptanceOfRideResponse(Time);
+            iGetCurrentRider = new InitialAcceptanceOfRideResponse(Time);
             FirebaseResponse.RideStartedResponse(FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance().HistoryID);
             FirebaseResponse.RideFinishedResponse(FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance().HistoryID);
             FirebaseResponse.RideCanceledByRiderResponse(FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance().HistoryID);
+        }
+    }
+
+    @Override
+    public void OnGetCurrentRider(boolean value) {
+        if(value == true){
+            iGetCurrentRider.OnGetCurrentRider(true);
+            Log.d(FirebaseConstant.RIDER_LOADED, FirebaseConstant.RIDER_LOADED + FirebaseWrapper.getInstance().getRiderModelInstance().FullName);
+            Log.d(FirebaseConstant.RIDER_LOADED, FirebaseConstant.RIDER_LOADED);
+        }else {
+            iGetCurrentRider.OnGetCurrentRider(false);
         }
     }
 }

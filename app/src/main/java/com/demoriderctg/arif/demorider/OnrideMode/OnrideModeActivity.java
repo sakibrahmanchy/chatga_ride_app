@@ -34,11 +34,16 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.Date;
+import java.util.MissingFormatArgumentException;
+
+import ContactWithFirebase.Main;
+import __Firebase.FirebaseWrapper;
+import __Firebase.ICallBackInstance.IGerRiderLocation;
 
 import static com.demoriderctg.arif.demorider.AppConfig.AppConstant.DEFAULT_ZOOM;
 import static com.demoriderctg.arif.demorider.AppConfig.AppConstant.OnchangeDeviceLOcation;
 
-public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyCallback, OnMyLocationButtonClickListener, GoogleMap.OnMyLocationChangeListener {
+public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyCallback, OnMyLocationButtonClickListener, GoogleMap.OnMyLocationChangeListener, IGerRiderLocation {
 
     GoogleMap mMap;
     private ConnectionCheck connectionCheck;
@@ -49,6 +54,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
     private GetCurrentLocation  getCurrentLocation;
     private static int progress=0;
     UiSettings uiSettings;
+    private Main main = null;
 
 
     @Override
@@ -57,6 +63,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
         setContentView(R.layout.activity_onride_mode);
         connectionCheck = new ConnectionCheck(this);
         getCurrentLocation = new GetCurrentLocation(this);
+        main = new Main();
         initMap();
     }
 
@@ -162,8 +169,21 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
 
     @Override
     public void onMyLocationChange(Location location) {
-             if(location !=null){
+             if(location != null){
                  currentMarker.setPosition(new LatLng(location.getLatitude(),location.getLongitude()));
              }
+    }
+
+    private void GetRiderCurrentLocation(){
+
+        /*Request*/
+        main.GetRiderLocation(FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider, this);
+    }
+
+    @Override
+    public void OnGerRiderLocation(boolean value, double Latitude, double Longitude) {
+        if(value == true){
+            /*Do stuff*/
+        }
     }
 }
