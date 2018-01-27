@@ -14,6 +14,8 @@ import com.demoriderctg.arif.demorider.models.ApiModels.RideHistory.ClientHistor
 import com.demoriderctg.arif.demorider.models.ApiModels.RideHistory.RideHistoryResponse;
 import com.demoriderctg.arif.demorider.models.ApiModels.User;
 import com.demoriderctg.arif.demorider.models.ApiModels.UserCheckResponse;
+import com.demoriderctg.arif.demorider.models.ApiModels.UserDiscounts.ApplyPromoCodeResponse;
+import com.demoriderctg.arif.demorider.models.ApiModels.UserDiscounts.UserDiscountResponse;
 import com.demoriderctg.arif.demorider.models.ApiModels.UserDiscounts.UserDiscounts;
 
 import org.json.JSONObject;
@@ -82,7 +84,7 @@ public interface ApiInterface {
                                                 @Field("initial_approx_cost") String initialApproxCost);
 
     @GET("api/v1/user_discounts")
-    Call<UserDiscounts> getUserDiscounts(@Query("user_id") String userId);
+    Call<UserDiscountResponse> getUserDiscounts(@Header("Authorization") String authHeader, @Query("user_id") String userId);
 
     @GET("api/v1/date_time")
     Call<DateTimeResponse> getDateTime();
@@ -90,5 +92,11 @@ public interface ApiInterface {
     @GET("api/v1/client/history")
     Call<ClientHistoryResponse>getClientHistory(@Header("Authorization") String authHeader,
                                                 @Query("client_id") String client_id);
+
+    @POST("api/v1/client/promo_code/apply")
+    @FormUrlEncoded
+    Call<ApplyPromoCodeResponse>applyPromoCode(@Header("Authorization") String authHeader,
+                                               @Field("promo_code") String promoCode,
+                                               @Field("client_id") String clientId);
 
 }

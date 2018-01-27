@@ -10,8 +10,6 @@ public class UserDiscounts {
 
     @SerializedName("id")
     private  int discountId;
-    @SerializedName("client_id")
-    private int clientId;
     @SerializedName("start_time")
     private String startTime;
     @SerializedName("end_time")
@@ -26,10 +24,12 @@ public class UserDiscounts {
     private  int maxUseTime;
     @SerializedName("max_discount_amount")
     private double maxDiscountAmount;
-
-    public UserDiscounts(int discountId, int clientId, String startTime, String endTime, double discountPercentage, double discountAmount, String promotionCode, int maxUseTime, double maxDiscountAmount) {
+    @SerializedName("promo_code_descriptions")
+    private String promoCodeDescriptions;
+    public UserDiscounts(int discountId, String startTime, String endTime, double discountPercentage,
+                         double discountAmount, String promotionCode,
+                         int maxUseTime, double maxDiscountAmount, String promoCodeDescriptions) {
         this.discountId = discountId;
-        this.clientId = clientId;
         this.startTime = startTime;
         this.endTime = endTime;
         this.discountPercentage = discountPercentage;
@@ -37,6 +37,7 @@ public class UserDiscounts {
         this.promotionCode = promotionCode;
         this.maxUseTime = maxUseTime;
         this.maxDiscountAmount = maxDiscountAmount;
+        this.promoCodeDescriptions = promoCodeDescriptions;
     }
 
     public int getDiscountId() {
@@ -45,14 +46,6 @@ public class UserDiscounts {
 
     public void setDiscountId(int discountId) {
         this.discountId = discountId;
-    }
-
-    public int getClientId() {
-        return clientId;
-    }
-
-    public void setClientId(int clientId) {
-        this.clientId = clientId;
     }
 
     public String getStartTime() {
@@ -109,5 +102,13 @@ public class UserDiscounts {
 
     public void setMaxDiscountAmount(double maxDiscountAmount) {
         this.maxDiscountAmount = maxDiscountAmount;
+    }
+
+    public String getPromoCodeDescriptions() {
+        return promoCodeDescriptions;
+    }
+
+    public void setPromoCodeDescriptions(String promoCodeDescriptions) {
+        this.promoCodeDescriptions = promoCodeDescriptions;
     }
 }

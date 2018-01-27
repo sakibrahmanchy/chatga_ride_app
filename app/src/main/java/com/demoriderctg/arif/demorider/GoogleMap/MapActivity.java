@@ -40,6 +40,7 @@ import com.demoriderctg.arif.demorider.InternetConnection.ConnectionCheck;
 import com.demoriderctg.arif.demorider.InternetConnection.InternetCheckActivity;
 import com.demoriderctg.arif.demorider.MainActivity;
 import com.demoriderctg.arif.demorider.PlaceAutocompleteAdapter;
+import com.demoriderctg.arif.demorider.PromotionActivity;
 import com.demoriderctg.arif.demorider.R;
 import com.demoriderctg.arif.demorider.UserInformation;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
@@ -617,6 +618,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             case R.id.nav_history:
                 Intent clientIntent = new Intent(MapActivity.this, ClientHistoryActivity.class);
                 startActivity(clientIntent);
+                break;
+            case R.id.nav_promotions:
+                Intent promotionIntent = new Intent(MapActivity.this, PromotionActivity.class);
+                startActivity(promotionIntent);
                 break;
             default:
                 break;
