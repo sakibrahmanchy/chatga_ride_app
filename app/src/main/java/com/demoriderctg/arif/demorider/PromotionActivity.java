@@ -1,6 +1,8 @@
 package com.demoriderctg.arif.demorider;
 
+import android.app.ActionBar;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
@@ -10,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +20,7 @@ import android.widget.Toast;
 
 import com.demoriderctg.arif.demorider.Adapters.History.HistoryAdapter;
 import com.demoriderctg.arif.demorider.Adapters.Promotion.PromotionAdapter;
+import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
 import com.demoriderctg.arif.demorider.RestAPI.ApiClient;
 import com.demoriderctg.arif.demorider.RestAPI.ApiInterface;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
@@ -183,5 +187,7 @@ public class PromotionActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
 }
