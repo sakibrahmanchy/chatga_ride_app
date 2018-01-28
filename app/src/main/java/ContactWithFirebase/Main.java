@@ -40,6 +40,7 @@ public class Main implements ICallbackMain {
     private IGetCurrentRider iGetCurrentRider;
     private static String SourceName, DestinationName;
     private static long TotalCost;
+    private static long DiscountID;
     private Context context = null;
 
     public Main() {
@@ -88,7 +89,7 @@ public class Main implements ICallbackMain {
         return true;
     }
 
-    public boolean RequestForRide(Pair<Double, Double> Source, Pair<Double, Double> Destination, String _SourceName, String _DestinationName, long _TotalCost){
+    public boolean RequestForRide(Pair<Double, Double> Source, Pair<Double, Double> Destination, String _SourceName, String _DestinationName, long _TotalCost, long _DiscountID){
 
         firebaseWrapper = FirebaseWrapper.getInstance();
         firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
@@ -97,12 +98,13 @@ public class Main implements ICallbackMain {
         SourceName = _SourceName;
         DestinationName = _DestinationName;
         TotalCost = _TotalCost;
+        DiscountID = _DiscountID;
 
         firebaseRequestInstance.RequestForRide(Source, Destination, Main.this);
         return true;
     }
 
-    public boolean SentNotificationToRider(/*Firebase Client Mode, rider Model*/RiderModel Rider, ClientModel Client, Pair<Double, Double> Source, Pair<Double, Double> Destination, String SourceName, String DestinationName, String ShortestTime, String ShortestDistance, long TotalCost){
+    public boolean SentNotificationToRider(/*Firebase Client Mode, rider Model*/RiderModel Rider, ClientModel Client, Pair<Double, Double> Source, Pair<Double, Double> Destination, String SourceName, String DestinationName, String ShortestTime, String ShortestDistance, long TotalCost, long DiscountID){
 
         if(Rider == null || Client == null || Source == null || Destination == null)    return false;
 
@@ -111,7 +113,7 @@ public class Main implements ICallbackMain {
         firebaseWrapper = FirebaseWrapper.getInstance();
         firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
 
-        firebaseRequestInstance.SentNotificationToRider(this.riderModel, this.clientModel, Source, Destination, SourceName, DestinationName, ShortestTime, ShortestDistance, TotalCost, Main.this);
+        firebaseRequestInstance.SentNotificationToRider(this.riderModel, this.clientModel, Source, Destination, SourceName, DestinationName, ShortestTime, ShortestDistance, TotalCost, DiscountID, Main.this);
         return true;
     }
 
@@ -293,7 +295,8 @@ public class Main implements ICallbackMain {
                     DestinationName,
                     shortestTime,
                     shortestDistance,
-                    TotalCost
+                    TotalCost,
+                    DiscountID
             );
         } else {
             //Toast.makeText(context, FirebaseConstant.NO_RIDER_FOUND, Toast.LENGTH_LONG).show();
