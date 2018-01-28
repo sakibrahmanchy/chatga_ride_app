@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class UserDiscounts {
 
-    @SerializedName("id")
+    @SerializedName("discount_id")
     private  int discountId;
     @SerializedName("start_time")
     private String startTime;
