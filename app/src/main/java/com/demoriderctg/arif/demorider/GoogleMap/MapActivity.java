@@ -294,6 +294,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     connectionCheck.showGPSDisabledAlertToUser();
                 } else {
 
+                    new DiscountCalculation(MapActivity.this).getClientPromotions();
                     AppConstant.SOURCE = source;
                     AppConstant.DESTINATION = dest;
                     AppConstant.SOURCE_NAME = HomeLocationName;

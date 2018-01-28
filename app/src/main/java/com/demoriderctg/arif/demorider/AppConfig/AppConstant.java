@@ -1,5 +1,6 @@
 package com.demoriderctg.arif.demorider.AppConfig;
 
+import com.demoriderctg.arif.demorider.models.ApiModels.UserDiscounts.UserDiscounts;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
@@ -40,6 +41,7 @@ public class AppConstant {
     public static long FINAL_RIDE_COST=0;
     public static boolean START_RIDE=false;
     public static boolean TREAD_FOR_FINISH_RIDE=true;
+    public static UserDiscounts userDiscount = null;
 
 
 

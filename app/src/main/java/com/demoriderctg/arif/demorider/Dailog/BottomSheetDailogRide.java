@@ -1,12 +1,15 @@
 package com.demoriderctg.arif.demorider.Dailog;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,15 +20,30 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.demoriderctg.arif.demorider.Adapters.Promotion.PromotionAdapter;
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
 import com.demoriderctg.arif.demorider.CostEstimation.CostEstimation;
 import com.demoriderctg.arif.demorider.InternetConnection.ConnectionCheck;
 import com.demoriderctg.arif.demorider.LoginActivity;
 import com.demoriderctg.arif.demorider.R;
+import com.demoriderctg.arif.demorider.RestAPI.ApiClient;
+import com.demoriderctg.arif.demorider.RestAPI.ApiInterface;
+import com.demoriderctg.arif.demorider.UserInformation;
+import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
+import com.demoriderctg.arif.demorider.models.ApiModels.User;
+import com.demoriderctg.arif.demorider.models.ApiModels.UserDiscounts.UserDiscountResponse;
+import com.demoriderctg.arif.demorider.models.ApiModels.UserDiscounts.UserDiscounts;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 import ContactWithFirebase.Main;
 import __Firebase.FirebaseResponse.NotificationModel;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.demoriderctg.arif.demorider.MainActivity.TAG;
 
 /**
  * Created by Arif on 12/30/2017.
@@ -44,6 +62,9 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
     private Main main;
     private long totalCost;
     private CostEstimation costEstimation = new CostEstimation();
+    private ProgressDialog dialog;
+    private ApiInterface apiService;
+
     public static BottomSheetDailogRide newInstance(String string) {
         BottomSheetDailogRide f = new BottomSheetDailogRide();
         Bundle args = new Bundle();
@@ -67,6 +88,7 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
         pickUpBotton = (Button) v.findViewById(R.id.pickupbtn);
         connectionCheck = new ConnectionCheck(getContext());
         fare_info = (ImageView) v.findViewById(R.id.fareInfo);
+
         //pathLocation.setText(AppConstant.SOURCE_NAME + " To "+AppConstant.DESTINATION_NAME);
 
         totalCost = (long)costEstimation.getTotalCost(AppConstant.DISTANCE,AppConstant.DURATION);
@@ -88,6 +110,10 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
                     Double DestinationLan = AppConstant.DESTINATION.longitude;
                     Pair Source = Pair.create(SourceLat,SourceLan);
                     Pair Destination = Pair.create(DestinationLat,DestinationLan);
+                    long DiscountId=0;
+                    if(AppConstant.userDiscount.getDiscountId()>0){
+                        DiscountId =(long)AppConstant.userDiscount.getDiscountId();
+                    }
                     main.RequestForRide(Source, Destination, AppConstant.SOURCE_NAME, AppConstant.DESTINATION_NAME, totalCost);
                     Intent intent = new Intent(getContext(), SearchingDriver.class);
                     startActivity(intent);
@@ -106,6 +132,9 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
             }
         });
     }
+
+
+
 
 
 }

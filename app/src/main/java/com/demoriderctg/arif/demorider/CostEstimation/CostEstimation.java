@@ -20,8 +20,24 @@ public class CostEstimation {
    public double getTotalCost(String Stringdistance,String Stringduration){
         double distance = getDistance(Stringdistance);
         double duration = getDuration(Stringduration);
+        double totalCost=0;
+        if(AppConstant.userDiscount !=null){
+            if(AppConstant.userDiscount.getDiscountPercentage()>0){
+                 totalCost =  AppConstant.BASE_TAKA+AppConstant.PER_KILOMITTER*distance + AppConstant.DURATION_PER_KILOMITTER*duration;
+                 totalCost = totalCost-(totalCost *(AppConstant.userDiscount.getDiscountPercentage()/100.0));
+            }
+            else if(AppConstant.userDiscount.getDiscountAmount()>0){
+                totalCost =  AppConstant.BASE_TAKA+AppConstant.PER_KILOMITTER*distance + AppConstant.DURATION_PER_KILOMITTER*duration;
+                totalCost = totalCost - AppConstant.userDiscount.getDiscountAmount();
+            }
+        }
+        else{
+            totalCost =  AppConstant.BASE_TAKA+AppConstant.PER_KILOMITTER*distance + AppConstant.DURATION_PER_KILOMITTER*duration;
+        }
+        if(totalCost<39){
+            totalCost =40;
+        }
 
-        double totalCost =  AppConstant.BASE_TAKA+AppConstant.PER_KILOMITTER*distance + AppConstant.DURATION_PER_KILOMITTER*duration;
         return totalCost;
     }
 
