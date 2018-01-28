@@ -114,7 +114,7 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
                     if(AppConstant.userDiscount.getDiscountId()>0){
                         DiscountId =(long)AppConstant.userDiscount.getDiscountId();
                     }
-                    main.RequestForRide(Source, Destination, AppConstant.SOURCE_NAME, AppConstant.DESTINATION_NAME, totalCost);
+                    main.RequestForRide(Source, Destination, AppConstant.SOURCE_NAME, AppConstant.DESTINATION_NAME, totalCost,DiscountId);
                     Intent intent = new Intent(getContext(), SearchingDriver.class);
                     startActivity(intent);
                 }
