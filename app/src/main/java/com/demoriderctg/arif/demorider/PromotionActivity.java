@@ -174,7 +174,7 @@ public class PromotionActivity extends AppCompatActivity {
                         }
                         break;
                     default:
-
+                            Toast.makeText(getApplicationContext(),"Error Occurred!",Toast.LENGTH_LONG).show();
                         break;
                 }
 
