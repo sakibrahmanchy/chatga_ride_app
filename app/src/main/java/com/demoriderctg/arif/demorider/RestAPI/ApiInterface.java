@@ -8,6 +8,8 @@ import com.demoriderctg.arif.demorider.models.ApiModels.AccessTokenModels.AuthTo
 import com.demoriderctg.arif.demorider.models.ApiModels.DateTimeModel.DateTimeResponse;
 import com.demoriderctg.arif.demorider.models.ApiModels.DeviceTokenModels.UpdateDeviceTokenData;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginModel;
+import com.demoriderctg.arif.demorider.models.ApiModels.Rating.RateDriver;
+import com.demoriderctg.arif.demorider.models.ApiModels.Rating.Rating;
 import com.demoriderctg.arif.demorider.models.ApiModels.RegistrationModels.RegistrationModel;
 import com.demoriderctg.arif.demorider.models.ApiModels.RideHistory.ClientHistory;
 import com.demoriderctg.arif.demorider.models.ApiModels.RideHistory.ClientHistoryResponse;
@@ -25,6 +27,7 @@ import java.util.ArrayList;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.GET;
+import retrofit2.http.HEAD;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -98,5 +101,19 @@ public interface ApiInterface {
     Call<ApplyPromoCodeResponse>applyPromoCode(@Header("Authorization") String authHeader,
                                                @Field("promo_code") String promoCode,
                                                @Field("client_id") String clientId);
+    @POST("api/v1/rate/rider")
+    @FormUrlEncoded
+    Call<RateDriver>rateRider(@Header("Authorization") String authHeader,
+                          @Field("history_id") int historyId,
+                          @Field("rating") double ratingPoint);
 
+    @POST("api/v1/rider/rating")
+    @FormUrlEncoded
+    Call<Rating>getRiderRating(@Header("Authorization") String authHeader,
+                              @Field("rider_id") int riderId);
+
+    @POST("api/v1/client/rating")
+    @FormUrlEncoded
+    Call<Rating>getClientRating(@Header("Authorization") String authHeader,
+                               @Field("client_id") int clientId);
 }
