@@ -42,6 +42,7 @@ import com.demoriderctg.arif.demorider.MainActivity;
 import com.demoriderctg.arif.demorider.PlaceAutocompleteAdapter;
 import com.demoriderctg.arif.demorider.PromotionActivity;
 import com.demoriderctg.arif.demorider.R;
+import com.demoriderctg.arif.demorider.Setting.SettingActivity;
 import com.demoriderctg.arif.demorider.UserInformation;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 import com.demoriderctg.arif.demorider.models.ApiModels.RideHistory.ClientHistory;
@@ -612,17 +613,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public boolean onNavigationItemSelected(MenuItem item) {
         Toast.makeText(getApplicationContext(), "" + item.getItemId(), Toast.LENGTH_SHORT).show();
         switch (item.getItemId()) {
-            case R.id.nav_notifications:
-                Intent intent = new Intent(MapActivity.this, FavoritePlacesActivity.class);
-                startActivity(intent);
+            case R.id.nav_settings:
+                Intent intent = new Intent(MapActivity.this, SettingActivity.class);
+                startActivityForResult(intent,0);
                 break;
             case R.id.nav_history:
                 Intent clientIntent = new Intent(MapActivity.this, ClientHistoryActivity.class);
-                startActivity(clientIntent);
+                startActivityForResult(clientIntent,0);
                 break;
             case R.id.nav_promotions:
                 Intent promotionIntent = new Intent(MapActivity.this, PromotionActivity.class);
-                startActivity(promotionIntent);
+                startActivityForResult(promotionIntent,0);
                 break;
             default:
                 break;

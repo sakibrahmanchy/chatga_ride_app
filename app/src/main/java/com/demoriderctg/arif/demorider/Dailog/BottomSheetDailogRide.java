@@ -111,7 +111,7 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
                     Pair Source = Pair.create(SourceLat,SourceLan);
                     Pair Destination = Pair.create(DestinationLat,DestinationLan);
                     int DiscountId=0;
-                    if(AppConstant.userDiscount.getDiscountId()>0){
+                    if( AppConstant.userDiscount !=null && AppConstant.userDiscount.getDiscountId()>0){
                         DiscountId =AppConstant.userDiscount.getDiscountId();
                     }
                     main.RequestForRide(Source, Destination, AppConstant.SOURCE_NAME, AppConstant.DESTINATION_NAME, totalCost,DiscountId);

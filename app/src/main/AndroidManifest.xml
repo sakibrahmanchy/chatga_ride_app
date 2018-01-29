@@ -87,6 +87,10 @@
             android:name=".Adapters.History.ClientHistoryActivity"
             android:label="Ride Histories" />
         <activity android:name=".PromotionActivity"></activity>
+        <activity
+            android:name=".Setting.SettingActivity"
+            android:label="User Setting" />
+
     </application>
 
 </manifest>

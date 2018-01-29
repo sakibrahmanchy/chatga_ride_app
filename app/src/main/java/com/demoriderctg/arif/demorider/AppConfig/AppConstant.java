@@ -42,7 +42,8 @@ public class AppConstant {
     public static boolean START_RIDE=false;
     public static boolean TREAD_FOR_FINISH_RIDE=true;
     public static UserDiscounts userDiscount = null;
-
+    public static int HISTORY_ID=0;
+    public static double RATING =0;
 
 
     /* Log Tag, Message */
