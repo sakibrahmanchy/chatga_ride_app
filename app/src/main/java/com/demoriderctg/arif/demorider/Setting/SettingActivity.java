@@ -20,6 +20,7 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 public class SettingActivity extends AppCompatActivity {
 
     private ImageView profileImage;
+    private ImageView editProfile;
     private TextView profileName;
     private TextView phoneNumber;
     private TextView email;
@@ -46,6 +47,7 @@ public class SettingActivity extends AppCompatActivity {
         homeLocation = (TextView) findViewById(R.id.home_location);
         workLocation = (TextView) findViewById(R.id.work_location);
         signOut = (TextView) findViewById(R.id.action_logout);
+        editProfile = (ImageView) findViewById(R.id.edit_profile);
 
         setAllInformation();
         setFovaritesLocation();
@@ -54,8 +56,8 @@ public class SettingActivity extends AppCompatActivity {
 
     private void setAllInformation(){
         profileName.setText(loginData.firstName);
-        phoneNumber.setText("+80"+userInformation.getRiderPhoneNumber());
-        email.setText(" ");
+        phoneNumber.setText("+88"+ loginData.phone);
+        email.setText(loginData.email);
     }
 
     private void setFovaritesLocation(){
@@ -86,6 +88,14 @@ public class SettingActivity extends AppCompatActivity {
                 } catch (GooglePlayServicesNotAvailableException e) {
                     e.printStackTrace();
                 }
+            }
+        });
+
+        editProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                   Intent intent = new Intent(SettingActivity.this,EditProfile.class);
+                   startActivity(intent);
             }
         });
 

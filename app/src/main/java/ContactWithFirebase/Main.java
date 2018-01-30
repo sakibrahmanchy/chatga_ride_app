@@ -56,7 +56,11 @@ public class Main implements ICallbackMain {
                     FirebaseWrapper.getDeviceToken(),
                     null,
                     null,
-                    "1010"
+                    "1010",
+                    "ar@gmail.com",
+                    "null",
+                    "null",
+                    "null"
             );
             phoneNumber = new String("01752062838");
         }
