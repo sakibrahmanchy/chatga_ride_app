@@ -1,9 +1,11 @@
 package com.demoriderctg.arif.demorider.Setting;
 
 import android.app.DatePickerDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.demoriderctg.arif.demorider.R;
 import com.demoriderctg.arif.demorider.UserInformation;
@@ -46,8 +49,11 @@ public class EditProfile extends AppCompatActivity  {
     private LoginData loginData;
     private RadioButton male,female;
     private DatePickerDialog birthDayPickerDialog;
+    private Uri picUri;
     private SimpleDateFormat dateFormatter;
     private String deviceToken,email,firstName,gender,birthDate;
+    //keep track of cropping intent
+    final int PIC_CROP = 2;
 
     private UserInformation userInformation;
     private static final int RESULT_LOAD_IMAGE = 1;
@@ -106,8 +112,10 @@ public class EditProfile extends AppCompatActivity  {
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent pickImageIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                pickImageIntent.setType("image/*");
+               // Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+               // Intent pickImageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                Intent pickImageIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                /*
                 pickImageIntent.putExtra("crop", "true");
                 pickImageIntent.putExtra("outputX", 200);
                 pickImageIntent.putExtra("outputY", 200);
@@ -115,8 +123,10 @@ public class EditProfile extends AppCompatActivity  {
                 pickImageIntent.putExtra("aspectY", 1);
                 pickImageIntent.putExtra("scale", true);
                 pickImageIntent.putExtra("outputFormat",
+                *
 
                         Bitmap.CompressFormat.JPEG);
+                        */
                 startActivityForResult(pickImageIntent, RESULT_LOAD_IMAGE);
             }
         });
@@ -155,16 +165,24 @@ public class EditProfile extends AppCompatActivity  {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null){
-            Bundle extras = data.getExtras();
-            if(extras != null ) {
-                Bitmap photo = extras.getParcelable("data");
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                photo.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                editProfile .setImageBitmap(photo);
+        if (resultCode == RESULT_OK ){
+            if(requestCode==RESULT_LOAD_IMAGE){
+                picUri = data.getData();
+                performCrop();
             }
+            else if(requestCode == PIC_CROP){
+//get the returned data
+                Bundle extras = data.getExtras();
+//get the cropped bitmap
 
+                if(extras !=null){
+                    Bitmap thePic = extras.getParcelable("data");
+                    editProfile.setImageBitmap(thePic);
+                }
+
+            }
         }
+
     }
 
     private boolean attemptLogin() {
@@ -214,6 +232,33 @@ public class EditProfile extends AppCompatActivity  {
         finish();
         return true;
 
+    }
+
+    private void performCrop(){
+        try {
+            //call the standard crop action intent (the user device may not support it)
+            Intent cropIntent = new Intent("com.android.camera.action.CROP");
+            //indicate image type and Uri
+            cropIntent.setDataAndType(picUri, "image/*");
+            //set crop properties
+            cropIntent.putExtra("crop", "true");
+            //indicate aspect of desired crop
+            cropIntent.putExtra("aspectX", 1);
+            cropIntent.putExtra("aspectY", 1);
+            //indicate output X and Y
+            cropIntent.putExtra("outputX", 256);
+            cropIntent.putExtra("outputY", 256);
+            //retrieve data on return
+            cropIntent.putExtra("return-data", true);
+            //start the activity - we handle returning in onActivityResult
+            startActivityForResult(cropIntent, PIC_CROP);
+        }
+        catch(ActivityNotFoundException anfe){
+            //display an error message
+            String errorMessage = "Whoops - your device doesn't support the crop action!";
+            Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
+            toast.show();
+        }
     }
 
 
