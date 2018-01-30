@@ -8,14 +8,23 @@ import com.google.gson.annotations.SerializedName;
 
 public class LoginData {
 
+    @SerializedName("user_id")
+    public String userId;
+
+    @SerializedName("client_id")
+    public String clientId;
+
     @SerializedName("first_name")
     public String firstName;
 
     @SerializedName("last_name")
     public String lastName;
 
-    @SerializedName("device_token")
-    public String deviceToken;
+    @SerializedName("email")
+    public String email;
+
+    @SerializedName("phone")
+    public String phone;
 
     @SerializedName("birth_date")
     public String birthDate;
@@ -23,16 +32,24 @@ public class LoginData {
     @SerializedName("gender")
     public String gender;
 
-    @SerializedName("user_id")
-    public String userId;
+    @SerializedName("device_token")
+    public String deviceToken;
 
-    public LoginData(String firstName, String lastName, String deviceToken, String birthDate, String gender, String userId) {
+    @SerializedName("avatar")
+    public String avatar;
+
+    public LoginData(String firstName, String lastName, String deviceToken, String birthDate, String gender, String userId,
+                     String clientId, String phone, String email,String avatar) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.deviceToken = deviceToken;
         this.birthDate = birthDate;
         this.gender = gender;
         this.userId = userId;
+        this.clientId =clientId;
+        this.deviceToken = deviceToken;
+        this.phone = phone;
+        this.email = email;
     }
 
     public LoginData(){}
@@ -83,5 +100,37 @@ public class LoginData {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }
