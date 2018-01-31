@@ -20,6 +20,7 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.gson.Gson;
+import com.google.maps.model.LatLng;
 
 public class SettingActivity extends AppCompatActivity {
 
@@ -35,8 +36,8 @@ public class SettingActivity extends AppCompatActivity {
     private LoginData loginData;
     private  int PLACE_PICKER_REQUEST = 1;
     private  int PLACE_PICKER_REQUEST_FOR_WORK = 2;
-    private HomeLocationModel homeLocationModel;
-    private WorkLocationModel workLocationModel;
+    private HomeLocationModel homeLocationModel =new HomeLocationModel();
+    private WorkLocationModel workLocationModel = new WorkLocationModel();
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
 
@@ -70,6 +71,13 @@ public class SettingActivity extends AppCompatActivity {
         profileName.setText(loginData.firstName);
         phoneNumber.setText("+88"+ loginData.phone);
         email.setText(loginData.email);
+        if(userInformation.getUserHomeLocation() !=null){
+            homeLocation.setText(userInformation.getUserHomeLocation().homeLocationName);
+        }
+        if(userInformation.getUserWorkLocation() !=null){
+            workLocation.setText(userInformation.getUserWorkLocation().workLocationName);
+        }
+
     }
 
     private void setFovaritesLocation(){
@@ -123,10 +131,10 @@ public class SettingActivity extends AppCompatActivity {
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(data, this);
-                String toastMsg =  place.getName().toString();
+                String toastMsg =  place.getAddress().toString();
                 homeLocation.setText(""+toastMsg);
-                homeLocationModel.setHome(place.getLatLng());
-                homeLocationModel.setHomeLocationName(place.getAddress().toString());
+                homeLocationModel.home=place.getLatLng();
+                homeLocationModel.homeLocationName= place.getAddress().toString();
                 Gson gson = new Gson();
                 String json = gson.toJson(homeLocationModel);
                 editor.putString("UserSetHomeLocation",json);
@@ -138,11 +146,10 @@ public class SettingActivity extends AppCompatActivity {
         else if (requestCode == PLACE_PICKER_REQUEST_FOR_WORK) {
             if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(data, this);
-                String toastMsg =  place.getName().toString();
+                String toastMsg =  place.getAddress().toString();
                 workLocation.setText(toastMsg);
-
-                workLocationModel.setWork(place.getLatLng());
-                workLocationModel.setWorkLocationName(place.getAddress().toString());
+                workLocationModel.work=place.getLatLng();
+                workLocationModel.workLocationName=place.getAddress().toString();
                 Gson gson = new Gson();
                 String json = gson.toJson(workLocationModel);
                 editor.putString("UserSetWorkLocation",json);

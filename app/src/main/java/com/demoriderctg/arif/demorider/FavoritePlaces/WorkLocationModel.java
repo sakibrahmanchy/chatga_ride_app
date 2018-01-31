@@ -7,27 +7,6 @@ import com.google.android.gms.maps.model.LatLng;
  */
 
 public class WorkLocationModel {
-    public LatLng getWork() {
-        return work;
-    }
-
-    public void setWork(LatLng work) {
-        this.work = work;
-    }
-
-    public String getWorkLocationName() {
-        return workLocationName;
-    }
-
-    public void setWorkLocationName(String workLocationName) {
-        this.workLocationName = workLocationName;
-    }
-
-    private LatLng work = null;
-    private String workLocationName=null;
-
-    public WorkLocationModel(LatLng work, String workLocationName) {
-        this.work = work;
-        this.workLocationName = workLocationName;
-    }
+    public LatLng work = null;
+    public String workLocationName=null;
 }
