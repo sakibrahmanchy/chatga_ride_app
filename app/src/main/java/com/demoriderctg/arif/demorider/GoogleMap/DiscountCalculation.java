@@ -52,7 +52,7 @@ public class DiscountCalculation {
                 ApiClient.getClient().create(ApiInterface.class);
 
         LoginData loginData = userInformation.getuserInformation();
-        Call<UserDiscountResponse> call = apiService.getUserDiscounts(authHeader,loginData.getUserId());
+        Call<UserDiscountResponse> call = apiService.getUserDiscounts(authHeader,loginData.getClientId());
 
         call.enqueue(new Callback<UserDiscountResponse>() {
             @Override

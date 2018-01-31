@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.demoriderctg.arif.demorider.FavoritePlaces.HomeLocationModel;
+import com.demoriderctg.arif.demorider.FavoritePlaces.WorkLocationModel;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 import com.google.gson.Gson;
 
@@ -16,6 +18,8 @@ public class UserInformation {
     private Gson gson;
     private SharedPreferences sharedpreferences;
     private LoginData loginData;
+    private  HomeLocationModel homeLocationModel;
+    private WorkLocationModel workLocationModel;
     public static final String MyPREFERENCES = "MyPrefs";
 
     public UserInformation(Context context) {
@@ -36,4 +40,15 @@ public class UserInformation {
         return phoneNumber;
     }
 
+    public HomeLocationModel getUserHomeLocation(){
+        String jsonString = sharedpreferences.getString("UserSetHomeLocation", null);
+        homeLocationModel = gson.fromJson(jsonString, HomeLocationModel.class);
+        return homeLocationModel;
+    }
+
+    public WorkLocationModel getUserWorkLocation(){
+        String jsonString = sharedpreferences.getString("UserSetWorkLocation", null);
+        workLocationModel = gson.fromJson(jsonString, WorkLocationModel.class);
+        return workLocationModel;
+    }
 }

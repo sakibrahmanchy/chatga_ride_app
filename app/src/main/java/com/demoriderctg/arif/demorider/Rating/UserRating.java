@@ -30,7 +30,7 @@ public class UserRating {
         pref = this.mContext.getSharedPreferences("MyPref", 0);
     }
 
-    public void RatingClient(){
+    public void RatingDriver(){
         apiService = ApiClient.getClient().create(ApiInterface.class);
         String authHeader = "Bearer "+pref.getString("access_token",null);
         Call<RateDriver> call = apiService.rateRider(authHeader, AppConstant.HISTORY_ID,AppConstant.RATING);
