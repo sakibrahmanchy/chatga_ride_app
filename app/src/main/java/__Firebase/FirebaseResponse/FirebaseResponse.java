@@ -21,9 +21,11 @@ import __Firebase.FirebaseWrapper;
 
 public class FirebaseResponse {
 
-    private static boolean IS_INITIALIZED = false;
+    private static boolean IS_INITIALIZED_INITIAL_AC = false;
+    private static boolean IS_INITIALIZED_RIDE_REJECTED = false;
     private static long ClientID = 0;
     private static long HistoryID = 0;
+    private static long RiderID = 0;
     private static long Time = 0;
 
     public FirebaseResponse() {
@@ -49,19 +51,24 @@ public class FirebaseResponse {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     if (dataSnapshot.exists()) {
-                                        if (IS_INITIALIZED == true) {
+                                        if (IS_INITIALIZED_INITIAL_AC == true) {
+
                                             Pair Data = FirebaseUtilMethod.GetHistoryAndTime(dataSnapshot.getValue().toString());
+                                            if(Data == null)    return;
+
                                             HistoryID = (long) Data.first;
                                             Time = (long) Data.second;
+
                                             if (HistoryID > 0) {
                                                 new Main().GetCurrentRiderHistoryModel(
                                                         FirebaseWrapper.getInstance().getClientModelInstance(),
                                                         HistoryID,
-                                                        Time
+                                                        Time,
+                                                        FirebaseConstant.GET_HISTORY_FOR_INITIAL_ACCEPTANCE
                                                 );
                                             }
                                         }
-                                        IS_INITIALIZED = true;
+                                        IS_INITIALIZED_INITIAL_AC = true;
                                         Log.d(FirebaseConstant.HISTORY_ID_ADDED_TO_CLIENT, ":: " + dataSnapshot.getValue().toString());
                                     }
                                 }
@@ -201,6 +208,59 @@ public class FirebaseResponse {
 
                             }
                         });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public static void RideRejectedByRiderResponse(ClientModel Client) {
+
+        ClientID = Client.ClientID;
+
+        FirebaseWrapper firebaseWrapper = FirebaseWrapper.getInstance();
+        Query pendingTask = firebaseWrapper.FirebaseRootReference.child(FirebaseConstant.CLIENT).orderByChild(FirebaseConstant.CLIENT_ID).equalTo(ClientID);
+
+        pendingTask.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    if (dataSnapshot.getChildren().iterator().hasNext()) {
+
+                        DataSnapshot dsp = dataSnapshot.getChildren().iterator().next();
+                        if(dsp.exists()) {
+                            dsp.getRef().child(FirebaseConstant.RIDE_REJECTED_BY_RIDER).addValueEventListener(new ValueEventListener() {
+
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.exists()) {
+                                        if (IS_INITIALIZED_RIDE_REJECTED == true) {
+                                            Pair Data = FirebaseUtilMethod.GetHistoryAndTime(dataSnapshot.getValue().toString());
+                                            if(Data == null)    return;
+
+                                            RiderID = (long) Data.first;
+                                            Time = (long) Data.second;
+
+                                            if (RiderID > 0) {
+                                                new RideRejectedByRider(RiderID, Time);
+                                            }
+                                        }
+                                        IS_INITIALIZED_RIDE_REJECTED = true;
+                                        Log.d(FirebaseConstant.RIDE_IS_REJECTED_BY_RIDER, ":: " + dataSnapshot.getValue().toString());
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
                     }
                 }
             }

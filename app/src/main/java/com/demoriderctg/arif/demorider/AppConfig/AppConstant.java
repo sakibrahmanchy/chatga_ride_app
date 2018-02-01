@@ -44,6 +44,7 @@ public class AppConstant {
     public static UserDiscounts userDiscount = null;
     public static int HISTORY_ID=0;
     public static double RATING =0;
+    public static long TOTAL_COST = 0;
 
 
     /* Log Tag, Message */

@@ -62,6 +62,7 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
         String destinationLongitude = FirebaseConstant.Empty;
         String totalCost = FirebaseConstant.Empty;
         String discountID = FirebaseConstant.Empty;
+        String time = FirebaseConstant.Empty;
 
         try {
             clientId = params[0];
@@ -80,6 +81,7 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
             destinationLongitude = params[13];
             totalCost = params[14];
             discountID = params[15];
+            time = params[16];
         } catch (ExceptionInInitializerError e) {
             e.printStackTrace();
         }
@@ -109,7 +111,8 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
                     URLEncoder.encode("destinationLatitude", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(destinationLatitude, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
                     URLEncoder.encode("destinationLongitude", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(destinationLongitude, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
                     URLEncoder.encode("totalCost", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(totalCost, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
-                    URLEncoder.encode("discountID", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(discountID, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND;
+                    URLEncoder.encode("discountID", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(discountID, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
+                    URLEncoder.encode("time", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(time, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND;
 
             bufferedWriter.write(data);
             bufferedWriter.flush();

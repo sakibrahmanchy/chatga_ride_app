@@ -21,6 +21,7 @@ public class InitialAcceptanceOfRideResponse implements ICallBackCurrentServerTi
     private CurrentRidingHistoryModel currentRidingHistoryModel;
     private RiderModel riderModel;
     private long Time;
+    private Main main;
 
     public InitialAcceptanceOfRideResponse(long Time) {
         this.Time = Time;

@@ -75,8 +75,20 @@ public class RiderModel {
         this.DistanceFromClient = FirebaseConstant.INFINITE_INTEGER;
     }
 
-    long DistanceBetweenTwoPoint(Pair<Double, Double> source, Pair<Double, Double> destination){
-        Random rm = new Random();
-        return rm.nextInt(100);
+    public void ClearData(){
+
+        this.RiderID = FirebaseConstant.UNDEFINE;
+        this.PhoneNumber = FirebaseConstant.UNDEFINE;
+        this.DeviceToken = FirebaseConstant.Empty;
+        this.FullName = FirebaseConstant.Empty;
+        this.IsRiderOnline = FirebaseConstant.UNDEFINE;
+        this.IsRiderBusy = FirebaseConstant.UNDEFINE;
+        this.IsRiderOnRide = FirebaseConstant.UNDEFINE;
+        this.CurrentRidingHistoryID = FirebaseConstant.UNDEFINE;
+        this.OnlineBusyOnRide = FirebaseConstant.UNDEFINE;
+        this.CurrentRiderLocation.Longitude = FirebaseConstant.UNDEFINE;
+        this.CurrentRiderLocation.Latitude = FirebaseConstant.UNDEFINE;
+
+        this.DistanceFromClient = FirebaseConstant.INFINITE_INTEGER;
     }
 }

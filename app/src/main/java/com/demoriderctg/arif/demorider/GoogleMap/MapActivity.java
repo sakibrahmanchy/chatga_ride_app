@@ -213,7 +213,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         if(MainActivity.IS_MAP_INITIALIZE == false) {
             MainActivity.IS_MAP_INITIALIZE = true;
-            main.CreateNewRiderFirebase(loginData, phonemumber);
+            main.CreateNewClientFirebase(loginData, phonemumber);
         }
     }
 
@@ -295,7 +295,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     connectionCheck.showGPSDisabledAlertToUser();
                 } else {
 
-                    new DiscountCalculation(MapActivity.this).getClientPromotions();
+                    //new DiscountCalculation(MapActivity.this).getClientPromotions();
                     AppConstant.SOURCE = source;
                     AppConstant.DESTINATION = dest;
                     AppConstant.SOURCE_NAME = HomeLocationName;

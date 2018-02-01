@@ -25,7 +25,7 @@ public class RiderStarted implements ICallBackCurrentServerTime {
 
     private void Response() {
         /*Do your Stuff*/
-        AppConstant.START_RIDE=true;
+        AppConstant.START_RIDE = true;
     }
 
     @Override

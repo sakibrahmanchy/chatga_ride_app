@@ -43,6 +43,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.content.Context.ACCESSIBILITY_SERVICE;
 import static com.demoriderctg.arif.demorider.MainActivity.TAG;
 
 /**
@@ -91,7 +92,7 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
 
         //pathLocation.setText(AppConstant.SOURCE_NAME + " To "+AppConstant.DESTINATION_NAME);
 
-        totalCost = (long)costEstimation.getTotalCost(AppConstant.DISTANCE,AppConstant.DURATION);
+        totalCost = (long)costEstimation.getTotalCost(AppConstant.DISTANCE, AppConstant.DURATION);
         total_cost.setText(totalCost+" TK");
         main = new Main();
         init();
@@ -114,7 +115,8 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
                     if( AppConstant.userDiscount !=null && AppConstant.userDiscount.getDiscountId()>0){
                         DiscountId =AppConstant.userDiscount.getDiscountId();
                     }
-                    main.RequestForRide(Source, Destination, AppConstant.SOURCE_NAME, AppConstant.DESTINATION_NAME, totalCost,DiscountId);
+                    AppConstant.TOTAL_COST = totalCost;
+                    main.RequestForRide(Source, Destination, AppConstant.SOURCE_NAME, AppConstant.DESTINATION_NAME, totalCost, DiscountId);
                     Intent intent = new Intent(getContext(), SearchingDriver.class);
                     startActivity(intent);
                 }
