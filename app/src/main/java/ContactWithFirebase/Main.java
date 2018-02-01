@@ -257,6 +257,7 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
     public void OnCreateNewRiderFirebase(boolean value) {
         if (value == true) {
             FirebaseResponse.InitialAcceptanceOfRideResponse(FirebaseWrapper.getInstance().getClientModelInstance());
+            FirebaseResponse.RideRejectedByRiderResponse(FirebaseWrapper.getInstance().getClientModelInstance());
         }
         Log.d(FirebaseConstant.NEW_USER_CREATED, Boolean.toString(value));
     }
@@ -282,6 +283,7 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
                     FirebaseWrapper.getDeviceToken()
             );
             FirebaseResponse.InitialAcceptanceOfRideResponse(FirebaseWrapper.getInstance().getClientModelInstance());
+            FirebaseResponse.RideRejectedByRiderResponse(FirebaseWrapper.getInstance().getClientModelInstance());
             return;
         }
         firebaseRequestInstance.CreateClientFirstTime(clientModel, Main.this);
