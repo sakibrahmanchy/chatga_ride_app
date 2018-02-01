@@ -47,6 +47,7 @@ public class GPS_Service extends Service {
     @Override
     public void onCreate() {
 
+        //noinspection deprecation
         listener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {

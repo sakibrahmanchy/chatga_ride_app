@@ -65,11 +65,11 @@ public class SearchingDriver extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }
-                if(progressStatus <18){
+                if(progressStatus <180){
                     handler.postDelayed(this, 1000);
                 }
-                else if(progressStatus>=18){
-                    AppConstant.INITIAL_RIDE_ACCEPT=0;
+                else if(progressStatus>=180){
+                    AppConstant.INITIAL_RIDE_ACCEPT=1;
 
                     new AlertDialog.Builder(SearchingDriver.this)
                             .setTitle("Rider Not Found")

@@ -209,6 +209,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         loginData = userInformation.getuserInformation();
         phonemumber = userInformation.getRiderPhoneNumber();
 
+        if(userInformation.getUserHomeLocation() !=null){
+            AppConstant.searchSorceLocationModel = new HomeLocationModel();
+            AppConstant.searchSorceLocationModel = userInformation.getUserHomeLocation();
+        }
+
+        if(userInformation.getUserWorkLocation()!=null){
+            AppConstant.searchDestinationLocationModel = new WorkLocationModel();
+            AppConstant.searchDestinationLocationModel = userInformation.getUserWorkLocation();
+        }
+
         if(MainActivity.check == true) {
             main.CreateNewClientFirebase(loginData, phonemumber);
         }
@@ -557,6 +567,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         mMap.clear();
+        requestbtn.setVisibility(View.INVISIBLE);
+        sendButton.setVisibility(View.VISIBLE);
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(data, this);
