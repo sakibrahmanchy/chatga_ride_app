@@ -9,14 +9,18 @@ import android.util.Pair;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
 import com.demoriderctg.arif.demorider.MainActivity;
 import com.demoriderctg.arif.demorider.R;
+import com.demoriderctg.arif.demorider.Rating.UserRating;
 
 import ContactWithFirebase.Main;
+import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
+import __Firebase.FirebaseWrapper;
 
 /**
  * Created by Arif on 1/17/2018.
@@ -28,6 +32,8 @@ public class RideFinishDailog extends Dialog implements View.OnClickListener {
     private FragmentActivity myContext;
     private Main main;
     private TextView total_cost;
+    private RatingBar ratingBar;
+    CurrentRidingHistoryModel currentRidingHistoryModel;
 
 
     public RideFinishDailog(Activity activity) {
@@ -45,17 +51,28 @@ public class RideFinishDailog extends Dialog implements View.OnClickListener {
         setContentView(R.layout.ride_finish_dailog);
         btnOk = (Button) findViewById(R.id.btnOk);
         total_cost = (TextView) findViewById(R.id.total_cost);
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         btnOk.setOnClickListener(this);
+        currentRidingHistoryModel = FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance();
+        AppConstant.HISTORY_ID = (int)currentRidingHistoryModel.HistoryID;
         main = new Main();
         total_cost.setText(AppConstant.FINAL_RIDE_COST+" TK");
+
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                AppConstant.RATING = ratingBar.getRating();
+
+            }
+        });
+
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnOk:
-                Intent intent = new Intent(getContext(),MainActivity.class);
-                getContext().startActivity(intent);
+                new UserRating(getContext()).RatingDriver();
                 myContext.finish();
                 break;
             default:

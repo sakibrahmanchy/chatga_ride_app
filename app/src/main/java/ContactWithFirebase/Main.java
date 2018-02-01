@@ -58,7 +58,7 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
                     null,
                     null,
                     "1010",
-                    "ar@gmail.com",
+                    "1",
                     "null",
                     "null",
                     "null"
@@ -72,7 +72,7 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
         clientModel = firebaseWrapper.getClientModelInstance();
         firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
 
-        clientModel.ClientID = Long.parseLong(loginData.userId);
+        clientModel.ClientID = Long.parseLong(loginData.getClientId());
         clientModel.FullName = loginData.firstName;
         clientModel.PhoneNumber = Long.parseLong(phoneNumber);
 

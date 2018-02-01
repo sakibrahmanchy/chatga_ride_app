@@ -18,13 +18,16 @@ public class ClientHistory {
     private String destinationAddress;
     @SerializedName("total_fare")
     private String totalFare;
+    @SerializedName("rider_id")
+    private int riderId;
 
-    public ClientHistory(String dateTime, String distanceTime, String pickPointAddress, String destinationAddress, String totalFare) {
+    public ClientHistory(String dateTime, String distanceTime, String pickPointAddress, String destinationAddress, String totalFare, int riderId) {
         this.dateTime = dateTime;
         this.distanceTime = distanceTime;
         this.pickPointAddress = pickPointAddress;
         this.destinationAddress = destinationAddress;
         this.totalFare = totalFare;
+        this.riderId = riderId;
     }
 
     public String getDateTime() {
@@ -65,5 +68,13 @@ public class ClientHistory {
 
     public void setTotalFare(String totalFare) {
         this.totalFare = totalFare;
+    }
+
+    public int getRiderId() {
+        return riderId;
+    }
+
+    public void setRiderId(int riderId) {
+        this.riderId = riderId;
     }
 }

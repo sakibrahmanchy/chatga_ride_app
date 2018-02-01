@@ -34,6 +34,7 @@ public class InitialAcceptanceOfRideResponse implements ICallBackCurrentServerTi
 
     private void Response() {
         AppConstant.INITIAL_RIDE_ACCEPT = 1;
+        AppConstant.HISTORY_ID = (int)currentRidingHistoryModel.HistoryID;
         /*Do the stuff*/
     }
 
@@ -47,6 +48,7 @@ public class InitialAcceptanceOfRideResponse implements ICallBackCurrentServerTi
     private void CheckValidity(){
 
         currentRidingHistoryModel = FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance();
+
         if(FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider.RiderID == currentRidingHistoryModel.RiderID) {
             riderModel = FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider;
             notificationModel = FirebaseWrapper.getInstance().getNotificationModelInstance();

@@ -1,6 +1,7 @@
 package com.demoriderctg.arif.demorider.Setting;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -9,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.demoriderctg.arif.demorider.FavoritePlaces.FavoritePlacesActivity;
+import com.demoriderctg.arif.demorider.FavoritePlaces.HomeLocationModel;
+import com.demoriderctg.arif.demorider.FavoritePlaces.WorkLocationModel;
 import com.demoriderctg.arif.demorider.R;
 import com.demoriderctg.arif.demorider.UserInformation;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
@@ -16,6 +19,8 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.gson.Gson;
+import com.google.maps.model.LatLng;
 
 public class SettingActivity extends AppCompatActivity {
 
@@ -31,6 +36,11 @@ public class SettingActivity extends AppCompatActivity {
     private LoginData loginData;
     private  int PLACE_PICKER_REQUEST = 1;
     private  int PLACE_PICKER_REQUEST_FOR_WORK = 2;
+    private HomeLocationModel homeLocationModel =new HomeLocationModel();
+    private WorkLocationModel workLocationModel = new WorkLocationModel();
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +49,9 @@ public class SettingActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         userInformation = new UserInformation(this);
         loginData = userInformation.getuserInformation();
+        pref = this.getSharedPreferences("MyPref", 0);
+        editor = pref.edit();
+
 
         profileImage = (ImageView) findViewById(R.id.profile_pic);
         profileName = (TextView) findViewById(R.id.profile_name);
@@ -58,6 +71,13 @@ public class SettingActivity extends AppCompatActivity {
         profileName.setText(loginData.firstName);
         phoneNumber.setText("+88"+ loginData.phone);
         email.setText(loginData.email);
+        if(userInformation.getUserHomeLocation() !=null){
+            homeLocation.setText(userInformation.getUserHomeLocation().homeLocationName);
+        }
+        if(userInformation.getUserWorkLocation() !=null){
+            workLocation.setText(userInformation.getUserWorkLocation().workLocationName);
+        }
+
     }
 
     private void setFovaritesLocation(){
@@ -111,8 +131,14 @@ public class SettingActivity extends AppCompatActivity {
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(data, this);
-                String toastMsg =  place.getName().toString();
+                String toastMsg =  place.getAddress().toString();
                 homeLocation.setText(""+toastMsg);
+                homeLocationModel.home=place.getLatLng();
+                homeLocationModel.homeLocationName= place.getAddress().toString();
+                Gson gson = new Gson();
+                String json = gson.toJson(homeLocationModel);
+                editor.putString("UserSetHomeLocation",json);
+                editor.commit();
 
             }
         }
@@ -120,8 +146,14 @@ public class SettingActivity extends AppCompatActivity {
         else if (requestCode == PLACE_PICKER_REQUEST_FOR_WORK) {
             if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(data, this);
-                String toastMsg =  place.getName().toString();
+                String toastMsg =  place.getAddress().toString();
                 workLocation.setText(toastMsg);
+                workLocationModel.work=place.getLatLng();
+                workLocationModel.workLocationName=place.getAddress().toString();
+                Gson gson = new Gson();
+                String json = gson.toJson(workLocationModel);
+                editor.putString("UserSetWorkLocation",json);
+                editor.commit();
 
             }
         }

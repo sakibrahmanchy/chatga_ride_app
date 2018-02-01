@@ -55,7 +55,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
     private ConnectionCheck connectionCheck;
     private Marker sourceMarker;
     private Marker destinationMarker;
-    private Marker currentMarker;
+    private Marker currentMarker ;
     private Handler handler = new Handler();
     private GetCurrentLocation  getCurrentLocation;
     private static int progressStatus=1;
@@ -189,6 +189,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
             public void run() {
                 while ( AppConstant.INITIAL_RIDE_ACCEPT>0) {
 
+
                     handler.post(new Runnable() {
                         public void run() {
                             if(AppConstant.START_RIDE){
@@ -249,6 +250,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
     private void GetRiderCurrentLocation(){
 
         /*Request*/
+
         main.GetRiderLocation(FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider, this);
     }
 
@@ -258,11 +260,15 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
             /*Do stuff*/
 
             try {
-                currentMarker = mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(Latitude,Longitude))
-                        .title("IN RIDE")
-                        .alpha(AppConstant.DEFAULT_ZOOM)
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_motorcycle)));
+                if(currentMarker == null){
+
+                    currentMarker = mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(AppConstant.SOURCE.latitude,AppConstant.SOURCE.longitude))
+                            .title("RIDER")
+                            .alpha(AppConstant.DEFAULT_ZOOM)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_motorcycle)));
+                }
+                currentMarker.setPosition(new LatLng(Latitude,Longitude));
             }catch(Exception e){
                 e.printStackTrace();
             }
