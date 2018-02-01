@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "Mainactivity";
     private static final int ERROR_DIALOG_REQUEST = 9001;
-    public static boolean check = false;
+    public static boolean check = true;
     private SharedPreferences pref;
     private ConnectionCheck connectionCheck;
 

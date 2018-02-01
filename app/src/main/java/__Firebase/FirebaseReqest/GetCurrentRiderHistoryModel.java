@@ -20,12 +20,14 @@ public class GetCurrentRiderHistoryModel {
     private long ClientID;
     private ICallbackMain callBackListener = null;
     private long Time;
+    private int ActionType;
 
-    public GetCurrentRiderHistoryModel(long HistoryID, long ClientID, long Time, ICallbackMain callBackListener){
+    public GetCurrentRiderHistoryModel(long HistoryID, long ClientID, long Time, int ActionType, ICallbackMain callBackListener){
         this.HistoryID = HistoryID;
         this.ClientID = ClientID;
         this.callBackListener = callBackListener;
         this.Time = Time;
+        this.ActionType = ActionType;
 
         Request();
     }
@@ -40,7 +42,7 @@ public class GetCurrentRiderHistoryModel {
                 if(dataSnapshot.exists() && dataSnapshot.hasChildren()) {
                     if (dataSnapshot.getChildren().iterator().hasNext()) {
                         firebaseWrapper.getCurrentRidingHistoryModelInstance().LoadData(dataSnapshot.getChildren().iterator().next());
-                        callBackListener.OnGetCurrentRiderHistoryModel(true, Time);
+                        callBackListener.OnGetCurrentRiderHistoryModel(true, Time, ActionType);
                     }
                 }
             }

@@ -15,11 +15,12 @@ public class ClientModel {
     public int IsSearchingOrOnRide;
     public long CostOfCurrentRide;
     public long CurrentRidingHistoryID;
+    public long RideRejectedByRider;
 
     public ClientModel(){
 
     }
-    public ClientModel(long _ClientID, long _PhoneNumber, String _DeviceToken, String _FullName, int _IsSearchingOrOnRide, long _CostOfCurrentRide, int _CurrentRidingHistoryID){
+    public ClientModel(long _ClientID, long _PhoneNumber, String _DeviceToken, String _FullName, int _IsSearchingOrOnRide, long _CostOfCurrentRide, long _CurrentRidingHistoryID, long _RideRejectedByRider){
         this.ClientID = _ClientID;
         this.PhoneNumber = _PhoneNumber;
         this.DeviceToken = _DeviceToken;
@@ -27,6 +28,7 @@ public class ClientModel {
         this.IsSearchingOrOnRide = _IsSearchingOrOnRide;
         this.CostOfCurrentRide = _CostOfCurrentRide;
         this.CurrentRidingHistoryID = _CurrentRidingHistoryID;
+        this.RideRejectedByRider = _RideRejectedByRider;
     }
 
     public void LoadData(DataSnapshot snapshot){
@@ -40,5 +42,6 @@ public class ClientModel {
         this.IsSearchingOrOnRide = clientModel.IsSearchingOrOnRide;
         this.CostOfCurrentRide = clientModel.CostOfCurrentRide;
         this.CurrentRidingHistoryID = clientModel.CurrentRidingHistoryID;
+        this.RideRejectedByRider = clientModel.RideRejectedByRider;
     }
 }

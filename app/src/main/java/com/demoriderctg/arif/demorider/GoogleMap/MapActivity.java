@@ -141,6 +141,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private PlaceAutocompleteAdapter mPlaceAutocompleteAdapter;
     private GoogleApiClient mGoogleApiClient;
+    private LatLng source, dest;
     private String phonemumber;
     private ProgressBar spinner;
     private LoginData loginData;
@@ -210,7 +211,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         if(MainActivity.IS_MAP_INITIALIZE == false) {
             MainActivity.IS_MAP_INITIALIZE = true;
-            main.CreateNewRiderFirebase(loginData, phonemumber);
+            main.CreateNewClientFirebase(loginData, phonemumber);
         }
     }
 

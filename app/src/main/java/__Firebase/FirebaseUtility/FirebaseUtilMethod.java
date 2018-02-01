@@ -32,7 +32,10 @@ public class FirebaseUtilMethod {
 
     public static Pair<Long, Long> GetHistoryAndTime(String value){
         String[] Data = value.trim().split("\\s+");
-        return Pair.create(Long.parseLong(Data[0]), Long.parseLong(Data[1]));
+        if(Data.length == 2) {
+            return Pair.create(Long.parseLong(Data[0]), Long.parseLong(Data[1]));
+        }
+        else   return null;
     }
 
     public static boolean getNetworkTime(final int type, final Context context, final ICallBackCurrentServerTime iCallBackCurrentServerTime) {

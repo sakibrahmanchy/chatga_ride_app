@@ -9,6 +9,7 @@ public class FirebaseConstant {
     public static String CLIENT = "Client";
     public static String CLIENT_ID = "ClientID";
     public static String CURRENT_RIDING_HISTORY_ID = "CurrentRidingHistoryID";
+    public static String RIDE_REJECTED_BY_RIDER = "RideRejectedByRider";
     public static String RIDER = "Rider";
     public static String RIDER_LOCATION = "RiderLocation";
     public static String CURRENT_RIDER_LOCATION = "CurrentRiderLocation";
@@ -91,6 +92,7 @@ public class FirebaseConstant {
     public static String DEVICE_TOKEN_UPDATE = "DEVICE_TOKEN_UPDATE";
     public static String RECEIVED_NOTIFICATION = "RECEIVED_NOTIFICATION";
     public static String HISTORY_ID_ADDED_TO_CLIENT = "HISTORY_ID_ADDED_TO_CLIENT";
+    public static String RIDE_IS_REJECTED_BY_RIDER = "RIDE_REJECTED_BY_RIDER";
     public static String RIDER_LOADED_ERROR = "RIDER_LOADED_ERROR";
     public static String RIDER_LOADED = "RIDER_LOADED";
 
@@ -106,6 +108,12 @@ public class FirebaseConstant {
     public static final int RIDE_ACCEPTED = 2;
     public static final int RIDE_CANCELED_BY_RIDER = 3;
     public static final int RIDE_FINISHED = 4;
+    public static final int RIDE_REJECT_BY_RIDER = 5;
+    public static final int SEND_NOTIFICATION_TO_RIDER = 6;
+
+    /*Request Action Type*/
+    public static final int GET_HISTORY_FOR_INITIAL_ACCEPTANCE = 1;
+    public static final int GET_HISTORY_FOR_GENERAL = 2;
 
     public FirebaseConstant(){
     }

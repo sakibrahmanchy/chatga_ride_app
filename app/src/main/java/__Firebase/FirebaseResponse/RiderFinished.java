@@ -27,13 +27,10 @@ public class RiderFinished implements ICallBackFinishedRide, ICallBackCurrentSer
     }
 
     private void Response() {
-        FirebaseWrapper.getInstance().getRiderViewModelInstance().ClearData(true);
-        FirebaseWrapper.getInstance().getNotificationModelInstance().ClearData();
-        FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance().ClearData();
-        AppConstant.FINISH_RIDE=true;
-        AppConstant.TREAD_FOR_FINISH_RIDE=true;
-        AppConstant.INITIAL_RIDE_ACCEPT=1;
-        AppConstant.START_RIDE=false;
+        AppConstant.FINISH_RIDE = true;
+        AppConstant.TREAD_FOR_FINISH_RIDE = true;
+        AppConstant.INITIAL_RIDE_ACCEPT = 1;
+        AppConstant.START_RIDE = false;
         RequestForFinalCost();
     }
 
@@ -44,7 +41,14 @@ public class RiderFinished implements ICallBackFinishedRide, ICallBackCurrentSer
     @Override
     public void OnFinishedRide(long FinalCost) {
         /* Get the final Cost */
-        AppConstant.FINAL_RIDE_COST=FinalCost;
+        AppConstant.FINAL_RIDE_COST = FinalCost;
+        ClearData();
+    }
+
+    private void ClearData(){
+        FirebaseWrapper.getInstance().getRiderViewModelInstance().ClearData(true);
+        FirebaseWrapper.getInstance().getNotificationModelInstance().ClearData();
+        FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance().ClearData();
     }
 
     @Override
