@@ -36,6 +36,8 @@ import com.demoriderctg.arif.demorider.Adapters.History.ClientHistoryActivity;
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
 import com.demoriderctg.arif.demorider.Dailog.BottomSheetDailogRide;
 import com.demoriderctg.arif.demorider.FavoritePlaces.FavoritePlacesActivity;
+import com.demoriderctg.arif.demorider.FavoritePlaces.HomeLocationModel;
+import com.demoriderctg.arif.demorider.FavoritePlaces.WorkLocationModel;
 import com.demoriderctg.arif.demorider.InternetConnection.ConnectionCheck;
 import com.demoriderctg.arif.demorider.InternetConnection.InternetCheckActivity;
 import com.demoriderctg.arif.demorider.MainActivity;
@@ -139,7 +141,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private PlaceAutocompleteAdapter mPlaceAutocompleteAdapter;
     private GoogleApiClient mGoogleApiClient;
-    private LatLng source, dest;
     private String phonemumber;
     private ProgressBar spinner;
     private LoginData loginData;
@@ -158,11 +159,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private String activityChangeForSearch = null;
 
     private LinearLayout linearLayout;
-    private String HomeLocationName;
-    private String DestinationLocationName;
-    private ProgressDialog dailog;
 
-    private boolean IS_INITIALIZE = false;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -193,7 +191,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mGps = (ImageView) findViewById(R.id.ic_gps);
         sendButton = (Button) findViewById(R.id.btnSend);
         requestbtn = (Button) findViewById(R.id.pickupbtn);
-        sendButton.setVisibility(View.INVISIBLE);
         requestbtn.setVisibility(View.INVISIBLE);
         linearLayout.setVisibility(View.VISIBLE);
         spinner = (ProgressBar) findViewById(R.id.progressBar);
@@ -294,14 +291,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 } else if (!connectionCheck.isGpsEnable()) {
                     connectionCheck.showGPSDisabledAlertToUser();
                 } else {
-
                     new DiscountCalculation(MapActivity.this).getClientPromotions();
-                    AppConstant.SOURCE = source;
-                    AppConstant.DESTINATION = dest;
-                    AppConstant.SOURCE_NAME = HomeLocationName;
-                    AppConstant.DESTINATION_NAME = DestinationLocationName;
-                    String url = getDirectionsUrl(source, dest);
-                    DownloadTask downloadTask = new DownloadTask(MapActivity.this, mMap, source, dest);
+                    AppConstant.SOURCE = AppConstant.searchSorceLocationModel.home;
+                    AppConstant.DESTINATION = AppConstant.searchDestinationLocationModel.work;
+                    AppConstant.SOURCE_NAME = AppConstant.searchSorceLocationModel.homeLocationName;
+                    AppConstant.DESTINATION_NAME = AppConstant.searchDestinationLocationModel.workLocationName;
+                    String url = getDirectionsUrl( AppConstant.SOURCE, AppConstant.DESTINATION );
+                    DownloadTask downloadTask = new DownloadTask(MapActivity.this, mMap, AppConstant.SOURCE,  AppConstant.DESTINATION);
                     downloadTask.execute(url);
                     sendButton.setVisibility(View.INVISIBLE);
                     requestbtn.setVisibility(View.VISIBLE);
@@ -346,15 +342,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         e.printStackTrace();
                     }
                     if (markerOption.equals("Home")) {
-                        source = marker.getPosition();
-                        HomeLocationName = address.getAddressLine(0);
-                        sourceText.setText(HomeLocationName);
+                        AppConstant.searchSorceLocationModel.home = marker.getPosition();
+                        AppConstant.searchSorceLocationModel.homeLocationName = address.getAddressLine(0);
+                        sourceText.setText(AppConstant.searchSorceLocationModel.homeLocationName);
                     } else {
-                        dest = marker.getPosition();
-                        DestinationLocationName = address.getAddressLine(0);
-                        destinationText.setText(DestinationLocationName);
+                        AppConstant.searchDestinationLocationModel.work = marker.getPosition();
+                        AppConstant.searchDestinationLocationModel.workLocationName = address.getAddressLine(0);
+                        destinationText.setText(AppConstant.searchDestinationLocationModel.workLocationName);
                     }
-                    checkLatLon();
+
                 } else {
                     Toast.makeText(MapActivity.this, "Connection Lost", Toast.LENGTH_SHORT).show();
                 }
@@ -377,8 +373,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private void getDeviceLocation() {
         Log.d(TAG, "getDeviceLocation: getting the devices current location");
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        requestbtn.setVisibility(View.INVISIBLE);
-        mMap.clear();
+     //   requestbtn.setVisibility(View.INVISIBLE);
+     //   mMap.clear();
         try {
             if (mLocationPermissionsGranted) {
 
@@ -394,27 +390,34 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             try {
                                 List<Address> myList = myLocation.getFromLocation(currentLocation.getLatitude(), currentLocation.getLongitude(), 1);
                                 Address address = (Address) myList.get(0);
-                                HomeLocationName = address.getAddressLine(0);
-                                sourceText.setText(HomeLocationName);
+                                mMap.addMarker(new MarkerOptions()
+                                        .position(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()))
+                                        .title("Destination")
+                                        .draggable(true)
+                                        .snippet("Work")
+                                        .icon(BitmapDescriptorFactory
+                                                .defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                                // mapMarkerDragging = new MapMarkerDragging(MapActivity.this,source,dest,mMap);
+                                moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
+                                        DEFAULT_ZOOM,
+                                        "My Location");
+                                //checkLatLon();
+                                if(AppConstant.searchSorceLocationModel ==null){
+                                    AppConstant.searchSorceLocationModel = new HomeLocationModel();
+                                    AppConstant.searchSorceLocationModel.homeLocationName =address.getAddressLine(0);
+                                    AppConstant.searchSorceLocationModel.home= new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+                                }
+                                if(AppConstant.searchDestinationLocationModel == null){
+                                    AppConstant.searchDestinationLocationModel = new WorkLocationModel();
+                                    AppConstant.searchDestinationLocationModel.workLocationName = AppConstant.searchSorceLocationModel.homeLocationName;
+                                    AppConstant.searchDestinationLocationModel.work = AppConstant.searchSorceLocationModel.home;
+                                }
+                                sourceText.setText(AppConstant.searchSorceLocationModel.homeLocationName);
+                                destinationText.setText(AppConstant.searchDestinationLocationModel.workLocationName);
 
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                            source = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-
-
-                            mMap.addMarker(new MarkerOptions()
-                                    .position(new LatLng(source.latitude, source.longitude))
-                                    .title("Destination")
-                                    .draggable(true)
-                                    .snippet("Work")
-                                    .icon(BitmapDescriptorFactory
-                                            .defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-                            // mapMarkerDragging = new MapMarkerDragging(MapActivity.this,source,dest,mMap);
-                            moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
-                                    DEFAULT_ZOOM,
-                                    "My Location");
-                            //checkLatLon();
 
 
                         } else {
@@ -538,6 +541,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
 
+    /*
     public void checkLatLon() {
 
         requestbtn.setVisibility(View.INVISIBLE);
@@ -548,29 +552,27 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             sendButton.setVisibility(View.INVISIBLE);
         }
     }
+    */
 
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mMap.clear();
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(data, this);
-
-                HomeLocationName = place.getAddress().toString();
-                source = place.getLatLng();
-                sourceText.setText(HomeLocationName);
-                checkLatLon();
-
+                AppConstant.searchSorceLocationModel.homeLocationName = place.getAddress().toString();
+                AppConstant.searchSorceLocationModel.home = place.getLatLng();
+                sourceText.setText(AppConstant.searchSorceLocationModel.homeLocationName);
             }
         }
 
         if (requestCode == PLACE_PICKER_REQUEST_DESTINATION) {
+            mMap.clear();
             if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(data, this);
-
-                DestinationLocationName = place.getAddress().toString();
-                dest = place.getLatLng();
-                destinationText.setText(DestinationLocationName);
-                checkLatLon();
+                AppConstant.searchDestinationLocationModel.workLocationName = place.getAddress().toString();
+                AppConstant.searchDestinationLocationModel.work = place.getLatLng();
+                destinationText.setText(AppConstant.searchDestinationLocationModel.workLocationName);
 
             }
         }
@@ -595,6 +597,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mMap.clear();
         requestbtn.setVisibility(View.INVISIBLE);
         sendButton.setVisibility(View.VISIBLE);
+
         if (back_pressed + 1000 > System.currentTimeMillis()) {
             super.onBackPressed();
         } else {

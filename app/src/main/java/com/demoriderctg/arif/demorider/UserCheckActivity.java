@@ -113,6 +113,7 @@ public class UserCheckActivity extends Activity {
                             intent.putExtra("phoneNumber",phoneNumber);
                             intent.putExtra("loginStatus","REGISTRATION_REQUIRED");
                             startActivity(intent);
+                            finish();
                         }
                         break;
                     case 500:
@@ -126,6 +127,7 @@ public class UserCheckActivity extends Activity {
                                 intent.putExtra("phoneNumber",phoneNumber);
                                 intent.putExtra("loginStatus","REGISTRATION_REQUIRED");
                                 startActivity(intent);
+                                finish();
                             }
 
                         } catch (Exception e) {

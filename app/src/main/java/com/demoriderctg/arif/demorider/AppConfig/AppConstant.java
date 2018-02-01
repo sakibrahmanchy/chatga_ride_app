@@ -1,5 +1,7 @@
 package com.demoriderctg.arif.demorider.AppConfig;
 
+import com.demoriderctg.arif.demorider.FavoritePlaces.HomeLocationModel;
+import com.demoriderctg.arif.demorider.FavoritePlaces.WorkLocationModel;
 import com.demoriderctg.arif.demorider.models.ApiModels.UserDiscounts.UserDiscounts;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -44,6 +46,8 @@ public class AppConstant {
     public static UserDiscounts userDiscount = null;
     public static int HISTORY_ID=0;
     public static double RATING =0;
+    public static HomeLocationModel searchSorceLocationModel = null;
+    public static WorkLocationModel searchDestinationLocationModel = null;
 
 
     /* Log Tag, Message */

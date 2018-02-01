@@ -2,6 +2,7 @@ package com.demoriderctg.arif.demorider.Dailog;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -117,6 +118,8 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
                     main.RequestForRide(Source, Destination, AppConstant.SOURCE_NAME, AppConstant.DESTINATION_NAME, totalCost,DiscountId);
                     Intent intent = new Intent(getContext(), SearchingDriver.class);
                     startActivity(intent);
+                    dismiss();
+
                 }
                 else{
                     Toast.makeText(getContext(), "Connection Lost", Toast.LENGTH_SHORT).show();
@@ -132,6 +135,8 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
             }
         });
     }
+
+
 
 
 

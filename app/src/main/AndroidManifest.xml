@@ -78,7 +78,6 @@
         <activity android:name=".FavoritePlaces.FavoritePlacesActivity" />
         <activity
             android:name=".Dailog.SearchingDriver"
-            android:noHistory="true"
             android:theme="@style/ThemeOverlay.MyNoTitleActivity" />
         <activity android:name=".InternetConnection.InternetCheckActivity" />
         <activity android:name=".OnrideMode.OnrideModeActivity" />
