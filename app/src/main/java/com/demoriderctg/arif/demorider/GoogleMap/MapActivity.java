@@ -211,8 +211,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         loginData = userInformation.getuserInformation();
         phonemumber = userInformation.getRiderPhoneNumber();
 
-        if(MainActivity.IS_MAP_INITIALIZE == false) {
-            MainActivity.IS_MAP_INITIALIZE = true;
+        if(MainActivity.check == true) {
             main.CreateNewClientFirebase(loginData, phonemumber);
         }
     }

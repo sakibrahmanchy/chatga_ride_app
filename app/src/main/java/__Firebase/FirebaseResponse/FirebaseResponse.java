@@ -46,7 +46,7 @@ public class FirebaseResponse {
 
                         DataSnapshot dsp = dataSnapshot.getChildren().iterator().next();
                         if(dsp.exists()) {
-                            dsp.getRef().child(FirebaseConstant.CURRENT_RIDING_HISTORY_ID).addValueEventListener(new ValueEventListener() {
+                            dsp.getRef().child(FirebaseConstant.CURRENT_RIDING_HISTORY_ID).addListenerForSingleValueEvent(new ValueEventListener() {
 
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
