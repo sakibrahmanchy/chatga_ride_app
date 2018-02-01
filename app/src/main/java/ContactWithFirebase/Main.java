@@ -58,7 +58,7 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
                     null,
                     null,
                     "1010",
-                    "1",
+                    "1010",
                     "null",
                     "null",
                     "null"

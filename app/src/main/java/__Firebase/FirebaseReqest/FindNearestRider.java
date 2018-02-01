@@ -56,7 +56,9 @@ public class FindNearestRider implements IDistanceAndDuration {
 
         _Rider.DistanceFromClient = FirebaseUtilMethod.GetDistanceInDouble(Distance);
 
-        if (FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider.RiderID <= 0) {
+        if (FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider.RiderID <= 0 &&
+                !firebaseWrapper.getRiderViewModelInstance().AlreadyRequestedRider.containsKey(_Rider.RiderID)) {
+
             FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider = _Rider;
             this._ShortestTime = Duration;
             this._ShortestDistance = Distance;
