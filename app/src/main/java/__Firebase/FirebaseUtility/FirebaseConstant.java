@@ -115,6 +115,17 @@ public class FirebaseConstant {
     public static final int GET_HISTORY_FOR_INITIAL_ACCEPTANCE = 1;
     public static final int GET_HISTORY_FOR_GENERAL = 2;
 
+    /*Some important parameter*/
+    public static int IS_RIDE_ACCEPTED_BY_RIDER = 0;
+    public static long REQUEST_INTERVAL_FIVE_MINUTE = 300000l;
+    public static long REQUEST_INTERVAL_TEN_MINUTE = 600000l;
+
+    /*Firebase Shared-Preference*/
+    public static String NUMBER_OF_REQUEST_PREF = "NUMBER_OF_REQUEST_PREF";
+    public static String LAST_REQUESTED_NUMBER = "LAST_REQUESTED_NUMBER";
+    public static String LAST_REQUESTED_TIME = "LAST_REQUESTED_TIME";
+    public static String ONE = ("1");
+
     public FirebaseConstant(){
     }
 }

@@ -52,6 +52,7 @@ public class DiscountCalculation {
                 ApiClient.getClient().create(ApiInterface.class);
 
         LoginData loginData = userInformation.getuserInformation();
+        if(loginData == null)   return;
         Call<UserDiscountResponse> call = apiService.getUserDiscounts(authHeader,loginData.getClientId());
 
         call.enqueue(new Callback<UserDiscountResponse>() {
