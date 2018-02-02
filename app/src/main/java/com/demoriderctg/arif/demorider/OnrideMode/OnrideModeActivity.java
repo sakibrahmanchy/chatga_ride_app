@@ -16,15 +16,19 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Handler;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
+import com.demoriderctg.arif.demorider.Dailog.BottomSheetDailogInRideMode;
 import com.demoriderctg.arif.demorider.Dailog.RideFinishDailog;
 import com.demoriderctg.arif.demorider.Dailog.SearchingDriver;
 import com.demoriderctg.arif.demorider.GoogleMap.GetCurrentLocation;
@@ -71,7 +75,8 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
     UiSettings uiSettings;
     private Main main = null;
     private SendNotification sendNotification;
-
+    private BottomSheetBehavior mBottomSheetBehavior;
+    private View bottomSheet;
 
 
     @Override
@@ -83,6 +88,10 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
         sendNotification = new SendNotification(this);
         notification = new NotificationCompat.Builder(this);
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+         bottomSheet = findViewById( R.id.bottom_sheet );
+        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        mBottomSheetBehavior.setPeekHeight(300);
+        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
         if(AppConstant.NOTIFICATION_ID ==0){
             notification.setAutoCancel(true);
