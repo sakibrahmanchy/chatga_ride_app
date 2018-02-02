@@ -54,50 +54,53 @@ public class ThrdRequestAgainForRider {
     }
 
     public static boolean CanRequest(Context context){
-        if (NumberOfRequestEdit == null) {
-            NumberOfRequestEdit = context.getSharedPreferences(FirebaseConstant.NUMBER_OF_REQUEST_PREF, Context.MODE_PRIVATE).edit();
-        }
-        if (NumberOfRequestGet == null) {
-            NumberOfRequestGet = context.getSharedPreferences(FirebaseConstant.NUMBER_OF_REQUEST_PREF, Context.MODE_PRIVATE);
-        }
 
-        String numberOfRequest = NumberOfRequestGet.getString(FirebaseConstant.LAST_REQUESTED_NUMBER, null);
-        if (numberOfRequest == null) {
-            /*
-             * No request is perform yet
-             * So save one request is done
-             */
-            NumberOfRequestEdit.putString(FirebaseConstant.LAST_REQUESTED_NUMBER, FirebaseConstant.ONE + (" ") + System.currentTimeMillis());
-            NumberOfRequestEdit.commit();
-        } else {
-            Pair<Integer, Long> P = FirebaseUtilMethod.GetNumberAndTime(numberOfRequest);
-            /*
-             * Can Request 3 times within five/ten minutes
-             */
-            if (P.first < 3) {
-                /*
-                 * Request is less than three, so can request
-                 */
-                NumberOfRequestEdit.putString(FirebaseConstant.LAST_REQUESTED_NUMBER, Integer.toString(P.first + 1) + (" ") + System.currentTimeMillis());
-                NumberOfRequestEdit.commit();
-            } else {
-                /*
-                 * Request is ore than 3 times
-                 */
-                long currentTime = System.currentTimeMillis();
-                if (Math.abs(P.second - currentTime) <= FirebaseConstant.REQUEST_INTERVAL_TEN_MINUTE) {
-                    /* Request is more than 3 and doesn't pass ten/five minutes*/
-                    return false;
-                } else {
-                    /*
-                    * Request is more than 3 but pass ten/five minutes
-                    * So request again and set one request is done
-                    */
-                    NumberOfRequestEdit.putString(FirebaseConstant.LAST_REQUESTED_NUMBER, FirebaseConstant.ONE + (" ") + System.currentTimeMillis());
-                    NumberOfRequestEdit.commit();
-                }
-            }
-        }
+
+//        if (NumberOfRequestEdit == null && context != null) {
+//            NumberOfRequestEdit = context.getSharedPreferences(FirebaseConstant.NUMBER_OF_REQUEST_PREF, MODE_PRIVATE).edit();
+//        }
+//        if (NumberOfRequestGet == null && context != null) {
+//            NumberOfRequestGet = context.getSharedPreferences(FirebaseConstant.NUMBER_OF_REQUEST_PREF, MODE_PRIVATE);
+//        }
+//
+//        String numberOfRequest = NumberOfRequestGet.getString(FirebaseConstant.LAST_REQUESTED_NUMBER, null);
+//        if (numberOfRequest == null) {
+//            /*
+//             * No request is perform yet
+//             * So save one request is done
+//             */
+//            NumberOfRequestEdit.putString(FirebaseConstant.LAST_REQUESTED_NUMBER, FirebaseConstant.ONE + (" ") + System.currentTimeMillis());
+//            NumberOfRequestEdit.commit();
+//        } else {
+//            Pair<Integer, Long> P = FirebaseUtilMethod.GetNumberAndTime(numberOfRequest);
+//            /*
+//             * Can Request 3 times within five/ten minutes
+//             */
+//            if (P.first < 3) {
+//                /*
+//                 * Request is less than three, so can request
+//                 */
+//                NumberOfRequestEdit.putString(FirebaseConstant.LAST_REQUESTED_NUMBER, Integer.toString(P.first + 1) + (" ") + System.currentTimeMillis());
+//                NumberOfRequestEdit.commit();
+//            } else {
+//                /*
+//                 * Request is ore than 3 times
+//                 */
+//                long currentTime = System.currentTimeMillis();
+//                if (Math.abs(P.second - currentTime) <= FirebaseConstant.REQUEST_INTERVAL_TEN_MINUTE) {
+//                    /* Request is more than 3 and doesn't pass ten/five minutes*/
+//                    return false;
+//                } else {
+//                    /*
+//                    * Request is more than 3 but pass ten/five minutes
+//                    * So request again and set one request is done
+//                    */
+//                    NumberOfRequestEdit.putString(FirebaseConstant.LAST_REQUESTED_NUMBER, FirebaseConstant.ONE + (" ") + System.currentTimeMillis());
+//                    NumberOfRequestEdit.commit();
+//                }
+//            }
+//        }
+//
         return true;
     }
 
