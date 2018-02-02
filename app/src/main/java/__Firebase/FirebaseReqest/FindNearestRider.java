@@ -56,16 +56,27 @@ public class FindNearestRider implements IDistanceAndDuration {
 
         _Rider.DistanceFromClient = FirebaseUtilMethod.GetDistanceInDouble(Distance);
 
+        /*
+         * If no rider found so far and current searched rider is not in block list
+         */
         if (FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider.RiderID <= 0 &&
                 !firebaseWrapper.getRiderViewModelInstance().AlreadyRequestedRider.containsKey(_Rider.RiderID)) {
 
-            FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider = _Rider;
+            FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider.DeepClone(_Rider);
             this._ShortestTime = Duration;
             this._ShortestDistance = Distance;
+
         } else {
+            /*
+             * Already has a rider but not confirm it is nearest
+             * And rider is not on block list
+             */
             if (!firebaseWrapper.getRiderViewModelInstance().AlreadyRequestedRider.containsKey(_Rider.RiderID) &&
                     FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider.DistanceFromClient >= _Rider.DistanceFromClient) {
-                FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider = _Rider;
+                /*
+                 * This rider not in block list and nearest than previous one
+                 */
+                FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider.DeepClone(_Rider);
                 this._ShortestTime = Duration;
                 this._ShortestDistance = Distance;
             }

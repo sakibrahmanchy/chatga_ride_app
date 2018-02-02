@@ -33,6 +33,7 @@ public class FirebaseResponse {
 
     public static void InitialAcceptanceOfRideResponse(ClientModel Client) {
 
+        if(IS_INITIALIZED_INITIAL_AC == true)   return;
         ClientID = Client.ClientID;
 
         FirebaseWrapper firebaseWrapper = FirebaseWrapper.getInstance();
@@ -46,7 +47,7 @@ public class FirebaseResponse {
 
                         DataSnapshot dsp = dataSnapshot.getChildren().iterator().next();
                         if(dsp.exists()) {
-                            dsp.getRef().child(FirebaseConstant.CURRENT_RIDING_HISTORY_ID).addListenerForSingleValueEvent(new ValueEventListener() {
+                            dsp.getRef().child(FirebaseConstant.CURRENT_RIDING_HISTORY_ID).addValueEventListener(new ValueEventListener() {
 
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -221,6 +222,7 @@ public class FirebaseResponse {
 
     public static void RideRejectedByRiderResponse(ClientModel Client) {
 
+        if(IS_INITIALIZED_RIDE_REJECTED == true)    return;
         ClientID = Client.ClientID;
 
         FirebaseWrapper firebaseWrapper = FirebaseWrapper.getInstance();

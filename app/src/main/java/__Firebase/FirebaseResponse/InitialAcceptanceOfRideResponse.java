@@ -34,6 +34,7 @@ public class InitialAcceptanceOfRideResponse implements ICallBackCurrentServerTi
 
     private void Response() {
         AppConstant.INITIAL_RIDE_ACCEPT = 1;
+        FirebaseConstant.IS_RIDE_ACCEPTED_BY_RIDER = 1;
         AppConstant.HISTORY_ID = (int)currentRidingHistoryModel.HistoryID;
         /*Do the stuff*/
     }

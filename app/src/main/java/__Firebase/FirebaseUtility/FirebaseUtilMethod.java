@@ -27,6 +27,9 @@ public class FirebaseUtilMethod {
                 ret = ret + c;
             }
         }
+        if((data.indexOf("km") >= 0) || (data.indexOf("KM") >= 0) || (data.indexOf("Km") >= 0)){
+            return Double.parseDouble(ret) * 1000d;
+        }
         return Double.parseDouble(ret);
     }
 
@@ -34,6 +37,14 @@ public class FirebaseUtilMethod {
         String[] Data = value.trim().split("\\s+");
         if(Data.length == 2) {
             return Pair.create(Long.parseLong(Data[0]), Long.parseLong(Data[1]));
+        }
+        else   return null;
+    }
+
+    public static Pair<Integer, Long> GetNumberAndTime(String value){
+        String[] Data = value.trim().split("\\s+");
+        if(Data.length == 2) {
+            return Pair.create(Integer.parseInt(Data[0]), Long.parseLong(Data[1]));
         }
         else   return null;
     }

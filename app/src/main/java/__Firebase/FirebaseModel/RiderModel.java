@@ -75,6 +75,21 @@ public class RiderModel {
         this.DistanceFromClient = FirebaseConstant.INFINITE_INTEGER;
     }
 
+    public void DeepClone(RiderModel temp){
+
+        RiderModel riderModel = temp;
+        this.RiderID = riderModel.RiderID;
+        this.PhoneNumber = riderModel.PhoneNumber;
+        this.DeviceToken = riderModel.DeviceToken;
+        this.FullName = riderModel.FullName;
+        this.IsRiderOnline = riderModel.IsRiderOnline;
+        this.IsRiderBusy = riderModel.IsRiderBusy;
+        this.IsRiderOnRide = riderModel.IsRiderOnRide;
+        this.CurrentRidingHistoryID = riderModel.CurrentRidingHistoryID;
+        this.OnlineBusyOnRide = riderModel.OnlineBusyOnRide;
+        this.CurrentRiderLocation = riderModel.CurrentRiderLocation;
+    }
+
     public void ClearData(){
 
         this.RiderID = FirebaseConstant.UNDEFINE;
