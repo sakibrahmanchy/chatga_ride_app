@@ -49,6 +49,7 @@ public class AppConstant {
     public static long TOTAL_COST = 0;
     public static HomeLocationModel searchSorceLocationModel = null;
     public static WorkLocationModel searchDestinationLocationModel = null;
+    public static  int NOTIFICATION_ID =0;
 
 
     /* Log Tag, Message */

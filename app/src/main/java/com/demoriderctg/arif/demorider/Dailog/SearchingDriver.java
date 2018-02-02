@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
 import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
 import com.demoriderctg.arif.demorider.OnrideMode.OnrideModeActivity;
+import com.demoriderctg.arif.demorider.OnrideMode.SendNotification;
 import com.demoriderctg.arif.demorider.R;
 import com.google.firebase.database.ValueEventListener;
 
@@ -30,6 +31,7 @@ public class SearchingDriver extends AppCompatActivity {
     private NotificationModel notificationModel;
     private TextView cancel,count_number;
     private Main main;
+    private SendNotification sendNotification;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +63,8 @@ public class SearchingDriver extends AppCompatActivity {
                 count_number.setText(progressStatus+"");
                 if (AppConstant.INITIAL_RIDE_ACCEPT==1 ) {
                     progressStatus = 181;
+                    sendNotification = new SendNotification(SearchingDriver.this);
+                    sendNotification.Notification("FOUND","RIDER FOUND","Click to view rider");
                     Intent  intent = new Intent(SearchingDriver.this,OnrideModeActivity.class);
                     startActivity(intent);
                     finish();

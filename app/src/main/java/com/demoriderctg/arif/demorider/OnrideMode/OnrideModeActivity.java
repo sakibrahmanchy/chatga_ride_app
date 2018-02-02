@@ -3,6 +3,8 @@ package com.demoriderctg.arif.demorider.OnrideMode;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -17,13 +19,16 @@ import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
 import com.demoriderctg.arif.demorider.Dailog.RideFinishDailog;
 import com.demoriderctg.arif.demorider.Dailog.SearchingDriver;
 import com.demoriderctg.arif.demorider.GoogleMap.GetCurrentLocation;
+import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
 import com.demoriderctg.arif.demorider.InternetConnection.ConnectionCheck;
 import com.demoriderctg.arif.demorider.MainActivity;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
@@ -46,6 +51,7 @@ import ContactWithFirebase.Main;
 import __Firebase.FirebaseWrapper;
 import __Firebase.ICallBackInstance.IGerRiderLocation;
 
+import static android.support.v4.app.NotificationCompat.*;
 import static com.demoriderctg.arif.demorider.AppConfig.AppConstant.DEFAULT_ZOOM;
 import static com.demoriderctg.arif.demorider.AppConfig.AppConstant.OnchangeDeviceLOcation;
 
@@ -59,8 +65,13 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
     private Handler handler = new Handler();
     private GetCurrentLocation  getCurrentLocation;
     private static int progressStatus=1;
+    private Builder notification;
+    private Notification note;
+    private NotificationManager notificationManager;
     UiSettings uiSettings;
     private Main main = null;
+    private SendNotification sendNotification;
+
 
 
     @Override
@@ -69,8 +80,19 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
         setContentView(R.layout.activity_onride_mode);
         connectionCheck = new ConnectionCheck(this);
         getCurrentLocation = new GetCurrentLocation(this);
+        sendNotification = new SendNotification(this);
+        notification = new NotificationCompat.Builder(this);
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        if(AppConstant.NOTIFICATION_ID ==0){
+            notification.setAutoCancel(true);
+            notificationManager.cancel(1);
+            Intent intent = new Intent(this, MapActivity.class);
+            startActivity(intent);
+        }
         main = new Main();
         initMap();
+
     }
 
     @Override
@@ -194,6 +216,10 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
                         public void run() {
                             if(AppConstant.START_RIDE){
                                 AppConstant.INITIAL_RIDE_ACCEPT=0;
+                                notification.setAutoCancel(true);
+                                notificationManager.cancel(1);
+                                sendNotification.Notification("RIDE MODE","You are in ride mode","Tap to view map");
+
                                 mMap.clear();
                                 try{
                                     sourceMarker= mMap.addMarker(new MarkerOptions()
