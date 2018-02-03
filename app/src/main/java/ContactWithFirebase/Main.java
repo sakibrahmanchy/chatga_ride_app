@@ -112,7 +112,7 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
 
     public boolean SentNotificationToRider(/*Firebase Client Mode, rider Model*/RiderModel Rider, ClientModel Client, Pair<Double, Double> Source, Pair<Double, Double> Destination, String SourceName, String DestinationName, String ShortestTime, String ShortestDistance, long TotalCost, long DiscountID, long Time) {
 
-        if (Rider == null || Client == null || Source == null || Destination == null || Time == 0) return false;
+        if (Rider == null || Rider.RiderID < 1 || Rider.DeviceToken.isEmpty() || Client == null || Source == null || Destination == null || Time == 0) return false;
 
         this.riderModel = Rider;
         this.clientModel = Client;

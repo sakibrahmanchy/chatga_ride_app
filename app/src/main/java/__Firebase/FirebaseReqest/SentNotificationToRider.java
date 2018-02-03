@@ -152,7 +152,7 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String result) {
         Log.d(FirebaseConstant.RESPONSE_FROM_SERVER, result);
         FirebaseConstant.IS_RIDE_ACCEPTED_BY_RIDER = 0;
-        //ThrdRequestAgainForRider.Initiate(context);
+        ThrdRequestAgainForRider.Initiate();
         this.callbackListener.OnSentNotificationToRider(true);
     }
 }

@@ -58,7 +58,7 @@ public class __FirebaseRequest extends AppCompatActivity {
 
     public void SentNotificationToRider(final RiderModel Rider, final ClientModel Client, final Pair<Double, Double> Source, final Pair<Double, Double> Destination, final String SourceName, String DestinationName, String ShortestTime, String ShortestDistance, long TotalCost, long DiscountID, long Time, ICallbackMain callbackListener){
 
-        if(!ThrdRequestAgainForRider.CanRequest(this))  return;
+        if(!ThrdRequestAgainForRider.CanRequest())  return;
 
         SentNotificationToRider pendingTask = new SentNotificationToRider(this, callbackListener);
         pendingTask.execute(

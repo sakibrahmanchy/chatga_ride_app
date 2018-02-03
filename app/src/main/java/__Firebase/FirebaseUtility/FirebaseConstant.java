@@ -117,8 +117,9 @@ public class FirebaseConstant {
 
     /*Some important parameter*/
     public static int IS_RIDE_ACCEPTED_BY_RIDER = 0;
-    public static long REQUEST_INTERVAL_FIVE_MINUTE = 300000l;
+    public static long REQUEST_INTERVAL_FIVE_MINUTE = /*Five minute*/300000l /*Two minute 120000l*/;
     public static long REQUEST_INTERVAL_TEN_MINUTE = 600000l;
+    public static int REQUEST_LIMIT = 3;
 
     /*Firebase Shared-Preference*/
     public static String NUMBER_OF_REQUEST_PREF = "NUMBER_OF_REQUEST_PREF";
