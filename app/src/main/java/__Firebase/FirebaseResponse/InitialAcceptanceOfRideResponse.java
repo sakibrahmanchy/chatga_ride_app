@@ -2,6 +2,8 @@ package __Firebase.FirebaseResponse;
 
 import ContactWithFirebase.Main;
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
+import com.demoriderctg.arif.demorider.OnrideMode.OnrideModeActivity;
+import com.demoriderctg.arif.demorider.OnrideMode.SendNotification;
 
 import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
 import __Firebase.FirebaseModel.RiderModel;
@@ -19,6 +21,7 @@ public class InitialAcceptanceOfRideResponse implements ICallBackCurrentServerTi
 
     private NotificationModel notificationModel;
     private CurrentRidingHistoryModel currentRidingHistoryModel;
+
     private RiderModel riderModel;
     private long Time;
     private Main main;
@@ -36,6 +39,7 @@ public class InitialAcceptanceOfRideResponse implements ICallBackCurrentServerTi
         AppConstant.INITIAL_RIDE_ACCEPT = 1;
         FirebaseConstant.IS_RIDE_ACCEPTED_BY_RIDER = 1;
         AppConstant.HISTORY_ID = (int)currentRidingHistoryModel.HistoryID;
+
         /*Do the stuff*/
     }
 

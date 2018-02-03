@@ -3,6 +3,7 @@ package __Firebase.FirebaseResponse;
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
 
 import ContactWithFirebase.Main;
+import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
 import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseUtility.FirebaseUtilMethod;
 import __Firebase.FirebaseWrapper;
@@ -16,6 +17,7 @@ import __Firebase.ICallBackInstance.ICallBackFinishedRide;
 public class RiderFinished implements ICallBackFinishedRide, ICallBackCurrentServerTime {
 
     private long Time;
+    private CurrentRidingHistoryModel currentRidingHistoryModel;
 
     public RiderFinished(long Time) {
         this.Time = Time;
@@ -27,7 +29,7 @@ public class RiderFinished implements ICallBackFinishedRide, ICallBackCurrentSer
     }
 
     private void Response() {
-        AppConstant.FINISH_RIDE = true;
+
         AppConstant.TREAD_FOR_FINISH_RIDE = true;
         AppConstant.INITIAL_RIDE_ACCEPT = 1;
         AppConstant.START_RIDE = false;
@@ -41,8 +43,12 @@ public class RiderFinished implements ICallBackFinishedRide, ICallBackCurrentSer
     @Override
     public void OnFinishedRide(long FinalCost) {
         /* Get the final Cost */
+        currentRidingHistoryModel = FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance();
+        AppConstant.HISTORY_ID = (int)currentRidingHistoryModel.HistoryID;
         AppConstant.FINAL_RIDE_COST = FinalCost;
+        AppConstant.FINISH_RIDE = true;
         ClearData();
+        ClearClientDate();
     }
 
     private void ClearData(){
@@ -58,5 +64,18 @@ public class RiderFinished implements ICallBackFinishedRide, ICallBackCurrentSer
                 Response();
             }
         }
+    }
+
+    private void ClearClientDate(){
+          AppConstant.NOTIFICATION_ID=0;
+          AppConstant.searchDestinationLocationModel=null;
+          AppConstant.searchSorceLocationModel=null;
+          AppConstant.INITIAL_RIDE_ACCEPT=0;
+          AppConstant.HISTORY_ID=0;
+          AppConstant.START_RIDE=false;
+          AppConstant.FINAL_RIDE_COST=0;
+          AppConstant.FINISH_RIDE=false;
+          AppConstant.TOTAL_COST=0;
+
     }
 }
