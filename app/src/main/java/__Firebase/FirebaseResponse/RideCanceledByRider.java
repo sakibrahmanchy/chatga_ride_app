@@ -3,6 +3,7 @@ package __Firebase.FirebaseResponse;
 import java.util.Map;
 
 import __Firebase.FirebaseModel.RiderModel;
+import __Firebase.FirebaseReqest.ThrdRequestAgainForRider;
 import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseUtility.FirebaseUtilMethod;
 import __Firebase.FirebaseWrapper;
@@ -38,7 +39,8 @@ public class RideCanceledByRider implements ICallBackCurrentServerTime {
         if(riderModel.RiderID > 0){
             requestedRider.put(riderModel.RiderID, true);
         }
-        RequestAgain();
+        /*Do no request again rather just notify client to request again*/
+        //RequestAgain();
     }
 
     private void RequestAgain(){

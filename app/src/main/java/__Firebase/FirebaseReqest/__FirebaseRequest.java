@@ -10,6 +10,7 @@ import __Firebase.FirebaseModel.ClientModel;
 import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
 import __Firebase.FirebaseModel.RiderModel;
 import __Firebase.ICallBackInstance.IGerRiderLocation;
+import __Firebase.ICallBackInstance.IGetCurrentRider;
 
 /**
  * Created by User on 11/16/2017.
@@ -105,12 +106,12 @@ public class __FirebaseRequest extends AppCompatActivity {
         thread.start();
     }
 
-    public void GetCurrentRider(final long RiderID, final ICallbackMain callBackListener){
+    public void GetCurrentRider(final long RiderID, final ICallbackMain callBackListener, final IGetCurrentRider iGetCurrentRider){
 
         Thread thread = new Thread(){
             @Override
             public void run(){
-                new GetCurrentRider(RiderID, callBackListener);
+                new GetCurrentRider(RiderID, callBackListener, iGetCurrentRider);
             }
         };
         thread.start();

@@ -67,6 +67,7 @@ public class FirebaseResponse {
                                                         Time,
                                                         FirebaseConstant.GET_HISTORY_FOR_INITIAL_ACCEPTANCE
                                                 );
+                                                FirebaseConstant.IS_RIDE_ACCEPTED_BY_RIDER = 1;
                                             }
                                         }
                                         IS_INITIALIZED_INITIAL_AC = true;

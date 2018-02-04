@@ -1,5 +1,7 @@
 package __Firebase.FirebaseResponse;
 
+import android.util.Log;
+
 import ContactWithFirebase.Main;
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
 import com.demoriderctg.arif.demorider.OnrideMode.OnrideModeActivity;
@@ -60,7 +62,7 @@ public class InitialAcceptanceOfRideResponse implements ICallBackCurrentServerTi
             ParseDataFromHistoryToNotification();
             Response();
         } else {
-            new Main().GetCurrentRider(currentRidingHistoryModel.RiderID);
+            new Main().GetCurrentRider(currentRidingHistoryModel.RiderID, this);
         }
     }
 
@@ -75,8 +77,9 @@ public class InitialAcceptanceOfRideResponse implements ICallBackCurrentServerTi
 
     @Override
     public void OnGetCurrentRider(boolean value) {
-        if(value == true){
-            FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider = FirebaseWrapper.getInstance().getRiderModelInstance();
+        if (value == true) {
+            Log.d(FirebaseConstant.RIDER_LOADED, FirebaseConstant.RIDER_LOADED + FirebaseWrapper.getInstance().getRiderModelInstance().FullName);
+            FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider.DeepClone(FirebaseWrapper.getInstance().getRiderModelInstance());
             Response();
         }
     }

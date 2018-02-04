@@ -219,7 +219,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             AppConstant.searchDestinationLocationModel = userInformation.getUserWorkLocation();
         }
 
-        if(MainActivity.check == false) {
+        if(MainActivity.check == true) {
             main.CreateNewClientFirebase(loginData, phonemumber);
         }
     }

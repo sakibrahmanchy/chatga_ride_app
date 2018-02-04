@@ -8,6 +8,7 @@ import java.util.Map;
 
 import ContactWithFirebase.Main;
 import __Firebase.FirebaseModel.RiderModel;
+import __Firebase.FirebaseReqest.ThrdRequestAgainForRider;
 import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseUtility.FirebaseUtilMethod;
 import __Firebase.FirebaseWrapper;
@@ -39,13 +40,16 @@ public class RideRejectedByRider implements ICallBackCurrentServerTime {
     }
 
     private void AddRiderIntoBlockList(){
-
-        riderModel = FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider;
-        requestedRider = FirebaseWrapper.getInstance().getRiderViewModelInstance().AlreadyRequestedRider;
-        if(riderModel.RiderID > 0){
-            requestedRider.put(riderModel.RiderID, true);
-        }
-        RequestAgain();
+        /*
+        * riderModel = FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider;
+        * requestedRider = FirebaseWrapper.getInstance().getRiderViewModelInstance().AlreadyRequestedRider;
+        * if(riderModel.RiderID > 0){
+        *     requestedRider.put(riderModel.RiderID, true);
+        * }
+        */
+        /*
+        * Do not request again, a timer is on which will automatically do another request within 70 sec
+        */
     }
 
     private void RequestAgain(){

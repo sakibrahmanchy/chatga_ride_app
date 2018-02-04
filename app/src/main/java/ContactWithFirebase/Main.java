@@ -136,10 +136,10 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
         return true;
     }
 
-    public boolean GetCurrentRider(long RiderID) {
+    public boolean GetCurrentRider(long RiderID, IGetCurrentRider iGetCurrentRider) {
 
         firebaseWrapper = FirebaseWrapper.getInstance();
-        firebaseWrapper.getFirebaseRequestInstance().GetCurrentRider(RiderID, this);
+        firebaseWrapper.getFirebaseRequestInstance().GetCurrentRider(RiderID, this, iGetCurrentRider);
         return true;
     }
 
@@ -328,13 +328,6 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
 
     @Override
     public void OnGetCurrentRider(boolean value) {
-        if (value == true) {
-            iGetCurrentRider.OnGetCurrentRider(true);
-            Log.d(FirebaseConstant.RIDER_LOADED, FirebaseConstant.RIDER_LOADED + FirebaseWrapper.getInstance().getRiderModelInstance().FullName);
-            Log.d(FirebaseConstant.RIDER_LOADED, FirebaseConstant.RIDER_LOADED);
-        } else {
-            iGetCurrentRider.OnGetCurrentRider(false);
-        }
     }
 
     @Override

@@ -33,18 +33,22 @@ public class ThrdRequestAgainForRider {
     }
 
     public static void Run() {
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                if (FirebaseConstant.IS_RIDE_ACCEPTED_BY_RIDER == 1) {
+        try {
+            runnable = new Runnable() {
+                @Override
+                public void run() {
+                    if (FirebaseConstant.IS_RIDE_ACCEPTED_BY_RIDER == 1 || runnable == null) {
+                        Destroy();
+                        return;
+                    }
                     Destroy();
-                    return;
+                    AddRiderIntoBlockList();
                 }
-                Destroy();
-                AddRiderIntoBlockList();
-            }
-        };
-        handler.postDelayed(runnable, 10000);
+            };
+            handler.postDelayed(runnable, 66000 /*One minute ten second*/);
+        } catch (Exception ex) {
+
+        }
     }
 
     public static void Initiate() {
@@ -122,7 +126,7 @@ public class ThrdRequestAgainForRider {
 
         RiderModel riderModel = FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider;
         Map<Long, Boolean> requestedRider = FirebaseWrapper.getInstance().getRiderViewModelInstance().AlreadyRequestedRider;
-        if (riderModel.RiderID > 0) {
+        if (riderModel != null && riderModel.RiderID > 0) {
             requestedRider.put(riderModel.RiderID, true);
         }
         RequestAgain();
