@@ -228,7 +228,6 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
                                 notification.setAutoCancel(true);
                                 notificationManager.cancel(1);
                                 sendNotification.Notification("RIDE MODE","You are in ride mode","Tap to view map");
-
                                 mMap.clear();
                                 try{
                                     sourceMarker= mMap.addMarker(new MarkerOptions()

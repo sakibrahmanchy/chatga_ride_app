@@ -97,7 +97,7 @@ public class ClientHistoryActivity extends AppCompatActivity {
                 ApiClient.getClient().create(ApiInterface.class);
 
         LoginData loginData = userInformation.getuserInformation();
-        Call<ClientHistoryResponse> call = apiService.getClientHistory(authHeader,loginData.getUserId());
+        Call<ClientHistoryResponse> call = apiService.getClientHistory(authHeader,loginData.getClientId());
 
         call.enqueue(new Callback<ClientHistoryResponse>() {
             @Override

@@ -67,14 +67,14 @@ public class RiderFinished implements ICallBackFinishedRide, ICallBackCurrentSer
     }
 
     private void ClearClientDate(){
+
           AppConstant.NOTIFICATION_ID=0;
           AppConstant.searchDestinationLocationModel=null;
           AppConstant.searchSorceLocationModel=null;
           AppConstant.INITIAL_RIDE_ACCEPT=0;
           AppConstant.HISTORY_ID=0;
           AppConstant.START_RIDE=false;
-          AppConstant.FINAL_RIDE_COST=0;
-          AppConstant.FINISH_RIDE=false;
+
           AppConstant.TOTAL_COST=0;
 
     }
