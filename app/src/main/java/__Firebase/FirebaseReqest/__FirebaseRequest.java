@@ -3,6 +3,7 @@ package __Firebase.FirebaseReqest;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Pair;
 
+import __Firebase.FirebaseResponse.HasAnyRide;
 import __Firebase.ICallBackInstance.CallBackListener;
 import __Firebase.ICallBackInstance.ICallBackFinishedRide;
 import __Firebase.ICallBackInstance.ICallbackMain;
@@ -116,6 +117,16 @@ public class __FirebaseRequest extends AppCompatActivity {
         };
         thread.start();
     }
+    public void GetCurrentRider(final long RiderID, final CallBackListener callBackListener){
+
+        Thread thread = new Thread(){
+            @Override
+            public void run(){
+                new GetCurrentRider(RiderID, callBackListener);
+            }
+        };
+        thread.start();
+    }
 
     public void GetRiderLocation(final RiderModel Rider, final IGerRiderLocation iGerRiderLocation){
 
@@ -135,6 +146,28 @@ public class __FirebaseRequest extends AppCompatActivity {
             public void run(){
                 new GetCurrentRiderHistoryModel(HistoryID, ClientID, Time, ActionType, callBackListener);
           }
+        };
+        thread.start();
+    }
+
+    public void GetCurrentRiderHistoryModel(final long HistoryID, final CallBackListener callBackListener){
+
+        Thread thread = new Thread(){
+            @Override
+            public void run(){
+                new GetCurrentRiderHistoryModel(HistoryID, callBackListener);
+            }
+        };
+        thread.start();
+    }
+
+    public void HasAnyRide(final long RiderID, final ICallbackMain callBackListener){
+
+        Thread thread = new Thread(){
+            @Override
+            public void run(){
+                new HasAnyRide(RiderID, callBackListener);
+            }
         };
         thread.start();
     }
@@ -178,6 +211,17 @@ public class __FirebaseRequest extends AppCompatActivity {
             @Override
             public void run(){
                 new UpdateCostForCurrentRide(Client, callBackListener);
+            }
+        };
+        thread.start();
+    }
+
+    public void FinishRide(final ClientModel Client, final ICallbackMain callBackListener){
+
+        Thread thread = new Thread(){
+            @Override
+            public void run(){
+                new FinishRide(Client, callBackListener);
             }
         };
         thread.start();

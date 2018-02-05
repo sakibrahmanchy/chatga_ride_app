@@ -17,4 +17,5 @@ public interface ICallbackMain {
     void OnSetDeviceTokenToRiderTable(boolean value);
     void OnGetCurrentRiderHistoryModel(boolean value, long Time, int ActionType);
     void OnGetCurrentRider(boolean value);
+    void OnHasAnyRide(boolean value);
 }

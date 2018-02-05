@@ -1,6 +1,7 @@
 package ContactWithFirebase;
 
 import android.content.Context;
+import android.service.autofill.FillEventHistory;
 import android.util.Log;
 import android.util.Pair;
 
@@ -16,9 +17,11 @@ import __Firebase.FirebaseReqest.FindNearestRider;
 import __Firebase.FirebaseReqest.__FirebaseRequest;
 import __Firebase.FirebaseResponse.FirebaseResponse;
 import __Firebase.FirebaseResponse.InitialAcceptanceOfRideResponse;
+import __Firebase.FirebaseResponse.RiderInRideMode;
 import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseUtility.FirebaseUtilMethod;
 import __Firebase.FirebaseWrapper;
+import __Firebase.ICallBackInstance.CallBackListener;
 import __Firebase.ICallBackInstance.ICallBackCurrentServerTime;
 import __Firebase.ICallBackInstance.ICallBackFinishedRide;
 import __Firebase.ICallBackInstance.ICallbackMain;
@@ -138,8 +141,19 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
 
     public boolean GetCurrentRider(long RiderID, IGetCurrentRider iGetCurrentRider) {
 
+        if(RiderID < 1 || iGetCurrentRider == null) return false;
+
         firebaseWrapper = FirebaseWrapper.getInstance();
         firebaseWrapper.getFirebaseRequestInstance().GetCurrentRider(RiderID, this, iGetCurrentRider);
+        return true;
+    }
+
+    public boolean GetCurrentRider(long RiderID, CallBackListener callBackListener) {
+
+        if(RiderID < 1 || callBackListener == null) return false;
+
+        firebaseWrapper = FirebaseWrapper.getInstance();
+        firebaseWrapper.getFirebaseRequestInstance().GetCurrentRider(RiderID, callBackListener);
         return true;
     }
 
@@ -167,6 +181,23 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
         return true;
     }
 
+    public boolean GetCurrentRiderHistoryModel(long HistoryID, CallBackListener callBackListener){
+
+        if(HistoryID < 1)   return false;
+
+        firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
+        firebaseRequestInstance.GetCurrentRiderHistoryModel(HistoryID, callBackListener);
+        return true;
+    }
+
+    public boolean HasAnyRide(long ClientID) {
+
+        if (ClientID < 1) return false;
+        firebaseWrapper = FirebaseWrapper.getInstance();
+        firebaseWrapper.getFirebaseRequestInstance().HasAnyRide(ClientID, Main.this);
+        return true;
+    }
+
     public boolean RequestForRiderLocation(/*Firebase Rider Model*/RiderModel Rider) {
 
         firebaseWrapper = FirebaseWrapper.getInstance();
@@ -190,6 +221,19 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
                 currentRidingHistoryModel,
                 iCallBackFinishedRide
         );
+        return true;
+    }
+
+    public boolean FinishRide(/*Firebase Client Model*/ClientModel Client) {
+
+        if(Client == null || Client.ClientID < 1)   return false;
+
+        firebaseWrapper = FirebaseWrapper.getInstance();
+        firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
+        this.clientModel = Client;
+
+        this.clientModel.CurrentRidingHistoryID = FirebaseConstant.UNSET;
+        firebaseRequestInstance.FinishRide(this.clientModel, Main.this);
         return true;
     }
 
@@ -249,6 +293,12 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
         this.currentRidingHistoryModel.RideCanceledByClient = FirebaseConstant.SET_CANCEL_RIDE_BY_CLIENT;
         firebaseRequestInstance.CancelRideByClient(this.currentRidingHistoryModel, this.clientModel, Main.this);
         return true;
+    }
+
+    /*Force Finish Ride*/
+
+    public void ForcedFinishRide(){
+        FinishRide(FirebaseWrapper.getInstance().getClientModelInstance());
     }
 
     /* Response From Server*/
@@ -328,6 +378,20 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
 
     @Override
     public void OnGetCurrentRider(boolean value) {
+    }
+
+    @Override
+    public void OnHasAnyRide(boolean value) {
+        if (value == true) {
+            ClientModel Client = FirebaseWrapper.getInstance().getClientModelInstance();
+            if (Client.CurrentRidingHistoryID > 0) {
+                /*Rider has a ride*/
+                new RiderInRideMode(true, Client.CurrentRidingHistoryID);
+            } else {
+                /*Rider has no ride*/
+                new RiderInRideMode(false, Client.CurrentRidingHistoryID);
+            }
+        }
     }
 
     @Override
