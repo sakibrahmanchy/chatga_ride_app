@@ -23,6 +23,7 @@ public class FirebaseConstant {
     public static String COST_OF_CURRENT_RIDE = "CostOfCurrentRide";
     public static String IS_RIDE_FINISHED = "IsRideFinished";
     public static String IS_RIDE_START = "IsRideStart";
+    public static String IS_SEARCHING_OR_FINISH_RIDE = "IsSearchingOrOnRide";
     public static String RIDE_CANCEL_BY_CLIENT = "RideCanceledByClient";
     public static String RIDE_CANCEL_BY_RIDER = "RideCanceledByRider";
     public static String HISTORY = "History";
@@ -83,6 +84,7 @@ public class FirebaseConstant {
     public static String SHORTEST_DISTANCE = "SHORTEST_DISTANCE";
     public static String ALL_RIDER_LOADED = "ALL_RIDER_LOADED";
     public static String CLIENT_LOADED = "CLIENT_LOADED";
+    public static String CLIENT_LOADED_ERROR = "CLIENT_LOADED_ERROR";
     public static String HISTORY_LOADED = "HISTORY_LOADED";
     public static String RIDING_HISTORY_LOADED = "RIDING_HISTORY_LOADED";
     public static String UPDATE_LOCATION = "UPDATE_LOCATION";

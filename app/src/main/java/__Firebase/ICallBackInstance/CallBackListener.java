@@ -5,8 +5,6 @@ package __Firebase.ICallBackInstance;
  */
 
 public interface CallBackListener {
-    void onRequestCompletion(boolean flag);
-    void onCreateClientFirstTime(boolean value);
-    void onRequestForRide(boolean value);
-    void onUpdateCostForCurrentRide(String value);
+    void OnGetCurrentRiderHistoryModel(boolean value);
+    void OnGetCurrentRider(boolean value);
 }
