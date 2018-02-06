@@ -33,7 +33,6 @@ public class FirstAppLoadingActivity extends AppCompatActivity {
 
         if(loginData !=null){
             main.HasAnyRide(Long.parseLong(loginData.getClientId()));
-
             InitializeApp();
 
         }
