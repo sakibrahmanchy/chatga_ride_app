@@ -32,11 +32,9 @@ public class FirstAppLoadingActivity extends AppCompatActivity {
         main = new Main();
 
         if(loginData !=null){
-          //  main.HasAnyRide(Long.parseLong(loginData.getClientId()));
-            Intent intent = new Intent(FirstAppLoadingActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-           // InitializeApp();
+            main.HasAnyRide(Long.parseLong(loginData.getClientId()));
+
+            InitializeApp();
 
         }
         else{
