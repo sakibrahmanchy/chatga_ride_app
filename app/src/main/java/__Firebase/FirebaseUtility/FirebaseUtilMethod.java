@@ -27,26 +27,34 @@ public class FirebaseUtilMethod {
                 ret = ret + c;
             }
         }
-        if((data.indexOf("km") >= 0) || (data.indexOf("KM") >= 0) || (data.indexOf("Km") >= 0)){
+        if ((data.indexOf("km") >= 0) || (data.indexOf("KM") >= 0) || (data.indexOf("Km") >= 0)) {
             return Double.parseDouble(ret) * 1000d;
         }
         return Double.parseDouble(ret);
     }
 
-    public static Pair<Long, Long> GetHistoryAndTime(String value){
+    public static Pair<Long, Long> GetHistoryAndTime(String value) {
         String[] Data = value.trim().split("\\s+");
-        if(Data.length == 2) {
+        if (Data.length == 2) {
             return Pair.create(Long.parseLong(Data[0]), Long.parseLong(Data[1]));
-        }
-        else   return null;
+        } else return null;
     }
 
-    public static Pair<Integer, Long> GetNumberAndTime(String value){
+    public static Pair<Integer, Long> GetNumberAndTime(String value) {
         String[] Data = value.trim().split("\\s+");
-        if(Data.length == 2) {
+        if (Data.length == 2) {
             return Pair.create(Integer.parseInt(Data[0]), Long.parseLong(Data[1]));
+        } else return null;
+    }
+
+    public static Pair<Long, Long> GetHistoryAndTime(String value, boolean isOne) {
+        String[] Data = value.trim().split("\\s+");
+        if (Data.length == 2) {
+            return Pair.create(Long.parseLong(Data[0]), Long.parseLong(Data[1]));
+        } else if (Data.length == 1) {
+            return Pair.create(Long.parseLong(Data[0]), Long.parseLong(Data[0]));
         }
-        else   return null;
+        return null;
     }
 
     public static boolean getNetworkTime(final int type, final Context context, final ICallBackCurrentServerTime iCallBackCurrentServerTime) {

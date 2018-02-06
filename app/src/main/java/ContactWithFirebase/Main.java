@@ -82,7 +82,7 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
         clientModel.DeviceToken = FirebaseWrapper.getDeviceToken();
         clientModel.IsSearchingOrOnRide = FirebaseConstant.UNDEFINE;
         clientModel.CostOfCurrentRide = FirebaseConstant.UNDEFINE;
-        clientModel.CurrentRidingHistoryID = FirebaseConstant.UNDEFINE;
+        clientModel.CurrentRidingHistoryID = FirebaseConstant.UNKNOWN_STRING;
         clientModel.RideRejectedByRider = FirebaseConstant.UNDEFINE;
 
         this.IsClientAlreadyCreated(clientModel);
@@ -232,7 +232,7 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
         firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
         this.clientModel = Client;
 
-        this.clientModel.CurrentRidingHistoryID = FirebaseConstant.UNSET;
+        this.clientModel.CurrentRidingHistoryID = FirebaseConstant.UNKNOWN_STRING;
         firebaseRequestInstance.FinishRide(this.clientModel, Main.this);
         return true;
     }
@@ -384,12 +384,13 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
     public void OnHasAnyRide(boolean value) {
         if (value == true) {
             ClientModel Client = FirebaseWrapper.getInstance().getClientModelInstance();
-            if (Client.CurrentRidingHistoryID > 0) {
+            Pair<Long, Long> P = FirebaseUtilMethod.GetHistoryAndTime(Client.CurrentRidingHistoryID, true);
+            if (P.first  > 0) {
                 /*Rider has a ride*/
-                new RiderInRideMode(true, Client.CurrentRidingHistoryID);
+                new RiderInRideMode(true, P.first);
             } else {
                 /*Rider has no ride*/
-                new RiderInRideMode(false, Client.CurrentRidingHistoryID);
+                new RiderInRideMode(false, P.first);
             }
         }
     }

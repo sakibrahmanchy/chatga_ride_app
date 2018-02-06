@@ -14,13 +14,13 @@ public class ClientModel {
     public String FullName;
     public int IsSearchingOrOnRide;
     public long CostOfCurrentRide;
-    public long CurrentRidingHistoryID;
+    public String CurrentRidingHistoryID;
     public long RideRejectedByRider;
 
     public ClientModel(){
 
     }
-    public ClientModel(long _ClientID, long _PhoneNumber, String _DeviceToken, String _FullName, int _IsSearchingOrOnRide, long _CostOfCurrentRide, long _CurrentRidingHistoryID, long _RideRejectedByRider){
+    public ClientModel(long _ClientID, long _PhoneNumber, String _DeviceToken, String _FullName, int _IsSearchingOrOnRide, long _CostOfCurrentRide, String _CurrentRidingHistoryID, long _RideRejectedByRider){
         this.ClientID = _ClientID;
         this.PhoneNumber = _PhoneNumber;
         this.DeviceToken = _DeviceToken;
