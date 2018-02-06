@@ -385,12 +385,12 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
         if (value == true) {
             ClientModel Client = FirebaseWrapper.getInstance().getClientModelInstance();
             Pair<Long, Long> P = FirebaseUtilMethod.GetHistoryAndTime(Client.CurrentRidingHistoryID, true);
-            if (P.first  > 0) {
+            if (P != null && P.first  > 0) {
                 /*Rider has a ride*/
                 new RiderInRideMode(true, P.first);
             } else {
                 /*Rider has no ride*/
-                new RiderInRideMode(false, P.first);
+                new RiderInRideMode(false, FirebaseConstant.UNKNOWN);
             }
         }
     }
