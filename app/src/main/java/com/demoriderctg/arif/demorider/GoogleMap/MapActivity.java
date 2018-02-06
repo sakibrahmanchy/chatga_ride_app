@@ -41,6 +41,7 @@ import com.demoriderctg.arif.demorider.FavoritePlaces.WorkLocationModel;
 import com.demoriderctg.arif.demorider.InternetConnection.ConnectionCheck;
 import com.demoriderctg.arif.demorider.InternetConnection.InternetCheckActivity;
 import com.demoriderctg.arif.demorider.MainActivity;
+import com.demoriderctg.arif.demorider.NotificationActivity;
 import com.demoriderctg.arif.demorider.PlaceAutocompleteAdapter;
 import com.demoriderctg.arif.demorider.PromotionActivity;
 import com.demoriderctg.arif.demorider.R;
@@ -639,6 +640,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             case R.id.nav_promotions:
                 Intent promotionIntent = new Intent(MapActivity.this, PromotionActivity.class);
                 startActivityForResult(promotionIntent,0);
+                break;
+            case R.id.nav_notifications:
+                Intent notificationIntent = new Intent(MapActivity.this, NotificationActivity.class);
+                startActivityForResult(notificationIntent,0);
                 break;
             default:
                 break;

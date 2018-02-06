@@ -8,6 +8,7 @@ import com.demoriderctg.arif.demorider.models.ApiModels.AccessTokenModels.AuthTo
 import com.demoriderctg.arif.demorider.models.ApiModels.DateTimeModel.DateTimeResponse;
 import com.demoriderctg.arif.demorider.models.ApiModels.DeviceTokenModels.UpdateDeviceTokenData;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginModel;
+import com.demoriderctg.arif.demorider.models.ApiModels.NotificationModels.NotificationResponse;
 import com.demoriderctg.arif.demorider.models.ApiModels.Rating.RateDriver;
 import com.demoriderctg.arif.demorider.models.ApiModels.Rating.Rating;
 import com.demoriderctg.arif.demorider.models.ApiModels.RegistrationModels.RegistrationModel;
@@ -116,4 +117,7 @@ public interface ApiInterface {
     @FormUrlEncoded
     Call<Rating>getClientRating(@Header("Authorization") String authHeader,
                                @Field("client_id") int clientId);
+
+    @GET("api/v1/client/notifications")
+    Call<NotificationResponse> getClientNotifications(@Header("Authorization") String authHeader);
 }

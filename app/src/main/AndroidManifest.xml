@@ -95,6 +95,9 @@
         <activity
             android:name=".Setting.SettingActivity"
             android:label="User Setting" />
+        <activity
+            android:name=".NotificationActivity"
+            android:label="Notifications" />
         <activity android:name=".Setting.EditProfile"></activity>
     </application>
 
