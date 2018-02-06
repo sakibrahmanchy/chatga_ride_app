@@ -34,6 +34,7 @@ public class FirebaseUtilMethod {
     }
 
     public static Pair<Long, Long> GetHistoryAndTime(String value) {
+        if(value == null)   return null;
         String[] Data = value.trim().split("\\s+");
         if (Data.length == 2) {
             return Pair.create(Long.parseLong(Data[0]), Long.parseLong(Data[1]));
@@ -48,6 +49,7 @@ public class FirebaseUtilMethod {
     }
 
     public static Pair<Long, Long> GetHistoryAndTime(String value, boolean isOne) {
+        if(value == null)   return null;
         String[] Data = value.trim().split("\\s+");
         if (Data.length == 2) {
             return Pair.create(Long.parseLong(Data[0]), Long.parseLong(Data[1]));
