@@ -31,6 +31,7 @@ import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
 import com.demoriderctg.arif.demorider.Dailog.BottomSheetDailogInRideMode;
 import com.demoriderctg.arif.demorider.Dailog.RideFinishDailog;
 import com.demoriderctg.arif.demorider.Dailog.SearchingDriver;
+import com.demoriderctg.arif.demorider.FirstAppLoadingActivity.FirstAppLoadingActivity;
 import com.demoriderctg.arif.demorider.GoogleMap.GetCurrentLocation;
 import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
 import com.demoriderctg.arif.demorider.InternetConnection.ConnectionCheck;
@@ -67,6 +68,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
     private Marker destinationMarker;
     private Marker currentMarker ;
     private Handler handler = new Handler();
+    private Handler handlerForFinishRide = new Handler();
     private GetCurrentLocation  getCurrentLocation;
     private static int progressStatus=1;
     private Builder notification;
@@ -88,7 +90,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
         sendNotification = new SendNotification(this);
         notification = new NotificationCompat.Builder(this);
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-         bottomSheet = findViewById( R.id.bottom_sheet );
+        bottomSheet = findViewById( R.id.bottom_sheet );
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         mBottomSheetBehavior.setPeekHeight(300);
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
@@ -189,81 +191,58 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
         //noinspection deprecation
         mMap.setOnMyLocationChangeListener(this);
 
-        new Thread(new Runnable() {
+        Runnable runnableForStartRide = new Runnable() {
+            @Override
             public void run() {
-                while (AppConstant.TREAD_FOR_FINISH_RIDE) {
 
-                    handler.post(new Runnable() {
-                        public void run() {
-                            if(AppConstant.FINISH_RIDE){
-                                RideFinishDailog rideFinishDailog = new RideFinishDailog(OnrideModeActivity.this);
-                                rideFinishDailog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                                rideFinishDailog.show();
-                                AppConstant.FINISH_RIDE=false;
-                                AppConstant.TREAD_FOR_FINISH_RIDE=false;
-                                return;
-                            }
-                        }
-                    });
-                    try {
-                        // Sleep for 200 milliseconds.
-                        Thread.sleep(200);
-                    } catch (InterruptedException e) {
+                if(AppConstant.FINISH_RIDE){
+                    RideFinishDailog rideFinishDailog = new RideFinishDailog(OnrideModeActivity.this);
+                    rideFinishDailog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    rideFinishDailog.show();
+                }
+                else {
+                    handlerForFinishRide.postDelayed(this, 3000);
+                }
+
+
+            }
+        };
+
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+
+                if(AppConstant.START_RIDE){
+                    mMap.clear();
+                    try{
+                        sourceMarker= mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(AppConstant.SOURCE.latitude,AppConstant.SOURCE.longitude))
+                                .title("Home")
+                                .snippet(AppConstant.SOURCE_NAME)
+                                .alpha(.7f)
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_google_map)));
+
+                        destinationMarker = mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(AppConstant.DESTINATION.latitude,AppConstant.DESTINATION.longitude))
+                                .title("DESTINATION")
+                                .snippet(AppConstant.DESTINATION_NAME)
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_google_map)));
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(AppConstant.SOURCE, DEFAULT_ZOOM));
+                        handlerForFinishRide.postDelayed(runnableForStartRide,3000);
+
+                    }catch (Exception e){
                         e.printStackTrace();
                     }
                 }
-            }
-        }).start();
-
-
-        new Thread(new Runnable() {
-            public void run() {
-                while ( AppConstant.INITIAL_RIDE_ACCEPT>0) {
-
-
-                    handler.post(new Runnable() {
-                        public void run() {
-                            if(AppConstant.START_RIDE){
-                                AppConstant.INITIAL_RIDE_ACCEPT=0;
-                                notification.setAutoCancel(true);
-                                notificationManager.cancel(1);
-                                sendNotification.Notification("RIDE MODE","You are in ride mode","Tap to view map");
-                                mMap.clear();
-                                try{
-                                    sourceMarker= mMap.addMarker(new MarkerOptions()
-                                            .position(new LatLng(AppConstant.SOURCE.latitude,AppConstant.SOURCE.longitude))
-                                            .title("Home")
-                                            .snippet(AppConstant.SOURCE_NAME)
-                                            .alpha(.7f)
-                                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_google_map)));
-
-                                    destinationMarker = mMap.addMarker(new MarkerOptions()
-                                            .position(new LatLng(AppConstant.DESTINATION.latitude,AppConstant.DESTINATION.longitude))
-                                            .title("DESTINATION")
-                                            .snippet(AppConstant.DESTINATION_NAME)
-                                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_google_map)));
-                                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(AppConstant.SOURCE, DEFAULT_ZOOM));
-                                    MandatoryCall();
-
-                                }catch (Exception e){
-                                    e.printStackTrace();
-                                }
-                                return;
-                            }
-                            GetRiderCurrentLocation();
-                        }
-                    });
-                    try {
-                        // Sleep for 200 milliseconds.
-                        Thread.sleep(3000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                else{
+                    GetRiderCurrentLocation();
+                    handler.postDelayed(this, 3000);
                 }
+
+
             }
-        }).start();
-
-
+        };
+        handler.postDelayed(runnable, 3000);
     }
 
 

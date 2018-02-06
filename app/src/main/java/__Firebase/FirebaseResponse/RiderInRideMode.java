@@ -1,5 +1,7 @@
 package __Firebase.FirebaseResponse;
 
+import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
+
 import ContactWithFirebase.Main;
 import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseWrapper;
@@ -26,13 +28,14 @@ public class RiderInRideMode implements CallBackListener {
 
     private void HasRide() {
         /* Riding History Model*/
-        FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance();
-        /*Client Model*/
-        FirebaseWrapper.getInstance().getRiderModelInstance();
+       AppConstant.currentRidingHistoryModel = FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance();
+        /*Rider Model*/
+       AppConstant.riderModel = FirebaseWrapper.getInstance().getRiderModelInstance();
+       AppConstant.IS_RIDE=1;
     }
 
     private void NoRide() {
-
+          AppConstant.IS_RIDE=0;
     }
 
     private void GetCurrentHistory() {
