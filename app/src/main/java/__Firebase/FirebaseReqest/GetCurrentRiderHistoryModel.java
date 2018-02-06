@@ -1,5 +1,6 @@
 package __Firebase.FirebaseReqest;
 
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
@@ -50,8 +51,11 @@ public class GetCurrentRiderHistoryModel {
 
                 if (dataSnapshot.exists() && dataSnapshot.hasChildren()) {
                     if (dataSnapshot.getChildren().iterator().hasNext()) {
-                        firebaseWrapper.getCurrentRidingHistoryModelInstance().LoadData(dataSnapshot.getChildren().iterator().next());
-                        callBackListener.OnGetCurrentRiderHistoryModel(true, Time, ActionType);
+                        DataSnapshot snp = dataSnapshot.getChildren().iterator().next();
+                        if(snp.exists()) {
+                            firebaseWrapper.getCurrentRidingHistoryModelInstance().LoadData(snp);
+                            callBackListener.OnGetCurrentRiderHistoryModel(true, Time, ActionType);
+                        }
                     }
                 }
             }

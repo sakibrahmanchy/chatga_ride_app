@@ -49,6 +49,7 @@ public class FirebaseConstant {
     /* For Map */
     public static final String BASE_URL  = "http://139.59.90.128/chaatga_rider/";
     public static final String Empty = ("");
+    public static final String UNKNOWN_STRING = ("-1");
     public static final String Latitude = "lat";
     public static final String Longitude = "lng";
     public static final String Map_Api_Direction = "https://maps.googleapis.com/maps/api/directions/";
@@ -67,6 +68,7 @@ public class FirebaseConstant {
     public static int SET = 1;
     public static int UNSET = 0;
     public static int UNDEFINE = -1;
+    public static int UNKNOWN = -1;
     public static Double INFINITE_DOUBLE = Double.MAX_VALUE;
     public static Integer INFINITE_INTEGER = Integer.MAX_VALUE;
     public static long ONE_MINUTE_IN_MILLISECOND = 60000;
