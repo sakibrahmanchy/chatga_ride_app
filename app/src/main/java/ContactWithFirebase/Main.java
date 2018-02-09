@@ -83,7 +83,7 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
         clientModel.IsSearchingOrOnRide = FirebaseConstant.UNDEFINE;
         clientModel.CostOfCurrentRide = FirebaseConstant.UNDEFINE;
         clientModel.CurrentRidingHistoryID = FirebaseConstant.UNKNOWN_STRING;
-        clientModel.RideRejectedByRider = FirebaseConstant.UNDEFINE;
+        clientModel.RideRejectedByRider = FirebaseConstant.UNKNOWN_STRING;
 
         this.IsClientAlreadyCreated(clientModel);
         return true;
