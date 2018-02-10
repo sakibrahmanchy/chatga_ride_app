@@ -78,7 +78,12 @@ public class PromotionActivity extends AppCompatActivity {
             }
         });
 
-        getClientPromotions();
+        try {
+            getClientPromotions();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -144,6 +149,7 @@ public class PromotionActivity extends AppCompatActivity {
 
     public void getClientPromotions(){
         dialog = new ProgressDialog(this);
+        dialog.dismiss();
         dialog.setMessage("Please wait...");
         dialog.show();
 

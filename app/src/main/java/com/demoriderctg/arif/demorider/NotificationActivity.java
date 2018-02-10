@@ -62,7 +62,12 @@ public class NotificationActivity extends AppCompatActivity {
 
 
 
-        getClientNotifications();
+        try {
+            getClientNotifications();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -86,6 +91,7 @@ public class NotificationActivity extends AppCompatActivity {
 
     public void getClientNotifications(){
         dialog = new ProgressDialog(this);
+        dialog.dismiss();
         dialog.setMessage("Please wait...");
         dialog.show();
 

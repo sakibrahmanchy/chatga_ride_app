@@ -58,7 +58,6 @@ public class FirstAppLoadingActivity extends AppCompatActivity {
                        }
                        if(AppConstant.IS_RIDE==1){
 
-
                            AppConstant.SOURCE = new LatLng(AppConstant.currentRidingHistoryModel.StartingLocation.Latitude,
                                    AppConstant.currentRidingHistoryModel.StartingLocation.Longitude);
                            AppConstant.DESTINATION = new LatLng(AppConstant.currentRidingHistoryModel.EndingLocation.Latitude,

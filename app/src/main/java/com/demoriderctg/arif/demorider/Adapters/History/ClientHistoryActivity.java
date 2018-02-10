@@ -63,7 +63,12 @@ public class ClientHistoryActivity extends AppCompatActivity {
 
         rv.setLayoutManager(new LinearLayoutManager(this));
 
-        getClientHistory();
+        try{
+            getClientHistory();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -87,6 +92,7 @@ public class ClientHistoryActivity extends AppCompatActivity {
 
     public void getClientHistory(){
         dialog = new ProgressDialog(this);
+        dialog.dismiss();
         dialog.setMessage("Gaining Access To App..");
         dialog.show();
 
