@@ -6,6 +6,10 @@ import com.demoriderctg.arif.demorider.models.ApiModels.UserDiscounts.UserDiscou
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
+import __Firebase.FirebaseModel.ClientModel;
+import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
+import __Firebase.FirebaseModel.RiderModel;
+
 /**
  * Created by User on 12/17/2017.
  */
@@ -50,6 +54,13 @@ public class AppConstant {
     public static HomeLocationModel searchSorceLocationModel = null;
     public static WorkLocationModel searchDestinationLocationModel = null;
     public static  int NOTIFICATION_ID =0;
+    public static CurrentRidingHistoryModel currentRidingHistoryModel = null;
+    public static RiderModel riderModel = null;
+    public static int IS_RIDE=2;
+    public static double SOURCE_LATITUTE=0;
+    public static double SOURCE_LOGITUTE=0;
+    public static double DESTINATION_LATITUTE=0;
+    public static double DESTINATION_LOGITUTE=0;
 
 
     /* Log Tag, Message */

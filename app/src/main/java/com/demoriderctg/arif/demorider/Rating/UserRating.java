@@ -43,7 +43,6 @@ public class UserRating {
 
                 switch(statusCode){
                     case 200:
-
                         if(response.body().isSuccess()){
                          double data = response.body().getData();
                         }

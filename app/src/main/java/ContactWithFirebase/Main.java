@@ -6,6 +6,7 @@ import android.util.Log;
 import android.util.Pair;
 
 import com.demoriderctg.arif.demorider.MainActivity;
+import com.demoriderctg.arif.demorider.OnrideMode.SendNotification;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 
 import java.util.ArrayList;

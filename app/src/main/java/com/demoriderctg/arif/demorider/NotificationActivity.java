@@ -1,9 +1,11 @@
-package com.demoriderctg.arif.demorider.Adapters.History;
+package com.demoriderctg.arif.demorider;
 
+import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,60 +13,56 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
-import com.demoriderctg.arif.demorider.PhoneVerificationActivity;
-import com.demoriderctg.arif.demorider.R;
+import com.demoriderctg.arif.demorider.Adapters.Notification.NotificationAdapter;
 import com.demoriderctg.arif.demorider.RestAPI.ApiClient;
 import com.demoriderctg.arif.demorider.RestAPI.ApiInterface;
-import com.demoriderctg.arif.demorider.UserInformation;
-import com.demoriderctg.arif.demorider.models.ApiModels.AccessTokenModels.AuthToken;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
-import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginModel;
-import com.demoriderctg.arif.demorider.models.ApiModels.RideHistory.ClientHistory;
-import com.demoriderctg.arif.demorider.models.ApiModels.RideHistory.ClientHistoryResponse;
-
+import com.demoriderctg.arif.demorider.models.ApiModels.NotificationModels.Notification;
+import com.demoriderctg.arif.demorider.models.ApiModels.NotificationModels.NotificationResponse;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import __Firebase.FirebaseWrapper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.demoriderctg.arif.demorider.MainActivity.TAG;
 
-public class ClientHistoryActivity extends AppCompatActivity {
-
+public class NotificationActivity extends AppCompatActivity {
 
     RecyclerView rv;
     SwipeRefreshLayout swiper;
-    HistoryAdapter adapter;
+    NotificationAdapter adapter;
 
     private ProgressDialog dialog;
     private ApiInterface apiService;
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
-    private ArrayList<ClientHistory> clientHistories;;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private UserInformation userInformation;
+    private ArrayList<Notification> notifications;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_client_history);
+        setContentView(R.layout.activity_notification);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         pref = getApplicationContext().getSharedPreferences("MyPref", 0);
-        userInformation = new UserInformation(this);
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout_notification);
 
-        rv = (RecyclerView) findViewById(R.id.history_recycler_view);
-      //  dialog = new ProgressDialog(this);
+        rv = (RecyclerView) findViewById(R.id.notification_recycler_view);
+        //  dialog = new ProgressDialog(this);
 
         rv.setLayoutManager(new LinearLayoutManager(this));
 
-        getClientHistory();
 
+
+        getClientNotifications();
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -76,7 +74,7 @@ public class ClientHistoryActivity extends AppCompatActivity {
                         // cancle the Visual indication of a refresh
                         swipeRefreshLayout.setRefreshing(false);
                         // Generate a random integer number
-                        getClientHistory();
+                        getClientNotifications();
                     }
                 }, 3000);
             }
@@ -85,9 +83,10 @@ public class ClientHistoryActivity extends AppCompatActivity {
 
     }
 
-    public void getClientHistory(){
+
+    public void getClientNotifications(){
         dialog = new ProgressDialog(this);
-        dialog.setMessage("Gaining Access To App..");
+        dialog.setMessage("Please wait...");
         dialog.show();
 
         //String deviceToken = FirebaseWrapper.getDeviceToken();
@@ -96,12 +95,12 @@ public class ClientHistoryActivity extends AppCompatActivity {
         apiService =
                 ApiClient.getClient().create(ApiInterface.class);
 
-        LoginData loginData = userInformation.getuserInformation();
-        Call<ClientHistoryResponse> call = apiService.getClientHistory(authHeader,loginData.getClientId());
 
-        call.enqueue(new Callback<ClientHistoryResponse>() {
+        Call<NotificationResponse> call = apiService.getClientNotifications(authHeader);
+
+        call.enqueue(new Callback<NotificationResponse>() {
             @Override
-            public void onResponse(Call<ClientHistoryResponse> call, Response<ClientHistoryResponse> response) {
+            public void onResponse(Call<NotificationResponse> call, Response<NotificationResponse> response) {
 
                 int statusCode = response.code();
                 String testStatusCode = statusCode+"";
@@ -110,30 +109,35 @@ public class ClientHistoryActivity extends AppCompatActivity {
                     case 200:
                         boolean isSuccess = response.body().isSuccess();
                         if(isSuccess){
-                            clientHistories = response.body().getData();
-                            adapter = new HistoryAdapter(getApplicationContext(),clientHistories);
+                            notifications = response.body().getData();
+                            adapter = new NotificationAdapter(getApplicationContext(),notifications);
                             rv.setAdapter(adapter);
                         }else{
+                            Toast.makeText(getApplicationContext(),"Error Occurred!",Toast.LENGTH_LONG).show();
                         }
                         break;
                     default:
-
+                        Toast.makeText(getApplicationContext(),"Error Occurred!",Toast.LENGTH_LONG).show();
                         break;
                 }
 
             }
 
             @Override
-            public void onFailure(Call<ClientHistoryResponse> call, Throwable t) {
+            public void onFailure(Call<NotificationResponse> call, Throwable t) {
                 // Log error here since request failed
                 Log.e(TAG, t.toString());
             }
         });
     }
 
+
     public boolean onOptionsItemSelected(MenuItem item){
         finish();
         return true;
 
     }
+
+
+
 }
