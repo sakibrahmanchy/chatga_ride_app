@@ -1,12 +1,10 @@
 package ContactWithFirebase;
 
 import android.content.Context;
-import android.service.autofill.FillEventHistory;
 import android.util.Log;
 import android.util.Pair;
 
 import com.demoriderctg.arif.demorider.MainActivity;
-import com.demoriderctg.arif.demorider.OnrideMode.SendNotification;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 
 import java.util.ArrayList;
@@ -393,6 +391,8 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
                 /*Rider has no ride*/
                 new RiderInRideMode(false, FirebaseConstant.UNKNOWN);
             }
+        } else {
+            new RiderInRideMode(false, FirebaseConstant.UNKNOWN);
         }
     }
 

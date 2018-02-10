@@ -31,10 +31,14 @@ public class FirstAppLoadingActivity extends AppCompatActivity {
         loginData = userInformation.getuserInformation();
         main = new Main();
 
-        if(loginData !=null){
+        if(MainActivity.check && loginData == null){
+            loginData = new LoginData();
+            loginData.clientId = "1010";
+        }
+
+        if(loginData != null){
             main.HasAnyRide(Long.parseLong(loginData.getClientId()));
             InitializeApp();
-
         }
         else{
             Intent intent = new Intent(FirstAppLoadingActivity.this, MainActivity.class);

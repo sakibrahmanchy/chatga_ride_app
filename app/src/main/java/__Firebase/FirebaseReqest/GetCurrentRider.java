@@ -53,6 +53,9 @@ public class GetCurrentRider {
                                 DataSnapshot snp = dataSnapshot.getChildren().iterator().next();
                                 FirebaseWrapper.getInstance().getRiderModelInstance().LoadData(snp);
                             }
+                        } else {
+                            if (iGetCurrentRider != null) iGetCurrentRider.OnGetCurrentRider(false);
+                            if (iCallBackListener != null) iCallBackListener.OnGetCurrentRider(false);
                         }
                     }
 

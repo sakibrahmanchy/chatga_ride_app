@@ -52,7 +52,7 @@ public class FindNearestRider implements IDistanceAndDuration {
         Log.d(FirebaseConstant.NEAREST_RIDER, FirebaseConstant.NEAREST_RIDER);
 
         this.numberOfRider -= 1;
-        if (FirebaseUtilMethod.IsEmptyOrNull(Distance) || FirebaseUtilMethod.IsEmptyOrNull(Distance) || _Rider == null) return;
+        if (FirebaseUtilMethod.IsEmptyOrNull(Distance) || FirebaseUtilMethod.IsEmptyOrNull(Duration) || _Rider == null) return;
 
         _Rider.DistanceFromClient = FirebaseUtilMethod.GetDistanceInDouble(Distance);
 
