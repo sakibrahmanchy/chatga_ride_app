@@ -62,7 +62,8 @@ public class PromotionActivity extends AppCompatActivity {
         pref = getApplicationContext().getSharedPreferences("MyPref", 0);
         userInformation = new UserInformation(this);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout_discount);
-
+        dialog = new ProgressDialog(this);
+        dialog.setMessage("Please wait...");
         rv = (RecyclerView) findViewById(R.id.discount_recycler_view);
         //  dialog = new ProgressDialog(this);
 
@@ -148,9 +149,7 @@ public class PromotionActivity extends AppCompatActivity {
 
 
     public void getClientPromotions(){
-        dialog = new ProgressDialog(this);
-        dialog.dismiss();
-        dialog.setMessage("Please wait...");
+
         dialog.show();
 
         //String deviceToken = FirebaseWrapper.getDeviceToken();

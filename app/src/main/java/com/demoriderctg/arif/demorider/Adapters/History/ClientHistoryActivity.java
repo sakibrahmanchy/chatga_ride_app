@@ -57,7 +57,8 @@ public class ClientHistoryActivity extends AppCompatActivity {
         pref = getApplicationContext().getSharedPreferences("MyPref", 0);
         userInformation = new UserInformation(this);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
-
+        dialog = new ProgressDialog(this);
+        dialog.setMessage("Gaining Access To App..");
         rv = (RecyclerView) findViewById(R.id.history_recycler_view);
       //  dialog = new ProgressDialog(this);
 
@@ -91,9 +92,7 @@ public class ClientHistoryActivity extends AppCompatActivity {
     }
 
     public void getClientHistory(){
-        dialog = new ProgressDialog(this);
-        dialog.dismiss();
-        dialog.setMessage("Gaining Access To App..");
+
         dialog.show();
 
         //String deviceToken = FirebaseWrapper.getDeviceToken();

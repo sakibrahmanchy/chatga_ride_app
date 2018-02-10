@@ -54,7 +54,8 @@ public class NotificationActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         pref = getApplicationContext().getSharedPreferences("MyPref", 0);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout_notification);
-
+        dialog = new ProgressDialog(this);
+        dialog.setMessage("Please wait...");
         rv = (RecyclerView) findViewById(R.id.notification_recycler_view);
         //  dialog = new ProgressDialog(this);
 
@@ -90,9 +91,7 @@ public class NotificationActivity extends AppCompatActivity {
 
 
     public void getClientNotifications(){
-        dialog = new ProgressDialog(this);
-        dialog.dismiss();
-        dialog.setMessage("Please wait...");
+
         dialog.show();
 
         //String deviceToken = FirebaseWrapper.getDeviceToken();
