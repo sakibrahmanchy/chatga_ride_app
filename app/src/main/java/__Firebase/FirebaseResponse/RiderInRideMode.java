@@ -28,14 +28,14 @@ public class RiderInRideMode implements CallBackListener {
 
     private void HasRide() {
         /* Riding History Model*/
-       AppConstant.currentRidingHistoryModel = FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance();
+        AppConstant.currentRidingHistoryModel = FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance();
         /*Rider Model*/
-       AppConstant.riderModel = FirebaseWrapper.getInstance().getRiderModelInstance();
-       AppConstant.IS_RIDE=1;
+        AppConstant.riderModel = FirebaseWrapper.getInstance().getRiderModelInstance();
+        AppConstant.IS_RIDE = 1;
     }
 
     private void NoRide() {
-          AppConstant.IS_RIDE=0;
+        AppConstant.IS_RIDE = 0;
     }
 
     private void GetCurrentHistory() {
@@ -46,6 +46,8 @@ public class RiderInRideMode implements CallBackListener {
     public void OnGetCurrentRiderHistoryModel(boolean value) {
         if (value == true) {
             this.main.GetCurrentRider(FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance().RiderID, this);
+        } else {
+            NoRide();
         }
     }
 
@@ -53,6 +55,8 @@ public class RiderInRideMode implements CallBackListener {
     public void OnGetCurrentRider(boolean value) {
         if (value == true) {
             HasRide();
+        } else {
+            NoRide();
         }
     }
 }

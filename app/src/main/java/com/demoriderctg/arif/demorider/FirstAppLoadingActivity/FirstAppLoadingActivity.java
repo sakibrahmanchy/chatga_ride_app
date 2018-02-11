@@ -31,12 +31,14 @@ public class FirstAppLoadingActivity extends AppCompatActivity {
         loginData = userInformation.getuserInformation();
         main = new Main();
 
-        if(loginData !=null){
-         //   main.HasAnyRide(Long.parseLong(loginData.getClientId()));
-         //   InitializeApp();
-            Intent intent = new Intent(FirstAppLoadingActivity.this, MainActivity.class);
-            startActivity(intent);
+        if(MainActivity.check && loginData == null){
+            loginData = new LoginData();
+            loginData.clientId = "1010";
+        }
 
+        if(loginData != null){
+            main.HasAnyRide(Long.parseLong(loginData.getClientId()));
+            InitializeApp();
         }
         else{
             Intent intent = new Intent(FirstAppLoadingActivity.this, MainActivity.class);
@@ -59,6 +61,7 @@ public class FirstAppLoadingActivity extends AppCompatActivity {
                            finish();
                        }
                        if(AppConstant.IS_RIDE==1){
+
 
                            AppConstant.SOURCE = new LatLng(AppConstant.currentRidingHistoryModel.StartingLocation.Latitude,
                                    AppConstant.currentRidingHistoryModel.StartingLocation.Longitude);

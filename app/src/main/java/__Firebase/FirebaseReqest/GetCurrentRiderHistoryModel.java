@@ -1,6 +1,5 @@
 package __Firebase.FirebaseReqest;
 
-import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
@@ -52,17 +51,19 @@ public class GetCurrentRiderHistoryModel {
                 if (dataSnapshot.exists() && dataSnapshot.hasChildren()) {
                     if (dataSnapshot.getChildren().iterator().hasNext()) {
                         DataSnapshot snp = dataSnapshot.getChildren().iterator().next();
-                        if(snp.exists()) {
+                        if (snp.exists()) {
                             firebaseWrapper.getCurrentRidingHistoryModelInstance().LoadData(snp);
                             callBackListener.OnGetCurrentRiderHistoryModel(true, Time, ActionType);
                         }
                     }
+                } else {
+                    callBackListener.OnGetCurrentRiderHistoryModel(false, Time, ActionType);
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                callBackListener.OnGetCurrentRiderHistoryModel(false, Time, ActionType);
             }
         });
 
@@ -93,12 +94,17 @@ public class GetCurrentRiderHistoryModel {
                             firebaseWrapper.getCurrentRidingHistoryModelInstance().LoadData(snap);
                             iCallBackListener.OnGetCurrentRiderHistoryModel(true);
                         }
+                    } else {
+                        iCallBackListener.OnGetCurrentRiderHistoryModel(false);
                     }
+                } else {
+                    iCallBackListener.OnGetCurrentRiderHistoryModel(false);
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                iCallBackListener.OnGetCurrentRiderHistoryModel(false);
             }
         });
     }
