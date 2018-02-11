@@ -114,6 +114,7 @@ public class FirebaseConstant {
     public static final int RIDE_FINISHED = 4;
     public static final int RIDE_REJECT_BY_RIDER = 5;
     public static final int SEND_NOTIFICATION_TO_RIDER = 6;
+    public static final int RIDE_CANCELED_BY_CLIENT = 7;
 
     /*Request Action Type*/
     public static final int GET_HISTORY_FOR_INITIAL_ACCEPTANCE = 1;

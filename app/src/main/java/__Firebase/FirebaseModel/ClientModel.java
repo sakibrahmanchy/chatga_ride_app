@@ -33,7 +33,6 @@ public class ClientModel {
 
     public void LoadData(DataSnapshot snapshot){
 
-
         ClientModel clientModel = snapshot.getValue(ClientModel.class);
         this.ClientID = clientModel.ClientID;
         this.PhoneNumber = clientModel.PhoneNumber;

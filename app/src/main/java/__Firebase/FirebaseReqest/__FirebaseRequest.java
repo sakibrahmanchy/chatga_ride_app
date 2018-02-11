@@ -107,6 +107,17 @@ public class __FirebaseRequest extends AppCompatActivity {
         thread.start();
     }
 
+    public void SetHistoryIDToClient(final CurrentRidingHistoryModel HistoryModel, final ClientModel Client, final long Time, final ICallbackMain callBackListener){
+
+        Thread thread = new Thread(){
+            @Override
+            public void run(){
+                new SetHistoryIDToClient(HistoryModel, Client, Time, callBackListener);
+            }
+        };
+        thread.start();
+    }
+
     public void GetCurrentRider(final long RiderID, final ICallbackMain callBackListener, final IGetCurrentRider iGetCurrentRider){
 
         Thread thread = new Thread(){
@@ -150,12 +161,12 @@ public class __FirebaseRequest extends AppCompatActivity {
         thread.start();
     }
 
-    public void GetCurrentRiderHistoryModel(final long HistoryID, final CallBackListener callBackListener){
+    public void GetCurrentRiderHistoryModel(final long HistoryID, final long ClientID, final CallBackListener callBackListener){
 
         Thread thread = new Thread(){
             @Override
             public void run(){
-                new GetCurrentRiderHistoryModel(HistoryID, callBackListener);
+                new GetCurrentRiderHistoryModel(HistoryID, ClientID, callBackListener);
             }
         };
         thread.start();

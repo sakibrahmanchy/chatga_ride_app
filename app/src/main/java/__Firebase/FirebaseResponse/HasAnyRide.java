@@ -45,7 +45,7 @@ public class HasAnyRide {
                 callBackListener.OnHasAnyRide(false);
             }
         });
-        firebaseWrapper.FirebaseRootReference.child(FirebaseConstant.RIDER).orderByChild(FirebaseConstant.RIDER_ID).equalTo(this.ClientID).addListenerForSingleValueEvent(new ValueEventListener() {
+        firebaseWrapper.FirebaseRootReference.child(FirebaseConstant.CLIENT).orderByChild(FirebaseConstant.CLIENT_ID).equalTo(this.ClientID).addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

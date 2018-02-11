@@ -14,12 +14,11 @@ import __Firebase.ICallBackInstance.CallBackListener;
 public class RiderInRideMode implements CallBackListener {
 
     private long HistoryID = FirebaseConstant.UNDEFINE;
-    private Main main;
+    private Main main = new Main();
 
     public RiderInRideMode(boolean hasRide, long HistoryID) {
         if (hasRide) {
             this.HistoryID = HistoryID;
-            this.main = new Main();
             GetCurrentHistory();
         } else {
             NoRide();
@@ -39,13 +38,17 @@ public class RiderInRideMode implements CallBackListener {
     }
 
     private void GetCurrentHistory() {
-        this.main.GetCurrentRiderHistoryModel(this.HistoryID, this);
+        this.main.GetCurrentRiderHistoryModel(this.HistoryID, FirebaseWrapper.getInstance().getClientModelInstance().ClientID, this);
     }
 
     @Override
     public void OnGetCurrentRiderHistoryModel(boolean value) {
         if (value == true) {
             this.main.GetCurrentRider(FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance().RiderID, this);
+
+            FirebaseResponse.RideStartedResponse(FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance().HistoryID);
+            FirebaseResponse.RideFinishedResponse(FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance().HistoryID);
+            FirebaseResponse.RideCanceledByRiderResponse(FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance().HistoryID);
         } else {
             NoRide();
         }

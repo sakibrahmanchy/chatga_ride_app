@@ -60,7 +60,7 @@ public class FirebaseResponse {
                                             HistoryID = (long) Data.first;
                                             Time = (long) Data.second;
 
-                                            if (HistoryID > 0) {
+                                            if (HistoryID > 0 && Time > 0) {
                                                 new Main().GetCurrentRiderHistoryModel(
                                                         FirebaseWrapper.getInstance().getClientModelInstance(),
                                                         HistoryID,
@@ -111,7 +111,7 @@ public class FirebaseResponse {
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.exists()) {
                                     long Time = Long.parseLong(dataSnapshot.getValue().toString());
-                                    if (Time != -1) {
+                                    if (Time > 0) {
                                         firebaseWrapper.getCurrentRidingHistoryModelInstance().IsRideStart = Time;
                                         new RiderStarted(Time);
                                     }
@@ -154,7 +154,7 @@ public class FirebaseResponse {
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.exists()) {
                                     long Time = Long.parseLong(dataSnapshot.getValue().toString());
-                                    if (Time != -1) {
+                                    if (Time > 0) {
                                         firebaseWrapper.getCurrentRidingHistoryModelInstance().IsRideFinished = Time;
                                         new RiderFinished(Time);
                                     }
@@ -197,7 +197,7 @@ public class FirebaseResponse {
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.exists()) {
                                     long Time = Integer.parseInt(dataSnapshot.getValue().toString());
-                                    if (Time != -1) {
+                                    if (Time > 0) {
                                         firebaseWrapper.getCurrentRidingHistoryModelInstance().RideCanceledByRider = Time;
                                         new RideCanceledByRider(Time);
                                     }

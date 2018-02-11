@@ -34,8 +34,9 @@ public class GetCurrentRiderHistoryModel {
         Request();
     }
 
-    public GetCurrentRiderHistoryModel(long HistoryID, CallBackListener callBackListener) {
+    public GetCurrentRiderHistoryModel(long HistoryID, long ClientID, CallBackListener callBackListener) {
         this.HistoryID = HistoryID;
+        this.ClientID = ClientID;
         this.iCallBackListener = callBackListener;
 
         RequestForOnlyHistory();

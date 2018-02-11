@@ -22,14 +22,13 @@ public class FirstAppLoadingActivity extends AppCompatActivity {
    private UserInformation userInformation;
    private LoginData loginData;
     private Handler handler = new Handler();
-    private Main main;
+    private Main main = new Main();;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_app_loading);
         userInformation = new UserInformation(this);
         loginData = userInformation.getuserInformation();
-        main = new Main();
 
         if(MainActivity.check && loginData == null){
             loginData = new LoginData();

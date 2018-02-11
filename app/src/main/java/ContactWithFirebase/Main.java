@@ -52,7 +52,7 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
 
     public boolean CreateNewClientFirebase(LoginData loginData, String phoneNumber) {
 
-        if (MainActivity.check) {
+        if (loginData == null && MainActivity.check) {
             loginData = new LoginData(
                     "Jobayer",
                     "sheikh",
@@ -180,12 +180,12 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
         return true;
     }
 
-    public boolean GetCurrentRiderHistoryModel(long HistoryID, CallBackListener callBackListener){
+    public boolean GetCurrentRiderHistoryModel(long HistoryID, long ClientID, CallBackListener callBackListener){
 
         if(HistoryID < 1)   return false;
 
         firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
-        firebaseRequestInstance.GetCurrentRiderHistoryModel(HistoryID, callBackListener);
+        firebaseRequestInstance.GetCurrentRiderHistoryModel(HistoryID, ClientID, callBackListener);
         return true;
     }
 
@@ -282,14 +282,16 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
         return true;
     }
 
-    public boolean CancelRideByClient(/*Firebase HistoryAdapter, Client Model*/CurrentRidingHistoryModel HistoryModel, ClientModel Client) {
+    public boolean CancelRideByClient(/*Firebase HistoryAdapter, Client Model*/CurrentRidingHistoryModel HistoryModel, ClientModel Client, long Time) {
+
+        if(HistoryModel.HistoryID < 1 || Client.ClientID < 1)   return false;
 
         firebaseWrapper = FirebaseWrapper.getInstance();
         firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
         this.currentRidingHistoryModel = HistoryModel;
         this.clientModel = Client;
 
-        this.currentRidingHistoryModel.RideCanceledByClient = FirebaseConstant.SET_CANCEL_RIDE_BY_CLIENT;
+        this.currentRidingHistoryModel.RideCanceledByClient = Time;
         firebaseRequestInstance.CancelRideByClient(this.currentRidingHistoryModel, this.clientModel, Main.this);
         return true;
     }
@@ -298,6 +300,27 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
 
     public void ForcedFinishRide(){
         FinishRide(FirebaseWrapper.getInstance().getClientModelInstance());
+    }
+
+    /*Force Cancel Ride*/
+    public void ForceCancelRide(){
+
+        FirebaseUtilMethod.getNetworkTime(
+                FirebaseConstant.RIDE_CANCELED_BY_CLIENT,
+                null,
+                this
+        );
+
+        FirebaseWrapper.getInstance().getClientModelInstance().CurrentRidingHistoryID = FirebaseConstant.UNKNOWN_STRING;
+        FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance().HistoryID = FirebaseConstant.UNKNOWN;
+
+        firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
+        firebaseRequestInstance.SetHistoryIDToClient(
+                FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance(),
+                FirebaseWrapper.getInstance().getClientModelInstance(),
+                -1,
+                this
+        );
     }
 
     /* Response From Server*/
@@ -412,6 +435,14 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
                             ShortestDistance,
                             TotalCost,
                             DiscountID,
+                            Time
+                    );
+                    break;
+                }
+                case FirebaseConstant.RIDE_CANCELED_BY_CLIENT: {
+                    CancelRideByClient(
+                            FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance(),
+                            FirebaseWrapper.getInstance().getClientModelInstance(),
                             Time
                     );
                     break;

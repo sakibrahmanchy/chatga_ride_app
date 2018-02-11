@@ -36,16 +36,11 @@ public class RideCanceledByRider implements ICallBackCurrentServerTime {
 
         riderModel = FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider;
         requestedRider = FirebaseWrapper.getInstance().getRiderViewModelInstance().AlreadyRequestedRider;
-        if(riderModel.RiderID > 0){
+        if(riderModel.RiderID > 0) {
             requestedRider.put(riderModel.RiderID, true);
         }
         /*Do no request again rather just notify client to request again*/
         //RequestAgain();
-    }
-
-    private void RequestAgain(){
-        FirebaseWrapper.getInstance().getRiderViewModelInstance().ClearData(false);
-        /*Request for another ride*/
     }
 
     @Override

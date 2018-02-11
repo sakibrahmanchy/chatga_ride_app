@@ -163,7 +163,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private LinearLayout linearLayout;
 
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -210,17 +209,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         loginData = userInformation.getuserInformation();
         phonemumber = userInformation.getRiderPhoneNumber();
 
-        if(userInformation.getUserHomeLocation() !=null){
+        if (userInformation.getUserHomeLocation() != null) {
             AppConstant.searchSorceLocationModel = new HomeLocationModel();
             AppConstant.searchSorceLocationModel = userInformation.getUserHomeLocation();
         }
 
-        if(userInformation.getUserWorkLocation()!=null){
+        if (userInformation.getUserWorkLocation() != null) {
             AppConstant.searchDestinationLocationModel = new WorkLocationModel();
             AppConstant.searchDestinationLocationModel = userInformation.getUserWorkLocation();
         }
 
-        if(MainActivity.check == true) {
+        if (MainActivity.check == true) {
+            main.CreateNewClientFirebase(loginData, "01752062838");
+        } else {
             main.CreateNewClientFirebase(loginData, phonemumber);
         }
     }
@@ -307,8 +308,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     AppConstant.DESTINATION = AppConstant.searchDestinationLocationModel.work;
                     AppConstant.SOURCE_NAME = AppConstant.searchSorceLocationModel.homeLocationName;
                     AppConstant.DESTINATION_NAME = AppConstant.searchDestinationLocationModel.workLocationName;
-                    String url = getDirectionsUrl( AppConstant.SOURCE, AppConstant.DESTINATION );
-                    DownloadTask downloadTask = new DownloadTask(MapActivity.this, mMap, AppConstant.SOURCE,  AppConstant.DESTINATION);
+                    String url = getDirectionsUrl(AppConstant.SOURCE, AppConstant.DESTINATION);
+                    DownloadTask downloadTask = new DownloadTask(MapActivity.this, mMap, AppConstant.SOURCE, AppConstant.DESTINATION);
                     downloadTask.execute(url);
                     sendButton.setVisibility(View.INVISIBLE);
                     requestbtn.setVisibility(View.VISIBLE);
@@ -384,8 +385,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private void getDeviceLocation() {
         Log.d(TAG, "getDeviceLocation: getting the devices current location");
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-     //   requestbtn.setVisibility(View.INVISIBLE);
-     //   mMap.clear();
+        //   requestbtn.setVisibility(View.INVISIBLE);
+        //   mMap.clear();
         try {
             if (mLocationPermissionsGranted) {
 
@@ -413,12 +414,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                         DEFAULT_ZOOM,
                                         "My Location");
                                 //checkLatLon();
-                                if(AppConstant.searchSorceLocationModel ==null){
+                                if (AppConstant.searchSorceLocationModel == null) {
                                     AppConstant.searchSorceLocationModel = new HomeLocationModel();
-                                    AppConstant.searchSorceLocationModel.homeLocationName =address.getAddressLine(0);
-                                    AppConstant.searchSorceLocationModel.home= new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+                                    AppConstant.searchSorceLocationModel.homeLocationName = address.getAddressLine(0);
+                                    AppConstant.searchSorceLocationModel.home = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                                 }
-                                if(AppConstant.searchDestinationLocationModel == null){
+                                if (AppConstant.searchDestinationLocationModel == null) {
                                     AppConstant.searchDestinationLocationModel = new WorkLocationModel();
                                     AppConstant.searchDestinationLocationModel.workLocationName = AppConstant.searchSorceLocationModel.homeLocationName;
                                     AppConstant.searchDestinationLocationModel.work = AppConstant.searchSorceLocationModel.home;
@@ -631,19 +632,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         switch (item.getItemId()) {
             case R.id.nav_settings:
                 Intent intent = new Intent(MapActivity.this, SettingActivity.class);
-                startActivityForResult(intent,0);
+                startActivityForResult(intent, 0);
                 break;
             case R.id.nav_history:
                 Intent clientIntent = new Intent(MapActivity.this, ClientHistoryActivity.class);
-                startActivityForResult(clientIntent,0);
+                startActivityForResult(clientIntent, 0);
                 break;
             case R.id.nav_promotions:
                 Intent promotionIntent = new Intent(MapActivity.this, PromotionActivity.class);
-                startActivityForResult(promotionIntent,0);
+                startActivityForResult(promotionIntent, 0);
                 break;
             case R.id.nav_notifications:
                 Intent notificationIntent = new Intent(MapActivity.this, NotificationActivity.class);
-                startActivityForResult(notificationIntent,0);
+                startActivityForResult(notificationIntent, 0);
                 break;
             default:
                 break;
