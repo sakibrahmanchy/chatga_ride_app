@@ -94,13 +94,6 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         mBottomSheetBehavior.setPeekHeight(300);
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-
-        if(AppConstant.NOTIFICATION_ID ==0){
-            notification.setAutoCancel(true);
-            notificationManager.cancel(1);
-            Intent intent = new Intent(this, MapActivity.class);
-            startActivity(intent);
-        }
         main = new Main();
         initMap();
 
