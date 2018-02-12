@@ -94,7 +94,8 @@
         <activity android:name=".PromotionActivity" />
         <activity
             android:name=".Setting.SettingActivity"
-            android:label="User Setting" />
+            android:label="User Setting"
+            android:noHistory="true"/>
         <activity
             android:name=".NotificationActivity"
             android:label="Notifications" />

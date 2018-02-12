@@ -134,6 +134,7 @@ public interface ApiInterface {
                                          @Part("last_name") RequestBody last_name,
                                          @Part("gender") RequestBody gender,
                                          @Part("email") RequestBody email,
-                                         @Part MultipartBody.Part avatar);
+                                         @Part MultipartBody.Part avatar,
+                                         @Part("phone") RequestBody phone);
 
 }

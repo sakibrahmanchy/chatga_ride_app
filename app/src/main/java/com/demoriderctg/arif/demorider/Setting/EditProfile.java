@@ -31,6 +31,7 @@ import com.demoriderctg.arif.demorider.UserInformation;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginModel;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -66,7 +67,7 @@ public class EditProfile extends AppCompatActivity  {
     private DatePickerDialog birthDayPickerDialog;
     private Uri picUri;
     private SimpleDateFormat dateFormatter;
-    private String deviceToken,email,firstName,lastName,gender,birthDate;
+    private String deviceToken,email,firstName,lastName,gender,birthDate,phone;
     //keep track of cropping intent
     final int PIC_CROP = 2;
 
@@ -116,12 +117,16 @@ public class EditProfile extends AppCompatActivity  {
         });
 
         setDateTimeField();
-
     }
 
     private void viewAndEditProfile(){
 
         loginData = userInformation.getuserInformation();
+        String url = loginData.getAvatar();
+        Picasso.with(this).invalidate(url);
+        Picasso.with(this)
+                .load(url)
+                .into(editProfile);
         editProfileFirstName.setText(loginData.firstName);
         editProfileLastName.setText(loginData.lastName);
         editEmail.setText(loginData.getEmail());
@@ -212,7 +217,7 @@ public class EditProfile extends AppCompatActivity  {
                     thePic.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
                     byte[] byteArray = byteArrayOutputStream .toByteArray();
 
-                    profilePicture = new File(getApplicationContext().getCacheDir(),"profileImage");
+                    profilePicture = new File(getApplicationContext().getCacheDir(),"profileImage.png");
                     try {
                         profilePicture.createNewFile();
                         FileOutputStream fos = new FileOutputStream(profilePicture);
@@ -289,9 +294,10 @@ public class EditProfile extends AppCompatActivity  {
     }
 
     public boolean onOptionsItemSelected(MenuItem item){
+        Intent intent = new Intent(EditProfile.this,SettingActivity.class);
+        startActivity(intent);
         finish();
-        return true;
-
+        return false;
     }
 
     private void performCrop(){
@@ -343,8 +349,11 @@ public class EditProfile extends AppCompatActivity  {
         RequestBody lastNameRequest = RequestBody.create(MediaType.parse("text/plain"),lastName);
         RequestBody genderRequest = RequestBody.create(MediaType.parse("text/plain"),gender);
         RequestBody emailRequest = RequestBody.create(MediaType.parse("text/plain"),email);
+        RequestBody phoneRequest = RequestBody.create(MediaType.parse("text/plain"),editPhoneNunber.getText().toString());
 
-        Call<LoginModel>call = apiService.updateClientProfile(authHeader,clientIdRequest,firstNameRequest,lastNameRequest,genderRequest,emailRequest,fileToUpload);
+
+
+        Call<LoginModel>call = apiService.updateClientProfile(authHeader,clientIdRequest,firstNameRequest,lastNameRequest,genderRequest,emailRequest,fileToUpload,phoneRequest);
         call.enqueue(new Callback<LoginModel>() {
             @Override
             public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {

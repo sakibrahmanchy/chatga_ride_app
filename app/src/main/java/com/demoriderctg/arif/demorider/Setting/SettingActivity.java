@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.demoriderctg.arif.demorider.FavoritePlaces.FavoritePlacesActivity;
 import com.demoriderctg.arif.demorider.FavoritePlaces.HomeLocationModel;
 import com.demoriderctg.arif.demorider.FavoritePlaces.WorkLocationModel;
@@ -21,6 +22,7 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.gson.Gson;
 import com.google.maps.model.LatLng;
+import com.squareup.picasso.Picasso;
 
 public class SettingActivity extends AppCompatActivity {
 
@@ -78,6 +80,12 @@ public class SettingActivity extends AppCompatActivity {
             workLocation.setText(userInformation.getUserWorkLocation().workLocationName);
         }
 
+        String url = loginData.getAvatar();
+        Picasso.with(this).invalidate(url);
+        Picasso.with(this)
+                .load(url)
+                .into(profileImage);
+
     }
 
     private void setFovaritesLocation(){
@@ -114,8 +122,8 @@ public class SettingActivity extends AppCompatActivity {
         profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                   Intent intent = new Intent(SettingActivity.this,EditProfile.class);
-                   startActivity(intent);
+                Intent intent = new Intent(SettingActivity.this,EditProfile.class);
+                startActivity(intent);
             }
         });
 
