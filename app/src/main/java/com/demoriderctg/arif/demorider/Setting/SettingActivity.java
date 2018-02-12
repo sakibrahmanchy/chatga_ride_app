@@ -111,7 +111,7 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
-        editProfile.setOnClickListener(new View.OnClickListener() {
+        profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                    Intent intent = new Intent(SettingActivity.this,EditProfile.class);
