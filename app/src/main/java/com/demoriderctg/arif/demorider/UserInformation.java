@@ -9,10 +9,6 @@ import com.demoriderctg.arif.demorider.FavoritePlaces.WorkLocationModel;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 import com.google.gson.Gson;
 
-/**
- * Created by Arif on 12/16/2017.
- */
-
 public class UserInformation {
 
     private Gson gson;

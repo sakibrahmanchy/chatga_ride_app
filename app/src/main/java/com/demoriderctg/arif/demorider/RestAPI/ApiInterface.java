@@ -7,6 +7,7 @@ package com.demoriderctg.arif.demorider.RestAPI;
 import com.demoriderctg.arif.demorider.models.ApiModels.AccessTokenModels.AuthToken;
 import com.demoriderctg.arif.demorider.models.ApiModels.DateTimeModel.DateTimeResponse;
 import com.demoriderctg.arif.demorider.models.ApiModels.DeviceTokenModels.UpdateDeviceTokenData;
+import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginModel;
 import com.demoriderctg.arif.demorider.models.ApiModels.NotificationModels.NotificationResponse;
 import com.demoriderctg.arif.demorider.models.ApiModels.Rating.RateDriver;
@@ -25,12 +26,16 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.HEAD;
 import retrofit2.http.Header;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 import retrofit2.http.FormUrlEncoded;
 
@@ -120,4 +125,15 @@ public interface ApiInterface {
 
     @GET("api/v1/client/notifications")
     Call<NotificationResponse> getClientNotifications(@Header("Authorization") String authHeader);
+
+    @POST("api/v1/client/update_profile")
+    @Multipart
+    Call<LoginModel> updateClientProfile(@Header("Authorization") String authHeader,
+                                         @Part("client_id") RequestBody client_id,
+                                         @Part("first_name") RequestBody first_name,
+                                         @Part("last_name") RequestBody last_name,
+                                         @Part("gender") RequestBody gender,
+                                         @Part("email") RequestBody email,
+                                         @Part MultipartBody.Part avatar);
+
 }

@@ -38,8 +38,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="text"
-                android:id="@+id/edit_profile_name"
-                android:hint="Name"/>
+                android:id="@+id/edit_profile_first_name"
+                android:hint="First Name"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="text"
+                android:id="@+id/edit_profile_last_name"
+                android:hint="Last Name"/>
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
