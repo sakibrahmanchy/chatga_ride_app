@@ -86,7 +86,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
-    ArrayList markerPoints = new ArrayList();
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
