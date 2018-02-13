@@ -109,9 +109,9 @@ public class PromotionActivity extends AppCompatActivity {
 
         String promocode = promoCodeText.getText().toString();
         LoginData loginData = userInformation.getuserInformation();
-        String userId = loginData.getUserId();
+        String clientId = loginData.getClientId();
         String authHeader = "Bearer "+pref.getString("access_token",null);
-        Call<ApplyPromoCodeResponse> call = apiService.applyPromoCode(authHeader,promocode,userId);
+        Call<ApplyPromoCodeResponse> call = apiService.applyPromoCode(authHeader,promocode,clientId);
 
         call.enqueue(new Callback<ApplyPromoCodeResponse>() {
             @Override
@@ -159,7 +159,7 @@ public class PromotionActivity extends AppCompatActivity {
                 ApiClient.getClient().create(ApiInterface.class);
 
         LoginData loginData = userInformation.getuserInformation();
-        Call<UserDiscountResponse> call = apiService.getUserDiscounts(authHeader,loginData.getUserId());
+        Call<UserDiscountResponse> call = apiService.getUserDiscounts(authHeader,loginData.getClientId());
 
         call.enqueue(new Callback<UserDiscountResponse>() {
             @Override

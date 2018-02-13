@@ -84,6 +84,8 @@ public class SettingActivity extends AppCompatActivity {
         Picasso.with(this).invalidate(url);
         Picasso.with(this)
                 .load(url)
+                .placeholder(R.drawable.profile_image)
+                .error(R.drawable.profile_image)
                 .into(profileImage);
 
     }
