@@ -69,11 +69,15 @@ public class FirstAppLoadingActivity extends AppCompatActivity {
                            if(AppConstant.currentRidingHistoryModel.IsRideStart ==-1 && AppConstant.currentRidingHistoryModel.IsRideFinished==-1)
                            {
                                AppConstant.INITIAL_RIDE_ACCEPT=1;
+                               AppConstant.RIDER_PHONENUMBER = String.valueOf(AppConstant.riderModel.PhoneNumber);
+                               AppConstant.RIDER_NAME=AppConstant.riderModel.FullName;
                            }
 
                            else if(AppConstant.currentRidingHistoryModel.IsRideStart !=-1 && AppConstant.currentRidingHistoryModel.IsRideFinished==-1){
                                AppConstant.START_RIDE=true;
                                AppConstant.FINISH_RIDE=false;
+                               AppConstant.RIDER_PHONENUMBER = String.valueOf(AppConstant.riderModel.PhoneNumber);
+                               AppConstant.RIDER_NAME=AppConstant.riderModel.FullName;
                            }
                            else{
                                AppConstant.FINISH_RIDE=true;

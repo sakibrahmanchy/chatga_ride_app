@@ -133,6 +133,7 @@ public class ThrdRequestAgainForRider {
     }
 
     private static void RequestAgain() {
+
         FirebaseWrapper.getInstance().getRiderViewModelInstance().ClearData(false);
 
         /*Request for another ride*/
