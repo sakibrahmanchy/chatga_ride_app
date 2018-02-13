@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
 import com.demoriderctg.arif.demorider.MainActivity;
 import com.demoriderctg.arif.demorider.NotificationActivity;
 import com.demoriderctg.arif.demorider.R;
@@ -29,8 +30,8 @@ public class FirebaseMessagingServices extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
         NotificationModel notificationModel = FirebaseWrapper.getInstance().getNotificationModelInstance();
-        if(remoteMessage.getData().containsKey("typeId")){
-            if(remoteMessage.getData().get("typeId").equals("2")){
+        if (remoteMessage.getData().containsKey("typeId")) {
+            if (remoteMessage.getData().get("typeId").equals("2")) {
                 Intent intent = new Intent(this, NotificationActivity.class);
                 PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -47,37 +48,108 @@ public class FirebaseMessagingServices extends FirebaseMessagingService {
                 NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 notificationManager.notify(0, builder.build());
             }
-        }
-        else{
-            if (remoteMessage.getData().size() > 0) {
-                notificationModel.title = remoteMessage.getData().containsKey("title") ? remoteMessage.getData().get("title") : FirebaseConstant.Empty;
-                notificationModel.body = remoteMessage.getData().containsKey("body") ? remoteMessage.getData().get("body") : FirebaseConstant.Empty;
-                notificationModel.riderId = Long.parseLong(remoteMessage.getData().containsKey("riderId") ? remoteMessage.getData().get("riderId") : "0");
-                notificationModel.riderName = remoteMessage.getData().containsKey("riderName") ? remoteMessage.getData().get("riderName") : "0";
-                notificationModel.riderPhone = remoteMessage.getData().containsKey("riderPhone") ? remoteMessage.getData().get("riderPhone") : "0";
+        } else if (remoteMessage.getData().containsKey(AppConstant.ACTION_TYPE)) {
+
+            int action = Integer.parseInt(remoteMessage.getData().get(AppConstant.ACTION_TYPE));
+            switch (action) {
+                case AppConstant.ACTION_INITIAL_ACCEPTANCE_NOTIFICATION: {
+                    this.ACTION_INITIAL_ACCEPTANCE_NOTIFICATION(action, remoteMessage);
+                    break;
+                }
+                case AppConstant.ACTION_FINAL_ACCEPTANCE_NOTIFICATION: {
+                    this.ACTION_FINAL_ACCEPTANCE_NOTIFICATION(action, remoteMessage);
+                    break;
+                }
+                case AppConstant.ACTION_FINISH_RIDE_NOTIFICATION: {
+                    this.ACTION_FINISH_RIDE_NOTIFICATION(action, remoteMessage);
+                    break;
+                }
+                case AppConstant.ACTION_CANCEL_RIDE_NOTIFICATION: {
+                    this.ACTION_CANCEL_RIDE_NOTIFICATION(action, remoteMessage);
+                    break;
+                }
             }
-
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.setFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-            builder.setContentTitle(notificationModel.title);
-            builder.setContentText(notificationModel.body);
-            builder.setAutoCancel(true);
-            builder.setSmallIcon(R.mipmap.ic_launcher);
-            builder.setContentIntent(pendingIntent);
-
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.notify(0, builder.build());
-
-            Log.d(FirebaseConstant.RECEIVED_NOTIFICATION, FirebaseConstant.RECEIVED_NOTIFICATION);
         }
-
     }
 
     @Override
     public void onDeletedMessages() {
 
+    }
+
+    private void ACTION_INITIAL_ACCEPTANCE_NOTIFICATION(int action, RemoteMessage remoteMessage){
+        if(remoteMessage.getData().size() > 0){
+
+            if(remoteMessage.getData().containsKey(AppConstant.RIDER_ID)){
+                long riderId = Long.parseLong(remoteMessage.getData().get(AppConstant.RIDER_ID));
+            }
+            /*Your Own Pending Intent*/
+            Intent intent = new Intent(this, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            this.Notify(AppConstant.INITIAL_ACCEPTANCE_TITLE, AppConstant.INITIAL_ACCEPTANCE_BODY, pendingIntent);
+        }
+    }
+
+    private void ACTION_FINAL_ACCEPTANCE_NOTIFICATION(int action, RemoteMessage remoteMessage){
+        if(remoteMessage.getData().size() > 0){
+
+            if(remoteMessage.getData().containsKey(AppConstant.RIDER_ID)){
+                long riderId = Long.parseLong(remoteMessage.getData().get(AppConstant.RIDER_ID));
+            }
+             /*Your Own Pending Intent*/
+            Intent intent = new Intent(this, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            this.Notify(AppConstant.FINAL_ACCEPTANCE_TITLE, AppConstant.FINAL_ACCEPTANCE_BODY, pendingIntent);
+        }
+    }
+
+    private void ACTION_FINISH_RIDE_NOTIFICATION(int action, RemoteMessage remoteMessage){
+        if(remoteMessage.getData().size() > 0){
+
+            if(remoteMessage.getData().containsKey(AppConstant.RIDER_ID)){
+                long riderId = Long.parseLong(remoteMessage.getData().get(AppConstant.RIDER_ID));
+            }
+            /* Get the final cost */
+            if(remoteMessage.getData().containsKey(AppConstant.FINAL_COST)){
+                long finalCost = Long.parseLong(remoteMessage.getData().get(AppConstant.FINAL_COST));
+            }
+
+            /*Your Own Pending Intent*/
+            Intent intent = new Intent(this, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            this.Notify(AppConstant.FINISH_RIDE_TITLE, AppConstant.FINISH_RIDE_BODY, pendingIntent);
+        }
+    }
+
+    private void ACTION_CANCEL_RIDE_NOTIFICATION(int action, RemoteMessage remoteMessage){
+        if(remoteMessage.getData().size() > 0){
+
+            if(remoteMessage.getData().containsKey(AppConstant.RIDER_ID)){
+                long riderId = Long.parseLong(remoteMessage.getData().get(AppConstant.RIDER_ID));
+            }
+            /*Your Own Pending Intent*/
+            Intent intent = new Intent(this, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            this.Notify(AppConstant.CANCEL_RIDE_TITLE, AppConstant.CANCEL_RIDE_BODY, pendingIntent);
+        }
+    }
+
+    private void Notify(String Title, String Body, PendingIntent pendingIntent){
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+
+        Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        builder.setSound(sound);
+        builder.setContentTitle(Title);
+        builder.setContentText(Body);
+        builder.setAutoCancel(true);
+        builder.setSmallIcon(R.mipmap.ic_launcher);
+        builder.setContentIntent(pendingIntent);
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(0, builder.build());
     }
 }
