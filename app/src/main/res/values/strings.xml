@@ -129,4 +129,5 @@
     <string name="per_minute">Per Minute       1TK</string>
     <string name="Minimum_fare">Minimum fare      40TK</string>
     <string name="final_finish_ride_dailog">OK</string>
+    <string name="cancel_ride">Cancel Ride</string>
 </resources>
