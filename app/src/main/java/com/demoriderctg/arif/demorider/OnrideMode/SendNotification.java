@@ -9,6 +9,7 @@ import android.support.v4.app.NotificationCompat;
 
 
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
+import com.demoriderctg.arif.demorider.FirstAppLoadingActivity.FirstAppLoadingActivity;
 import com.demoriderctg.arif.demorider.R;
 
 import __Firebase.FirebaseResponse.NotificationModel;
@@ -46,11 +47,10 @@ public class SendNotification {
         notification.setOnlyAlertOnce(true);
         notification.setContentText(NotficationBoday);
         notification.setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND);
-        Intent intent = new Intent(mContext,OnrideModeActivity.class);
+        Intent intent = new Intent(mContext,FirstAppLoadingActivity.class);
         PendingIntent pendingIntent =PendingIntent.getActivity(mContext,0,intent,0);
         notification.setContentIntent(pendingIntent);
         note = notification.build();
-        note.flags = Notification.FLAG_ONGOING_EVENT;
         notificationManager.notify(AppConstant.NOTIFICATION_ID,note);
 
 

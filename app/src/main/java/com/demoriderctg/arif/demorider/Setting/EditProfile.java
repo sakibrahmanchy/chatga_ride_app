@@ -1,16 +1,18 @@
 package com.demoriderctg.arif.demorider.Setting;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Environment;
-import android.provider.MediaStore;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,16 +25,29 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.demoriderctg.arif.demorider.R;
+import com.demoriderctg.arif.demorider.RestAPI.ApiClient;
+import com.demoriderctg.arif.demorider.RestAPI.ApiInterface;
 import com.demoriderctg.arif.demorider.UserInformation;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
+import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginModel;
+import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
 import __Firebase.FirebaseWrapper;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.demoriderctg.arif.demorider.MainActivity.TAG;
 
@@ -40,7 +55,8 @@ public class EditProfile extends AppCompatActivity  {
 
 
     private ImageView editProfile,edit_profile;
-    private EditText editProfileName;
+    private EditText editProfileFirstName;
+    private EditText editProfileLastName;
     private EditText editEmail;
     private RadioGroup editGender;
     private Button profileUpdate;
@@ -51,21 +67,33 @@ public class EditProfile extends AppCompatActivity  {
     private DatePickerDialog birthDayPickerDialog;
     private Uri picUri;
     private SimpleDateFormat dateFormatter;
-    private String deviceToken,email,firstName,gender,birthDate;
+    private String deviceToken,email,firstName,lastName,gender,birthDate,phone;
     //keep track of cropping intent
     final int PIC_CROP = 2;
 
-    private UserInformation userInformation;
+
     private static final int RESULT_LOAD_IMAGE = 1;
+    private String imageEncodedToBase64;
+
+    private ProgressDialog dialog;
+    private  ApiInterface apiService ;
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
+
+    private UserInformation userInformation;
+    private File profilePicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
+        pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+        editor = pref.edit();
 
         editProfile = (ImageView) findViewById(R.id.edit_profile_pic);
-        editProfileName = (EditText) findViewById(R.id.edit_profile_name);
+        editProfileFirstName = (EditText) findViewById(R.id.edit_profile_first_name);
+        editProfileLastName = (EditText) findViewById(R.id.edit_profile_last_name);
         editEmail = (EditText) findViewById(R.id.edit_email);
         editGender =(RadioGroup) findViewById(R.id.edit_gender_radio_group);
         editDate =(EditText) findViewById(R.id.edit_birthday_edittext);
@@ -89,13 +117,18 @@ public class EditProfile extends AppCompatActivity  {
         });
 
         setDateTimeField();
-
     }
 
     private void viewAndEditProfile(){
 
         loginData = userInformation.getuserInformation();
-        editProfileName.setText(loginData.firstName);
+        String url = loginData.getAvatar();
+        Picasso.with(this).invalidate(url);
+        Picasso.with(this)
+                .load(url)
+                .into(editProfile);
+        editProfileFirstName.setText(loginData.firstName);
+        editProfileLastName.setText(loginData.lastName);
         editEmail.setText(loginData.getEmail());
         editPhoneNunber.setText(loginData.phone);
         if(loginData.getGender() !=null ){
@@ -135,7 +168,8 @@ public class EditProfile extends AppCompatActivity  {
             @Override
             public void onClick(View v) {
                 if(attemptLogin()){
-
+                    System.out.println(imageEncodedToBase64);
+                    updateProfile(firstName,lastName,gender,email,profilePicture);
                 }
             }
         });
@@ -176,7 +210,27 @@ public class EditProfile extends AppCompatActivity  {
 //get the cropped bitmap
 
                 if(extras !=null){
+                    
                     Bitmap thePic = extras.getParcelable("data");
+
+                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                    thePic.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+                    byte[] byteArray = byteArrayOutputStream .toByteArray();
+
+                    profilePicture = new File(getApplicationContext().getCacheDir(),"profileImage.png");
+                    try {
+                        profilePicture.createNewFile();
+                        FileOutputStream fos = new FileOutputStream(profilePicture);
+                        fos.write(byteArray);
+                        fos.flush();
+                        fos.close();
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    //imageEncodedToBase64 = Base64.encodeToString(byteArray, Base64.DEFAULT);
+
                     editProfile.setImageBitmap(thePic);
                 }
 
@@ -189,10 +243,13 @@ public class EditProfile extends AppCompatActivity  {
 
         boolean ok=true;
         editEmail.setError(null);
-        editProfileName.setError(null);
+        editProfileFirstName.setError(null);
+        editProfileLastName.setError(null);
 
         email = editEmail.getText().toString();
-        firstName = editProfileName.getText().toString();
+        firstName = editProfileFirstName.getText().toString();
+        lastName = editProfileLastName.getText().toString();
+
         deviceToken = FirebaseWrapper.getDeviceToken();
         birthDate = editDate.getText().toString();
 
@@ -207,8 +264,16 @@ public class EditProfile extends AppCompatActivity  {
         View focusView = null;
 
         if (TextUtils.isEmpty(firstName)) {
-            editProfileName.setError(getString(R.string.error_field_required));
-            focusView = editProfileName;
+            editProfileFirstName.setError(getString(R.string.error_field_required));
+            focusView = editProfileFirstName;
+
+            cancel = true;
+            ok=false;
+        }
+
+        if (TextUtils.isEmpty(lastName)) {
+            editProfileLastName.setError(getString(R.string.error_field_required));
+            focusView = editProfileLastName;
 
             cancel = true;
             ok=false;
@@ -229,9 +294,10 @@ public class EditProfile extends AppCompatActivity  {
     }
 
     public boolean onOptionsItemSelected(MenuItem item){
+        Intent intent = new Intent(EditProfile.this,SettingActivity.class);
+        startActivity(intent);
         finish();
-        return true;
-
+        return false;
     }
 
     private void performCrop(){
@@ -259,6 +325,67 @@ public class EditProfile extends AppCompatActivity  {
             Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
             toast.show();
         }
+    }
+
+    public void updateProfile(String firstName, String lastName, String gender, String email, File avatar){
+
+        RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), avatar);
+        MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("avatar", avatar.getName(), requestBody);
+        //RequestBody filename = RequestBody.create(MediaType.parse("text/plain"), avatar.getName());
+
+        apiService =
+                ApiClient.getClient().create(ApiInterface.class);
+
+        dialog = new ProgressDialog(EditProfile.this);
+        dialog.setMessage("Please Wait..");
+        dialog.show();
+
+        String clientId = userInformation.getuserInformation().clientId;
+
+        String authHeader = "Bearer "+pref.getString("access_token",null);
+
+        RequestBody clientIdRequest = RequestBody.create(MediaType.parse("text/plain"),clientId);
+        RequestBody firstNameRequest = RequestBody.create(MediaType.parse("text/plain"),firstName);
+        RequestBody lastNameRequest = RequestBody.create(MediaType.parse("text/plain"),lastName);
+        RequestBody genderRequest = RequestBody.create(MediaType.parse("text/plain"),gender);
+        RequestBody emailRequest = RequestBody.create(MediaType.parse("text/plain"),email);
+        RequestBody phoneRequest = RequestBody.create(MediaType.parse("text/plain"),editPhoneNunber.getText().toString());
+
+
+
+        Call<LoginModel>call = apiService.updateClientProfile(authHeader,clientIdRequest,firstNameRequest,lastNameRequest,genderRequest,emailRequest,fileToUpload,phoneRequest);
+        call.enqueue(new Callback<LoginModel>() {
+            @Override
+            public void onResponse(Call<LoginModel> call, Response<LoginModel> response) {
+
+                int statusCode = response.code();
+                dialog.dismiss();
+                switch(statusCode){
+                    case 200:
+                        LoginData newLoginData = response.body().getLoginData();
+                        Gson gson = new Gson();
+                        String json = gson.toJson(newLoginData);
+                        editor.putString("userData",json);
+                        editor.commit();
+                        break;
+                    default:
+                        Snackbar.make(findViewById(android.R.id.content), "Sorry, network error.",
+                                Snackbar.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoginModel> call, Throwable t) {
+                // Log error here since request failed
+                Log.e(TAG, t.toString());
+            }
+        });
+
+    }
+
+    public void generateFile(Bitmap bitmap){
+
     }
 
 

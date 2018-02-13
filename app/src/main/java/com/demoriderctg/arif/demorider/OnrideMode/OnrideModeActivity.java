@@ -23,6 +23,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -53,6 +56,9 @@ import java.util.Date;
 import java.util.MissingFormatArgumentException;
 
 import ContactWithFirebase.Main;
+import __Firebase.FirebaseModel.ClientModel;
+import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
+import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseWrapper;
 import __Firebase.ICallBackInstance.IGerRiderLocation;
 
@@ -75,7 +81,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
     private Notification note;
     private NotificationManager notificationManager;
     UiSettings uiSettings;
-    private Main main = null;
+    private Main main = new Main();
     private SendNotification sendNotification;
     private BottomSheetBehavior mBottomSheetBehavior;
     private View bottomSheet;
@@ -94,14 +100,6 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         mBottomSheetBehavior.setPeekHeight(300);
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-
-        if(AppConstant.NOTIFICATION_ID ==0){
-            notification.setAutoCancel(true);
-            notificationManager.cancel(1);
-            Intent intent = new Intent(this, MapActivity.class);
-            startActivity(intent);
-        }
-        main = new Main();
         initMap();
 
     }
@@ -287,6 +285,29 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
             }
 
 
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.onridemode_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.cancel_ride:
+                ClientModel clientModel = FirebaseWrapper.getInstance().getClientModelInstance();
+                CurrentRidingHistoryModel currentRidingHistoryModel = FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance();
+                main.CancelRideByClient(currentRidingHistoryModel,clientModel,0);
+                return true;
+            case R.id.help:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

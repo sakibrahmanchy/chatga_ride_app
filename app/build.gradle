@@ -5,7 +5,7 @@ android {
     buildToolsVersion "26.0.2"
     defaultConfig {
         applicationId "com.demoriderctg.arif.demorider"
-        minSdkVersion 18
+        minSdkVersion 17
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -61,6 +61,7 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.android.support:support-vector-drawable:26.+'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.+'
+    compile 'com.squareup.picasso:picasso:2.5.2'
 
 
 }
