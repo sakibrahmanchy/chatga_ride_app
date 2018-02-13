@@ -99,13 +99,15 @@ public class FirebaseConstant {
     public static String RIDE_IS_REJECTED_BY_RIDER = "RIDE_REJECTED_BY_RIDER";
     public static String RIDER_LOADED_ERROR = "RIDER_LOADED_ERROR";
     public static String RIDER_LOADED = "RIDER_LOADED";
+    public static String RESPONSE_CANCEL_RIDE_NOTF = "RESPONSE_CANCEL_RIDE_NOTF";
 
     /*Toast Message*/
     public static String NO_RIDER_FOUND = "No rider found";
 
     /*Notification Action Type*/
-    public static String CLIENT_TO_RIDER = "3021";
-    public static String GET_CURRENT_TIME = "4001";
+    public static String CLIENT_TO_RIDER = ("3021");
+    public static String GET_CURRENT_TIME = ("4001");
+    public static String CANCEL_RIDE_NOTIFY_CLIENT = ("5021");
 
     /*Request Type*/
     public static final int INITIAL_AC_OF_RIDE_NOTIFY = 1;

@@ -297,7 +297,6 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
     }
 
     /*Force Finish Ride*/
-
     public void ForcedFinishRide(){
         FinishRide(FirebaseWrapper.getInstance().getClientModelInstance());
     }

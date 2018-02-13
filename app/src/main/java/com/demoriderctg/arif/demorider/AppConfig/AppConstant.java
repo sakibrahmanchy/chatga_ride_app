@@ -74,4 +74,25 @@ public class AppConstant {
     public static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
             new LatLng(90.1474141289,23.6245050799), new LatLng(90.599381674, 23.9678033413));
 
+    /*Notification key*/
+    public static String ACTION_TYPE = ("actionType");
+    public static String FINAL_COST = ("finalCost");
+    public static String RIDER_ID = ("riderId");
+
+    /*Notification Action Type*/
+    public static final int ACTION_INITIAL_ACCEPTANCE_NOTIFICATION = 5012;
+    public static final int ACTION_FINAL_ACCEPTANCE_NOTIFICATION = 6012;
+    public static final int ACTION_FINISH_RIDE_NOTIFICATION = 7012;
+    public static final int ACTION_CANCEL_RIDE_NOTIFICATION = 8012;
+
+    /*Notification Title and Body*/
+    public static final String INITIAL_ACCEPTANCE_BODY = ("Your ride is accepted");
+    public static final String FINAL_ACCEPTANCE_BODY = ("Your ride is started");
+    public static final String FINISH_RIDE_BODY = ("Your ride is finished");
+    public static final String CANCEL_RIDE_BODY = ("Your ride is canceled try again");
+
+    public static final String INITIAL_ACCEPTANCE_TITLE = ("Ride Accepted");
+    public static final String FINAL_ACCEPTANCE_TITLE = ("Ride Started");
+    public static final String FINISH_RIDE_TITLE = ("Ride Finished");
+    public static final String CANCEL_RIDE_TITLE = ("Ride Canceled");
 }
