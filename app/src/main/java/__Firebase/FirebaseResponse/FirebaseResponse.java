@@ -196,7 +196,7 @@ public class FirebaseResponse {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.exists()) {
-                                    long Time = Integer.parseInt(dataSnapshot.getValue().toString());
+                                    long Time = Long.parseLong(dataSnapshot.getValue().toString());
                                     if (Time > 0) {
                                         firebaseWrapper.getCurrentRidingHistoryModelInstance().RideCanceledByRider = Time;
                                         new RideCanceledByRider(Time);

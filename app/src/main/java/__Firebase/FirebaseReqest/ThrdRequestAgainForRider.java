@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.util.Pair;
 
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
+import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
 import com.demoriderctg.arif.demorider.MainActivity;
 
 import java.util.Map;
@@ -59,7 +60,7 @@ public class ThrdRequestAgainForRider {
     public static boolean CanRequest() {
 
         /*Initialize Shared Preferences*/
-        Context context = MainActivity.getContextOfApplication();
+        Context context = MapActivity.getContextOfApplication();
         if (NumberOfRequestEdit == null) {
             NumberOfRequestEdit = context.getSharedPreferences(FirebaseConstant.NUMBER_OF_REQUEST_PREF, MODE_PRIVATE).edit();
         }

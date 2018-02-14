@@ -4,6 +4,7 @@ package com.demoriderctg.arif.demorider.GoogleMap;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -158,6 +159,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private ConnectionCheck connectionCheck;
     private SharedPreferences.Editor editor;
     private String activityChangeForSearch = null;
+    public static Context contextOfApplication;
 
     private LinearLayout linearLayout;
 
@@ -166,6 +168,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map_activity);
+        contextOfApplication = getApplicationContext();
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawLayout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.app_name, R.string.app_name);
@@ -650,6 +653,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
 
         return true;
+    }
+
+    public static Context getContextOfApplication(){
+        return contextOfApplication;
     }
 }
 

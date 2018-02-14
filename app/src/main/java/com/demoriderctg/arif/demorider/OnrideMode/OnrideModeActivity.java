@@ -296,7 +296,6 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
     private void GetRiderCurrentLocation(){
 
         /*Request*/
-
         main.GetRiderLocation(FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider, this);
     }
 
@@ -335,9 +334,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.cancel_ride:
-                ClientModel clientModel = FirebaseWrapper.getInstance().getClientModelInstance();
-                CurrentRidingHistoryModel currentRidingHistoryModel = FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance();
-                main.CancelRideByClient(currentRidingHistoryModel,clientModel,0);
+                main.ForceCancelRide();
                 return true;
             case R.id.help:
                 return true;
