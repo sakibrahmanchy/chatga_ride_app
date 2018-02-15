@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
+import com.demoriderctg.arif.demorider.ClearData.ClearData;
 import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
 import com.demoriderctg.arif.demorider.OnrideMode.OnrideModeActivity;
 import com.demoriderctg.arif.demorider.OnrideMode.SendNotification;
@@ -39,20 +40,20 @@ public class SearchingDriver extends AppCompatActivity {
       //  getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         count_number = findViewById(R.id.count_second);
-
         main = new Main();
         notificationModel = FirebaseWrapper.getInstance().getNotificationModelInstance();
-       searchDriver();
+        searchDriver();
     }
+
 
     /*
     public boolean onOptionsItemSelected(MenuItem item){
         Intent myIntent = new Intent(getApplicationContext(), MapActivity.class);
         startActivityForResult(myIntent, 0);
         return true;
-
     }
    */
+
 
     void searchDriver(){
 
@@ -69,12 +70,11 @@ public class SearchingDriver extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }
-                if(progressStatus <180){
+                else if(progressStatus <180){
                     handler.postDelayed(this, 1000);
                 }
                 else if(progressStatus>=180){
-                    AppConstant.INITIAL_RIDE_ACCEPT=1;
-
+                    new ClearData();
                     new AlertDialog.Builder(SearchingDriver.this)
                             .setTitle("Rider Not Found")
                             .setMessage("Currently All the Rider Busy, Please search again.")
@@ -88,7 +88,6 @@ public class SearchingDriver extends AppCompatActivity {
                                 }
                             }).show();
                 }
-
             }
         };
         handler.postDelayed(runnable, 1000);

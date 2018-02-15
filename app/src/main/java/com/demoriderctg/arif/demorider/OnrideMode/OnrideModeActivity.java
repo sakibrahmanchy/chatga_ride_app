@@ -69,6 +69,7 @@ import __Firebase.FirebaseResponse.NotificationModel;
 import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseWrapper;
 import __Firebase.ICallBackInstance.IGerRiderLocation;
+import __Firebase.Notification.NotificationWrapper;
 
 import static android.support.v4.app.NotificationCompat.*;
 import static com.demoriderctg.arif.demorider.AppConfig.AppConstant.DEFAULT_ZOOM;
@@ -230,9 +231,9 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
             public void run() {
 
                 if(AppConstant.FINISH_RIDE){
-                    RideFinishDailog rideFinishDailog = new RideFinishDailog(OnrideModeActivity.this);
-                    rideFinishDailog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                    rideFinishDailog.show();
+                    Intent intent = new Intent(OnrideModeActivity.this,MapActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
                 else {
                     handlerForFinishRide.postDelayed(this, 3000);
@@ -372,5 +373,10 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 }

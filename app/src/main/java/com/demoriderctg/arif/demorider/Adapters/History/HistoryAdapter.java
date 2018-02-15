@@ -52,7 +52,12 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         viewHolder.tv_src_address.setText(pickPoint);
         viewHolder.tv_dest_address.setText(destinationPoint);
         viewHolder.tv_total_fare.setText(history.getTotalFare());
-        viewHolder.tv_history_promotion.setText(history.getPromotion());
+        if(!history.getPromotion().equals("")){
+            viewHolder.tv_history_promotion.setVisibility(View.VISIBLE);
+            viewHolder.tv_history_promotion.setText(history.getPromotion());
+        }
+        else
+            viewHolder.tv_history_promotion.setVisibility(View.GONE);
         viewHolder.tv_history_rider_name.setText(history.getRiderName());
         Picasso.with(context).invalidate(history.getRiderAvatar());
         Picasso.with(context)
