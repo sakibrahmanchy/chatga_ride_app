@@ -402,16 +402,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                     AppConstant.searchDestinationLocationModel.work = AppConstant.searchSorceLocationModel.home;
                                 }
                                 String sourceLocation = AppConstant.searchSorceLocationModel.homeLocationName;
-                                if(sourceLocation.length()>30)
-                                    sourceText.setText(sourceLocation.substring(0,30));
-                                else
-                                    sourceText.setText(sourceLocation);
+                                sourceText.setText(sourceLocation);
 
                                 String destinationLocation = AppConstant.searchDestinationLocationModel.workLocationName;
-                                if(destinationLocation.length()>30)
-                                    destinationText.setText(destinationLocation.substring(0,30));
-                                else
-                                    destinationText.setText(destinationLocation);
+                                destinationText.setText(destinationLocation);
 
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -563,10 +557,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 AppConstant.searchSorceLocationModel.homeLocationName = place.getAddress().toString();
                 AppConstant.searchSorceLocationModel.home = place.getLatLng();
                 String sourceLocation = AppConstant.searchSorceLocationModel.homeLocationName;
-                if(sourceLocation.length()>30)
-                    sourceText.setText(sourceLocation.substring(0,30));
-                else
-                    sourceText.setText(sourceLocation);
+                sourceText.setText(sourceLocation);
             }
         }
 
@@ -577,10 +568,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 AppConstant.searchDestinationLocationModel.workLocationName = place.getAddress().toString();
                 AppConstant.searchDestinationLocationModel.work = place.getLatLng();
                 String destinationLocation = AppConstant.searchDestinationLocationModel.workLocationName;
-                if(destinationLocation.length()>30)
-                    destinationText.setText(destinationLocation.substring(0,30));
-                else
-                    destinationText.setText(destinationLocation);
+                destinationText.setText(destinationLocation);
 
             }
         }

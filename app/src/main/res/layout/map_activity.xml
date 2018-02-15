@@ -41,6 +41,8 @@
                     android:hint="Your current location"
                     android:textSize="18sp"
                     android:padding="10dp"
+                    android:elevation="3dp"
+                    android:maxLines="1"
                     android:drawableRight="@drawable/places_ic_search"
                     />
 
@@ -57,6 +59,7 @@
                     android:textSize="18sp"
                     android:padding="10dp"
                     android:elevation="3dp"
+                    android:maxLines="1"
                     android:drawableRight="@drawable/places_ic_search"/>
 
         </LinearLayout>
