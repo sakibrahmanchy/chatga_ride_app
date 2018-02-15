@@ -170,24 +170,16 @@ public class DownloadTask extends AsyncTask<String, Void, String> {
         HttpURLConnection urlConnection = null;
         try {
             URL url = new URL(strUrl);
-
             urlConnection = (HttpURLConnection) url.openConnection();
-
             urlConnection.connect();
-
             iStream = urlConnection.getInputStream();
-
             BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
-
             StringBuffer sb = new StringBuffer();
-
             String line = "";
             while ((line = br.readLine()) != null) {
                 sb.append(line);
             }
-
             data = sb.toString();
-
             br.close();
 
         } catch (Exception e) {

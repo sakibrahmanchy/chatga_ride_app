@@ -3,6 +3,7 @@ package __Firebase.Notification;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 
+import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
 import com.demoriderctg.arif.demorider.MainActivity;
 
 import __Firebase.FirebaseModel.ClientModel;
@@ -15,7 +16,7 @@ import __Firebase.ICallBackInstance.INotificationListener;
 
 public class NotificationWrapper extends AppCompatActivity{
 
-    private static Context context = MainActivity.getContextOfApplication();
+    private static Context context = MapActivity.getContextOfApplication();
     public NotificationWrapper(){ }
 
     public boolean SendInitialAcceptanceOfRide(final RiderModel Rider, final ClientModel Client, INotificationListener iNotificationListener){

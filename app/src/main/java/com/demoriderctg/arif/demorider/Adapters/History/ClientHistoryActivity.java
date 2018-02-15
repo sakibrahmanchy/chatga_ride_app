@@ -40,8 +40,6 @@ public class ClientHistoryActivity extends AppCompatActivity {
     RecyclerView rv;
     SwipeRefreshLayout swiper;
     HistoryAdapter adapter;
-
-    private ProgressDialog dialog;
     private ApiInterface apiService;
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
@@ -57,8 +55,6 @@ public class ClientHistoryActivity extends AppCompatActivity {
         pref = getApplicationContext().getSharedPreferences("MyPref", 0);
         userInformation = new UserInformation(this);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
-        dialog = new ProgressDialog(this);
-        dialog.setMessage("Gaining Access To App..");
         rv = (RecyclerView) findViewById(R.id.history_recycler_view);
       //  dialog = new ProgressDialog(this);
 
@@ -92,9 +88,6 @@ public class ClientHistoryActivity extends AppCompatActivity {
     }
 
     public void getClientHistory(){
-
-        dialog.show();
-
         //String deviceToken = FirebaseWrapper.getDeviceToken();
         String authHeader = "Bearer "+pref.getString("access_token",null);
 
@@ -110,7 +103,6 @@ public class ClientHistoryActivity extends AppCompatActivity {
 
                 int statusCode = response.code();
                 String testStatusCode = statusCode+"";
-                dialog.dismiss();
                 switch(statusCode){
                     case 200:
                         boolean isSuccess = response.body().isSuccess();

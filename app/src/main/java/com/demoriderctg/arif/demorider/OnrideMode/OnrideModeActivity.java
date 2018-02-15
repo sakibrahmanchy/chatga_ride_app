@@ -15,10 +15,14 @@ import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.NotificationCompat;
@@ -28,6 +32,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
@@ -58,9 +64,12 @@ import java.util.MissingFormatArgumentException;
 import ContactWithFirebase.Main;
 import __Firebase.FirebaseModel.ClientModel;
 import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
+import __Firebase.FirebaseModel.RiderModel;
+import __Firebase.FirebaseResponse.NotificationModel;
 import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseWrapper;
 import __Firebase.ICallBackInstance.IGerRiderLocation;
+import __Firebase.Notification.NotificationWrapper;
 
 import static android.support.v4.app.NotificationCompat.*;
 import static com.demoriderctg.arif.demorider.AppConfig.AppConstant.DEFAULT_ZOOM;
@@ -85,6 +94,12 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
     private SendNotification sendNotification;
     private BottomSheetBehavior mBottomSheetBehavior;
     private View bottomSheet;
+    private ImageView riderImage;
+    private TextView riderName;
+    private  TextView contactRider;
+    private  TextView rating;
+    private RiderModel riderModel;
+    private NotificationModel notificationModel;
 
 
     @Override
@@ -95,15 +110,37 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
         getCurrentLocation = new GetCurrentLocation(this);
         sendNotification = new SendNotification(this);
         notification = new NotificationCompat.Builder(this);
+        riderImage = (ImageView) findViewById(R.id.Rider_profile_pic);
+        riderName = (TextView) findViewById(R.id.rider_name);
+        contactRider = (TextView) findViewById(R.id.rider_number);
+        rating = (TextView) findViewById(R.id.rider_rating);
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         bottomSheet = findViewById( R.id.bottom_sheet );
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         mBottomSheetBehavior.setPeekHeight(300);
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        notificationModel = FirebaseWrapper.getInstance().getNotificationModelInstance();
+
+        if(notificationModel.riderId !=0){
+            AppConstant.RIDER_NAME = notificationModel.riderName;
+            AppConstant.RIDER_PHONENUMBER = notificationModel.riderPhone;
+        }
         initMap();
+        setUi();
 
     }
 
+    void setUi(){
+        riderName.setText(AppConstant.RIDER_NAME);
+        rating.setText("100");
+        contactRider.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onCall();
+            }
+        });
+
+    }
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -194,9 +231,9 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
             public void run() {
 
                 if(AppConstant.FINISH_RIDE){
-                    RideFinishDailog rideFinishDailog = new RideFinishDailog(OnrideModeActivity.this);
-                    rideFinishDailog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                    rideFinishDailog.show();
+                    Intent intent = new Intent(OnrideModeActivity.this,MapActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
                 else {
                     handlerForFinishRide.postDelayed(this, 3000);
@@ -261,7 +298,6 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
     private void GetRiderCurrentLocation(){
 
         /*Request*/
-
         main.GetRiderLocation(FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider, this);
     }
 
@@ -300,14 +336,47 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.cancel_ride:
-                ClientModel clientModel = FirebaseWrapper.getInstance().getClientModelInstance();
-                CurrentRidingHistoryModel currentRidingHistoryModel = FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance();
-                main.CancelRideByClient(currentRidingHistoryModel,clientModel,0);
+                main.ForceCancelRide();
                 return true;
             case R.id.help:
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void onCall() {
+        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE);
+
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{Manifest.permission.CALL_PHONE},
+                    123);
+        } else {
+            startActivity(new Intent(Intent.ACTION_CALL).setData(Uri.parse("tel:0"+AppConstant.RIDER_PHONENUMBER)));
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+
+            case 123:
+                if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    onCall();
+                } else {
+                    Log.d("TAG", "Call Permission Not Granted");
+                }
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 }

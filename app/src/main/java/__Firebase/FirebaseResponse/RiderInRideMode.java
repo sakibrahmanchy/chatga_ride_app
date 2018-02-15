@@ -30,6 +30,7 @@ public class RiderInRideMode implements CallBackListener {
         AppConstant.currentRidingHistoryModel = FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance();
         /*Rider Model*/
         AppConstant.riderModel = FirebaseWrapper.getInstance().getRiderModelInstance();
+        FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider.DeepClone(FirebaseWrapper.getInstance().getRiderModelInstance());
         AppConstant.IS_RIDE = 1;
     }
 

@@ -38,8 +38,6 @@ public class NotificationActivity extends AppCompatActivity {
     RecyclerView rv;
     SwipeRefreshLayout swiper;
     NotificationAdapter adapter;
-
-    private ProgressDialog dialog;
     private ApiInterface apiService;
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
@@ -54,8 +52,6 @@ public class NotificationActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         pref = getApplicationContext().getSharedPreferences("MyPref", 0);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout_notification);
-        dialog = new ProgressDialog(this);
-        dialog.setMessage("Please wait...");
         rv = (RecyclerView) findViewById(R.id.notification_recycler_view);
         //  dialog = new ProgressDialog(this);
 
@@ -92,8 +88,6 @@ public class NotificationActivity extends AppCompatActivity {
 
     public void getClientNotifications(){
 
-        dialog.show();
-
         //String deviceToken = FirebaseWrapper.getDeviceToken();
         String authHeader = "Bearer "+pref.getString("access_token",null);
 
@@ -109,7 +103,6 @@ public class NotificationActivity extends AppCompatActivity {
 
                 int statusCode = response.code();
                 String testStatusCode = statusCode+"";
-                dialog.dismiss();
                 switch(statusCode){
                     case 200:
                         boolean isSuccess = response.body().isSuccess();
