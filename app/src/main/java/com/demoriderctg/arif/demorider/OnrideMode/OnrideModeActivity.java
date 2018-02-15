@@ -119,7 +119,8 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
         mBottomSheetBehavior.setPeekHeight(300);
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         notificationModel = FirebaseWrapper.getInstance().getNotificationModelInstance();
-        if(notificationModel==null){
+
+        if(notificationModel.riderId !=0){
             AppConstant.RIDER_NAME = notificationModel.riderName;
             AppConstant.RIDER_PHONENUMBER = notificationModel.riderPhone;
         }
