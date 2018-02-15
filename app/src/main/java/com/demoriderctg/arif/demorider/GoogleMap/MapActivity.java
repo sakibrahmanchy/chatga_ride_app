@@ -185,6 +185,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         actionBarDrawerToggle.syncState();
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
         bottomSheet = findViewById( R.id.bottom_sheet );
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         mBottomSheetBehavior.setPeekHeight(200);
