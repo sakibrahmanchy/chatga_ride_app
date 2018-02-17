@@ -13,12 +13,14 @@ import __Firebase.ICallBackInstance.INotificationListener;
  * Created by User on 2/13/2018.
  */
 
-public class NotificationWrapper extends AppCompatActivity{
+public class NotificationWrapper extends AppCompatActivity implements INotificationListener {
 
     private static Context context = MainActivity.getContextOfApplication();
     public NotificationWrapper(){ }
 
-    public boolean SendInitialAcceptanceOfRide(final RiderModel Rider, final ClientModel Client, INotificationListener iNotificationListener){
+    public boolean SendCancelRide(final RiderModel Rider, final ClientModel Client, INotificationListener iNotificationListener){
+
+        if(iNotificationListener == null)   iNotificationListener = this;
 
         if(Rider == null || Client == null || iNotificationListener == null)    return false;
         if(Rider.RiderID < 1 || Client.ClientID < 1 || Rider.DeviceToken.isEmpty())    return false;
@@ -30,5 +32,10 @@ public class NotificationWrapper extends AppCompatActivity{
         );
         finish();
         return true;
+    }
+
+    @Override
+    public void OnNotificationResponse(boolean value, int action) {
+
     }
 }
