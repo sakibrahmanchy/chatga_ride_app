@@ -26,6 +26,7 @@ import __Firebase.ICallBackInstance.ICallBackFinishedRide;
 import __Firebase.ICallBackInstance.ICallbackMain;
 import __Firebase.ICallBackInstance.IGerRiderLocation;
 import __Firebase.ICallBackInstance.IGetCurrentRider;
+import __Firebase.Notification.NotificationWrapper;
 
 /**
  * Created by User on 12/9/2017.
@@ -321,6 +322,13 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
                 FirebaseWrapper.getInstance().getClientModelInstance(),
                 -1,
                 this
+        );
+
+        /* Send Notification to Rider */
+        new NotificationWrapper().SendCancelRide(
+                FirebaseWrapper.getInstance().getRiderModelInstance(),
+                FirebaseWrapper.getInstance().getClientModelInstance(),
+                null
         );
     }
 

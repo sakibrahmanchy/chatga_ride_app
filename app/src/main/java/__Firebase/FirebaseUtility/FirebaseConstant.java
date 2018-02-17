@@ -100,6 +100,7 @@ public class FirebaseConstant {
     public static String RIDER_LOADED_ERROR = "RIDER_LOADED_ERROR";
     public static String RIDER_LOADED = "RIDER_LOADED";
     public static String RESPONSE_CANCEL_RIDE_NOTF = "RESPONSE_CANCEL_RIDE_NOTF";
+    public static String NOTIFICATION_RESPONSE = "NOTIFICATION_RESPONSE";
 
     /*Toast Message*/
     public static String NO_RIDER_FOUND = "No rider found";
@@ -107,7 +108,9 @@ public class FirebaseConstant {
     /*Notification Action Type*/
     public static String CLIENT_TO_RIDER = ("3021");
     public static String GET_CURRENT_TIME = ("4001");
-    public static String CANCEL_RIDE_NOTIFY_CLIENT = ("5021");
+    public static String CANCEL_RIDE_NOTIFY_RIDER = ("5021");
+
+    public static final int INT_CANCEL_RIDE_NOTIFY_RIDER = 5021;
 
     /*Request Type*/
     public static final int INITIAL_AC_OF_RIDE_NOTIFY = 1;

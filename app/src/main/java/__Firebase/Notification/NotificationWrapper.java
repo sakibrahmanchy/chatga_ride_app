@@ -2,12 +2,13 @@ package __Firebase.Notification;
 
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
-import com.demoriderctg.arif.demorider.MainActivity;
 
 import __Firebase.FirebaseModel.ClientModel;
 import __Firebase.FirebaseModel.RiderModel;
+import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.ICallBackInstance.INotificationListener;
 
 /**
@@ -17,14 +18,16 @@ import __Firebase.ICallBackInstance.INotificationListener;
 public class NotificationWrapper extends AppCompatActivity implements INotificationListener {
 
     private static Context context = MapActivity.getContextOfApplication();
-    public NotificationWrapper(){ }
 
-    public boolean SendCancelRide(final RiderModel Rider, final ClientModel Client, INotificationListener iNotificationListener){
+    public NotificationWrapper() {
+    }
 
-        if(iNotificationListener == null)   iNotificationListener = this;
+    public boolean SendCancelRide(final RiderModel Rider, final ClientModel Client, INotificationListener iNotificationListener) {
 
-        if(Rider == null || Client == null || iNotificationListener == null)    return false;
-        if(Rider.RiderID < 1 || Client.ClientID < 1 || Rider.DeviceToken.isEmpty())    return false;
+        if (iNotificationListener == null) iNotificationListener = this;
+
+        if (Rider == null || Client == null || iNotificationListener == null) return false;
+        if (Rider.RiderID < 1 || Client.ClientID < 1 || Rider.DeviceToken.isEmpty()) return false;
 
         SendCancelRide pendingTask = new SendCancelRide(this, iNotificationListener);
         pendingTask.execute(
@@ -38,5 +41,11 @@ public class NotificationWrapper extends AppCompatActivity implements INotificat
     @Override
     public void OnNotificationResponse(boolean value, int action) {
 
+        switch (action) {
+            case FirebaseConstant.INT_CANCEL_RIDE_NOTIFY_RIDER: {
+                Log.d(FirebaseConstant.NOTIFICATION_RESPONSE, ("INT_CANCEL_RIDE_NOTIFY_RIDER"));
+                break;
+            }
+        }
     }
 }
