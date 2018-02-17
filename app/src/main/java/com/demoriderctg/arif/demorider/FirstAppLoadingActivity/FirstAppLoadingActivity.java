@@ -1,8 +1,12 @@
 package com.demoriderctg.arif.demorider.FirstAppLoadingActivity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
 
@@ -34,6 +38,8 @@ public class FirstAppLoadingActivity extends AppCompatActivity {
             loginData = new LoginData();
             loginData.clientId = "1010";
         }
+
+        int GET_MY_PERMISSION = 1;
 
         if(loginData != null){
             main.HasAnyRide(Long.parseLong(loginData.getClientId()));

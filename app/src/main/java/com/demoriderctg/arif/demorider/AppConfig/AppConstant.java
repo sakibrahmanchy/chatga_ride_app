@@ -99,4 +99,5 @@ public class AppConstant {
     public static final String FINAL_ACCEPTANCE_TITLE = ("Ride Started");
     public static final String FINISH_RIDE_TITLE = ("Ride Finished");
     public static final String CANCEL_RIDE_TITLE = ("Ride Canceled");
+    public static int GET_SMS_PERMISSION = 1;
 }

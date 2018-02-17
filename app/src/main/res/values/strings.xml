@@ -1,6 +1,6 @@
 <resources>
     <string name="google_maps_API_KEY">AIzaSyCUlumoP9HNAHy8lSTHVWavcrihYe0vNm8</string>
-    <string name="app_name">Chatgaa Rider</string>
+    <string name="app_name">Chatga Rider</string>
     <string name="title_activity_login">Sign in</string>
 
     <!-- Strings related to login -->
@@ -130,4 +130,6 @@
     <string name="Minimum_fare">Minimum fare      40TK</string>
     <string name="final_finish_ride_dailog">OK</string>
     <string name="cancel_ride">Cancel Ride</string>
+    <string name="FACEBOOK_APP_ID">186542548773569</string>
+    <string name="ACCOUNT_KIT_CLIENT_TOKEN">5e8405c3ad93a84cb26eb790c267c59c</string>
 </resources>

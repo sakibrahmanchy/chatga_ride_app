@@ -402,7 +402,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                     AppConstant.searchDestinationLocationModel.workLocationName = AppConstant.searchSorceLocationModel.homeLocationName;
                                     AppConstant.searchDestinationLocationModel.work = AppConstant.searchSorceLocationModel.home;
                                 }
-                                String sourceLocation = AppConstant.searchSorceLocationModel.homeLocationName;
+                                String sourceLocation = AppConstant .searchSorceLocationModel.homeLocationName;
                                 sourceText.setText(sourceLocation);
 
                                 String destinationLocation = AppConstant.searchDestinationLocationModel.workLocationName;
