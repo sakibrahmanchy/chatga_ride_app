@@ -20,14 +20,24 @@ public class ClientHistory {
     private String totalFare;
     @SerializedName("rider_id")
     private int riderId;
+    @SerializedName("rider_name")
+    private String riderName;
+    @SerializedName("rider_avatar")
+    private String riderAvatar;
+    @SerializedName("promotion")
+    private String promotion;
 
-    public ClientHistory(String dateTime, String distanceTime, String pickPointAddress, String destinationAddress, String totalFare, int riderId) {
+    public ClientHistory(String dateTime, String distanceTime, String pickPointAddress, String destinationAddress, String totalFare, int riderId,
+                         String riderName, String riderAvatar, String promotion) {
         this.dateTime = dateTime;
         this.distanceTime = distanceTime;
         this.pickPointAddress = pickPointAddress;
         this.destinationAddress = destinationAddress;
         this.totalFare = totalFare;
         this.riderId = riderId;
+        this.riderName = riderName;
+        this.riderAvatar = riderAvatar;
+        this.promotion = promotion;
     }
 
     public String getDateTime() {
@@ -76,5 +86,29 @@ public class ClientHistory {
 
     public void setRiderId(int riderId) {
         this.riderId = riderId;
+    }
+
+    public String getRiderName() {
+        return riderName;
+    }
+
+    public void setRiderName(String riderName) {
+        this.riderName = riderName;
+    }
+
+    public String getRiderAvatar() {
+        return riderAvatar;
+    }
+
+    public void setRiderAvatar(String riderAvatar) {
+        this.riderAvatar = riderAvatar;
+    }
+
+    public String getPromotion() {
+        return promotion;
+    }
+
+    public void setPromotion(String promotion) {
+        this.promotion = promotion;
     }
 }

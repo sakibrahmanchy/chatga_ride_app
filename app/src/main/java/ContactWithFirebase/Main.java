@@ -44,6 +44,7 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
     private static long TotalCost;
     private static long DiscountID;
     private static String ShortestTime, ShortestDistance;
+    private static long HistoryID;
     private Context context = null;
 
     public Main() {
@@ -310,6 +311,7 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
                 this
         );
 
+        HistoryID = FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance().HistoryID;
         FirebaseWrapper.getInstance().getClientModelInstance().CurrentRidingHistoryID = FirebaseConstant.UNKNOWN_STRING;
         FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance().HistoryID = FirebaseConstant.UNKNOWN;
 
@@ -406,7 +408,7 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
         if (value == true) {
             ClientModel Client = FirebaseWrapper.getInstance().getClientModelInstance();
             Pair<Long, Long> P = FirebaseUtilMethod.GetHistoryAndTime(Client.CurrentRidingHistoryID, true);
-            if (P != null && P.first  > 0) {
+            if (P != null && P.first  > 0 && P.second > 0) {
                 /*Rider has a ride*/
                 new RiderInRideMode(true, P.first);
             } else {
@@ -439,6 +441,7 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
                     break;
                 }
                 case FirebaseConstant.RIDE_CANCELED_BY_CLIENT: {
+                    FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance().HistoryID = HistoryID;
                     CancelRideByClient(
                             FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance(),
                             FirebaseWrapper.getInstance().getClientModelInstance(),

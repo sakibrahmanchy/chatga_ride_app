@@ -12,115 +12,159 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:orientation="vertical"
-            android:background="@color/colorPrimary">
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:orientation="horizontal"
-                android:weightSum="1">
-
-                <TextView
-                    android:id="@+id/date_time"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="DEC 26 2017, 10:51 PM"
-                    android:textSize="12sp"
-                    android:gravity="left"
-                    android:layout_weight=".5"
-                    android:textColor="@android:color/white"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="1"
-                    android:layout_weight=".5">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:weightSum="1"
-                        android:layout_weight=".5">
-
-                        <TextView
-                            android:id="@+id/total_fare"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="TK.200"
-                            android:textSize="15sp"
-                            android:textStyle="bold"
-                            android:gravity="right"
-                            android:layout_weight=".5"
-                            android:textColor="@android:color/white"/>
-
-                        <TextView
-                            android:id="@+id/distance_minute"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight=".5"
-                            android:gravity="right"
-                            android:text="8.03KM/20min"
-                            android:textColor="@android:color/white"
-                            android:textSize="12sp" />
-
-                    </LinearLayout>
-                </LinearLayout>
-                
-            </LinearLayout>
-            
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp"
-                android:weightSum="10">
+                android:padding="16dp">
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_weight="5"
-                    android:weightSum="10">
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_weight="2"
-                        android:src="@drawable/source"/>
+                    android:weightSum="1">
 
                     <TextView
-                        android:id="@+id/source_address"
-                        android:layout_width="wrap_content"
-                        android:layout_height="20dp"
-                        android:layout_weight="8"
-                        android:text="Something, adfasdsda, a dsaassa, as d"
-                        android:textColor="@android:color/white" />
+                        android:id="@+id/date_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="DEC 26 2017, 10:51 PM"
+                        android:textSize="12sp"
+                        android:gravity="left"
+                        android:layout_weight=".5"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="1"
+                        android:layout_weight=".5">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:weightSum="1"
+                            android:layout_weight=".5">
+
+                            <TextView
+                                android:id="@+id/total_fare"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="TK.200"
+                                android:textSize="15sp"
+                                android:textStyle="bold"
+                                android:gravity="right"
+                                android:textColor="@android:color/holo_green_dark"
+                                android:layout_weight=".5"
+                                />
+
+                            <TextView
+                                android:id="@+id/distance_minute"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight=".5"
+                                android:gravity="right"
+                                android:text="8.03KM/20min"
+
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_weight="5"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp"
                     android:weightSum="10">
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_weight="2"
-                        android:src="@drawable/destination"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_weight="5"
+                        android:weightSum="10">
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_weight="2"
+                            android:src="@drawable/source"/>
 
-                    <TextView
-                        android:id="@+id/destination_address"
-                        android:layout_width="wrap_content"
-                        android:layout_height="20dp"
-                        android:layout_weight="8"
-                        android:text="Something, adfasdsda, a dsaassa, as d"
-                        android:textColor="@android:color/white" />
+                        <TextView
+                            android:id="@+id/source_address"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="8"
+                            android:text="Something, adfasdsda, a dsaassa, as d" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_weight="5"
+                        android:weightSum="10">
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_weight="2"
+                            android:src="@drawable/destination"/>
+
+                        <TextView
+                            android:id="@+id/destination_address"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="8"
+                            android:text="Something, adfasdsda, a dsaassa, as d" />
+                    </LinearLayout>
+
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Promotion code ABC is applied"
+                        android:id="@+id/history_promotion_text"
+                        android:textColor="@android:color/holo_red_dark"/>
+                </LinearLayout>
+
             </LinearLayout>
-            
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/profile_border"
+                android:padding="15dp"
+                android:elevation="5dp">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:clickable="true"
+                    app:civ_border_width="3dp"
+                    app:civ_border_color="#FFFFFFFF"
+                    android:layout_gravity="center"
+                    android:id="@+id/history_rider_image"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/profile_image" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:text="Mr. Abul Kalam"
+                    android:id="@+id/history_rider_name"
+                    android:layout_gravity="center"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+
         </LinearLayout>
 
         

@@ -46,11 +46,11 @@ public class SendCancelRide extends AsyncTask<String, Void, String> {
     protected String doInBackground(String... params) {
 
         String actionType = FirebaseConstant.CANCEL_RIDE_NOTIFY_CLIENT;
-        String clientID = FirebaseConstant.Empty;
+        String clientId = FirebaseConstant.Empty;
         String riderDeviceToken = FirebaseConstant.Empty;
 
         try {
-            clientID = params[0];
+            clientId = params[0];
             riderDeviceToken = params[1];
         } catch (ExceptionInInitializerError e) {
             e.printStackTrace();
@@ -66,7 +66,7 @@ public class SendCancelRide extends AsyncTask<String, Void, String> {
             BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(OS, FirebaseConstant.UTF_8));
 
             String data = URLEncoder.encode("actionType", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(actionType, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
-                    URLEncoder.encode("clientId", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(clientID, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
+                    URLEncoder.encode("clientId", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(clientId, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
                     URLEncoder.encode("riderDeviceToken", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(riderDeviceToken, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND;
 
             bufferedWriter.write(data);

@@ -61,6 +61,10 @@ public class AppConstant {
     public static double SOURCE_LOGITUTE=0;
     public static double DESTINATION_LATITUTE=0;
     public static double DESTINATION_LOGITUTE=0;
+    public static String RIDER_NAME=null;
+    public static String RIDER_PHONENUMBER= null;
+    public static String RIDER_BIKE_NUMBER=null;
+
 
 
     /* Log Tag, Message */

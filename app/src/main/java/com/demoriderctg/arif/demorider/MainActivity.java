@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
     public static boolean check = true;
     private SharedPreferences pref;
     private ConnectionCheck connectionCheck;
-    public static Context contextOfApplication;
 
     public static boolean IS_MAP_INITIALIZE = false;
 
@@ -35,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        contextOfApplication = getApplicationContext();
         connectionCheck = new ConnectionCheck(this);
         //new CurrentDateTime(this).getCurrentDateTime();
         if (!connectionCheck.isNetworkConnected()) {
@@ -98,9 +96,5 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         }
-    }
-
-    public static Context getContextOfApplication(){
-        return contextOfApplication;
     }
 }

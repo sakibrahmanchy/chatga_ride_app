@@ -4,15 +4,19 @@ package com.demoriderctg.arif.demorider.GoogleMap;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -34,7 +38,9 @@ import android.widget.Toast;
 
 import com.demoriderctg.arif.demorider.Adapters.History.ClientHistoryActivity;
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
+import com.demoriderctg.arif.demorider.ClearData.ClearData;
 import com.demoriderctg.arif.demorider.Dailog.BottomSheetDailogRide;
+import com.demoriderctg.arif.demorider.Dailog.RideFinishDailog;
 import com.demoriderctg.arif.demorider.FavoritePlaces.FavoritePlacesActivity;
 import com.demoriderctg.arif.demorider.FavoritePlaces.HomeLocationModel;
 import com.demoriderctg.arif.demorider.FavoritePlaces.WorkLocationModel;
@@ -42,6 +48,7 @@ import com.demoriderctg.arif.demorider.InternetConnection.ConnectionCheck;
 import com.demoriderctg.arif.demorider.InternetConnection.InternetCheckActivity;
 import com.demoriderctg.arif.demorider.MainActivity;
 import com.demoriderctg.arif.demorider.NotificationActivity;
+import com.demoriderctg.arif.demorider.OnrideMode.OnrideModeActivity;
 import com.demoriderctg.arif.demorider.PlaceAutocompleteAdapter;
 import com.demoriderctg.arif.demorider.PromotionActivity;
 import com.demoriderctg.arif.demorider.R;
@@ -69,6 +76,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -86,7 +94,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
-    ArrayList markerPoints = new ArrayList();
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -135,6 +142,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
+    private NavigationView navigationView;
 
     //vars
     private Boolean mLocationPermissionsGranted = false;
@@ -159,6 +167,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private ConnectionCheck connectionCheck;
     private SharedPreferences.Editor editor;
     private String activityChangeForSearch = null;
+    public static Context contextOfApplication;
+    private BottomSheetBehavior mBottomSheetBehavior;
+    private View bottomSheet;
 
     private LinearLayout linearLayout;
 
@@ -167,12 +178,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map_activity);
-
+        contextOfApplication = getApplicationContext();
         drawerLayout = (DrawerLayout) findViewById(R.id.drawLayout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.app_name, R.string.app_name);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+        bottomSheet = findViewById( R.id.bottom_sheet );
+        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        mBottomSheetBehavior.setPeekHeight(200);
+        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
         InitializationAll();
 
@@ -184,27 +201,43 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private void InitializationAll() {
         sourceText = (TextView) findViewById(R.id.sourceText);
         destinationText = (TextView) findViewById(R.id.destinationText);
-
-        userFirstName = (TextView) findViewById(R.id.userNameProfile);
-        userPhoneNumber = (TextView) findViewById(R.id.use_Phonemuber);
         linearLayout = (LinearLayout) findViewById(R.id.searchLinearLayout);
-
         mGps = (ImageView) findViewById(R.id.ic_gps);
         sendButton = (Button) findViewById(R.id.btnSend);
         requestbtn = (Button) findViewById(R.id.pickupbtn);
         requestbtn.setVisibility(View.INVISIBLE);
         linearLayout.setVisibility(View.VISIBLE);
         spinner = (ProgressBar) findViewById(R.id.progressBar);
+        navigationView= (NavigationView) findViewById(R.id.nav_view);
+        View v = navigationView.getHeaderView(0);
+        userInformation = new UserInformation(this);
+        ImageView avatarContainer = (ImageView ) v.findViewById(R.id.profile_nav);
+        userFirstName = (TextView) v.findViewById(R.id.user_full_name);
+        userFirstName.setText(userInformation.getuserInformation().getFirstName() +" " + userInformation.getuserInformation().getLastName());
+        Picasso.with(this).invalidate(userInformation.getuserInformation().getAvatar());
+        Picasso.with(this)
+                .load(userInformation.getuserInformation().getAvatar())
+                .placeholder(R.drawable.profile_image)
+                .error(R.drawable.profile_image)
+                .into(avatarContainer);
+
         spinner.setVisibility(View.GONE);
         sharedpreferences = this.getSharedPreferences("MyPref", 0);
-        //   sendButton.setVisibility(View.INVISIBLE);
-        userInformation = new UserInformation(this);
+
         connectionCheck = new ConnectionCheck(this);
         editor = sharedpreferences.edit();
         main = new Main();
         options = new MarkerOptions();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        if(AppConstant.FINISH_RIDE){
+            RideFinishDailog rideFinishDailog = new RideFinishDailog(MapActivity.this);
+            rideFinishDailog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            rideFinishDailog.show();
+            new ClearData();
+
+        }
+
 
         loginData = userInformation.getuserInformation();
         phonemumber = userInformation.getRiderPhoneNumber();
@@ -329,54 +362,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         });
 
 
-        mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-
-            @Override
-            public void onMarkerDragStart(Marker marker) {
-                // TODO Auto-generated method stub
-                // Here your code
-                Toast.makeText(getApplicationContext(), "Dragging Start",
-                        Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onMarkerDragEnd(Marker marker) {
-                // TODO Auto-generated method stub
-                if (connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected()) {
-                    String markerOption = marker.getSnippet();
-                    Geocoder myLocation = new Geocoder(getApplicationContext(), Locale.getDefault());
-                    try {
-                        List<Address> myList = myLocation.getFromLocation(marker.getPosition().latitude, marker.getPosition().longitude, 1);
-                        address = (Address) myList.get(0);
-
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    if (markerOption.equals("Home")) {
-                        AppConstant.searchSorceLocationModel.home = marker.getPosition();
-                        AppConstant.searchSorceLocationModel.homeLocationName = address.getAddressLine(0);
-                        sourceText.setText(AppConstant.searchSorceLocationModel.homeLocationName);
-                    } else {
-                        AppConstant.searchDestinationLocationModel.work = marker.getPosition();
-                        AppConstant.searchDestinationLocationModel.workLocationName = address.getAddressLine(0);
-                        destinationText.setText(AppConstant.searchDestinationLocationModel.workLocationName);
-                    }
-
-                } else {
-                    Toast.makeText(MapActivity.this, "Connection Lost", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-
-            @Override
-            public void onMarkerDrag(Marker marker) {
-                // TODO Auto-generated method stub
-                // Toast.makeText(MainActivity.this, "Dragging",
-                // Toast.LENGTH_SHORT).show();
-                System.out.println("Draagging");
-            }
-        });
 
         hideSoftKeyboard();
     }
@@ -402,13 +387,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             try {
                                 List<Address> myList = myLocation.getFromLocation(currentLocation.getLatitude(), currentLocation.getLongitude(), 1);
                                 Address address = (Address) myList.get(0);
-                                mMap.addMarker(new MarkerOptions()
-                                        .position(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()))
-                                        .title("Destination")
-                                        .draggable(true)
-                                        .snippet("Work")
-                                        .icon(BitmapDescriptorFactory
-                                                .defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
                                 // mapMarkerDragging = new MapMarkerDragging(MapActivity.this,source,dest,mMap);
                                 moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
                                         DEFAULT_ZOOM,
@@ -424,8 +402,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                     AppConstant.searchDestinationLocationModel.workLocationName = AppConstant.searchSorceLocationModel.homeLocationName;
                                     AppConstant.searchDestinationLocationModel.work = AppConstant.searchSorceLocationModel.home;
                                 }
-                                sourceText.setText(AppConstant.searchSorceLocationModel.homeLocationName);
-                                destinationText.setText(AppConstant.searchDestinationLocationModel.workLocationName);
+                                String sourceLocation = AppConstant.searchSorceLocationModel.homeLocationName;
+                                if(sourceLocation.length()>30)
+                                    sourceText.setText(sourceLocation.substring(0,30));
+                                else
+                                    sourceText.setText(sourceLocation);
+
+                                String destinationLocation = AppConstant.searchDestinationLocationModel.workLocationName;
+                                if(destinationLocation.length()>30)
+                                    destinationText.setText(destinationLocation.substring(0,30));
+                                else
+                                    destinationText.setText(destinationLocation);
 
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -576,7 +563,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 Place place = PlacePicker.getPlace(data, this);
                 AppConstant.searchSorceLocationModel.homeLocationName = place.getAddress().toString();
                 AppConstant.searchSorceLocationModel.home = place.getLatLng();
-                sourceText.setText(AppConstant.searchSorceLocationModel.homeLocationName);
+                String sourceLocation = AppConstant.searchSorceLocationModel.homeLocationName;
+                if(sourceLocation.length()>30)
+                    sourceText.setText(sourceLocation.substring(0,30));
+                else
+                    sourceText.setText(sourceLocation);
             }
         }
 
@@ -586,7 +577,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 Place place = PlacePicker.getPlace(data, this);
                 AppConstant.searchDestinationLocationModel.workLocationName = place.getAddress().toString();
                 AppConstant.searchDestinationLocationModel.work = place.getLatLng();
-                destinationText.setText(AppConstant.searchDestinationLocationModel.workLocationName);
+                String destinationLocation = AppConstant.searchDestinationLocationModel.workLocationName;
+                if(destinationLocation.length()>30)
+                    destinationText.setText(destinationLocation.substring(0,30));
+                else
+                    destinationText.setText(destinationLocation);
 
             }
         }
@@ -651,6 +646,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
 
         return true;
+    }
+
+    public static Context getContextOfApplication(){
+        return contextOfApplication;
     }
 }
 

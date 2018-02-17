@@ -44,7 +44,6 @@ public class PromotionActivity extends AppCompatActivity {
     SwipeRefreshLayout swiper;
     PromotionAdapter adapter;
 
-    private ProgressDialog dialog;
     private ApiInterface apiService;
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
@@ -62,8 +61,6 @@ public class PromotionActivity extends AppCompatActivity {
         pref = getApplicationContext().getSharedPreferences("MyPref", 0);
         userInformation = new UserInformation(this);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout_discount);
-        dialog = new ProgressDialog(this);
-        dialog.setMessage("Please wait...");
         rv = (RecyclerView) findViewById(R.id.discount_recycler_view);
         //  dialog = new ProgressDialog(this);
 
@@ -109,16 +106,16 @@ public class PromotionActivity extends AppCompatActivity {
 
         String promocode = promoCodeText.getText().toString();
         LoginData loginData = userInformation.getuserInformation();
-        String userId = loginData.getUserId();
+        String clientId = loginData.getClientId();
         String authHeader = "Bearer "+pref.getString("access_token",null);
-        Call<ApplyPromoCodeResponse> call = apiService.applyPromoCode(authHeader,promocode,userId);
+        Call<ApplyPromoCodeResponse> call = apiService.applyPromoCode(authHeader,promocode,clientId);
 
         call.enqueue(new Callback<ApplyPromoCodeResponse>() {
             @Override
             public void onResponse(Call<ApplyPromoCodeResponse> call, Response<ApplyPromoCodeResponse> response) {
 
                 int statusCode = response.code();
-                dialog.dismiss();
+
                 switch(statusCode){
                     case 200:
                         boolean isSuccess = response.body().isSuccess();
@@ -150,8 +147,6 @@ public class PromotionActivity extends AppCompatActivity {
 
     public void getClientPromotions(){
 
-        dialog.show();
-
         //String deviceToken = FirebaseWrapper.getDeviceToken();
         String authHeader = "Bearer "+pref.getString("access_token",null);
 
@@ -159,7 +154,7 @@ public class PromotionActivity extends AppCompatActivity {
                 ApiClient.getClient().create(ApiInterface.class);
 
         LoginData loginData = userInformation.getuserInformation();
-        Call<UserDiscountResponse> call = apiService.getUserDiscounts(authHeader,loginData.getUserId());
+        Call<UserDiscountResponse> call = apiService.getUserDiscounts(authHeader,loginData.getClientId());
 
         call.enqueue(new Callback<UserDiscountResponse>() {
             @Override
@@ -167,7 +162,6 @@ public class PromotionActivity extends AppCompatActivity {
 
                 int statusCode = response.code();
                 String testStatusCode = statusCode+"";
-                dialog.dismiss();
                 switch(statusCode){
                     case 200:
                         boolean isSuccess = response.body().isSuccess();
