@@ -15,6 +15,30 @@
       },
       "oauth_client": [
         {
+          "client_id": "707764250103-a21ratlstrhbppp8ne6dq59oikm4i4vt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.demoriderctg.arif.demorider",
+            "certificate_hash": "0a2e6f00f5c979c65fdae117b4db0a1105b6569e"
+          }
+        },
+        {
+          "client_id": "707764250103-qs33h6igjekkgi6obd2fk9ra6bl2oe2e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.demoriderctg.arif.demorider",
+            "certificate_hash": "d443277ec72da719ab3764e48a76f4ac9d1d72a4"
+          }
+        },
+        {
+          "client_id": "707764250103-ij1favb57tudcrmljc1arcbumdhfqpdi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.demoriderctg.arif.demorider",
+            "certificate_hash": "c4df80672e899ff424113c4503edf024610de1d4"
+          }
+        },
+        {
           "client_id": "707764250103-8h2sh3uthmneufp50809ef46d24a7q5o.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -74,6 +98,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "707764250103-sjfgkfisg1fbd6jq5n50f76664o8gf2f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chaatgadrive.arif.chaatgadrive",
+            "certificate_hash": "d443277ec72da719ab3764e48a76f4ac9d1d72a4"
+          }
+        },
         {
           "client_id": "707764250103-5grv4b9d943kevcr5h1e1s3dve0ave46.apps.googleusercontent.com",
           "client_type": 1,

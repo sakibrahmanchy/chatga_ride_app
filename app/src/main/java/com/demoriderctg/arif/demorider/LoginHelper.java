@@ -81,7 +81,7 @@ public class LoginHelper {
                             LoginCall(phoneNumber);
 
                         }else{
-                            Intent intent = new Intent(context, PhoneVerificationActivity.class);
+                            Intent intent = new Intent(context, FacebookAccountVerificationActivity.class);
                             intent.putExtra("phoneNumber",phoneNumber);
                             intent.putExtra("loginStatus","REGISTRATION_REQUIRED");
                             context.startActivity(intent);
@@ -89,7 +89,7 @@ public class LoginHelper {
                         }
                         break;
                     default:
-                        Intent intent = new Intent(context, PhoneVerificationActivity.class);
+                        Intent intent = new Intent(context, FacebookAccountVerificationActivity.class);
                         intent.putExtra("phoneNumber",phoneNumber);
                         intent.putExtra("loginStatus","REGISTRATION_REQUIRED");
                         context.startActivity(intent);
@@ -142,7 +142,7 @@ public class LoginHelper {
                             context.startActivity(intent);
 
                         }else{
-                            Intent intent = new Intent(context, PhoneVerificationActivity.class);
+                            Intent intent = new Intent(context, FacebookAccountVerificationActivity.class);
                             intent.putExtra("phoneNumber",phoneNumber);
                             intent.putExtra("loginStatus","PHONE_VERIFICATION_REQUIRED");
                             context.startActivity(intent);
@@ -155,7 +155,7 @@ public class LoginHelper {
                             String errorResponseCode = errorBody.getString("response_code");
                             switch(errorResponseCode){
                                 case "auth/phone-verification-required":
-                                    Intent intent = new Intent(context, PhoneVerificationActivity.class);
+                                    Intent intent = new Intent(context, FacebookAccountVerificationActivity.class);
                                     intent.putExtra("phoneNumber",phoneNumber);
                                     intent.putExtra("loginStatus","PHONE_VERIFICATION_REQUIRED");
                                     context.startActivity(intent);

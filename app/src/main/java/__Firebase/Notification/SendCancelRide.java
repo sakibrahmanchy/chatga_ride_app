@@ -45,7 +45,7 @@ public class SendCancelRide extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... params) {
 
-        String actionType = FirebaseConstant.CANCEL_RIDE_NOTIFY_CLIENT;
+        String actionType = FirebaseConstant.CANCEL_RIDE_NOTIFY_RIDER;
         String clientId = FirebaseConstant.Empty;
         String riderDeviceToken = FirebaseConstant.Empty;
 
@@ -106,6 +106,6 @@ public class SendCancelRide extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         Log.d(FirebaseConstant.RESPONSE_CANCEL_RIDE_NOTF, result);
-        iNotificationListener.OnNotificationResponse(true, Integer.parseInt(FirebaseConstant.CANCEL_RIDE_NOTIFY_CLIENT));
+        iNotificationListener.OnNotificationResponse(true, Integer.parseInt(FirebaseConstant.CANCEL_RIDE_NOTIFY_RIDER));
     }
 }
