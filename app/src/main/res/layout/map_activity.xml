@@ -68,13 +68,13 @@
             </LinearLayout>
 
 
-            <android.support.design.widget.FloatingActionButton
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
                 android:scaleType="centerCrop"
                 android:id="@+id/ic_gps"
-                android:background="@color/white"
+                android:background="@drawable/white_border"
                 android:src="@drawable/ic_gps"
                 android:layout_above="@+id/btnSend"
                 android:layout_alignParentEnd="true"/>
@@ -172,7 +172,6 @@
                                 <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:orientation="horizontal"
-                                    android:background="@drawable/reple_effect"
                                     android:clickable="true"
                                     android:focusable="true"
                                     android:layout_gravity="center"
@@ -191,7 +190,7 @@
                                 <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:orientation="horizontal"
-                                    android:background="@drawable/reple_effect"
+
                                     android:clickable="true"
                                     android:focusable="true"
                                     android:layout_height="wrap_content">
@@ -216,7 +215,7 @@
                                     android:orientation="horizontal"
                                     android:clickable="true"
                                     android:focusable="true"
-                                    android:background="@drawable/reple_effect"
+
                                     android:layout_height="wrap_content">
                                     <ImageView
                                         android:layout_width="20dp"

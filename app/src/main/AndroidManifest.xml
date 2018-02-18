@@ -111,6 +111,7 @@
             android:label="Notifications" />
         <activity android:name=".Setting.EditProfile" />
         <activity android:name=".FacebookAccountVerificationActivity"></activity>
+        <activity android:name=".Dailog.FullMapSearching"></activity>
     </application>
 
 </manifest>
