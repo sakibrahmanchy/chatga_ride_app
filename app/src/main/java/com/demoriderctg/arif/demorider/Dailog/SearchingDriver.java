@@ -24,6 +24,9 @@ import ContactWithFirebase.Main;
 import __Firebase.FirebaseResponse.NotificationModel;
 import __Firebase.FirebaseWrapper;
 
+
+import static com.demoriderctg.arif.demorider.Dailog.FullMapSearching.fullMapActivity;
+
 public class SearchingDriver extends AppCompatActivity {
 
 
@@ -68,6 +71,7 @@ public class SearchingDriver extends AppCompatActivity {
                     sendNotification.Notification("FOUND","RIDER FOUND","Click to view rider");
                     Intent  intent = new Intent(SearchingDriver.this,OnrideModeActivity.class);
                     startActivity(intent);
+                    fullMapActivity.finish();
                     finish();
                 }
                 else if(progressStatus <180){
@@ -84,6 +88,7 @@ public class SearchingDriver extends AppCompatActivity {
                                 public void onClick(DialogInterface dialog, int which) {
                                     Intent myIntent = new Intent(getApplicationContext(), MapActivity.class);
                                     startActivity(myIntent);
+                                    fullMapActivity.finish();
                                     finish();
                                 }
                             }).show();

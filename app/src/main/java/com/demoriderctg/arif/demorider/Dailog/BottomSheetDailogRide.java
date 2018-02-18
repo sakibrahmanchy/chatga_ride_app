@@ -118,7 +118,7 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
                     }
                     AppConstant.TOTAL_COST = totalCost;
                     main.RequestForRide(Source, Destination, AppConstant.SOURCE_NAME, AppConstant.DESTINATION_NAME, totalCost, DiscountId);
-                    Intent intent = new Intent(getContext(), SearchingDriver.class);
+                    Intent intent = new Intent(getContext(), FullMapSearching.class);
                     startActivity(intent);
                     dismiss();
 

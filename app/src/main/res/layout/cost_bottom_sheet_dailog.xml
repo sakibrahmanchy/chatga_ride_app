@@ -53,7 +53,6 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="30dp"
-                android:text="Badda To Uttara"
                 android:textColor="#fff"
                 android:textSize="24sp"
                 android:textStyle="bold" />

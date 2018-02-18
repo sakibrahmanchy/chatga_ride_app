@@ -85,6 +85,7 @@ public class LoginHelper {
                             intent.putExtra("phoneNumber",phoneNumber);
                             intent.putExtra("loginStatus","REGISTRATION_REQUIRED");
                             context.startActivity(intent);
+
                         }
                         break;
                     default:
