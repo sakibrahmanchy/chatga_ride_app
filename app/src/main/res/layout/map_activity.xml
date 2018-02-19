@@ -51,19 +51,19 @@
 
                 <TextView
                     android:id="@+id/destinationText"
-                    android:layout_width="match_parent"
+                    android:layout_width="319dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:background="@android:color/darker_gray"
-                    android:ems="10"
-                    android:selectAllOnFocus="true"
-                    android:inputType="textPersonName"
-                    android:hint="Your Destination"
-                    android:textSize="18sp"
-                    android:padding="10dp"
+                    android:drawableRight="@drawable/destination"
                     android:elevation="3dp"
+                    android:ems="10"
+                    android:hint="Your Destination"
+                    android:inputType="textPersonName"
                     android:maxLines="1"
-                    android:drawableRight="@drawable/places_ic_search"/>
+                    android:padding="10dp"
+                    android:selectAllOnFocus="true"
+                    android:textSize="18sp" />
 
             </LinearLayout>
 
@@ -123,7 +123,7 @@
             android:clipToPadding="true"
             android:background="@color/grey_300"
             app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
-            >
+            app:behavior_hideable="false">
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
@@ -133,133 +133,119 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
-                    <TableLayout
-                        android:layout_width="fill_parent"
-                        android:id="@+id/profile_table"
-                        android:layout_height="fill_parent">
-                        <TableRow
-                            android:layout_height="fill_parent"
-                            android:background="@drawable/profile_border"
-                            android:layout_width="fill_parent">
+                    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        xmlns:app="http://schemas.android.com/apk/res-auto">
+                        <android.support.v7.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="16dp">
                             <LinearLayout
-                                android:orientation="vertical"
-                                android:layout_gravity="center"
-                                android:layout_height="match_parent">
-                                <TextView
-                                    android:id="@+id/button2"
-                                    android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="160dp"
+                                    android:scaleType="centerCrop"
+                                    android:src="@drawable/chatga_ride_background_1" />
+                                <LinearLayout
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:textSize="25dp"
-                                    android:textColor="@color/colorPrimary"
-                                    android:layout_marginBottom="20dp"
-                                    android:text="Rider Info" />
-                                <de.hdodenhof.circleimageview.CircleImageView
-                                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                                    android:clickable="true"
-                                    app:civ_border_width="3dp"
-                                    app:civ_border_color="#FFFFFFFF"
-                                    android:id="@+id/Rider_profile_pic"
-                                    android:layout_width="80dp"
-                                    android:layout_height="80dp"
-                                    android:elevation="5dp"
-                                    android:src="@drawable/profile_image" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:orientation="vertical"
-                                android:layout_gravity="center"
-                                android:layout_height="match_parent">
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:orientation="horizontal"
-                                    android:background="@drawable/reple_effect"
-                                    android:clickable="true"
-                                    android:focusable="true"
-                                    android:layout_gravity="center"
-                                    android:layout_marginTop="60dp"
-                                    android:layout_height="wrap_content">
-
+                                    android:orientation="vertical"
+                                    android:padding="16dp">
                                     <TextView
-                                        android:layout_width="wrap_content"
+                                        android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
-                                        android:textSize="20dp"
-                                        android:id="@+id/rider_name"
-                                        android:textColor="@color/colorPrimary"
-                                        android:text="Name"/>
-                                </LinearLayout>
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:orientation="horizontal"
-                                    android:background="@drawable/reple_effect"
-                                    android:clickable="true"
-                                    android:focusable="true"
-                                    android:layout_height="wrap_content">
-                                    <ImageView
-                                        android:layout_width="20dp"
-                                        android:layout_height="20dp"
-                                        android:layout_gravity="center"
-                                        android:src="@drawable/ic_bike"
-                                        />
+                                        android:layout_marginBottom="8dp"
+                                        android:text="Chatga Rides"
+                                        android:textColor="#000"
+                                        android:textSize="18sp" />
                                     <TextView
-                                        android:layout_width="wrap_content"
+                                        android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginLeft="20dp"
-                                        android:layout_gravity="center"
-                                        android:id="@+id/bike_number"
-                                        android:textSize="15dp"
-                                        android:textColor="@color/colorPrimary"
-                                        android:text="Bike Number"/>
+                                        android:text="Make your destination easy with Chatga ride.
+Call us to get the cheapest ride in the city.
+Our promotional fare: Base fare 20tk
+Per km 10tk
+* NO TIME CHARGE
+Call 018 77 55 55 80 or
+019 19 19 99 88 to confirm your ride.
+Service available primarily on route no: 10( Bahaddarhat circle- EPZ) from 8am-8pm."
+                                        android:textColor="#555" />
                                 </LinearLayout>
                                 <LinearLayout
                                     android:layout_width="match_parent"
-                                    android:orientation="horizontal"
-                                    android:clickable="true"
-                                    android:focusable="true"
-                                    android:background="@drawable/reple_effect"
                                     android:layout_height="wrap_content">
-                                    <ImageView
-                                        android:layout_width="20dp"
-                                        android:layout_height="20dp"
-                                        android:layout_gravity="center"
-                                        android:src="@drawable/icons8_thumbs_up"
-                                        />
-                                    <TextView
+                                    <Button
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginLeft="20dp"
-                                        android:id="@+id/rider_rating"
-                                        android:layout_gravity="center"
-                                        android:textSize="15dp"
-                                        android:textColor="@color/colorPrimary"
-                                        android:text="Rating"/>
+                                        android:text="SHARE"
+                                        android:theme="@style/PrimaryFlatButton" />
+                                    <Button
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="EXPLORE"
+                                        android:theme="@style/PrimaryFlatButton" />
                                 </LinearLayout>
-
-
                             </LinearLayout>
-
-
-
-                        </TableRow>
-
-                    </TableLayout>
-
-                    <LinearLayout
+                        </android.support.v7.widget.CardView>
+                    </RelativeLayout>
+                    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <TextView
+                        android:layout_height="match_parent"
+                        xmlns:app="http://schemas.android.com/apk/res-auto">
+                        <android.support.v7.widget.CardView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="8dp"
-                            android:text="Contact Rider"
-                            android:id="@+id/rider_number"
-                            android:textColor="#000"
-                            android:textSize="18sp" />
+                            android:layout_margin="16dp">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="160dp"
+                                    android:scaleType="centerCrop"
+                                    android:src="@drawable/chatga_ride_background_1" />
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:padding="16dp">
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="8dp"
+                                        android:text="Chatga Rides"
+                                        android:textColor="#000"
+                                        android:textSize="18sp" />
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="প্রতিদিন চট্টগ্রামের প্রথম রাইড শেয়ারিং সার্ভিস চাটগাঁ রাইড যাত্রীদের দিচ্ছে নিরাপদ এবং সাশ্রয়ী ভ্রমণের সুযোগ। যাত্রীদের নিরাপদে তাদের গন্তব্যে পৌঁছে দেওয়ার জন্য চাটগাঁ রাইডের রয়েছে অভিজ্ঞ এবং নির্ভরযোগ্য বাইকার। চাটগাঁ রাইডই হোক আপনার আস্থার প্রতীক। সার্ভিস পেতে কল করুন - ০১৮৭৭৫৫৫৫৮০ নম্বরে । ভালো থাকুন, নিরাপদ থাকুন।"
+                                        android:textColor="#555" />
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+                                    <Button
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="SHARE"
+                                        android:theme="@style/PrimaryFlatButton" />
+                                    <Button
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="EXPLORE"
+                                        android:theme="@style/PrimaryFlatButton" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </android.support.v7.widget.CardView>
+                    </RelativeLayout>
 
-                    </LinearLayout>
+
 
                 </LinearLayout>
             </android.support.v7.widget.CardView>
