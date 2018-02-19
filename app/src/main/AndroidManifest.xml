@@ -116,6 +116,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".FacebookAccountVerificationActivity"
             android:screenOrientation="portrait"></activity>
+        <activity android:name=".Dailog.FullMapSearching"
+            android:screenOrientation="portrait"></activity>
 
         <service android:name="com.demoriderctg.arif.FirebaseInstanceIDService">
             <intent-filter>
