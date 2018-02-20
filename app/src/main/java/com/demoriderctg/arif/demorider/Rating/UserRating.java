@@ -45,15 +45,11 @@ public class UserRating {
                     case 200:
                         if(response.body().isSuccess()){
                          double data = response.body().getData();
-
                         }
                         break;
                     case 500:
-
                         break;
-
                     default:
-
                         break;
                 }
             }

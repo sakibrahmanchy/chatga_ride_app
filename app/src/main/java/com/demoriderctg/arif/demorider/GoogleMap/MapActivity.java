@@ -47,6 +47,7 @@ import com.demoriderctg.arif.demorider.Dailog.RideFinishDailog;
 import com.demoriderctg.arif.demorider.FavoritePlaces.FavoritePlacesActivity;
 import com.demoriderctg.arif.demorider.FavoritePlaces.HomeLocationModel;
 import com.demoriderctg.arif.demorider.FavoritePlaces.WorkLocationModel;
+import com.demoriderctg.arif.demorider.FinishRideActivity.FinishRideActivity;
 import com.demoriderctg.arif.demorider.InternetConnection.ConnectionCheck;
 import com.demoriderctg.arif.demorider.InternetConnection.InternetCheckActivity;
 import com.demoriderctg.arif.demorider.MainActivity;
@@ -271,10 +272,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         if(AppConstant.FINISH_RIDE){
-            RideFinishDailog rideFinishDailog = new RideFinishDailog(MapActivity.this);
-            rideFinishDailog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            rideFinishDailog.show();
-            new ClearData();
+           Intent intent = new Intent(this, FinishRideActivity.class);
+           startActivity(intent);
+
 
         }
 

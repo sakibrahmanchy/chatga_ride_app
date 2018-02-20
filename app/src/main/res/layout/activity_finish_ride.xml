@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
+    android:layout_height="match_parent"
+   >
     <android.support.v7.widget.CardView
         android:id="@+id/cv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -20,7 +21,7 @@
                 android:padding="16dp"
                 android:orientation="horizontal"
                 android:weightSum="1"
-                android:background="@color/colorPrimaryDark">
+                android:background="@android:color/holo_green_dark">
 
                 <TextView
                     android:id="@+id/promotion_code"
@@ -28,7 +29,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight=".5"
                     android:gravity="center"
-                    android:text="NWY20X"
+                    android:text="Ride Finished"
                     android:textColor="@android:color/white"
                     android:textSize="30sp" />
 
@@ -45,7 +46,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="6"
                     android:orientation="horizontal"
                     android:weightSum="10">
@@ -53,74 +54,71 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="4"
-                        android:background="@color/colorPrimaryDark"
-                        android:orientation="vertical">
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:background="@color/colorPrimaryDark"
+                        android:layout_weight="1"
                         android:gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:layout_marginTop="40dp">
 
                         <TextView
-                            android:id="@+id/ride_type"
+                            android:id="@+id/total_cost"
                             android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_weight="2"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
                             android:gravity="center"
-                            android:text="BIKE"
-                            android:textColor="@android:color/white"
-                            android:textSize="20sp" />
+                            android:text="৳85"
+                            android:textColor="@android:color/holo_green_dark"
+                            android:textSize="40sp" />
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="4"
-                        android:background="@color/colorPrimaryDark"
-                        android:orientation="vertical">
-
-                    </LinearLayout>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
                     android:layout_weight="5"
-                    android:gravity="center"
-                    android:layout_marginTop="15dp">
+                    android:layout_marginTop="40dp"
+                    android:gravity="center">
 
                     <TextView
                         android:id="@+id/promo_code_descriptions"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="20% off on your next 3 rides"
+                        android:textColor="@android:color/black"
+                        android:text="How much do you love our client?"
                         android:textSize="20sp" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_weight="5"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
                     android:gravity="center">
 
-                    <TextView
-                        android:id="@+id/end_time"
+
+                    <RatingBar
+                        android:id="@+id/ratingBar"
                         android:layout_width="wrap_content"
-                        android:layout_height="20dp"
-                        android:text="December 3, 2017"
-                        android:textSize="15sp" />
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"/>
+                    <Button
+                        android:id="@+id/btnOk"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="OK"
+                        android:textSize="20sp"
+                        android:background="@color/colorAccent"
+                        android:textColor="@android:color/white"
+                        android:layout_margin="20dp"/>
                 </LinearLayout>
+
             </LinearLayout>
 
         </LinearLayout>
 
+
+
     </android.support.v7.widget.CardView>
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>
