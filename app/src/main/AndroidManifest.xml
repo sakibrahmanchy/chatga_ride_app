@@ -117,6 +117,7 @@
         <activity android:name=".FacebookAccountVerificationActivity"
             android:screenOrientation="portrait"></activity>
         <activity android:name=".Dailog.FullMapSearching"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
             android:screenOrientation="portrait"></activity>
 
         <service android:name="com.demoriderctg.arif.FirebaseInstanceIDService">

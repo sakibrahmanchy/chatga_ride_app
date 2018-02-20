@@ -463,9 +463,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         if(AppConstant.searchDestinationLocationModel == null){
             sendButton.setVisibility(View.INVISIBLE);
             requestbtn.setVisibility(View.INVISIBLE);
+            destinationText.setText("");
         }
         if(AppConstant.searchSorceLocationModel!=null && AppConstant.searchDestinationLocationModel !=null){
             sendButton.setVisibility(View.VISIBLE);
+            sourceText.setText(AppConstant.searchSorceLocationModel.homeLocationName);
+            destinationText.setText(AppConstant.searchDestinationLocationModel.workLocationName);
         }
 
     }
@@ -557,18 +560,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
 
-    /*
-    public void checkLatLon() {
 
-        requestbtn.setVisibility(View.INVISIBLE);
-        if (source != null && dest != null) {
-
-            sendButton.setVisibility(View.VISIBLE);
-        } else {
-            sendButton.setVisibility(View.INVISIBLE);
-        }
-    }
-    */
 
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

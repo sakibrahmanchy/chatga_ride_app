@@ -55,11 +55,12 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:background="@android:color/darker_gray"
-                    android:drawableRight="@drawable/destination"
+                    android:drawableRight="@drawable/places_ic_search"
                     android:elevation="3dp"
                     android:ems="10"
                     android:hint="Your Destination"
                     android:inputType="textPersonName"
+
                     android:maxLines="1"
                     android:padding="10dp"
                     android:selectAllOnFocus="true"
