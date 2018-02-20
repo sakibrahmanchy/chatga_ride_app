@@ -20,9 +20,11 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -194,6 +196,39 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         mBottomSheetBehavior.setPeekHeight(100);
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        mBottomSheetBehavior.setHideable(false);
+
+        mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+
+                switch (newState){
+
+                }
+
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                // React to dragging events
+                if(slideOffset>=0.8){
+                    ActionBar actionBar = getSupportActionBar();
+                    actionBar.hide();
+                }
+                else if(slideOffset>=0.7 ){
+                    linearLayout.setVisibility(View.GONE);
+                }else if(slideOffset>=0 && slideOffset<0.7){
+                    ActionBar actionBar = getSupportActionBar();
+                    actionBar.show();
+                    linearLayout.setVisibility(View.VISIBLE);
+                }else{
+                    mBottomSheetBehavior.setPeekHeight(200);
+                    mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
+
+            }
+        });
+
 
         InitializationAll();
 
@@ -402,16 +437,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                     AppConstant.searchSorceLocationModel.homeLocationName = address.getAddressLine(0);
                                     AppConstant.searchSorceLocationModel.home = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                                 }
-                                if (AppConstant.searchDestinationLocationModel == null) {
-                                    AppConstant.searchDestinationLocationModel = new WorkLocationModel();
-                                    AppConstant.searchDestinationLocationModel.workLocationName = AppConstant.searchSorceLocationModel.homeLocationName;
-                                    AppConstant.searchDestinationLocationModel.work = AppConstant.searchSorceLocationModel.home;
-                                }
+
                                 String sourceLocation = AppConstant .searchSorceLocationModel.homeLocationName;
                                 sourceText.setText(sourceLocation);
-
-                                String destinationLocation = AppConstant.searchDestinationLocationModel.workLocationName;
-                                destinationText.setText(destinationLocation);
+                                checkButtonState();
 
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -428,6 +457,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         } catch (SecurityException e) {
             Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage());
         }
+    }
+
+    void checkButtonState(){
+        if(AppConstant.searchDestinationLocationModel == null){
+            sendButton.setVisibility(View.INVISIBLE);
+            requestbtn.setVisibility(View.INVISIBLE);
+        }
+        if(AppConstant.searchSorceLocationModel!=null && AppConstant.searchDestinationLocationModel !=null){
+            sendButton.setVisibility(View.VISIBLE);
+        }
+
     }
 
     private void moveCamera(LatLng latLng, float zoom, String title) {
@@ -549,6 +589,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             mMap.clear();
             if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(data, this);
+                if(AppConstant.searchDestinationLocationModel == null){
+                    AppConstant.searchDestinationLocationModel = new WorkLocationModel();
+                }
                 AppConstant.searchDestinationLocationModel.workLocationName = place.getAddress().toString();
                 AppConstant.searchDestinationLocationModel.work = place.getLatLng();
                 String destinationLocation = AppConstant.searchDestinationLocationModel.workLocationName;
@@ -556,6 +599,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             }
         }
+        checkButtonState();
 
 
     }
