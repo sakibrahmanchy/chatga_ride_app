@@ -89,7 +89,7 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".Dailog.SearchingDriver"
-            android:theme="@style/ThemeOverlay.MyNoTitleActivity"
+            android:theme="@style/Theme.Transparent"
             android:screenOrientation="portrait"/>
         <activity android:name=".InternetConnection.InternetCheckActivity"
             android:screenOrientation="portrait"/>

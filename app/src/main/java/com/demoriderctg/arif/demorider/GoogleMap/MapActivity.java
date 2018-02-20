@@ -114,7 +114,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 return;
             }
             mMap.setMyLocationEnabled(true);
-
+            mMap.getUiSettings().setMapToolbarEnabled(false);
             init();
 
 
@@ -434,11 +434,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                 //checkLatLon();
                                 if (AppConstant.searchSorceLocationModel == null) {
                                     AppConstant.searchSorceLocationModel = new HomeLocationModel();
-                                    AppConstant.searchSorceLocationModel.homeLocationName = address.getAddressLine(0);
-                                    AppConstant.searchSorceLocationModel.home = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-                                }
 
-                                String sourceLocation = AppConstant .searchSorceLocationModel.homeLocationName;
+                                }
+                                AppConstant.searchSorceLocationModel.homeLocationName = address.getAddressLine(0);
+                                AppConstant.searchSorceLocationModel.home = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());                                String sourceLocation = AppConstant .searchSorceLocationModel.homeLocationName;
                                 sourceText.setText(sourceLocation);
                                 checkButtonState();
 

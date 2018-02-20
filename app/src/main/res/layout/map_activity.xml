@@ -78,7 +78,6 @@
                 android:background="@color/white"
                 android:src="@drawable/ic_gps"
                 android:layout_above="@+id/btnSend"
-                android:visibility="invisible"
                 android:layout_alignParentEnd="true"/>
 
 
