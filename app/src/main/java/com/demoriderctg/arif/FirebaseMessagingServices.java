@@ -118,6 +118,7 @@ public class FirebaseMessagingServices extends FirebaseMessagingService {
             /* Get the final cost */
             if(remoteMessage.getData().containsKey(AppConstant.FINAL_COST)){
                 long finalCost = Long.parseLong(remoteMessage.getData().get(AppConstant.FINAL_COST));
+                AppConstant.TOTAL_COST=finalCost;
             }
 
             /*Your Own Pending Intent*/

@@ -31,6 +31,19 @@
             android:text="0"
             android:textColor="@color/colorPrimary"
             android:textSize="100dp" />
+
+        <TextView
+            android:id="@+id/cancel_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:gravity="right"
+            android:layout_alignParentTop="true"
+            android:textColor="@color/colorAccent"
+            android:layout_marginTop="19dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+                android:text="Cancel" />
     </RelativeLayout>
 
 
