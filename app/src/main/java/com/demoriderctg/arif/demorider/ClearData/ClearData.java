@@ -23,7 +23,6 @@ public class ClearData {
         AppConstant. START_RIDE=false;
         AppConstant. TREAD_FOR_FINISH_RIDE=true;
         AppConstant.userDiscount = null;
-        AppConstant. HISTORY_ID=0;
         AppConstant. RATING =0;
         AppConstant. TOTAL_COST = 0;
         AppConstant.currentRidingHistoryModel = null;

@@ -10,6 +10,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
+import com.demoriderctg.arif.demorider.FirstAppLoadingActivity.FirstAppLoadingActivity;
 import com.demoriderctg.arif.demorider.MainActivity;
 import com.demoriderctg.arif.demorider.NotificationActivity;
 import com.demoriderctg.arif.demorider.R;
@@ -84,7 +85,8 @@ public class FirebaseMessagingServices extends FirebaseMessagingService {
                 long riderId = Long.parseLong(remoteMessage.getData().get(AppConstant.RIDER_ID));
             }
             /*Your Own Pending Intent*/
-            Intent intent = new Intent(this, MainActivity.class);
+            AppConstant.INITIAL_RIDE_ACCEPT=1;
+            Intent intent = new Intent(this, FirstAppLoadingActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             this.Notify(AppConstant.INITIAL_ACCEPTANCE_TITLE, AppConstant.INITIAL_ACCEPTANCE_BODY, pendingIntent);
@@ -94,11 +96,12 @@ public class FirebaseMessagingServices extends FirebaseMessagingService {
     private void ACTION_FINAL_ACCEPTANCE_NOTIFICATION(int action, RemoteMessage remoteMessage){
         if(remoteMessage.getData().size() > 0){
 
+            AppConstant.START_RIDE=true;
             if(remoteMessage.getData().containsKey(AppConstant.RIDER_ID)){
                 long riderId = Long.parseLong(remoteMessage.getData().get(AppConstant.RIDER_ID));
             }
              /*Your Own Pending Intent*/
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, FirstAppLoadingActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             this.Notify(AppConstant.FINAL_ACCEPTANCE_TITLE, AppConstant.FINAL_ACCEPTANCE_BODY, pendingIntent);
@@ -108,12 +111,14 @@ public class FirebaseMessagingServices extends FirebaseMessagingService {
     private void ACTION_FINISH_RIDE_NOTIFICATION(int action, RemoteMessage remoteMessage){
         if(remoteMessage.getData().size() > 0){
 
+            AppConstant.FINISH_RIDE=true;
             if(remoteMessage.getData().containsKey(AppConstant.RIDER_ID)){
                 long riderId = Long.parseLong(remoteMessage.getData().get(AppConstant.RIDER_ID));
             }
             /* Get the final cost */
             if(remoteMessage.getData().containsKey(AppConstant.FINAL_COST)){
                 long finalCost = Long.parseLong(remoteMessage.getData().get(AppConstant.FINAL_COST));
+                AppConstant.TOTAL_COST=finalCost;
             }
 
             /*Your Own Pending Intent*/
@@ -131,7 +136,7 @@ public class FirebaseMessagingServices extends FirebaseMessagingService {
                 long riderId = Long.parseLong(remoteMessage.getData().get(AppConstant.RIDER_ID));
             }
             /*Your Own Pending Intent*/
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, FirstAppLoadingActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             this.Notify(AppConstant.CANCEL_RIDE_TITLE, AppConstant.CANCEL_RIDE_BODY, pendingIntent);
@@ -148,7 +153,6 @@ public class FirebaseMessagingServices extends FirebaseMessagingService {
         builder.setAutoCancel(true);
         builder.setSmallIcon(R.mipmap.ic_launcher);
         builder.setContentIntent(pendingIntent);
-
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0, builder.build());
     }

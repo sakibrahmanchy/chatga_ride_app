@@ -462,6 +462,7 @@ public class PhoneVerificationActivity extends AppCompatActivity implements
             Intent intent = new Intent(PhoneVerificationActivity.this, RegistrationActivity.class);
             intent.putExtra("phoneNumber",phoneNumber);
             startActivity(intent);
+            finish();
         }else if(getIntent().getStringExtra("loginStatus").equals("PHONE_VERIFICATION_REQUIRED")){
             Log.e(TAG, pref.getString("access_token",null));
             dialog = new ProgressDialog(PhoneVerificationActivity.this);

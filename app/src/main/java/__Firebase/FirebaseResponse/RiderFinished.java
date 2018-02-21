@@ -69,7 +69,6 @@ public class RiderFinished implements ICallBackFinishedRide, ICallBackCurrentSer
           AppConstant.searchDestinationLocationModel=null;
           AppConstant.searchSorceLocationModel=null;
           AppConstant.INITIAL_RIDE_ACCEPT=0;
-          AppConstant.HISTORY_ID=0;
           AppConstant.START_RIDE=false;
 
     }

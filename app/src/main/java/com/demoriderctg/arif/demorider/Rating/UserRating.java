@@ -48,11 +48,8 @@ public class UserRating {
                         }
                         break;
                     case 500:
-
                         break;
-
                     default:
-
                         break;
                 }
             }

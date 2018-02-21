@@ -2,25 +2,15 @@ package com.demoriderctg.arif.demorider.OnrideMode;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -31,22 +21,18 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
-import com.demoriderctg.arif.demorider.Dailog.BottomSheetDailogInRideMode;
-import com.demoriderctg.arif.demorider.Dailog.RideFinishDailog;
-import com.demoriderctg.arif.demorider.Dailog.SearchingDriver;
 import com.demoriderctg.arif.demorider.FirstAppLoadingActivity.FirstAppLoadingActivity;
 import com.demoriderctg.arif.demorider.GoogleMap.GetCurrentLocation;
 import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
 import com.demoriderctg.arif.demorider.InternetConnection.ConnectionCheck;
-import com.demoriderctg.arif.demorider.MainActivity;
+
+
 import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
-import com.demoriderctg.arif.demorider.OnLocationChange.GPS_Service;
 import com.demoriderctg.arif.demorider.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -58,22 +44,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.Date;
-import java.util.MissingFormatArgumentException;
-
 import ContactWithFirebase.Main;
-import __Firebase.FirebaseModel.ClientModel;
-import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
 import __Firebase.FirebaseModel.RiderModel;
 import __Firebase.FirebaseResponse.NotificationModel;
-import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseWrapper;
 import __Firebase.ICallBackInstance.IGerRiderLocation;
-import __Firebase.Notification.NotificationWrapper;
 
 import static android.support.v4.app.NotificationCompat.*;
 import static com.demoriderctg.arif.demorider.AppConfig.AppConstant.DEFAULT_ZOOM;
-import static com.demoriderctg.arif.demorider.AppConfig.AppConstant.OnchangeDeviceLOcation;
 
 public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyCallback, OnMyLocationButtonClickListener, GoogleMap.OnMyLocationChangeListener, IGerRiderLocation {
 
@@ -100,6 +78,8 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
     private  TextView rating;
     private RiderModel riderModel;
     private NotificationModel notificationModel;
+
+
 
 
     @Override
@@ -336,7 +316,16 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.cancel_ride:
-                main.ForceCancelRide();
+                if(AppConstant.START_RIDE == false && AppConstant.FINISH_RIDE == false){
+                    main.ForceCancelRide();
+                    Intent intent = new Intent(OnrideModeActivity.this, FirstAppLoadingActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),"Can not cancel ride!!",Toast.LENGTH_SHORT).show();
+                }
+
                 return true;
             case R.id.help:
                 return true;

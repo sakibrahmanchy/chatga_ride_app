@@ -18,6 +18,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -46,6 +47,7 @@ import com.demoriderctg.arif.demorider.Dailog.RideFinishDailog;
 import com.demoriderctg.arif.demorider.FavoritePlaces.FavoritePlacesActivity;
 import com.demoriderctg.arif.demorider.FavoritePlaces.HomeLocationModel;
 import com.demoriderctg.arif.demorider.FavoritePlaces.WorkLocationModel;
+import com.demoriderctg.arif.demorider.FinishRideActivity.FinishRideActivity;
 import com.demoriderctg.arif.demorider.InternetConnection.ConnectionCheck;
 import com.demoriderctg.arif.demorider.InternetConnection.InternetCheckActivity;
 import com.demoriderctg.arif.demorider.MainActivity;
@@ -113,21 +115,24 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 return;
             }
             mMap.setMyLocationEnabled(true);
-            mMap.getUiSettings().setMyLocationButtonEnabled(false);
-
+            mMap.getUiSettings().setMapToolbarEnabled(false);
             init();
 
 
             Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
         }
+
+
     }
+
+
 
     private static final String TAG = "MapActivity";
 
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
-    private static final float DEFAULT_ZOOM = 15f;
+    private static final float DEFAULT_ZOOM = 18f;
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
             new LatLng(54.69726685890506, -2.7379201682812226), new LatLng(55.38942944437183, -1.2456105979687226));
     String CurrentLocation;
@@ -190,7 +195,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         bottomSheet = findViewById( R.id.bottom_sheet );
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-        mBottomSheetBehavior.setPeekHeight(200);
+        mBottomSheetBehavior.setPeekHeight(100);
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         mBottomSheetBehavior.setHideable(false);
 
@@ -246,6 +251,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         navigationView= (NavigationView) findViewById(R.id.nav_view);
         View v = navigationView.getHeaderView(0);
         userInformation = new UserInformation(this);
+
         ImageView avatarContainer = (ImageView ) v.findViewById(R.id.profile_nav);
         userFirstName = (TextView) v.findViewById(R.id.user_full_name);
         userFirstName.setText(userInformation.getuserInformation().getFirstName() +" " + userInformation.getuserInformation().getLastName());
@@ -266,10 +272,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         if(AppConstant.FINISH_RIDE){
-            RideFinishDailog rideFinishDailog = new RideFinishDailog(MapActivity.this);
-            rideFinishDailog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            rideFinishDailog.show();
-            new ClearData();
+           Intent intent = new Intent(this, FinishRideActivity.class);
+           startActivity(intent);
+
 
         }
 
@@ -429,11 +434,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                 //checkLatLon();
                                 if (AppConstant.searchSorceLocationModel == null) {
                                     AppConstant.searchSorceLocationModel = new HomeLocationModel();
-                                    AppConstant.searchSorceLocationModel.homeLocationName = address.getAddressLine(0);
-                                    AppConstant.searchSorceLocationModel.home = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-                                }
 
-                                String sourceLocation = AppConstant .searchSorceLocationModel.homeLocationName;
+                                }
+                                AppConstant.searchSorceLocationModel.homeLocationName = address.getAddressLine(0);
+                                AppConstant.searchSorceLocationModel.home = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());                                String sourceLocation = AppConstant .searchSorceLocationModel.homeLocationName;
                                 sourceText.setText(sourceLocation);
                                 checkButtonState();
 
@@ -458,9 +462,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         if(AppConstant.searchDestinationLocationModel == null){
             sendButton.setVisibility(View.INVISIBLE);
             requestbtn.setVisibility(View.INVISIBLE);
+            destinationText.setText("");
         }
         if(AppConstant.searchSorceLocationModel!=null && AppConstant.searchDestinationLocationModel !=null){
             sendButton.setVisibility(View.VISIBLE);
+            sourceText.setText(AppConstant.searchSorceLocationModel.homeLocationName);
+            destinationText.setText(AppConstant.searchDestinationLocationModel.workLocationName);
         }
 
     }
@@ -509,29 +516,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        Log.d(TAG, "onRequestPermissionsResult: called.");
-        mLocationPermissionsGranted = false;
 
-        switch (requestCode) {
-            case LOCATION_PERMISSION_REQUEST_CODE: {
-                if (grantResults.length > 0) {
-                    for (int i = 0; i < grantResults.length; i++) {
-                        if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
-                            mLocationPermissionsGranted = false;
-                            Log.d(TAG, "onRequestPermissionsResult: permission failed");
-                            return;
-                        }
-                    }
-                    Log.d(TAG, "onRequestPermissionsResult: permission granted");
-                    mLocationPermissionsGranted = true;
-                    //initialize our map
-                    initMap();
-                }
-            }
-        }
-    }
 
     private void hideSoftKeyboard() {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -574,18 +559,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
 
-    /*
-    public void checkLatLon() {
 
-        requestbtn.setVisibility(View.INVISIBLE);
-        if (source != null && dest != null) {
-
-            sendButton.setVisibility(View.VISIBLE);
-        } else {
-            sendButton.setVisibility(View.INVISIBLE);
-        }
-    }
-    */
 
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

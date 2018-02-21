@@ -4,38 +4,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent"
     tools:context="com.demoriderctg.arif.demorider.Dailog.SearchingDriver">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/transparent"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp"
         tools:ignore="MissingConstraints">
 
 
-        <pl.droidsonroids.gif.GifTextView
+        <ProgressBar
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:background="@drawable/loading" />
+            android:padding="40dp"
+            android:theme="@style/CircularProgress" />
 
         <TextView
             android:id="@+id/count_second"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
-            android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="0dp"
-            android:gravity="fill_horizontal"
+            android:gravity="center"
 
             android:text="0"
             android:textColor="@color/colorPrimary"
             android:textSize="100dp" />
+
+        <TextView
+            android:id="@+id/cancel_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:gravity="right"
+            android:layout_alignParentTop="true"
+            android:textColor="@color/colorAccent"
+            android:layout_marginTop="19dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+                android:text="Cancel" />
     </RelativeLayout>
 
 

@@ -89,7 +89,7 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".Dailog.SearchingDriver"
-            android:theme="@style/ThemeOverlay.MyNoTitleActivity"
+            android:theme="@style/Theme.Transparent"
             android:screenOrientation="portrait"/>
         <activity android:name=".InternetConnection.InternetCheckActivity"
             android:screenOrientation="portrait"/>
@@ -116,7 +116,13 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".FacebookAccountVerificationActivity"
             android:screenOrientation="portrait"></activity>
+        <activity android:name=".Dailog.FullMapSearching"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".FinishRideActivity.FinishRideActivity"
+            >
 
+        </activity>
         <service android:name="com.demoriderctg.arif.FirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
