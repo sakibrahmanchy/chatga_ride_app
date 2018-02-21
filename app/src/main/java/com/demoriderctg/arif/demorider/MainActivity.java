@@ -1,6 +1,7 @@
 package com.demoriderctg.arif.demorider;
 
 import android.*;
+import android.Manifest;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -12,6 +13,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -32,7 +34,9 @@ public class MainActivity extends AppCompatActivity {
     public static boolean check = false;
     private SharedPreferences pref;
     private ConnectionCheck connectionCheck;
-
+    private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
+    private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     public static boolean IS_MAP_INITIALIZE = false;
 
     @Override
@@ -57,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 setContentView(R.layout.activity_main);
                 if (isServiceOk()) {
+                    getLocationPermission();
                     init();
                 }
             }
@@ -104,4 +109,35 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    private void getLocationPermission() {
+        Log.d(TAG, "getLocationPermission: getting location permissions");
+        String[] permissions = {android.Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION};
+
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                    COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+            } else {
+                Intent intent = new Intent(MainActivity.this, UserCheckActivity.class);
+                startActivity(intent);
+                ActivityCompat.requestPermissions(this,
+                        permissions,LOCATION_PERMISSION_REQUEST_CODE);
+
+            }
+        } else {
+
+            Intent intent = new Intent(MainActivity.this, UserCheckActivity.class);
+            startActivity(intent);
+            ActivityCompat.requestPermissions(this,
+                    permissions,
+                    LOCATION_PERMISSION_REQUEST_CODE);
+        }
+    }
+
 }
+
+
+

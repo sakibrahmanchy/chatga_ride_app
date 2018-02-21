@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.demoriderctg.arif.demorider.FirstAppLoadingActivity.FirstAppLoadingActivity;
 import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
 import com.demoriderctg.arif.demorider.models.ApiModels.AccessTokenModels.AuthToken;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
@@ -138,7 +139,7 @@ public class LoginHelper {
                             editor.putString("phoneNumber",phoneNumber);
                             editor.commit();
 
-                            Intent intent = new Intent(context, MapActivity.class);
+                            Intent intent = new Intent(context, FirstAppLoadingActivity.class);
                             context.startActivity(intent);
 
                         }else{
