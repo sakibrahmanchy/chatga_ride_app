@@ -106,7 +106,6 @@
         <activity
             android:name=".Setting.SettingActivity"
             android:label="User Setting"
-            android:noHistory="true"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".NotificationActivity"
