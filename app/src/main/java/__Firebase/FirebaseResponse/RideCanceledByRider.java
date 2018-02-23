@@ -1,5 +1,11 @@
 package __Firebase.FirebaseResponse;
 
+import android.content.Intent;
+
+import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
+import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
+import com.demoriderctg.arif.demorider.MainActivity;
+
 import java.util.Map;
 
 import __Firebase.FirebaseModel.RiderModel;
@@ -8,6 +14,8 @@ import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseUtility.FirebaseUtilMethod;
 import __Firebase.FirebaseWrapper;
 import __Firebase.ICallBackInstance.ICallBackCurrentServerTime;
+
+import static com.demoriderctg.arif.demorider.OnrideMode.OnrideModeActivity.OnrideModeContext;
 
 /**
  * Created by User on 1/15/2018.
@@ -30,6 +38,11 @@ public class RideCanceledByRider implements ICallBackCurrentServerTime {
 
     private void Response(){
         AddRiderIntoBlockList();
+        if(AppConstant.ONRIDEMODE_ACTIVITY){
+            Intent intent = new Intent(OnrideModeContext,MapActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            OnrideModeContext.startActivity(intent);
+        }
     }
 
     private void AddRiderIntoBlockList(){

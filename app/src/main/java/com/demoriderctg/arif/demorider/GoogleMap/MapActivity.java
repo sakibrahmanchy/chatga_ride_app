@@ -195,7 +195,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         bottomSheet = findViewById( R.id.bottom_sheet );
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-        mBottomSheetBehavior.setPeekHeight(100);
+        mBottomSheetBehavior.setPeekHeight(200);
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         mBottomSheetBehavior.setHideable(false);
 

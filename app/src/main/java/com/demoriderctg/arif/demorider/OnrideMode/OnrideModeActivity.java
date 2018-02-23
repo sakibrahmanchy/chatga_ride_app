@@ -2,8 +2,10 @@ package com.demoriderctg.arif.demorider.OnrideMode;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -13,6 +15,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.NotificationCompat;
@@ -43,6 +46,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.Date;
 
 import ContactWithFirebase.Main;
 import __Firebase.FirebaseModel.RiderModel;
@@ -78,6 +83,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
     private  TextView rating;
     private RiderModel riderModel;
     private NotificationModel notificationModel;
+    public static Activity OnrideModeContext;
 
 
 
@@ -100,6 +106,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
         mBottomSheetBehavior.setPeekHeight(300);
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         notificationModel = FirebaseWrapper.getInstance().getNotificationModelInstance();
+        OnrideModeContext = this;
 
         if(notificationModel.riderId >0){
             AppConstant.RIDER_NAME = notificationModel.riderName;
@@ -317,10 +324,20 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
         switch (item.getItemId()) {
             case R.id.cancel_ride:
                 if(AppConstant.START_RIDE == false && AppConstant.FINISH_RIDE == false){
-                    main.ForceCancelRide();
-                    Intent intent = new Intent(OnrideModeActivity.this, FirstAppLoadingActivity.class);
-                    startActivity(intent);
-                    finish();
+
+                    new AlertDialog.Builder(OnrideModeActivity.this)
+                            .setTitle("Really Exit?")
+                            .setMessage("Are you sure you want to Cancel the Ride?")
+                            .setNegativeButton(android.R.string.no, null)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface arg0, int arg1) {
+                                    main.ForceCancelRide();
+                                    Intent intent = new Intent(OnrideModeActivity.this, MapActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            }).create().show();
+
                 }
                 else{
                     Toast.makeText(getApplicationContext(),"Can not cancel ride!!",Toast.LENGTH_SHORT).show();
@@ -368,4 +385,18 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
     public void onBackPressed() {
 
     }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        AppConstant.ONRIDEMODE_ACTIVITY = true;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        AppConstant.ONRIDEMODE_ACTIVITY = false;
+    }
+
 }

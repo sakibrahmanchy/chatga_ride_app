@@ -64,6 +64,7 @@ public class AppConstant {
     public static String RIDER_NAME=null;
     public static String RIDER_PHONENUMBER= null;
     public static String RIDER_BIKE_NUMBER=null;
+    public static boolean ONRIDEMODE_ACTIVITY=false;
 
 
 
