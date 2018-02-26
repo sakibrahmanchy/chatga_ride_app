@@ -2,6 +2,8 @@ package __Firebase.FirebaseModel;
 
 import com.google.firebase.database.DataSnapshot;
 
+import __Firebase.FirebaseUtility.FirebaseConstant;
+
 /**
  * Created by User on 11/16/2017.
  */
@@ -16,11 +18,13 @@ public class ClientModel {
     public long CostOfCurrentRide;
     public String CurrentRidingHistoryID;
     public String RideRejectedByRider;
+    public String ImageUrl;
+    public String Ratting;
 
     public ClientModel(){
 
     }
-    public ClientModel(long _ClientID, long _PhoneNumber, String _DeviceToken, String _FullName, int _IsSearchingOrOnRide, long _CostOfCurrentRide, String _CurrentRidingHistoryID, String _RideRejectedByRider){
+    public ClientModel(long _ClientID, long _PhoneNumber, String _DeviceToken, String _FullName, int _IsSearchingOrOnRide, long _CostOfCurrentRide, String _CurrentRidingHistoryID, String _RideRejectedByRider, String _ImageUrl, String _Ratting){
         this.ClientID = _ClientID;
         this.PhoneNumber = _PhoneNumber;
         this.DeviceToken = _DeviceToken;
@@ -29,6 +33,8 @@ public class ClientModel {
         this.CostOfCurrentRide = _CostOfCurrentRide;
         this.CurrentRidingHistoryID = _CurrentRidingHistoryID;
         this.RideRejectedByRider = _RideRejectedByRider;
+        this.ImageUrl = _ImageUrl;
+        this.Ratting = _Ratting;
     }
 
     public void LoadData(DataSnapshot snapshot){
@@ -42,5 +48,7 @@ public class ClientModel {
         this.CostOfCurrentRide = clientModel.CostOfCurrentRide;
         this.CurrentRidingHistoryID = clientModel.CurrentRidingHistoryID;
         this.RideRejectedByRider = clientModel.RideRejectedByRider;
+        this.ImageUrl = clientModel.ImageUrl;
+        this.Ratting = clientModel.Ratting;
     }
 }

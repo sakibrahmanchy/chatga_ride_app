@@ -108,6 +108,6 @@ public class FirebaseWrapper {
     }
 
     public static String getDeviceToken() {
-        return FirebaseInstanceId.getInstance().getToken().toString();
+        return FirebaseInstanceId.getInstance().getToken();
     }
 }

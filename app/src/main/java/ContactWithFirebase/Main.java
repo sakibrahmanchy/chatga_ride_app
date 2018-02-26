@@ -54,22 +54,6 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
 
     public boolean CreateNewClientFirebase(LoginData loginData, String phoneNumber) {
 
-        if (loginData == null && MainActivity.check) {
-            loginData = new LoginData(
-                    "Jobayer",
-                    "sheikh",
-                    FirebaseWrapper.getDeviceToken(),
-                    null,
-                    null,
-                    "1010",
-                    "1010",
-                    "null",
-                    "null",
-                    "null"
-            );
-            phoneNumber = new String("01752062838");
-        }
-
         if (loginData == null || FirebaseUtilMethod.IsEmptyOrNull(phoneNumber)) return false;
 
         firebaseWrapper = FirebaseWrapper.getInstance();
@@ -85,6 +69,8 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
         clientModel.CostOfCurrentRide = FirebaseConstant.UNDEFINE;
         clientModel.CurrentRidingHistoryID = FirebaseConstant.UNKNOWN_STRING;
         clientModel.RideRejectedByRider = FirebaseConstant.UNKNOWN_STRING;
+        clientModel.ImageUrl = FirebaseConstant.UNKNOWN_STRING;
+        clientModel.Ratting = FirebaseConstant.UNKNOWN_STRING;
 
         this.IsClientAlreadyCreated(clientModel);
         return true;
