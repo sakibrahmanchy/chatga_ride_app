@@ -176,8 +176,8 @@ public class EditProfile extends AppCompatActivity  {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 Calendar newDate = Calendar.getInstance();
                 Log.d(TAG, dayOfMonth+"");
-                newDate.set(year, monthOfYear+1, dayOfMonth);
-                editDate.setText(year+"-"+(monthOfYear+1)+"-"+dayOfMonth);
+                newDate.set(year, monthOfYear, dayOfMonth);
+                editDate.setText(year+"-"+monthOfYear+"-"+dayOfMonth);
             }
 
         },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
@@ -317,14 +317,9 @@ public class EditProfile extends AppCompatActivity  {
     }
 
     public void updateProfile(String firstName, String lastName, String gender, String email, File avatar){
-        MultipartBody.Part fileToUpload;
-        if(avatar!=null){
-            RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), avatar);
-            fileToUpload = MultipartBody.Part.createFormData("avatar", avatar.getName(), requestBody);
-        }else{
-            fileToUpload = null;
-        }
 
+        RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), avatar);
+        MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("avatar", avatar.getName(), requestBody);
         //RequestBody filename = RequestBody.create(MediaType.parse("text/plain"), avatar.getName());
 
         apiService =

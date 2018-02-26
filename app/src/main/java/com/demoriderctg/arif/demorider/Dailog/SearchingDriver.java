@@ -1,5 +1,6 @@
 package com.demoriderctg.arif.demorider.Dailog;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
@@ -33,24 +34,18 @@ import static com.demoriderctg.arif.demorider.Dailog.FullMapSearching.fullMapAct
 
 public class SearchingDriver extends AppCompatActivity {
 
-
-    private int progressStatus = 0;
     private Handler handler = new Handler();
-    private NotificationModel notificationModel;
-    private TextView cancel,count_number;
-    private Main main;
-    private SendNotification sendNotification;
+    private TextView cancel;
+    public static Activity searchActivity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_searching_driver);
       //  getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        count_number = findViewById(R.id.count_second);
         cancel = (TextView) findViewById(R.id.cancel_search);
-        main = new Main();
-        notificationModel = FirebaseWrapper.getInstance().getNotificationModelInstance();
-        searchDriver();
+        searchActivity=this;
+
 
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +56,7 @@ public class SearchingDriver extends AppCompatActivity {
                         .setNegativeButton(android.R.string.no, null)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface arg0, int arg1) {
+                                new ClearData();
                                     Intent intent = new Intent(SearchingDriver.this, MapActivity.class);
                                     startActivity(intent);
                                     finish();
@@ -72,60 +68,20 @@ public class SearchingDriver extends AppCompatActivity {
     }
 
 
-    /*
-    public boolean onOptionsItemSelected(MenuItem item){
-        Intent myIntent = new Intent(getApplicationContext(), MapActivity.class);
-        startActivityForResult(myIntent, 0);
-        return true;
-    }
-   */
-
-
-
-    void searchDriver(){
-
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                progressStatus+=1;
-                count_number.setText(progressStatus+"");
-                if (AppConstant.INITIAL_RIDE_ACCEPT==1 ) {
-                    progressStatus = 181;
-                    sendNotification = new SendNotification(SearchingDriver.this);
-                    sendNotification.Notification("FOUND","RIDER FOUND","Click to view rider");
-                    Intent  intent = new Intent(SearchingDriver.this,OnrideModeActivity.class);
-                    startActivity(intent);
-                    fullMapActivity.finish();
-                    finish();
-                }
-                else if(progressStatus <180){
-                    handler.postDelayed(this, 1000);
-                }
-                else if(progressStatus>=180){
-                    new ClearData();
-                    new AlertDialog.Builder(SearchingDriver.this)
-                            .setTitle("Rider Not Found")
-                            .setMessage("Currently All the Rider Busy, Please search again.")
-                            .setCancelable(false)
-                            .setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent myIntent = new Intent(getApplicationContext(), MapActivity.class);
-                                    startActivity(myIntent);
-                                    fullMapActivity.finish();
-                                    finish();
-                                }
-                            }).show();
-                }
-            }
-        };
-        handler.postDelayed(runnable, 1000);
-
-    }
-
     @Override
     public void onBackPressed() {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        AppConstant.SEARCH_ACTIVITY=true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        AppConstant.SEARCH_ACTIVITY=false;
+    }
 }

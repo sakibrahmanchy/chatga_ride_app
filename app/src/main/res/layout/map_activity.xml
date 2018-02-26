@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_margin="20dp"
+                android:layout_margin="10dp"
                 android:weightSum="2"
                 android:id="@+id/searchLinearLayout"
                 android:padding= "10dp">
@@ -46,7 +46,8 @@
                     android:padding="10dp"
                     android:elevation="3dp"
                     android:maxLines="1"
-                    android:drawableRight="@drawable/places_ic_search"
+                    android:drawableLeft="@drawable/red"
+                    android:drawablePadding="10dp"
                     />
 
                 <TextView
@@ -55,9 +56,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:background="@android:color/darker_gray"
-                    android:drawableRight="@drawable/places_ic_search"
+                    android:drawableLeft="@drawable/indicator_unfilled"
+                    android:drawablePadding="10dp"
                     android:elevation="3dp"
-
                     android:ems="10"
                     android:hint="Your Destination"
                     android:inputType="textPersonName"
@@ -76,7 +77,7 @@
                 android:layout_marginRight="10dp"
                 android:scaleType="centerCrop"
                 android:id="@+id/ic_gps"
-                android:background="@color/white"
+                app:backgroundTint="@android:color/white"
                 android:src="@drawable/ic_gps"
                 android:layout_above="@+id/btnSend"
                 android:layout_alignParentEnd="true"/>

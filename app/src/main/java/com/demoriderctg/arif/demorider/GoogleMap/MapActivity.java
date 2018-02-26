@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
@@ -73,6 +75,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -116,6 +119,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
+
             init();
 
 
@@ -132,7 +136,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
-    private static final float DEFAULT_ZOOM = 18f;
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
             new LatLng(54.69726685890506, -2.7379201682812226), new LatLng(55.38942944437183, -1.2456105979687226));
     String CurrentLocation;
@@ -249,12 +252,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         linearLayout.setVisibility(View.VISIBLE);
         spinner = (ProgressBar) findViewById(R.id.progressBar);
         navigationView= (NavigationView) findViewById(R.id.nav_view);
+
         View v = navigationView.getHeaderView(0);
         userInformation = new UserInformation(this);
 
         ImageView avatarContainer = (ImageView ) v.findViewById(R.id.profile_nav);
         userFirstName = (TextView) v.findViewById(R.id.user_full_name);
+        userPhoneNumber =v.findViewById(R.id.user_phone_number);
         userFirstName.setText(userInformation.getuserInformation().getFirstName() +" " + userInformation.getuserInformation().getLastName());
+        userPhoneNumber.setText(userInformation.getuserInformation().phone);
         Picasso.with(this).invalidate(userInformation.getuserInformation().getAvatar());
         Picasso.with(this)
                 .load(userInformation.getuserInformation().getAvatar())
@@ -318,8 +324,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         sourceText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mMap.getUiSettings().setScrollGesturesEnabled(true);
+                mMap.getUiSettings().setZoomGesturesEnabled(true);
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-
+                builder.setLatLngBounds(AppConstant.LAT_LNG_BOUNDS);
                 try {
                     startActivityForResult(builder.build(MapActivity.this), PLACE_PICKER_REQUEST);
                 } catch (GooglePlayServicesRepairableException e) {
@@ -333,7 +341,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         destinationText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mMap.getUiSettings().setScrollGesturesEnabled(true);
+                mMap.getUiSettings().setZoomGesturesEnabled(true);
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                builder.setLatLngBounds(AppConstant.LAT_LNG_BOUNDS);
 
                 try {
                     startActivityForResult(builder.build(MapActivity.this), PLACE_PICKER_REQUEST_DESTINATION);
@@ -424,8 +435,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                 List<Address> myList = myLocation.getFromLocation(currentLocation.getLatitude(), currentLocation.getLongitude(), 1);
                                 Address address = (Address) myList.get(0);
                                 // mapMarkerDragging = new MapMarkerDragging(MapActivity.this,source,dest,mMap);
+
                                 moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
-                                        DEFAULT_ZOOM,
+                                        AppConstant.DEFAULT_ZOOM,
                                         "My Location");
                                 //checkLatLon();
                                 if (AppConstant.searchSorceLocationModel == null) {
@@ -472,13 +484,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
 
-        if (!title.equals("My Location")) {
-            MarkerOptions options = new MarkerOptions()
-                    .position(latLng)
-                    .title(title);
-            mMap.addMarker(options);
-        }
+        if (title.equals("Destination"))
+        {
+            mMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromBitmap(this.resizeMapIcons("ic_marker_destination",200,200))).anchor(.5f,.5f));//.icon(BitmapDescriptorFactory.fromBitmap(resizedMarker(200,200) )));
 
+        }
+        if (title.equals("Source"))
+        {
+            mMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromBitmap(this.resizeMapIcons("ic_marker_pickup",200,200))).anchor(.5f,.5f));//.icon(BitmapDescriptorFactory.fromBitmap(resizedMarker(200,200) )));
+
+        }
         hideSoftKeyboard();
     }
 
@@ -487,6 +502,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(MapActivity.this);
+
     }
 
     private void getLocationPermission() {
@@ -559,16 +575,23 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        mMap.clear();
+
         requestbtn.setVisibility(View.INVISIBLE);
         sendButton.setVisibility(View.VISIBLE);
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(data, this);
-                AppConstant.searchSorceLocationModel.homeLocationName = place.getAddress().toString();
-                AppConstant.searchSorceLocationModel.home = place.getLatLng();
-                String sourceLocation = AppConstant.searchSorceLocationModel.homeLocationName;
-                sourceText.setText(sourceLocation);
+                if(AppConstant.LAT_LNG_BOUNDS.contains(place.getLatLng())){
+                    AppConstant.searchSorceLocationModel.homeLocationName = place.getAddress().toString();
+                    AppConstant.searchSorceLocationModel.home = place.getLatLng();
+                    String sourceLocation = AppConstant.searchSorceLocationModel.homeLocationName;
+                    sourceText.setText(sourceLocation);
+                    moveCamera(AppConstant.searchSorceLocationModel.home,AppConstant.DEFAULT_ZOOM,"Source");
+                }
+                else{
+                    Toast.makeText(getContextOfApplication(),"Service is not work now",Toast.LENGTH_SHORT).show();
+                }
+
             }
         }
 
@@ -576,15 +599,22 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             mMap.clear();
             if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(data, this);
-                if(AppConstant.searchDestinationLocationModel == null){
-                    AppConstant.searchDestinationLocationModel = new WorkLocationModel();
+                if(AppConstant.LAT_LNG_BOUNDS.contains(place.getLatLng())){
+                    if(AppConstant.searchDestinationLocationModel == null){
+                        AppConstant.searchDestinationLocationModel = new WorkLocationModel();
+                    }
+                    AppConstant.searchDestinationLocationModel.workLocationName = place.getAddress().toString();
+                    AppConstant.searchDestinationLocationModel.work = place.getLatLng();
+                    String destinationLocation = AppConstant.searchDestinationLocationModel.workLocationName;
+                    destinationText.setText(destinationLocation);
+                    moveCamera(AppConstant.searchDestinationLocationModel.work,AppConstant.DEFAULT_ZOOM,"Destination");
                 }
-                AppConstant.searchDestinationLocationModel.workLocationName = place.getAddress().toString();
-                AppConstant.searchDestinationLocationModel.work = place.getLatLng();
-                String destinationLocation = AppConstant.searchDestinationLocationModel.workLocationName;
-                destinationText.setText(destinationLocation);
+                else{
+                    Toast.makeText(getContextOfApplication(),"Service is not work now",Toast.LENGTH_SHORT).show();
+                }
 
             }
+
         }
         checkButtonState();
 
@@ -653,6 +683,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public static Context getContextOfApplication(){
         return contextOfApplication;
     }
+
+    public Bitmap resizeMapIcons(String iconName, int width, int height){
+        Bitmap decodeResource = BitmapFactory.decodeResource(contextOfApplication.getResources(),contextOfApplication.getResources().getIdentifier(iconName, "drawable", contextOfApplication.getPackageName()));
+        return Bitmap.createScaledBitmap(decodeResource, (int) (((double) decodeResource.getWidth()) * .25d), (int) (((double) decodeResource.getHeight()) * .25d), false);
+    }
+
 }
 
 
