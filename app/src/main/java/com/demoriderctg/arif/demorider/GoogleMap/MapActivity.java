@@ -298,11 +298,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             AppConstant.searchDestinationLocationModel = userInformation.getUserWorkLocation();
         }
 
-        if (MainActivity.check == true) {
-            main.CreateNewClientFirebase(loginData, "01752062838");
-        } else {
-            main.CreateNewClientFirebase(loginData, phonemumber);
-        }
+        main.CreateNewClientFirebase(loginData, phonemumber);
     }
 
     private void init() {

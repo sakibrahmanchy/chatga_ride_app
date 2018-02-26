@@ -40,12 +40,14 @@ public class RiderModel {
     public int OnlineBusyOnRide;
     public RiderLocation CurrentRiderLocation;
     public double DistanceFromClient;
+    public String ImageUrl;
+    public String Ratting;
 
     public RiderModel(){
         this.CurrentRiderLocation = new RiderLocation();
     }
 
-    public RiderModel(long _RiderID, long _PhoneNumber, String _DeviceToken, String _FullName, int _IsRiderOnline, int _IsRiderBusy, int _IsRiderOnRide, long _CurrentRidingHistoryID, int _OnlineBusyOnRide, RiderLocation _RiderLocation){
+    public RiderModel(long _RiderID, long _PhoneNumber, String _DeviceToken, String _FullName, int _IsRiderOnline, int _IsRiderBusy, int _IsRiderOnRide, long _CurrentRidingHistoryID, int _OnlineBusyOnRide, RiderLocation _RiderLocation, String _ImageUrl, String _Ratting){
         this.RiderID = _RiderID;
         this.PhoneNumber = _PhoneNumber;
         this.DeviceToken = _DeviceToken;
@@ -56,6 +58,8 @@ public class RiderModel {
         this.CurrentRidingHistoryID = _CurrentRidingHistoryID;
         this.OnlineBusyOnRide = _OnlineBusyOnRide;
         this.CurrentRiderLocation = _RiderLocation;
+        this.ImageUrl = _ImageUrl;
+        this.Ratting = _Ratting;
     }
 
     public void LoadData(DataSnapshot snapshot){
@@ -71,8 +75,9 @@ public class RiderModel {
         this.CurrentRidingHistoryID = riderModel.CurrentRidingHistoryID;
         this.OnlineBusyOnRide = riderModel.OnlineBusyOnRide;
         this.CurrentRiderLocation = riderModel.CurrentRiderLocation;
-
         this.DistanceFromClient = FirebaseConstant.INFINITE_INTEGER;
+        this.ImageUrl = riderModel.ImageUrl;
+        this.Ratting = riderModel.Ratting;
     }
 
     public void DeepClone(RiderModel temp){
@@ -88,6 +93,8 @@ public class RiderModel {
         this.CurrentRidingHistoryID = riderModel.CurrentRidingHistoryID;
         this.OnlineBusyOnRide = riderModel.OnlineBusyOnRide;
         this.CurrentRiderLocation = riderModel.CurrentRiderLocation;
+        this.ImageUrl = riderModel.ImageUrl;
+        this.Ratting = riderModel.Ratting;
     }
 
     public void ClearData(){
@@ -103,7 +110,8 @@ public class RiderModel {
         this.OnlineBusyOnRide = FirebaseConstant.UNDEFINE;
         this.CurrentRiderLocation.Longitude = FirebaseConstant.UNDEFINE;
         this.CurrentRiderLocation.Latitude = FirebaseConstant.UNDEFINE;
-
         this.DistanceFromClient = FirebaseConstant.INFINITE_INTEGER;
+        this.ImageUrl = FirebaseConstant.Empty;
+        this.Ratting = FirebaseConstant.Empty;
     }
 }

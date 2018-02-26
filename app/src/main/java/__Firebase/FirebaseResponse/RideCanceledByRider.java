@@ -4,12 +4,10 @@ import android.content.Intent;
 
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
 import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
-import com.demoriderctg.arif.demorider.MainActivity;
 
 import java.util.Map;
 
 import __Firebase.FirebaseModel.RiderModel;
-import __Firebase.FirebaseReqest.ThrdRequestAgainForRider;
 import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseUtility.FirebaseUtilMethod;
 import __Firebase.FirebaseWrapper;
@@ -27,7 +25,7 @@ public class RideCanceledByRider implements ICallBackCurrentServerTime {
     private Map<Long, Boolean> requestedRider;
     private long Time;
 
-    public RideCanceledByRider(long Time){
+    public RideCanceledByRider(long Time) {
         this.Time = Time;
         FirebaseUtilMethod.getNetworkTime(
                 FirebaseConstant.RIDE_CANCELED_BY_RIDER,
@@ -36,20 +34,24 @@ public class RideCanceledByRider implements ICallBackCurrentServerTime {
         );
     }
 
-    private void Response(){
+    private void Response() {
         AddRiderIntoBlockList();
-        if(AppConstant.ONRIDEMODE_ACTIVITY){
-            Intent intent = new Intent(OnrideModeContext,MapActivity.class);
+        if (AppConstant.ONRIDEMODE_ACTIVITY) {
+            Intent intent = new Intent(OnrideModeContext, MapActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             OnrideModeContext.startActivity(intent);
         }
     }
 
-    private void AddRiderIntoBlockList(){
+    private void ResponseTimeOver(){
+
+    }
+
+    private void AddRiderIntoBlockList() {
 
         riderModel = FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider;
         requestedRider = FirebaseWrapper.getInstance().getRiderViewModelInstance().AlreadyRequestedRider;
-        if(riderModel.RiderID > 0) {
+        if (riderModel.RiderID > 0) {
             requestedRider.put(riderModel.RiderID, true);
         }
         /*Do no request again rather just notify client to request again*/
@@ -58,10 +60,12 @@ public class RideCanceledByRider implements ICallBackCurrentServerTime {
 
     @Override
     public void OnResponseServerTime(long value, int type) {
-        if(value > 0 && type == FirebaseConstant.RIDE_CANCELED_BY_RIDER){
-            if(Math.abs(value - Time) <= FirebaseConstant.ONE_MINUTE_IN_MILLISECOND){
+        if (value > 0 && type == FirebaseConstant.RIDE_CANCELED_BY_RIDER) {
+            if (Math.abs(value - Time) <= FirebaseConstant.ONE_MINUTE_IN_MILLISECOND) {
                 Response();
             }
+        } else {
+            ResponseTimeOver();
         }
     }
 }
