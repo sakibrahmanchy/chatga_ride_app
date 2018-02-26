@@ -106,9 +106,9 @@ public class FirebaseConstant {
     public static String NO_RIDER_FOUND = "No rider found";
 
     /*Notification Action Type*/
-    public static String CLIENT_TO_RIDER = ("3021");
-    public static String GET_CURRENT_TIME = ("4001");
-    public static String CANCEL_RIDE_NOTIFY_RIDER = ("5021");
+    public static final String CLIENT_TO_RIDER = ("3021");
+    public static final String GET_CURRENT_TIME = ("4001");
+    public static final String CANCEL_RIDE_NOTIFY_RIDER = ("5021");
 
     public static final int INT_CANCEL_RIDE_NOTIFY_RIDER = 5021;
 
