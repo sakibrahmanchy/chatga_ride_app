@@ -34,7 +34,7 @@ public class AppConstant {
     public static LatLng SOURCE,DESTINATION;
     public static String SOURCE_NAME="";
     public static String DESTINATION_NAME="";
-    public static final float DEFAULT_ZOOM = 14f;
+    public static final float DEFAULT_ZOOM = 16f;
     public static final int IS_RIDE_FINISH=0;
     public static LatLng OnchangeDeviceLOcation = null;
     public static final double BASE_TAKA = 20;

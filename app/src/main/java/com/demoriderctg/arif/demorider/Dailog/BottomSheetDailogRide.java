@@ -86,7 +86,7 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.cost_bottom_sheet_dailog, container, false);
         pathLocation =(TextView) v.findViewById(R.id.path_location);
-        total_cost =(TextView) v.findViewById(R.id.total_cost);
+        total_cost =(TextView) v.findViewById(R.id.total_estimate);
         pickUpBotton = (Button) v.findViewById(R.id.pickupbtn);
         connectionCheck = new ConnectionCheck(getContext());
         fare_info = (ImageView) v.findViewById(R.id.fareInfo);
@@ -94,7 +94,7 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
         //pathLocation.setText(AppConstant.SOURCE_NAME + " To "+AppConstant.DESTINATION_NAME);
 
         totalCost = (long)costEstimation.getTotalCost(AppConstant.DISTANCE, AppConstant.DURATION);
-        total_cost.setText(totalCost+" TK");
+        total_cost.setText("Estimated Distance: "+AppConstant.DISTANCE+" \nEstimated Time: "+AppConstant.DURATION+" \nEstimated Fare: ৳"+totalCost);
         main = new Main();
         init();
         return v;
