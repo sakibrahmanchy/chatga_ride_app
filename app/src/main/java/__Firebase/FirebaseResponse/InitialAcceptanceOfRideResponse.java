@@ -1,9 +1,11 @@
 package __Firebase.FirebaseResponse;
 
+import android.content.Intent;
 import android.util.Log;
 
 import ContactWithFirebase.Main;
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
+import com.demoriderctg.arif.demorider.Dailog.SearchingDriver;
 import com.demoriderctg.arif.demorider.OnrideMode.OnrideModeActivity;
 import com.demoriderctg.arif.demorider.OnrideMode.SendNotification;
 
@@ -14,6 +16,9 @@ import __Firebase.FirebaseUtility.FirebaseUtilMethod;
 import __Firebase.FirebaseWrapper;
 import __Firebase.ICallBackInstance.ICallBackCurrentServerTime;
 import __Firebase.ICallBackInstance.IGetCurrentRider;
+
+import static com.demoriderctg.arif.demorider.Dailog.FullMapSearching.fullMapActivity;
+import static com.demoriderctg.arif.demorider.Dailog.SearchingDriver.searchActivity;
 
 /**
  * Created by User on 1/15/2018.
@@ -41,6 +46,14 @@ public class InitialAcceptanceOfRideResponse implements ICallBackCurrentServerTi
         AppConstant.INITIAL_RIDE_ACCEPT = 1;
         FirebaseConstant.IS_RIDE_ACCEPTED_BY_RIDER = 1;
         AppConstant.HISTORY_ID = (int)currentRidingHistoryModel.HistoryID;
+
+        if(AppConstant.SEARCH_ACTIVITY){
+            Intent intent = new Intent(searchActivity,OnrideModeActivity.class);
+            searchActivity.startActivity(intent);
+            fullMapActivity.finish();
+            searchActivity.finish();
+        }
+
 
         /*Do the stuff*/
     }
@@ -83,4 +96,6 @@ public class InitialAcceptanceOfRideResponse implements ICallBackCurrentServerTi
             Response();
         }
     }
+
+
 }

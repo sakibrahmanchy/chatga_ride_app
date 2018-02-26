@@ -58,7 +58,6 @@ public class SettingActivity extends AppCompatActivity {
         profileImage = (ImageView) findViewById(R.id.profile_pic);
         profileName = (TextView) findViewById(R.id.profile_name);
         phoneNumber = (TextView) findViewById(R.id.profile_phone);
-        email = (TextView) findViewById(R.id.profile_email);
         homeLocation = (TextView) findViewById(R.id.home_location);
         workLocation = (TextView) findViewById(R.id.work_location);
         signOut = (TextView) findViewById(R.id.action_logout);
@@ -72,7 +71,6 @@ public class SettingActivity extends AppCompatActivity {
     private void setAllInformation(){
         profileName.setText(loginData.firstName);
         phoneNumber.setText("+88"+ loginData.phone);
-        email.setText(loginData.email);
         if(userInformation.getUserHomeLocation() !=null){
             homeLocation.setText(userInformation.getUserHomeLocation().homeLocationName);
         }

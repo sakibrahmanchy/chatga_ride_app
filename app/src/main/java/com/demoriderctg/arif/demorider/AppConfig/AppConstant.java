@@ -65,6 +65,7 @@ public class AppConstant {
     public static String RIDER_PHONENUMBER= null;
     public static String RIDER_BIKE_NUMBER=null;
     public static boolean ONRIDEMODE_ACTIVITY=false;
+    public static boolean SEARCH_ACTIVITY=false;
 
 
 
@@ -76,8 +77,9 @@ public class AppConstant {
     public static final String GOOGLE_PLAY_SERVICE_MSG = "you can not make request";
 
     /*Latlon bound*/
+
     public static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
-            new LatLng(90.1474141289,23.6245050799), new LatLng(90.599381674, 23.9678033413));
+            new LatLng(23.678001,90.308731), new LatLng(23.895385, 90.447749));
 
     /*Notification key*/
     public static String ACTION_TYPE = ("actionType");

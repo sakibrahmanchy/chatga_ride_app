@@ -249,12 +249,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         linearLayout.setVisibility(View.VISIBLE);
         spinner = (ProgressBar) findViewById(R.id.progressBar);
         navigationView= (NavigationView) findViewById(R.id.nav_view);
+
         View v = navigationView.getHeaderView(0);
         userInformation = new UserInformation(this);
 
         ImageView avatarContainer = (ImageView ) v.findViewById(R.id.profile_nav);
         userFirstName = (TextView) v.findViewById(R.id.user_full_name);
+        userPhoneNumber =v.findViewById(R.id.user_phone_number);
         userFirstName.setText(userInformation.getuserInformation().getFirstName() +" " + userInformation.getuserInformation().getLastName());
+        userPhoneNumber.setText(userInformation.getuserInformation().phone);
         Picasso.with(this).invalidate(userInformation.getuserInformation().getAvatar());
         Picasso.with(this)
                 .load(userInformation.getuserInformation().getAvatar())
@@ -323,7 +326,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-
+                builder.setLatLngBounds(AppConstant.LAT_LNG_BOUNDS);
                 try {
                     startActivityForResult(builder.build(MapActivity.this), PLACE_PICKER_REQUEST);
                 } catch (GooglePlayServicesRepairableException e) {
@@ -338,6 +341,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                builder.setLatLngBounds(AppConstant.LAT_LNG_BOUNDS);
 
                 try {
                     startActivityForResult(builder.build(MapActivity.this), PLACE_PICKER_REQUEST_DESTINATION);
@@ -568,11 +572,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         sendButton.setVisibility(View.VISIBLE);
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
+
+
                 Place place = PlacePicker.getPlace(data, this);
-                AppConstant.searchSorceLocationModel.homeLocationName = place.getAddress().toString();
-                AppConstant.searchSorceLocationModel.home = place.getLatLng();
-                String sourceLocation = AppConstant.searchSorceLocationModel.homeLocationName;
-                sourceText.setText(sourceLocation);
+                if(AppConstant.LAT_LNG_BOUNDS.contains(place.getLatLng())){
+                    AppConstant.searchSorceLocationModel.homeLocationName = place.getAddress().toString();
+                    AppConstant.searchSorceLocationModel.home = place.getLatLng();
+                    String sourceLocation = AppConstant.searchSorceLocationModel.homeLocationName;
+                    sourceText.setText(sourceLocation);
+                }
+                else{
+                    Toast.makeText(getContextOfApplication(),"Service is not work now",Toast.LENGTH_SHORT).show();
+                }
+
             }
         }
 
@@ -580,15 +592,21 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             mMap.clear();
             if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(data, this);
-                if(AppConstant.searchDestinationLocationModel == null){
-                    AppConstant.searchDestinationLocationModel = new WorkLocationModel();
+                if(AppConstant.LAT_LNG_BOUNDS.contains(place.getLatLng())){
+                    if(AppConstant.searchDestinationLocationModel == null){
+                        AppConstant.searchDestinationLocationModel = new WorkLocationModel();
+                    }
+                    AppConstant.searchDestinationLocationModel.workLocationName = place.getAddress().toString();
+                    AppConstant.searchDestinationLocationModel.work = place.getLatLng();
+                    String destinationLocation = AppConstant.searchDestinationLocationModel.workLocationName;
+                    destinationText.setText(destinationLocation);
                 }
-                AppConstant.searchDestinationLocationModel.workLocationName = place.getAddress().toString();
-                AppConstant.searchDestinationLocationModel.work = place.getLatLng();
-                String destinationLocation = AppConstant.searchDestinationLocationModel.workLocationName;
-                destinationText.setText(destinationLocation);
+                else{
+                    Toast.makeText(getContextOfApplication(),"Service is not work now",Toast.LENGTH_SHORT).show();
+                }
 
             }
+
         }
         checkButtonState();
 
