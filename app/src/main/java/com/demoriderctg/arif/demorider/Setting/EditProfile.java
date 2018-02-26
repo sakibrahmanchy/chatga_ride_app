@@ -318,9 +318,13 @@ public class EditProfile extends AppCompatActivity  {
 
     public void updateProfile(String firstName, String lastName, String gender, String email, File avatar){
 
-        RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), avatar);
-        MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("avatar", avatar.getName(), requestBody);
-        //RequestBody filename = RequestBody.create(MediaType.parse("text/plain"), avatar.getName());
+        MultipartBody.Part fileToUpload;
+        if(avatar!=null){
+            RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), avatar);
+            fileToUpload = MultipartBody.Part.createFormData("avatar", avatar.getName(), requestBody);
+        }else{
+            fileToUpload = null;
+        }
 
         apiService =
                 ApiClient.getClient().create(ApiInterface.class);
