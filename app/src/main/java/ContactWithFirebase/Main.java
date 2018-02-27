@@ -69,8 +69,8 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
         clientModel.CostOfCurrentRide = FirebaseConstant.UNDEFINE;
         clientModel.CurrentRidingHistoryID = FirebaseConstant.UNKNOWN_STRING;
         clientModel.RideRejectedByRider = FirebaseConstant.UNKNOWN_STRING;
-        clientModel.ImageUrl = FirebaseConstant.UNKNOWN_STRING;
-        clientModel.Ratting = FirebaseConstant.UNKNOWN_STRING;
+        clientModel.ImageUrl = loginData.getAvatar();
+        clientModel.Ratting = "100%";
 
         this.IsClientAlreadyCreated(clientModel);
         return true;
@@ -79,7 +79,6 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
     public boolean IsClientAlreadyCreated(ClientModel ClientModel) {
 
         firebaseWrapper = FirebaseWrapper.getInstance();
-
         firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
         firebaseRequestInstance.IsClientAlreadyCreated(ClientModel.ClientID, Main.this);
         return true;
