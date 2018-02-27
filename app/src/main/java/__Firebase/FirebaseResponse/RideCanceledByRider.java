@@ -40,6 +40,7 @@ public class RideCanceledByRider implements ICallBackCurrentServerTime {
             Intent intent = new Intent(OnrideModeContext, MapActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             OnrideModeContext.startActivity(intent);
+            OnrideModeContext.finish();
         }
     }
 

@@ -50,6 +50,8 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
         String clientName = FirebaseConstant.Empty;
         String clientPhone = FirebaseConstant.Empty;
         String clientDeviceToken = FirebaseConstant.Empty;
+        String clientImageUrl = FirebaseConstant.Empty;
+        String clientRatting = FirebaseConstant.Empty;
         String riderId = FirebaseConstant.Empty;
         String riderDeviceToken = FirebaseConstant.Empty;
         String sourceName = FirebaseConstant.Empty;
@@ -69,19 +71,21 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
             clientName = params[1];
             clientPhone = params[2];
             clientDeviceToken = params[3];
-            riderId = params[4];
-            riderDeviceToken = params[5];
-            sourceName = params[6];
-            destinationName = params[7];
-            shortestTime = params[8];
-            shortestDistance = params[9];
-            sourceLatitude = params[10];
-            sourceLongitude = params[11];
-            destinationLatitude = params[12];
-            destinationLongitude = params[13];
-            totalCost = params[14];
-            discountID = params[15];
-            time = params[16];
+            clientImageUrl = params[4];
+            clientRatting = params[5];
+            riderId = params[6];
+            riderDeviceToken = params[7];
+            sourceName = params[8];
+            destinationName = params[9];
+            shortestTime = params[10];
+            shortestDistance = params[11];
+            sourceLatitude = params[12];
+            sourceLongitude = params[13];
+            destinationLatitude = params[14];
+            destinationLongitude = params[15];
+            totalCost = params[16];
+            discountID = params[17];
+            time = params[18];
         } catch (ExceptionInInitializerError e) {
             e.printStackTrace();
         }
@@ -100,6 +104,8 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
                     URLEncoder.encode("clientName", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(clientName, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
                     URLEncoder.encode("clientPhone", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(clientPhone, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
                     URLEncoder.encode("clientDeviceToken", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(clientDeviceToken, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
+                    URLEncoder.encode("clientImageUrl", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(clientImageUrl, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
+                    URLEncoder.encode("clientRatting", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(clientRatting, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
                     URLEncoder.encode("riderId", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(riderId, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
                     URLEncoder.encode("riderDeviceToken", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(riderDeviceToken, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
                     URLEncoder.encode("sourceName", FirebaseConstant.UTF_8) + FirebaseConstant.EQUAL + URLEncoder.encode(sourceName, FirebaseConstant.UTF_8) + FirebaseConstant.AMPERSAND +
