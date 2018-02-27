@@ -150,18 +150,6 @@ public class EditProfile extends AppCompatActivity  {
                // Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                // Intent pickImageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 Intent pickImageIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                /*
-                pickImageIntent.putExtra("crop", "true");
-                pickImageIntent.putExtra("outputX", 200);
-                pickImageIntent.putExtra("outputY", 200);
-                pickImageIntent.putExtra("aspectX", 1);
-                pickImageIntent.putExtra("aspectY", 1);
-                pickImageIntent.putExtra("scale", true);
-                pickImageIntent.putExtra("outputFormat",
-                *
-
-                        Bitmap.CompressFormat.JPEG);
-                        */
                 startActivityForResult(pickImageIntent, RESULT_LOAD_IMAGE);
             }
         });
@@ -170,7 +158,6 @@ public class EditProfile extends AppCompatActivity  {
             @Override
             public void onClick(View v) {
                 if(attemptLogin()){
-                    System.out.println(imageEncodedToBase64);
                     updateProfile(firstName,lastName,gender,email,profilePicture);
                 }
             }
@@ -331,9 +318,13 @@ public class EditProfile extends AppCompatActivity  {
 
     public void updateProfile(String firstName, String lastName, String gender, String email, File avatar){
 
-        RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), avatar);
-        MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("avatar", avatar.getName(), requestBody);
-        //RequestBody filename = RequestBody.create(MediaType.parse("text/plain"), avatar.getName());
+        MultipartBody.Part fileToUpload;
+        if(avatar!=null){
+            RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), avatar);
+            fileToUpload = MultipartBody.Part.createFormData("avatar", avatar.getName(), requestBody);
+        }else{
+            fileToUpload = null;
+        }
 
         apiService =
                 ApiClient.getClient().create(ApiInterface.class);

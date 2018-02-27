@@ -15,22 +15,11 @@
 
 
         <ProgressBar
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="40dp"
-            android:theme="@style/CircularProgress" />
-
-        <TextView
-            android:id="@+id/count_second"
-            android:layout_width="match_parent"
+            android:layout_width="80dp"
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="0dp"
-            android:gravity="center"
+            android:theme="@style/CircularProgress" />
 
-            android:text="0"
-            android:textColor="@color/colorPrimary"
-            android:textSize="100dp" />
 
         <TextView
             android:id="@+id/cancel_search"

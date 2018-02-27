@@ -393,10 +393,10 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
         AppConstant.ONRIDEMODE_ACTIVITY = true;
     }
 
+
     @Override
-    public void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         AppConstant.ONRIDEMODE_ACTIVITY = false;
     }
-
 }
