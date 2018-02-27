@@ -68,6 +68,8 @@ public class __FirebaseRequest extends AppCompatActivity {
                     Client.FullName,
                     Long.toString(Client.PhoneNumber),
                     Client.DeviceToken,
+                    Client.ImageUrl,
+                    Client.Ratting,
                     Long.toString(Rider.RiderID),
                     Rider.DeviceToken.toString(),
                     SourceName,
