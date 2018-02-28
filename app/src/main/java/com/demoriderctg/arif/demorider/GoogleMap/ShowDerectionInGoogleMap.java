@@ -73,16 +73,7 @@ public class ShowDerectionInGoogleMap {
         mMap.setLatLngBoundsForCameraTarget(builder.build());
         mMap.getUiSettings().setScrollGesturesEnabled(false);
         mMap.getUiSettings().setZoomGesturesEnabled(false);
-//        mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-//
-//            @Override
-//            public void onCameraChange(CameraPosition arg0) {
-//                // Move camera.
-//                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 10));
-//                // Remove listener to prevent position reset on camera move.
-//                mMap.setOnCameraChangeListener(null);
-//            }
-//        });
+
 
     }
 

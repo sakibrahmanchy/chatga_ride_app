@@ -122,8 +122,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             init();
 
-
-            Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
         }
 
 
@@ -636,8 +634,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onBackPressed() {
 
         mMap.clear();
-        requestbtn.setVisibility(View.INVISIBLE);
-        sendButton.setVisibility(View.VISIBLE);
+        checkButtonState();
 
         if (back_pressed + 1000 > System.currentTimeMillis()) {
             super.onBackPressed();
@@ -655,7 +652,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        Toast.makeText(getApplicationContext(), "" + item.getItemId(), Toast.LENGTH_SHORT).show();
+
+
         switch (item.getItemId()) {
             case R.id.nav_settings:
                 Intent intent = new Intent(MapActivity.this, SettingActivity.class);

@@ -42,17 +42,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        connectionCheck = new ConnectionCheck(this);
-
-        //new CurrentDateTime(this).getCurrentDateTime();
-
-        if (!connectionCheck.isNetworkConnected()) {
-            Intent intent = new Intent(this, InternetCheckActivity.class);
-            startActivityForResult(intent, AppConstant.INTERNET_CHECK);
-        } else if (!connectionCheck.isGpsEnable()) {
-            connectionCheck.showGPSDisabledAlertToUser();
-        } else {
             pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
             if (pref.getString("userData", null) != null) {
                 Intent intent = new Intent(MainActivity.this, MapActivity.class);
@@ -65,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                     init();
                 }
             }
-        }
+
     }
 
     private void init() {

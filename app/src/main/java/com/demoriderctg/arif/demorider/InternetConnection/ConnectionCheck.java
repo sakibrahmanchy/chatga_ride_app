@@ -31,7 +31,7 @@ public class ConnectionCheck {
         LocationManager locationManager = (LocationManager)mContext. getSystemService(LOCATION_SERVICE);
 
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-            Toast.makeText(mContext, "GPS is Enabled in your devide", Toast.LENGTH_SHORT).show();
+
             return true;
         }
         return false;
