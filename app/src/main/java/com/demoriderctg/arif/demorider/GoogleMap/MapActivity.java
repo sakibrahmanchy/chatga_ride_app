@@ -32,6 +32,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -96,6 +97,8 @@ import ContactWithFirebase.Main;
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.OnConnectionFailedListener, NavigationView.OnNavigationItemSelectedListener {
 
+
+
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
@@ -130,6 +133,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
     private static final String TAG = "MapActivity";
+    private static final String TAGHEIGHT = "HEIGHTS";
 
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
@@ -178,8 +182,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public static Context contextOfApplication;
     private BottomSheetBehavior mBottomSheetBehavior;
     private View bottomSheet;
+    private CoordinatorLayout elemnentsContainer;
+    private LinearLayout actionsConainer;
+    private LinearLayout searchContainer;
 
     private LinearLayout linearLayout;
+
+    private boolean isTotalHeightFound = false;
+    private boolean isActionHeightFound = false;
+    private boolean isSearchHeightFound = false;
+
+    private double totalHeight, actionHeight, searchHeight,peekHeight;
 
 
     @Override
@@ -192,13 +205,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        elemnentsContainer = findViewById(R.id.elements_container);
+        actionsConainer = findViewById(R.id.actions_container);
+        searchContainer = findViewById(R.id.searchLinearLayout);
 
 
         bottomSheet = findViewById( R.id.bottom_sheet );
+
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-        mBottomSheetBehavior.setPeekHeight(200);
-        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        mBottomSheetBehavior.setHideable(false);
+        getPeekHeightOfScrollBar();
 
         mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
@@ -224,7 +239,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     actionBar.show();
                     linearLayout.setVisibility(View.VISIBLE);
                 }else{
-                    mBottomSheetBehavior.setPeekHeight(200);
+                    mBottomSheetBehavior.setPeekHeight((int) peekHeight);
                     mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 }
 
@@ -248,7 +263,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         requestbtn = (Button) findViewById(R.id.pickupbtn);
         requestbtn.setVisibility(View.INVISIBLE);
         linearLayout.setVisibility(View.VISIBLE);
-        spinner = (ProgressBar) findViewById(R.id.progressBar);
+        //spinner = (ProgressBar) findViewById(R.id.progressBar);
         navigationView= (NavigationView) findViewById(R.id.nav_view);
 
         View v = navigationView.getHeaderView(0);
@@ -266,7 +281,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 .error(R.drawable.profile_image)
                 .into(avatarContainer);
 
-        spinner.setVisibility(View.GONE);
+        //spinner.setVisibility(View.GONE);
         sharedpreferences = this.getSharedPreferences("MyPref", 0);
 
         connectionCheck = new ConnectionCheck(this);
@@ -687,6 +702,66 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         return Bitmap.createScaledBitmap(decodeResource, (int) (((double) decodeResource.getWidth()) * .25d), (int) (((double) decodeResource.getHeight()) * .25d), false);
     }
 
+    public void getPeekHeightOfScrollBar(){
+
+
+        ViewTreeObserver observer = elemnentsContainer.getViewTreeObserver();
+        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @Override
+            public void onGlobalLayout() {
+                // TODO Auto-generated method stub
+                double elementsContainerHeight = elemnentsContainer.getHeight();
+                totalHeight = elementsContainerHeight;
+                isTotalHeightFound = true;
+                check();
+                Log.d(TAGHEIGHT,"A: "+ elementsContainerHeight);
+                elemnentsContainer.getViewTreeObserver().removeGlobalOnLayoutListener(
+                        this);
+            }
+        });
+
+        ViewTreeObserver observer2 = actionsConainer.getViewTreeObserver();
+        observer2.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @Override
+            public void onGlobalLayout() {
+                // TODO Auto-generated method stub
+                double actionsContainerHeight = actionsConainer.getHeight();
+                actionHeight = actionsContainerHeight;
+                isActionHeightFound = true;
+                check();
+                //Log.d(TAGHEIGHT,"B: "+ actionsContainerHeight);
+                actionsConainer.getViewTreeObserver().removeGlobalOnLayoutListener(
+                        this);
+            }
+        });
+
+        ViewTreeObserver observer3 = searchContainer.getViewTreeObserver();
+        observer3.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @Override
+            public void onGlobalLayout() {
+                // TODO Auto-generated method stub
+                double searchContainerHeight = searchContainer.getHeight();
+                searchHeight = searchContainerHeight;
+                isSearchHeightFound = true;
+                check();
+                actionsConainer.getViewTreeObserver().removeGlobalOnLayoutListener(
+                        this);
+            }
+        });
+    }
+
+    public void check(){
+
+        if(isActionHeightFound&&isSearchHeightFound&&isTotalHeightFound){
+            peekHeight = totalHeight - (actionHeight+searchHeight);
+            mBottomSheetBehavior.setPeekHeight((int) peekHeight);
+            mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            mBottomSheetBehavior.setHideable(false);
+        }
+    }
 }
 
 
