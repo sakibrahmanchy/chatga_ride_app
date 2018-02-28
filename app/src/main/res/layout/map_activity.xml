@@ -15,23 +15,25 @@
         android:layout_alignParentStart="true"
         tools:context=".MapsActivity" />
 
+
     <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/elements_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="60dp">
-
+            android:orientation="vertical"
+            android:weightSum="8">
 
             <LinearLayout
+                android:id="@+id/searchLinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight=".1"
                 android:orientation="vertical"
-                android:layout_margin="10dp"
-                android:weightSum="2"
-                android:id="@+id/searchLinearLayout"
-                android:padding= "10dp">
+                android:padding="10dp"
+                android:weightSum="2">
 
                 <TextView
                     android:id="@+id/sourceText"
@@ -39,16 +41,15 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:background="@android:color/white"
-                    android:ems="10"
-                    android:selectAllOnFocus="true"
-                    android:hint="Your current location"
-                    android:textSize="18sp"
-                    android:padding="10dp"
-                    android:elevation="3dp"
-                    android:maxLines="1"
                     android:drawableLeft="@drawable/red"
                     android:drawablePadding="10dp"
-                    />
+                    android:elevation="3dp"
+                    android:ems="10"
+                    android:hint="Your current location"
+                    android:maxLines="1"
+                    android:padding="10dp"
+                    android:selectAllOnFocus="true"
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/destinationText"
@@ -70,95 +71,94 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="12"
+                android:gravity="bottom"
+                android:id="@+id/actions_container"
+                android:orientation="vertical">
 
-            <android.support.design.widget.FloatingActionButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:scaleType="centerCrop"
-                android:id="@+id/ic_gps"
-                app:backgroundTint="@android:color/white"
-                android:src="@drawable/ic_gps"
-                android:layout_above="@+id/btnSend"
-                android:layout_alignParentEnd="true"/>
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/ic_gps"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="10dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_gps"
+                    app:backgroundTint="@android:color/white" />
 
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true">
+                    <Button
+                        android:id="@+id/btnSend"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="Done"
+                        android:theme="@style/ThemeOverlay.MyDarkButton"
+                        android:visibility="invisible" />
 
-            <Button
-                android:id="@+id/btnSend"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="23dp"
-                android:text="Done"
-                android:visibility="invisible"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentStart="true"
-                android:theme="@style/ThemeOverlay.MyDarkButton"
-                android:layout_margin="5dp"/>
+                    <Button
+                        android:id="@+id/pickupbtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="Request For Pickup"
+                        android:theme="@style/ThemeOverlay.MyDarkButton" />
+                </FrameLayout>
 
-            <Button
-                android:id="@+id/pickupbtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/btnSend"
-                android:text="Request For Pickup"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
-                android:theme="@style/ThemeOverlay.MyDarkButton"
-                android:layout_margin="5dp"
-                />
-
-
-            <ProgressBar
-                android:id="@+id/progressBar"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:paddingBottom="30dp"/>
-
-        </RelativeLayout>
-
+            </LinearLayout>
+        </LinearLayout>
         <android.support.v4.widget.NestedScrollView
             android:id="@+id/bottom_sheet"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="true"
             android:background="@color/grey_300"
-            app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
-            app:behavior_hideable="false">
+            android:clipToPadding="true"
+            app:behavior_hideable="false"
+            app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
                     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        xmlns:app="http://schemas.android.com/apk/res-auto">
+                        android:layout_height="match_parent">
+
                         <android.support.v7.widget.CardView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="16dp">
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
+
                                 <ImageView
                                     android:layout_width="match_parent"
                                     android:layout_height="160dp"
                                     android:scaleType="centerCrop"
                                     android:src="@drawable/chatga_ride_background_1" />
+
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:orientation="vertical"
                                     android:padding="16dp">
+
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
@@ -166,6 +166,7 @@
                                         android:text="Chatga Rides"
                                         android:textColor="#000"
                                         android:textSize="18sp" />
+
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
@@ -179,14 +180,17 @@ Call 018 77 55 55 80 or
 Service available primarily on route no: 10( Bahaddarhat circle- EPZ) from 8am-8pm."
                                         android:textColor="#555" />
                                 </LinearLayout>
+
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content">
+
                                     <Button
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="SHARE"
                                         android:theme="@style/PrimaryFlatButton" />
+
                                     <Button
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
@@ -196,28 +200,34 @@ Service available primarily on route no: 10( Bahaddarhat circle- EPZ) from 8am-8
                             </LinearLayout>
                         </android.support.v7.widget.CardView>
                     </RelativeLayout>
+
                     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        xmlns:app="http://schemas.android.com/apk/res-auto">
+                        android:layout_height="match_parent">
+
                         <android.support.v7.widget.CardView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="16dp">
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
+
                                 <ImageView
                                     android:layout_width="match_parent"
                                     android:layout_height="160dp"
                                     android:scaleType="centerCrop"
                                     android:src="@drawable/chatga_ride_background_1" />
+
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:orientation="vertical"
                                     android:padding="16dp">
+
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
@@ -225,20 +235,24 @@ Service available primarily on route no: 10( Bahaddarhat circle- EPZ) from 8am-8
                                         android:text="Chatga Rides"
                                         android:textColor="#000"
                                         android:textSize="18sp" />
+
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:text="প্রতিদিন চট্টগ্রামের প্রথম রাইড শেয়ারিং সার্ভিস চাটগাঁ রাইড যাত্রীদের দিচ্ছে নিরাপদ এবং সাশ্রয়ী ভ্রমণের সুযোগ। যাত্রীদের নিরাপদে তাদের গন্তব্যে পৌঁছে দেওয়ার জন্য চাটগাঁ রাইডের রয়েছে অভিজ্ঞ এবং নির্ভরযোগ্য বাইকার। চাটগাঁ রাইডই হোক আপনার আস্থার প্রতীক। সার্ভিস পেতে কল করুন - ০১৮৭৭৫৫৫৫৮০ নম্বরে । ভালো থাকুন, নিরাপদ থাকুন।"
                                         android:textColor="#555" />
                                 </LinearLayout>
+
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content">
+
                                     <Button
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="SHARE"
                                         android:theme="@style/PrimaryFlatButton" />
+
                                     <Button
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
@@ -250,11 +264,12 @@ Service available primarily on route no: 10( Bahaddarhat circle- EPZ) from 8am-8
                     </RelativeLayout>
 
 
-
                 </LinearLayout>
             </android.support.v7.widget.CardView>
         </android.support.v4.widget.NestedScrollView>
     </android.support.design.widget.CoordinatorLayout>
+
+
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
