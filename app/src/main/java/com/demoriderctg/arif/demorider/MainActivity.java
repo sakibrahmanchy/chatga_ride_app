@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -50,8 +51,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 setContentView(R.layout.activity_main);
                 if (isServiceOk()) {
-                    getLocationPermission();
-                    init();
+                   init();
                 }
             }
 
@@ -63,13 +63,26 @@ public class MainActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!check) {
-                    Intent intent = new Intent(MainActivity.this, UserCheckActivity.class);
-                    startActivity(intent);
-                } else {
-                    Intent intent = new Intent(MainActivity.this, MapActivity.class);
-                    startActivity(intent);
-                }
+
+                    int MyVersion = Build.VERSION.SDK_INT;
+                    if (MyVersion > Build.VERSION_CODES.LOLLIPOP_MR1) {
+                        Toast.makeText(getApplicationContext(), "We need Some Permission", Toast.LENGTH_SHORT).show();
+                        if (!checkIfAlreadyhavePermission()) {
+                            requestForSpecificPermission();
+                        }
+                        else{
+                            Intent intent = new Intent(MainActivity.this, UserCheckActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }
+                    else{
+                        Intent intent = new Intent(MainActivity.this, UserCheckActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+
+
             }
         });
     }
@@ -99,32 +112,39 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void getLocationPermission() {
-        Log.d(TAG, "getLocationPermission: getting location permissions");
-        String[] permissions = {android.Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION};
-
-        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                    COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-
-            } else {
-                Intent intent = new Intent(MainActivity.this, UserCheckActivity.class);
-                startActivity(intent);
-                ActivityCompat.requestPermissions(this,
-                        permissions,LOCATION_PERMISSION_REQUEST_CODE);
-
-            }
+    private boolean checkIfAlreadyhavePermission() {
+        int result = ContextCompat.checkSelfPermission(this, Manifest.permission.GET_ACCOUNTS);
+        if (result == PackageManager.PERMISSION_GRANTED) {
+            return true;
         } else {
-
-            Intent intent = new Intent(MainActivity.this, UserCheckActivity.class);
-            startActivity(intent);
-            ActivityCompat.requestPermissions(this,
-                    permissions,
-                    LOCATION_PERMISSION_REQUEST_CODE);
+            return false;
         }
     }
+    private void requestForSpecificPermission() {
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_SMS,
+                Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.CALL_PHONE}, 101);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case 101:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1]==PackageManager.PERMISSION_GRANTED &&
+                        grantResults[2]==PackageManager.PERMISSION_GRANTED) {
+                        Intent intent = new Intent(MainActivity.this, UserCheckActivity.class);
+                       startActivity(intent);
+                       finish();
+                } else {
+                    //not granted
+                    Toast.makeText(getApplicationContext(),"Please Restart Application",Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+
 
 }
 

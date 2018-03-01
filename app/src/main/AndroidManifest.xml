@@ -52,7 +52,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:noHistory="true" />
+            />
         <activity
             android:name=".GoogleMap.MapActivity"
             android:theme="@style/AppTheme"

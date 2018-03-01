@@ -43,7 +43,7 @@ public class ShortestDistanceMap {
         this.iDistanceAndDuration = iDistanceAndDuration;
         this.Rider = Rider;
 
-        Thread thread = new Thread(){
+        Thread thread =  new Thread(){
             @Override
             public void run(){
                 try {
