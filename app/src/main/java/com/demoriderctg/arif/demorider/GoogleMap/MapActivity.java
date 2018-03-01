@@ -251,10 +251,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
 
-
+        getLocationPermission();
         InitializationAll();
 
-        getLocationPermission();
+
 
     }
 
