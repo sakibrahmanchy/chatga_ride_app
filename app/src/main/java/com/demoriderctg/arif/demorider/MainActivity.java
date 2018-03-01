@@ -72,13 +72,13 @@ public class MainActivity extends AppCompatActivity {
                             requestForSpecificPermission();
                         }
                         else{
-                            Intent intent = new Intent(MainActivity.this, UserCheckActivity.class);
+                            Intent intent = new Intent(MainActivity.this, FacebookAccountVerificationActivity.class);
                             startActivity(intent);
                             finish();
                         }
                     }
                     else{
-                        Intent intent = new Intent(MainActivity.this, UserCheckActivity.class);
+                        Intent intent = new Intent(MainActivity.this, FacebookAccountVerificationActivity.class);
                         startActivity(intent);
                         finish();
                     }
@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
             case 101:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1]==PackageManager.PERMISSION_GRANTED &&
                         grantResults[2]==PackageManager.PERMISSION_GRANTED) {
-                        Intent intent = new Intent(MainActivity.this, UserCheckActivity.class);
+                        Intent intent = new Intent(MainActivity.this, FacebookAccountVerificationActivity.class);
                        startActivity(intent);
                        finish();
                 } else {
