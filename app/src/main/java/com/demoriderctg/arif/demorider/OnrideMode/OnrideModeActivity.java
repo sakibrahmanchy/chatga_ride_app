@@ -87,6 +87,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
     private TextView riderName;
     private  TextView contactRider;
     private  TextView rating;
+    private TextView bikeNumber;
     private RiderModel riderModel;
     private NotificationModel notificationModel;
     public static Activity OnrideModeContext;
@@ -107,6 +108,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
         riderName = (TextView) findViewById(R.id.rider_name);
         contactRider = (TextView) findViewById(R.id.rider_number);
         rating = (TextView) findViewById(R.id.rider_rating);
+        bikeNumber =(TextView)findViewById(R.id.bike_number);
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         bottomSheet = findViewById( R.id.bottom_sheet );
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
@@ -127,6 +129,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
     void setUi(){
         riderName.setText(AppConstant.RIDER_NAME);
         rating.setText("100");
+        bikeNumber.setText("");
         contactRider.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,11 +164,10 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
             uiSettings = googleMap.getUiSettings();
             uiSettings.setMapToolbarEnabled(false);
             googleMap.setMyLocationEnabled(true);
-            googleMap.setTrafficEnabled(true);
             mMap.setOnMyLocationButtonClickListener( OnrideModeActivity.this);
 
             setUpMap();
-            Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
+
         }
     }
 
@@ -181,18 +183,10 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
             // Getting URL to the Google Directions API
 
             try{
-                sourceMarker= mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(AppConstant.SOURCE.latitude,AppConstant.SOURCE.longitude))
-                        .title("Home")
-                        .snippet(AppConstant.SOURCE_NAME)
-                        .alpha(.7f)
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_google_map)));
 
-                destinationMarker = mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(AppConstant.DESTINATION.latitude,AppConstant.DESTINATION.longitude))
-                        .title("DESTINATION")
-                        .snippet(AppConstant.DESTINATION_NAME)
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_google_map)));
+                mMap.addMarker(new MarkerOptions().position(AppConstant.DESTINATION).icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("ic_marker_destination",200,200))).anchor(.5f,.5f));//.icon(BitmapDescriptorFactory.fromBitmap(resizedMarker(200,200) )));
+                mMap.addMarker(new MarkerOptions()
+                        .position(AppConstant.SOURCE).icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("ic_marker_pickup",400,300))).anchor(.5f,.5f));
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(AppConstant.SOURCE, DEFAULT_ZOOM));
                 MandatoryCall();
 
@@ -244,18 +238,11 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
                 if(AppConstant.START_RIDE){
                     mMap.clear();
                     try{
-                        sourceMarker= mMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(AppConstant.SOURCE.latitude,AppConstant.SOURCE.longitude))
-                                .title("Home")
-                                .snippet(AppConstant.SOURCE_NAME)
-                                .alpha(.7f)
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_google_map)));
 
-                        destinationMarker = mMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(AppConstant.DESTINATION.latitude,AppConstant.DESTINATION.longitude))
-                                .title("DESTINATION")
-                                .snippet(AppConstant.DESTINATION_NAME)
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_google_map)));
+                        mMap.addMarker(new MarkerOptions().position(AppConstant.DESTINATION).icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("ic_marker_destination",200,200))).anchor(.5f,.5f));//.icon(BitmapDescriptorFactory.fromBitmap(resizedMarker(200,200) )));
+                        mMap.addMarker(new MarkerOptions()
+                                .position(AppConstant.SOURCE).icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("ic_marker_pickup",400,300))).anchor(.5f,.5f));
+
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(AppConstant.SOURCE, DEFAULT_ZOOM));
                         handlerForFinishRide.postDelayed(runnableForStartRide,3000);
 
@@ -311,7 +298,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
 
                 }
                 ValueAnimator valueAnimator = ValueAnimator.ofFloat(0,1);
-                valueAnimator.setDuration(3000);
+                valueAnimator.setDuration(1000);
                 valueAnimator.setInterpolator(new LinearInterpolator());
                 valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     @Override

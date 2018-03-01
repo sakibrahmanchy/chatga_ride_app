@@ -67,10 +67,13 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -90,6 +93,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
 
 import ContactWithFirebase.Main;
 
@@ -125,8 +129,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             init();
 
-
-            Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
         }
 
 
@@ -140,6 +142,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
+    public boolean sendtBtnClick =false;
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
             new LatLng(54.69726685890506, -2.7379201682812226), new LatLng(55.38942944437183, -1.2456105979687226));
     String CurrentLocation;
@@ -169,7 +172,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private ProgressBar spinner;
     private LoginData loginData;
     private UserInformation userInformation;
-    private MarkerOptions options;
+    private Marker sourceMarker,destinationMarker=null;
     TextView userFirstName;
     TextView userPhoneNumber;
     private Address address;
@@ -289,7 +292,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         connectionCheck = new ConnectionCheck(this);
         editor = sharedpreferences.edit();
         main = new Main();
-        options = new MarkerOptions();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         if(AppConstant.FINISH_RIDE){
@@ -339,12 +341,23 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         sourceText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mMap.getUiSettings().setScrollGesturesEnabled(true);
-                mMap.getUiSettings().setZoomGesturesEnabled(true);
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-                builder.setLatLngBounds(AppConstant.LAT_LNG_BOUNDS);
+
                 try {
-                    startActivityForResult(builder.build(MapActivity.this), PLACE_PICKER_REQUEST);
+                    if(sendtBtnClick==true){
+                        mMap.clear();
+                        sendtBtnClick=false;
+
+                    }
+                    AutocompleteFilter filter =
+                            new AutocompleteFilter.Builder()
+                                    .setCountry("BD")
+                                    .build();
+                    Intent intent =
+                            new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN).
+                                    setBoundsBias(AppConstant.LAT_LNG_BOUNDS).setFilter(filter)
+                                    .build(MapActivity.this);
+                    startActivityForResult(intent, AppConstant.SEARCH_SOURCE_AUTOCOMPLETE);
                 } catch (GooglePlayServicesRepairableException e) {
                     e.printStackTrace();
                 } catch (GooglePlayServicesNotAvailableException e) {
@@ -356,17 +369,26 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         destinationText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mMap.getUiSettings().setScrollGesturesEnabled(true);
-                mMap.getUiSettings().setZoomGesturesEnabled(true);
-                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-                builder.setLatLngBounds(AppConstant.LAT_LNG_BOUNDS);
 
                 try {
-                    startActivityForResult(builder.build(MapActivity.this), PLACE_PICKER_REQUEST_DESTINATION);
+                    if(sendtBtnClick==true){
+                        mMap.clear();
+                        sendtBtnClick=false;
+
+                    }
+                    AutocompleteFilter filter =
+                            new AutocompleteFilter.Builder()
+                                    .setCountry("BD")
+                                    .build();
+                    Intent intent =
+                            new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN).
+                                    setBoundsBias(AppConstant.LAT_LNG_BOUNDS).setFilter(filter)
+                                    .build(MapActivity.this);
+                    startActivityForResult(intent, AppConstant.SEARCH_DESTINATION_AUTOCOMPLETE);
                 } catch (GooglePlayServicesRepairableException e) {
-                    e.printStackTrace();
+                    // TODO: Handle the error.
                 } catch (GooglePlayServicesNotAvailableException e) {
-                    e.printStackTrace();
+                    // TODO: Handle the error.
                 }
             }
         });
@@ -408,6 +430,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     downloadTask.execute(url);
                     sendButton.setVisibility(View.INVISIBLE);
                     requestbtn.setVisibility(View.VISIBLE);
+                    sendtBtnClick=true;
 
                 }
 
@@ -450,10 +473,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                 List<Address> myList = myLocation.getFromLocation(currentLocation.getLatitude(), currentLocation.getLongitude(), 1);
                                 Address address = (Address) myList.get(0);
                                 // mapMarkerDragging = new MapMarkerDragging(MapActivity.this,source,dest,mMap);
-
                                 moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
                                         AppConstant.DEFAULT_ZOOM,
-                                        "My Location");
+
+                                        "Source");
                                 //checkLatLon();
                                 if (AppConstant.searchSorceLocationModel == null) {
                                     AppConstant.searchSorceLocationModel = new HomeLocationModel();
@@ -496,20 +519,36 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     private void moveCamera(LatLng latLng, float zoom, String title) {
-        Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude);
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+
 
         if (title.equals("Destination"))
         {
-            mMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromBitmap(this.resizeMapIcons("ic_marker_destination",200,200))).anchor(.5f,.5f));//.icon(BitmapDescriptorFactory.fromBitmap(resizedMarker(200,200) )));
+               if(destinationMarker !=null){
+                   destinationMarker.remove();
+               }
+
+                destinationMarker = mMap.addMarker(new MarkerOptions()
+                        .position(latLng)
+                        .title("Destination")
+                        .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("ic_marker_destination",200,200))).anchor(.5f,.5f));
+
+                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+
 
         }
         if (title.equals("Source"))
         {
-            mMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromBitmap(this.resizeMapIcons("ic_marker_pickup",200,200))).anchor(.5f,.5f));//.icon(BitmapDescriptorFactory.fromBitmap(resizedMarker(200,200) )));
+            if(sourceMarker !=null){
+                sourceMarker.remove();
+            }
+                sourceMarker = mMap.addMarker(new MarkerOptions()
+                        .position(latLng)
+                        .title("Source")
+                        .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("ic_marker_pickup",200,200))).anchor(.5f,.5f));
 
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
         }
-        hideSoftKeyboard();
+
     }
 
     private void initMap() {
@@ -585,56 +624,58 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-
-
-
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        requestbtn.setVisibility(View.INVISIBLE);
-        sendButton.setVisibility(View.VISIBLE);
-        if (requestCode == PLACE_PICKER_REQUEST) {
-            if (resultCode == RESULT_OK) {
-                Place place = PlacePicker.getPlace(data, this);
-                if(AppConstant.LAT_LNG_BOUNDS.contains(place.getLatLng())){
-                    AppConstant.searchSorceLocationModel.homeLocationName = place.getAddress().toString();
-                    AppConstant.searchSorceLocationModel.home = place.getLatLng();
-                    String sourceLocation = AppConstant.searchSorceLocationModel.homeLocationName;
-                    sourceText.setText(sourceLocation);
-                    moveCamera(AppConstant.searchSorceLocationModel.home,AppConstant.DEFAULT_ZOOM,"Source");
-                }
-                else{
-                    Toast.makeText(getContextOfApplication(),"Service is not work now",Toast.LENGTH_SHORT).show();
-                }
-
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    if (requestCode == AppConstant.SEARCH_SOURCE_AUTOCOMPLETE) {
+        if (resultCode == RESULT_OK) {
+            Place place = PlaceAutocomplete.getPlace(this, data);
+            if (AppConstant.LAT_LNG_BOUNDS.contains(place.getLatLng())) {
+                AppConstant.searchSorceLocationModel.homeLocationName = place.getAddress().toString();
+                AppConstant.searchSorceLocationModel.home = place.getLatLng();
+                String sourceLocation = AppConstant.searchSorceLocationModel.homeLocationName;
+                sourceText.setText(sourceLocation);
+                moveCamera(AppConstant.searchSorceLocationModel.home, AppConstant.DEFAULT_ZOOM, "Source");
+            } else {
+                Toast.makeText(getContextOfApplication(), "Service is out of bounds", Toast.LENGTH_SHORT).show();
             }
+        } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+            Status status = PlaceAutocomplete.getStatus(this, data);
+            // TODO: Handle the error.
+            Log.i(TAG, status.getStatusMessage());
+
+        } else if (resultCode == RESULT_CANCELED) {
+            // The user canceled the operation.
         }
-
-        if (requestCode == PLACE_PICKER_REQUEST_DESTINATION) {
-            mMap.clear();
-            if (resultCode == RESULT_OK) {
-                Place place = PlacePicker.getPlace(data, this);
-                if(AppConstant.LAT_LNG_BOUNDS.contains(place.getLatLng())){
-                    if(AppConstant.searchDestinationLocationModel == null){
-                        AppConstant.searchDestinationLocationModel = new WorkLocationModel();
-                    }
-                    AppConstant.searchDestinationLocationModel.workLocationName = place.getAddress().toString();
-                    AppConstant.searchDestinationLocationModel.work = place.getLatLng();
-                    String destinationLocation = AppConstant.searchDestinationLocationModel.workLocationName;
-                    destinationText.setText(destinationLocation);
-                    moveCamera(AppConstant.searchDestinationLocationModel.work,AppConstant.DEFAULT_ZOOM,"Destination");
+    } else if (requestCode == AppConstant.SEARCH_DESTINATION_AUTOCOMPLETE) {
+        if (resultCode == RESULT_OK) {
+            Place place = PlaceAutocomplete.getPlace(this, data);
+            if (AppConstant.LAT_LNG_BOUNDS.contains(place.getLatLng())) {
+                if (AppConstant.searchDestinationLocationModel == null) {
+                    AppConstant.searchDestinationLocationModel = new WorkLocationModel();
                 }
-                else{
-                    Toast.makeText(getContextOfApplication(),"Service is not work now",Toast.LENGTH_SHORT).show();
-                }
-
+                AppConstant.searchDestinationLocationModel.workLocationName = place.getAddress().toString();
+                AppConstant.searchDestinationLocationModel.work = place.getLatLng();
+                String destinationLocation = AppConstant.searchDestinationLocationModel.workLocationName;
+                destinationText.setText(destinationLocation);
+                moveCamera(AppConstant.searchDestinationLocationModel.work, AppConstant.DEFAULT_ZOOM, "Destination");
+            } else {
+                Toast.makeText(getContextOfApplication(), "Service is out of bounds", Toast.LENGTH_SHORT).show();
             }
 
         }
-        checkButtonState();
+        else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+            Status status = PlaceAutocomplete.getStatus(this, data);
+            // TODO: Handle the error.
+            Log.i(TAG, status.getStatusMessage());
 
-
+        } else if (resultCode == RESULT_CANCELED) {
+            // The user canceled the operation.
+        }
     }
+    checkButtonState();
+}
+
+
 
 
     //Menu
@@ -651,8 +692,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onBackPressed() {
 
         mMap.clear();
+        moveCamera(AppConstant.searchSorceLocationModel.home,AppConstant.DEFAULT_ZOOM,"Source");
         requestbtn.setVisibility(View.INVISIBLE);
-        sendButton.setVisibility(View.VISIBLE);
+        checkButtonState();
 
         if (back_pressed + 1000 > System.currentTimeMillis()) {
             super.onBackPressed();
@@ -670,7 +712,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        Toast.makeText(getApplicationContext(), "" + item.getItemId(), Toast.LENGTH_SHORT).show();
+
+
         switch (item.getItemId()) {
             case R.id.nav_settings:
                 Intent intent = new Intent(MapActivity.this, SettingActivity.class);

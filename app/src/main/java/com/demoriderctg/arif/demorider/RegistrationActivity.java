@@ -146,6 +146,9 @@ public class RegistrationActivity extends Activity {
         boolean ok=true;
         mEmailView.setError(null);
         firstName.setError(null);
+        lastName.setError(null);
+        birthDayText.setError(null);
+        gender = "Male";
 
         email = mEmailView.getText().toString();
         userFirstName = firstName.getText().toString();
@@ -164,9 +167,16 @@ public class RegistrationActivity extends Activity {
         View focusView = null;
 
         if (TextUtils.isEmpty(userFirstName)) {
-            mEmailView.setError(getString(R.string.error_field_required));
+            firstName.setError(getString(R.string.error_field_required));
             focusView = firstName;
 
+            cancel = true;
+            ok=false;
+        }
+
+        if (TextUtils.isEmpty(userLastName)) {
+            lastName.setError(getString(R.string.error_field_required));
+            focusView = lastName;
             cancel = true;
             ok=false;
         }
@@ -177,9 +187,10 @@ public class RegistrationActivity extends Activity {
             focusView = mEmailView;
             cancel = true;
             ok=false;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
+        }
+        if (TextUtils.isEmpty(birthDate)) {
+            birthDayText.setError(getString(R.string.error_field_required));
+            focusView = birthDayText;
             cancel = true;
             ok=false;
         }
