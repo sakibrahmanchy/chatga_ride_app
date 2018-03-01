@@ -24,8 +24,12 @@ import com.demoriderctg.arif.demorider.RestAPI.ApiClient;
 import com.demoriderctg.arif.demorider.RestAPI.ApiInterface;
 import com.demoriderctg.arif.demorider.models.ApiModels.DeviceTokenModels.UpdateDeviceTokenData;
 import com.facebook.accountkit.AccessToken;
+import com.facebook.accountkit.Account;
 import com.facebook.accountkit.AccountKit;
+import com.facebook.accountkit.AccountKitCallback;
+import com.facebook.accountkit.AccountKitError;
 import com.facebook.accountkit.AccountKitLoginResult;
+import com.facebook.accountkit.PhoneNumber;
 import com.facebook.accountkit.ui.AccountKitActivity;
 import com.facebook.accountkit.ui.AccountKitConfiguration;
 import com.facebook.accountkit.ui.LoginType;
@@ -74,7 +78,7 @@ public class FacebookAccountVerificationActivity extends AppCompatActivity {
     }
 
     public void startAccountVerification(){
-        final Intent intent = new Intent(this, AccountKitActivity.class);
+            final Intent intent = new Intent(this, AccountKitActivity.class);
         AccountKitConfiguration.AccountKitConfigurationBuilder configurationBuilder =
                 new AccountKitConfiguration.AccountKitConfigurationBuilder(
                         LoginType.PHONE,
@@ -110,6 +114,20 @@ public class FacebookAccountVerificationActivity extends AppCompatActivity {
             } else {
                 if (loginResult.getAccessToken() != null) {
                     toastMessage = "Success:" + loginResult.getAccessToken().getAccountId();
+                    AccountKit.getCurrentAccount(new AccountKitCallback<Account>() {
+                        @Override
+                        public void onSuccess(final Account account) {
+                            String accountKitId = account.getId();
+                            PhoneNumber phoneNumber = account.getPhoneNumber();
+                            String phoneNumberString = phoneNumber.toString();
+
+                        }
+
+                        @Override
+                        public void onError(final AccountKitError error) {
+                            // Handle Error
+                        }
+                    });
 
                 } else {
                     toastMessage = String.format(

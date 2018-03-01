@@ -82,7 +82,7 @@ public class LoginHelper {
                             LoginCall(phoneNumber);
 
                         }else{
-                            Intent intent = new Intent(context, FacebookAccountVerificationActivity.class);
+                            Intent intent = new Intent(context, RegistrationActivity.class);
                             intent.putExtra("phoneNumber",phoneNumber);
                             intent.putExtra("loginStatus","REGISTRATION_REQUIRED");
                             context.startActivity(intent);
@@ -90,7 +90,7 @@ public class LoginHelper {
                         }
                         break;
                     default:
-                        Intent intent = new Intent(context, FacebookAccountVerificationActivity.class);
+                        Intent intent = new Intent(context, RegistrationActivity.class);
                         intent.putExtra("phoneNumber",phoneNumber);
                         intent.putExtra("loginStatus","REGISTRATION_REQUIRED");
                         context.startActivity(intent);
