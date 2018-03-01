@@ -66,8 +66,9 @@ public class MainActivity extends AppCompatActivity {
 
                     int MyVersion = Build.VERSION.SDK_INT;
                     if (MyVersion > Build.VERSION_CODES.LOLLIPOP_MR1) {
-                        Toast.makeText(getApplicationContext(), "We need Some Permission", Toast.LENGTH_SHORT).show();
                         if (!checkIfAlreadyhavePermission()) {
+                            Toast.makeText(getApplicationContext(), "We need Some Permission", Toast.LENGTH_SHORT).show();
+
                             requestForSpecificPermission();
                         }
                         else{
