@@ -131,7 +131,6 @@ public class DownloadTask extends AsyncTask<String, Void, String> {
 
             }
 
-
         }
 
 
