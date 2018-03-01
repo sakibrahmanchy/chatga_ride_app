@@ -23,6 +23,7 @@ import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
 import com.demoriderctg.arif.demorider.RestAPI.ApiClient;
 import com.demoriderctg.arif.demorider.RestAPI.ApiInterface;
 import com.demoriderctg.arif.demorider.models.ApiModels.DeviceTokenModels.UpdateDeviceTokenData;
+import com.demoriderctg.arif.demorider.models.ApiModels.UserCheckResponse;
 import com.facebook.accountkit.AccessToken;
 import com.facebook.accountkit.Account;
 import com.facebook.accountkit.AccountKit;
@@ -36,10 +37,14 @@ import com.facebook.accountkit.ui.LoginType;
 import com.facebook.accountkit.ui.SkinManager;
 import com.facebook.accountkit.ui.UIManager;
 
+import org.json.JSONObject;
+
 import __Firebase.FirebaseWrapper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.demoriderctg.arif.demorider.MainActivity.TAG;
 
 
 public class FacebookAccountVerificationActivity extends AppCompatActivity {
@@ -82,7 +87,7 @@ public class FacebookAccountVerificationActivity extends AppCompatActivity {
         AccountKitConfiguration.AccountKitConfigurationBuilder configurationBuilder =
                 new AccountKitConfiguration.AccountKitConfigurationBuilder(
                         LoginType.PHONE,
-                        AccountKitActivity.ResponseType.CODE); // or .ResponseType.TOKEN
+                        AccountKitActivity.ResponseType.TOKEN); // or .ResponseType.TOKEN
 
         uiManager = new SkinManager(
                 SkinManager.Skin.TRANSLUCENT,
@@ -114,20 +119,7 @@ public class FacebookAccountVerificationActivity extends AppCompatActivity {
             } else {
                 if (loginResult.getAccessToken() != null) {
                     toastMessage = "Success:" + loginResult.getAccessToken().getAccountId();
-                    AccountKit.getCurrentAccount(new AccountKitCallback<Account>() {
-                        @Override
-                        public void onSuccess(final Account account) {
-                            String accountKitId = account.getId();
-                            PhoneNumber phoneNumber = account.getPhoneNumber();
-                            String phoneNumberString = phoneNumber.toString();
 
-                        }
-
-                        @Override
-                        public void onError(final AccountKitError error) {
-                            // Handle Error
-                        }
-                    });
 
                 } else {
                     toastMessage = String.format(
@@ -140,13 +132,32 @@ public class FacebookAccountVerificationActivity extends AppCompatActivity {
                 // and pass it to your server and exchange it for an access token.
 
                 // Success! Start your next activity...
-                deviceTokenCheck(phoneNumber);
+                AccountKit.getCurrentAccount(new AccountKitCallback<Account>() {
+                    @Override
+                    public void onSuccess(final Account account) {
+                        String accountKitId = account.getId();
+                        PhoneNumber phoneNumber = account.getPhoneNumber();
+                        String phoneNumberString = phoneNumber.toString().substring(3,phoneNumber.toString().length());
+                        UserExists(phoneNumberString);
+
+                    }
+
+                    @Override
+                    public void onError(final AccountKitError error) {
+                        // Handle Error
+                        Log.d(TAG,error.toString());
+                    }
+                });
+               // deviceTokenCheck(phoneNumber);
             }
 
             // Surface the result to your user in an appropriate way.
             Toast.makeText(this, toastMessage, Toast.LENGTH_LONG).show();
         }
+
     }
+
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -231,5 +242,76 @@ public class FacebookAccountVerificationActivity extends AppCompatActivity {
 
     }
 
+    public void UserExists(final String phoneNumber){
+
+        ApiInterface apiService =
+                ApiClient.getClient().create(ApiInterface.class);
+
+        dialog = new ProgressDialog(FacebookAccountVerificationActivity.this);
+        dialog.setMessage("Please Wait..");
+        dialog.show();
+
+        String clientId = getString(R.string.APP_CLIENT);
+        String clientSecret = getString(R.string.APP_CLIENT_SECRET);
+
+        Call<UserCheckResponse> call = apiService.checkUser(phoneNumber);
+
+        call.enqueue(new Callback<UserCheckResponse>() {
+            @Override
+            public void onResponse(Call<UserCheckResponse> call, Response<UserCheckResponse> response) {
+
+                int statusCode = response.code();
+                dialog.dismiss();
+                switch(statusCode){
+                    case 200:
+                        String responseCode = response.body().getResponseCode().toString();
+                        if(responseCode.equals("user-found")){
+                            //No phone verification required, call for access token
+                            LoginHelper loginHelper = new LoginHelper(FacebookAccountVerificationActivity.this);
+                            loginHelper.AccessTokenCall(clientId,clientSecret,phoneNumber);
+
+                        }else{
+
+                            Intent intent = new Intent(FacebookAccountVerificationActivity.this, RegistrationActivity.class);
+                            intent.putExtra("phoneNumber",phoneNumber);
+                            intent.putExtra("loginStatus","REGISTRATION_REQUIRED");
+                            startActivity(intent);
+                            finish();
+                        }
+                        break;
+                    case 500:
+                        try {
+                            JSONObject error = new JSONObject(response.errorBody().string());
+                            String errorCode = error.getString("response_code");
+
+                            if(errorCode.equals("auth/user-not-found")){
+
+                                Intent intent = new Intent(FacebookAccountVerificationActivity.this, RegistrationActivity.class);
+                                intent.putExtra("phoneNumber",phoneNumber);
+                                intent.putExtra("loginStatus","REGISTRATION_REQUIRED");
+                                startActivity(intent);
+                                finish();
+                            }
+
+                        } catch (Exception e) {
+                            Snackbar.make(findViewById(android.R.id.content), e.getMessage(),
+                                    Snackbar.LENGTH_SHORT).show();
+                        }
+                        break;
+
+                    default:
+                        Snackbar.make(findViewById(android.R.id.content), "Sorry, network error.",
+                                Snackbar.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserCheckResponse> call, Throwable t) {
+                // Log error here since request failed
+                Log.e(TAG, t.toString());
+            }
+        });
+    }
 
 }
