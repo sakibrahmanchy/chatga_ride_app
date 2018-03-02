@@ -93,6 +93,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
     public static Activity OnrideModeContext;
     private float v;
     private double lat,lng;
+    private TextView rider_phone_number;
 
 
 
@@ -108,7 +109,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
         riderName = (TextView) findViewById(R.id.rider_name);
         contactRider = (TextView) findViewById(R.id.contact_with_rider);
         rating = (TextView) findViewById(R.id.rider_rating);
-
+        rider_phone_number =findViewById(R.id.rider_number);
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         bottomSheet = findViewById( R.id.bottom_sheet );
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
@@ -130,6 +131,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
     void setUi(){
         riderName.setText(AppConstant.RIDER_NAME);
         rating.setText("100");
+        rider_phone_number.setText(AppConstant.RIDER_PHONENUMBER);
         contactRider.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

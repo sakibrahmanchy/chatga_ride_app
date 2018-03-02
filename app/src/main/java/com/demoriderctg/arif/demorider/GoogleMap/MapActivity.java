@@ -196,6 +196,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private LinearLayout searchContainer;
     private TextView serviceNotAvailable;
 
+
     private LinearLayout linearLayout;
 
     private boolean isTotalHeightFound = false;
@@ -220,6 +221,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         searchContainer = findViewById(R.id.searchLinearLayout);
         serviceNotAvailable =findViewById(R.id.service_not_available);
         serviceNotAvailable.setVisibility(View.GONE);
+
 
 
         bottomSheet = findViewById( R.id.bottom_sheet );
