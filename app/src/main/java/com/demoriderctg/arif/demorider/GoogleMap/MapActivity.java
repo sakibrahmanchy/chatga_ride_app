@@ -117,7 +117,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
         if (mLocationPermissionsGranted) {
-            //getDeviceLocation();
 
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
@@ -126,6 +125,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
+            if (connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected() && activityChangeForSearch == null) {
+                getDeviceLocation();
+
+            }
+
 
             init();
 
@@ -190,6 +194,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private CoordinatorLayout elemnentsContainer;
     private LinearLayout actionsConainer;
     private LinearLayout searchContainer;
+    private TextView serviceNotAvailable;
 
     private LinearLayout linearLayout;
 
@@ -213,6 +218,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         elemnentsContainer = findViewById(R.id.elements_container);
         actionsConainer = findViewById(R.id.actions_container);
         searchContainer = findViewById(R.id.searchLinearLayout);
+        serviceNotAvailable =findViewById(R.id.service_not_available);
+        serviceNotAvailable.setVisibility(View.GONE);
 
 
         bottomSheet = findViewById( R.id.bottom_sheet );
@@ -328,12 +335,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 .enableAutoManage(this, this)
                 .build();
 
-        if (connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected() && activityChangeForSearch == null) {
-            getDeviceLocation();
-
-        }
-
-
         mPlaceAutocompleteAdapter = new PlaceAutocompleteAdapter(this, mGoogleApiClient,
                 LAT_LNG_BOUNDS, null);
 
@@ -358,7 +359,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 //                                    setBoundsBias(AppConstant.LAT_LNG_BOUNDS).setFilter(filter)
 //                                    .build(MapActivity.this);
                     Intent intent =
-                            new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN).setFilter(filter)
+                            new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+                                    .setBoundsBias(AppConstant.LAT_LNG_BOUNDS_CTG_3)
+                                    .setFilter(filter)
                                     .build(MapActivity.this);
                     startActivityForResult(intent, AppConstant.SEARCH_SOURCE_AUTOCOMPLETE);
                 } catch (GooglePlayServicesRepairableException e) {
@@ -389,6 +392,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 //                                    .build(MapActivity.this);
                     Intent intent =
                             new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+                                    .setBoundsBias(AppConstant.LAT_LNG_BOUNDS_CTG_3)
                                     .setFilter(filter)
                                     .build(MapActivity.this);
                     startActivityForResult(intent, AppConstant.SEARCH_DESTINATION_AUTOCOMPLETE);
@@ -474,7 +478,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         if (task.isSuccessful()) {
                             Log.d(TAG, "onComplete: found location!");
                             Location currentLocation = (Location) task.getResult();
-
                             Geocoder myLocation = new Geocoder(MapActivity.this, Locale.getDefault());
                             try {
                                 List<Address> myList = myLocation.getFromLocation(currentLocation.getLatitude(), currentLocation.getLongitude(), 1);
@@ -492,6 +495,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                 AppConstant.searchSorceLocationModel.homeLocationName = address.getAddressLine(0);
                                 AppConstant.searchSorceLocationModel.home = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());                                String sourceLocation = AppConstant .searchSorceLocationModel.homeLocationName;
                                 sourceText.setText(sourceLocation);
+
+                                if(!AppConstant.LAT_LNG_BOUNDS.contains(AppConstant.searchSorceLocationModel.home)){
+                                    serviceNotAvailable.setVisibility(View.VISIBLE);
+
+                                }
+                                else{
+                                    serviceNotAvailable.setVisibility(View.GONE);
+                                }
                                 checkButtonState();
 
                             } catch (IOException e) {
@@ -516,6 +527,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             sendButton.setVisibility(View.INVISIBLE);
             requestbtn.setVisibility(View.INVISIBLE);
             destinationText.setText("");
+        }
+        if(AppConstant.searchSorceLocationModel == null){
+            sendButton.setVisibility(View.INVISIBLE);
+            requestbtn.setVisibility(View.INVISIBLE);
+            sourceText.setText("");
         }
         if(AppConstant.searchSorceLocationModel!=null && AppConstant.searchDestinationLocationModel !=null){
             sendButton.setVisibility(View.VISIBLE);
@@ -631,18 +647,23 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 @Override
 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        requestbtn.setVisibility(View.INVISIBLE);
     if (requestCode == AppConstant.SEARCH_SOURCE_AUTOCOMPLETE) {
         if (resultCode == RESULT_OK) {
-            Place place = PlaceAutocomplete.getPlace(this, data);
-            if (AppConstant.LAT_LNG_BOUNDS_CTG.contains(place.getLatLng()) || AppConstant.LAT_LNG_BOUNDS_CTG_2.contains(place.getLatLng())) {
-                AppConstant.searchSorceLocationModel.homeLocationName = place.getAddress().toString();
-                AppConstant.searchSorceLocationModel.home = place.getLatLng();
-                String sourceLocation = AppConstant.searchSorceLocationModel.homeLocationName;
-                sourceText.setText(sourceLocation);
-                moveCamera(AppConstant.searchSorceLocationModel.home, AppConstant.DEFAULT_ZOOM, "Source");
-            } else {
-                Toast.makeText(getContextOfApplication(), "Service is out of bounds", Toast.LENGTH_SHORT).show();
+
+            if(AppConstant.searchSorceLocationModel !=null){
+                Place place = PlaceAutocomplete.getPlace(this, data);
+                if (AppConstant.LAT_LNG_BOUNDS_CTG_3.contains(place.getLatLng())) {
+                    AppConstant.searchSorceLocationModel.homeLocationName = place.getAddress().toString();
+                    AppConstant.searchSorceLocationModel.home = place.getLatLng();
+                    String sourceLocation = AppConstant.searchSorceLocationModel.homeLocationName;
+                    sourceText.setText(sourceLocation);
+                    moveCamera(AppConstant.searchSorceLocationModel.home, AppConstant.DEFAULT_ZOOM, "Source");
+                } else {
+                    Toast.makeText(getContextOfApplication(), "Service is out of bounds", Toast.LENGTH_SHORT).show();
+                }
             }
+
         } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
             Status status = PlaceAutocomplete.getStatus(this, data);
             // TODO: Handle the error.
@@ -654,7 +675,7 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     } else if (requestCode == AppConstant.SEARCH_DESTINATION_AUTOCOMPLETE) {
         if (resultCode == RESULT_OK) {
             Place place = PlaceAutocomplete.getPlace(this, data);
-            if (AppConstant.LAT_LNG_BOUNDS_CTG.contains(place.getLatLng()) || AppConstant.LAT_LNG_BOUNDS_CTG_2.contains(place.getLatLng())) {
+            if (AppConstant.LAT_LNG_BOUNDS_CTG_3.contains(place.getLatLng())) {
                 if (AppConstant.searchDestinationLocationModel == null) {
                     AppConstant.searchDestinationLocationModel = new WorkLocationModel();
                 }
@@ -699,6 +720,7 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         mMap.clear();
         moveCamera(AppConstant.searchSorceLocationModel.home,AppConstant.DEFAULT_ZOOM,"Source");
         requestbtn.setVisibility(View.INVISIBLE);
+        AppConstant.searchDestinationLocationModel=null;
         checkButtonState();
 
         if (back_pressed + 1000 > System.currentTimeMillis()) {

@@ -106,9 +106,9 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
         notification = new NotificationCompat.Builder(this);
         riderImage = (ImageView) findViewById(R.id.Rider_profile_pic);
         riderName = (TextView) findViewById(R.id.rider_name);
-        contactRider = (TextView) findViewById(R.id.rider_number);
+        contactRider = (TextView) findViewById(R.id.contact_with_rider);
         rating = (TextView) findViewById(R.id.rider_rating);
-        bikeNumber =(TextView)findViewById(R.id.bike_number);
+
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         bottomSheet = findViewById( R.id.bottom_sheet );
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
@@ -120,6 +120,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
         if(notificationModel.riderId >0){
             AppConstant.RIDER_NAME = notificationModel.riderName;
             AppConstant.RIDER_PHONENUMBER = notificationModel.riderPhone;
+
         }
         initMap();
         setUi();
@@ -129,7 +130,6 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
     void setUi(){
         riderName.setText(AppConstant.RIDER_NAME);
         rating.setText("100");
-        bikeNumber.setText("");
         contactRider.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -224,7 +224,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
                     finish();
                 }
                 else {
-                    handlerForFinishRide.postDelayed(this, 3000);
+                    handlerForFinishRide.postDelayed(this, 1000);
                 }
 
 
@@ -292,7 +292,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
                     currentMarker = mMap.addMarker(new MarkerOptions()
                             .position(new LatLng(AppConstant.SOURCE.latitude,AppConstant.SOURCE.longitude))
                             .title("RIDER")
-                            .alpha(AppConstant.DEFAULT_ZOOM)
+                            .anchor(.5f,.5f)
                             .flat(true)
                             .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("ic_marker_bike",30,30))));
 
@@ -434,7 +434,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     public Bitmap resizeMapIcons(String iconName, int width, int height){
-        Bitmap decodeResource = BitmapFactory.decodeResource(contextOfApplication.getResources(),contextOfApplication.getResources().getIdentifier(iconName, "drawable", contextOfApplication.getPackageName()));
+        Bitmap decodeResource = BitmapFactory.decodeResource(this.getResources(),this.getResources().getIdentifier(iconName, "drawable", this.getPackageName()));
         return Bitmap.createScaledBitmap(decodeResource, (int) (((double) decodeResource.getWidth()) * .25d), (int) (((double) decodeResource.getHeight()) * .25d), false);
     }
 }

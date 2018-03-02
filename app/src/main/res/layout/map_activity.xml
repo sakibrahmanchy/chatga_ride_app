@@ -69,6 +69,17 @@
                     android:selectAllOnFocus="true"
                     android:textSize="18sp" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:id="@+id/service_not_available"
+                    android:background="@color/colorButtonBlack"
+                    android:textColor="@android:color/white"
+                    android:padding="10dp"
+                    android:textSize="18sp"
+                    android:text="Service is not available in your area."/>
+
             </LinearLayout>
 
             <LinearLayout

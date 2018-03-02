@@ -77,13 +77,14 @@ public class AppConstant {
     public static final String GOOGLE_PLAY_SERVICE_MSG = "you can not make request";
 
     /*Latlon bound*/
-
     public static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
             new LatLng(23.678001,90.308731), new LatLng(23.895385, 90.447749));
     public static final LatLngBounds LAT_LNG_BOUNDS_CTG = new LatLngBounds(
             new LatLng(22.306818, 91.769043), new LatLng(22.405721,91.860118) );
     public static final LatLngBounds LAT_LNG_BOUNDS_CTG_2 = new LatLngBounds(
             new LatLng(22.235183,91.791642), new LatLng(22.321428, 91.812988));
+    public static final LatLngBounds LAT_LNG_BOUNDS_CTG_3 = new LatLngBounds(
+            new LatLng(22.237333, 91.717972), new LatLng(22.475470, 91.866288));
 
     /*Notification key*/
     public static String ACTION_TYPE = ("actionType");
