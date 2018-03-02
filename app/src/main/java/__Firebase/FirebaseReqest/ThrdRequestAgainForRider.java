@@ -109,6 +109,7 @@ public class ThrdRequestAgainForRider {
                     * Request is more than 3 but pass ten/five minutes
                     * So request again and set one request is done
                     */
+                    FirebaseWrapper.getInstance().getRiderViewModelInstance().ClearData(true);
                     NumberOfRequestEdit.putString(FirebaseConstant.LAST_REQUESTED_NUMBER, FirebaseConstant.ONE + (" ") + System.currentTimeMillis());
                     NumberOfRequestEdit.commit();
                 }
