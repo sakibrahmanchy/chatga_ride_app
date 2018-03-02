@@ -353,9 +353,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             new AutocompleteFilter.Builder()
                                     .setCountry("BD")
                                     .build();
+//                    Intent intent =
+//                            new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN).
+//                                    setBoundsBias(AppConstant.LAT_LNG_BOUNDS).setFilter(filter)
+//                                    .build(MapActivity.this);
                     Intent intent =
-                            new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN).
-                                    setBoundsBias(AppConstant.LAT_LNG_BOUNDS).setFilter(filter)
+                            new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN).setFilter(filter)
                                     .build(MapActivity.this);
                     startActivityForResult(intent, AppConstant.SEARCH_SOURCE_AUTOCOMPLETE);
                 } catch (GooglePlayServicesRepairableException e) {
@@ -380,9 +383,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             new AutocompleteFilter.Builder()
                                     .setCountry("BD")
                                     .build();
+//                    Intent intent =
+//                            new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN).
+//                                    setBoundsBias(AppConstant.LAT_LNG_BOUNDS).setFilter(filter)
+//                                    .build(MapActivity.this);
                     Intent intent =
-                            new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN).
-                                    setBoundsBias(AppConstant.LAT_LNG_BOUNDS).setFilter(filter)
+                            new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+                                    .setFilter(filter)
                                     .build(MapActivity.this);
                     startActivityForResult(intent, AppConstant.SEARCH_DESTINATION_AUTOCOMPLETE);
                 } catch (GooglePlayServicesRepairableException e) {
@@ -582,8 +589,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
-
-
     private void hideSoftKeyboard() {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
@@ -629,7 +634,7 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     if (requestCode == AppConstant.SEARCH_SOURCE_AUTOCOMPLETE) {
         if (resultCode == RESULT_OK) {
             Place place = PlaceAutocomplete.getPlace(this, data);
-            if (AppConstant.LAT_LNG_BOUNDS.contains(place.getLatLng())) {
+            if (AppConstant.LAT_LNG_BOUNDS_CTG.contains(place.getLatLng()) || AppConstant.LAT_LNG_BOUNDS_CTG_2.contains(place.getLatLng())) {
                 AppConstant.searchSorceLocationModel.homeLocationName = place.getAddress().toString();
                 AppConstant.searchSorceLocationModel.home = place.getLatLng();
                 String sourceLocation = AppConstant.searchSorceLocationModel.homeLocationName;
@@ -649,7 +654,7 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     } else if (requestCode == AppConstant.SEARCH_DESTINATION_AUTOCOMPLETE) {
         if (resultCode == RESULT_OK) {
             Place place = PlaceAutocomplete.getPlace(this, data);
-            if (AppConstant.LAT_LNG_BOUNDS.contains(place.getLatLng())) {
+            if (AppConstant.LAT_LNG_BOUNDS_CTG.contains(place.getLatLng()) || AppConstant.LAT_LNG_BOUNDS_CTG_2.contains(place.getLatLng())) {
                 if (AppConstant.searchDestinationLocationModel == null) {
                     AppConstant.searchDestinationLocationModel = new WorkLocationModel();
                 }

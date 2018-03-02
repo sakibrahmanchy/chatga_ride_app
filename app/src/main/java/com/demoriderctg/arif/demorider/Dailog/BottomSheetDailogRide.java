@@ -40,6 +40,7 @@ import java.util.ArrayList;
 
 import ContactWithFirebase.Main;
 import __Firebase.FirebaseResponse.NotificationModel;
+import __Firebase.FirebaseWrapper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -117,7 +118,10 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
                         DiscountId =AppConstant.userDiscount.getDiscountId();
                     }
                     AppConstant.TOTAL_COST = totalCost;
+
+                    FirebaseWrapper.getInstance().getRiderViewModelInstance().ClearData(true);
                     main.RequestForRide(Source, Destination, AppConstant.SOURCE_NAME, AppConstant.DESTINATION_NAME, totalCost, DiscountId);
+                    
                     Intent intent = new Intent(getContext(), FullMapSearching.class);
                     startActivity(intent);
                     dismiss();
