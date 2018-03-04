@@ -31,6 +31,7 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
     private String path = ("http://139.59.90.128/notification.php");
     private Context context;
     private ICallbackMain callbackListener;
+    private JSONObject jsonObject;
 
     public SentNotificationToRider(Context context, ICallbackMain callbackListener) {
         this.context = context;
@@ -134,7 +135,7 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
                 responseStrBuilder.append(inputStr);
             }
             try {
-                JSONObject jsonObject = new JSONObject(responseStrBuilder.toString());
+                jsonObject = new JSONObject(responseStrBuilder.toString());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -157,6 +158,16 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         Log.d(FirebaseConstant.RESPONSE_FROM_SERVER, result);
+        try {
+            if (jsonObject.getString("result").contains("false")) {
+                ThrdRequestAgainForRider.ReduceNumberOfRide();
+                ThrdRequestAgainForRider.AddRiderIntoBlockList();
+                return;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         FirebaseConstant.IS_RIDE_ACCEPTED_BY_RIDER = 0;
         ThrdRequestAgainForRider.Initiate();
         this.callbackListener.OnSentNotificationToRider(true);
