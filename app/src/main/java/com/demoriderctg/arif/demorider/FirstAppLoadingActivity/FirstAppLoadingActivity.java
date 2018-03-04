@@ -42,12 +42,14 @@ public class FirstAppLoadingActivity extends AppCompatActivity {
         int GET_MY_PERMISSION = 1;
 
         if(loginData != null){
+
             main.HasAnyRide(Long.parseLong(loginData.getClientId()));
             InitializeApp();
         }
         else{
             Intent intent = new Intent(FirstAppLoadingActivity.this, MainActivity.class);
             startActivity(intent);
+            finish();
         }
 
     }

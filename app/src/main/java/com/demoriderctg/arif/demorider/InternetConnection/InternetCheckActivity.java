@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.demoriderctg.arif.demorider.FirstAppLoadingActivity.FirstAppLoadingActivity;
 import com.demoriderctg.arif.demorider.R;
 
 
@@ -35,8 +36,8 @@ public class InternetCheckActivity extends AppCompatActivity {
                 dialog.show();
                   if(connectionCheck.isNetworkConnected()){
                       dialog.dismiss();
-                      Intent returnIntent = new Intent();
-                      setResult(Activity.RESULT_OK,returnIntent);
+                      Intent returnIntent = new Intent(InternetCheckActivity.this, FirstAppLoadingActivity.class);
+                      startActivity(returnIntent);
                       finish();
                   }
             }

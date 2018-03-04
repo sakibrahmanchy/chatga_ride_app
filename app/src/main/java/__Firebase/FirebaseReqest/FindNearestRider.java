@@ -41,9 +41,11 @@ public class FindNearestRider implements IDistanceAndDuration {
     }
 
     private void Request() {
-        for (RiderModel Rider : RiderList) {
-            Destination = Pair.create(Rider.CurrentRiderLocation.Latitude, Rider.CurrentRiderLocation.Longitude);
-            new ShortestDistanceMap().getDistanceAndTime(Rider, Source, Destination,this);
+        if(RiderList != null) {
+            for (RiderModel Rider : RiderList) {
+                Destination = Pair.create(Rider.CurrentRiderLocation.Latitude, Rider.CurrentRiderLocation.Longitude);
+                new ShortestDistanceMap().getDistanceAndTime(Rider, Source, Destination, this);
+            }
         }
     }
 

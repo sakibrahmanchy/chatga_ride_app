@@ -1,6 +1,7 @@
 package com.demoriderctg.arif.demorider.OnrideMode;
 
 import android.Manifest;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Notification;
@@ -8,6 +9,8 @@ import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Handler;
@@ -24,6 +27,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,9 +47,11 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.squareup.picasso.Picasso;
 
 import java.util.Date;
 
@@ -57,6 +63,7 @@ import __Firebase.ICallBackInstance.IGerRiderLocation;
 
 import static android.support.v4.app.NotificationCompat.*;
 import static com.demoriderctg.arif.demorider.AppConfig.AppConstant.DEFAULT_ZOOM;
+import static com.demoriderctg.arif.demorider.GoogleMap.MapActivity.contextOfApplication;
 
 public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyCallback, OnMyLocationButtonClickListener, GoogleMap.OnMyLocationChangeListener, IGerRiderLocation {
 
@@ -81,10 +88,13 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
     private TextView riderName;
     private  TextView contactRider;
     private  TextView rating;
+    private TextView bikeNumber;
     private RiderModel riderModel;
     private NotificationModel notificationModel;
     public static Activity OnrideModeContext;
-
+    private float v;
+    private double lat,lng;
+    private TextView rider_phone_number;
 
 
 
@@ -98,8 +108,9 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
         notification = new NotificationCompat.Builder(this);
         riderImage = (ImageView) findViewById(R.id.Rider_profile_pic);
         riderName = (TextView) findViewById(R.id.rider_name);
-        contactRider = (TextView) findViewById(R.id.rider_number);
+        contactRider = (TextView) findViewById(R.id.contact_with_rider);
         rating = (TextView) findViewById(R.id.rider_rating);
+        rider_phone_number =findViewById(R.id.rider_number);
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         bottomSheet = findViewById( R.id.bottom_sheet );
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
@@ -111,6 +122,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
         if(notificationModel.riderId >0){
             AppConstant.RIDER_NAME = notificationModel.riderName;
             AppConstant.RIDER_PHONENUMBER = notificationModel.riderPhone;
+
         }
         initMap();
         setUi();
@@ -120,6 +132,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
     void setUi(){
         riderName.setText(AppConstant.RIDER_NAME);
         rating.setText("100");
+        rider_phone_number.setText(AppConstant.RIDER_PHONENUMBER);
         contactRider.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,11 +167,10 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
             uiSettings = googleMap.getUiSettings();
             uiSettings.setMapToolbarEnabled(false);
             googleMap.setMyLocationEnabled(true);
-            googleMap.setTrafficEnabled(true);
             mMap.setOnMyLocationButtonClickListener( OnrideModeActivity.this);
 
             setUpMap();
-            Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
+
         }
     }
 
@@ -174,18 +186,10 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
             // Getting URL to the Google Directions API
 
             try{
-                sourceMarker= mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(AppConstant.SOURCE.latitude,AppConstant.SOURCE.longitude))
-                        .title("Home")
-                        .snippet(AppConstant.SOURCE_NAME)
-                        .alpha(.7f)
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_google_map)));
 
-                destinationMarker = mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(AppConstant.DESTINATION.latitude,AppConstant.DESTINATION.longitude))
-                        .title("DESTINATION")
-                        .snippet(AppConstant.DESTINATION_NAME)
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_google_map)));
+                mMap.addMarker(new MarkerOptions().position(AppConstant.DESTINATION).icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("ic_marker_destination",200,200))).anchor(.5f,.5f));//.icon(BitmapDescriptorFactory.fromBitmap(resizedMarker(200,200) )));
+                mMap.addMarker(new MarkerOptions()
+                        .position(AppConstant.SOURCE).icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("ic_marker_pickup",400,300))).anchor(.5f,.5f));
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(AppConstant.SOURCE, DEFAULT_ZOOM));
                 MandatoryCall();
 
@@ -223,7 +227,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
                     finish();
                 }
                 else {
-                    handlerForFinishRide.postDelayed(this, 3000);
+                    handlerForFinishRide.postDelayed(this, 1000);
                 }
 
 
@@ -237,18 +241,11 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
                 if(AppConstant.START_RIDE){
                     mMap.clear();
                     try{
-                        sourceMarker= mMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(AppConstant.SOURCE.latitude,AppConstant.SOURCE.longitude))
-                                .title("Home")
-                                .snippet(AppConstant.SOURCE_NAME)
-                                .alpha(.7f)
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_google_map)));
 
-                        destinationMarker = mMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(AppConstant.DESTINATION.latitude,AppConstant.DESTINATION.longitude))
-                                .title("DESTINATION")
-                                .snippet(AppConstant.DESTINATION_NAME)
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_google_map)));
+                        mMap.addMarker(new MarkerOptions().position(AppConstant.DESTINATION).icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("ic_marker_destination",200,200))).anchor(.5f,.5f));//.icon(BitmapDescriptorFactory.fromBitmap(resizedMarker(200,200) )));
+                        mMap.addMarker(new MarkerOptions()
+                                .position(AppConstant.SOURCE).icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("ic_marker_pickup",400,300))).anchor(.5f,.5f));
+
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(AppConstant.SOURCE, DEFAULT_ZOOM));
                         handlerForFinishRide.postDelayed(runnableForStartRide,3000);
 
@@ -264,7 +261,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
 
             }
         };
-        handler.postDelayed(runnable, 3000);
+        handler.postDelayed(runnable, 2000);
     }
 
 
@@ -292,17 +289,39 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
     public void OnGerRiderLocation(boolean value, double Latitude, double Longitude) {
         if(value == true){
             /*Do stuff*/
-
             try {
                 if(currentMarker == null){
 
                     currentMarker = mMap.addMarker(new MarkerOptions()
                             .position(new LatLng(AppConstant.SOURCE.latitude,AppConstant.SOURCE.longitude))
                             .title("RIDER")
-                            .alpha(AppConstant.DEFAULT_ZOOM)
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_motorcycle)));
+                            .anchor(.5f,.5f)
+                            .flat(true)
+                            .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("ic_marker_bike",30,30))));
+
                 }
-                currentMarker.setPosition(new LatLng(Latitude,Longitude));
+                ValueAnimator valueAnimator = ValueAnimator.ofFloat(0,1);
+                valueAnimator.setDuration(1000);
+                valueAnimator.setInterpolator(new LinearInterpolator());
+                valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
+
+                        v = valueAnimator.getAnimatedFraction();
+                        lng = v*AppConstant.SOURCE.longitude+(1-v)*Longitude;
+                        lat = v*AppConstant.SOURCE.latitude+(1-v)*Latitude;
+                        LatLng newPos = new LatLng(Latitude,Longitude);
+                        currentMarker.setPosition(newPos);
+                        currentMarker.setAnchor(0.5f,0.5f);
+                        currentMarker.setRotation(getBearing(newPos,AppConstant.SOURCE));
+//                        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(
+//                                new CameraPosition.Builder().
+//                                        target(newPos)
+//                                      .zoom(15.5f).build()));
+                    }
+                });
+                valueAnimator.start();
+
             }catch(Exception e){
                 e.printStackTrace();
             }
@@ -393,10 +412,32 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
         AppConstant.ONRIDEMODE_ACTIVITY = true;
     }
 
-
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         AppConstant.ONRIDEMODE_ACTIVITY = false;
+    }
+
+    private float getBearing(LatLng startPos, LatLng newPos)
+    {
+        double lat = Math.abs(startPos.latitude - newPos.latitude);
+        double lng = Math.abs(startPos.longitude - newPos.longitude);
+
+        if(startPos.latitude < newPos.latitude && startPos.longitude < newPos.longitude){
+            return (float) (Math.toDegrees(Math.atan(lng/lat)));
+        }else if(startPos.latitude >= newPos.latitude && startPos.longitude < newPos.longitude){
+            return (float) (90 -(Math.toDegrees(Math.atan(lng/lat)))+90);
+        }else if(startPos.latitude >= newPos.latitude && startPos.longitude >= newPos.longitude){
+            return (float) (90 -(Math.toDegrees(Math.atan(lng/lat)))+180);
+        }else if(startPos.latitude < newPos.latitude && startPos.longitude >= newPos.longitude){
+            return (float) (90 -(Math.toDegrees(Math.atan(lng/lat)))+270);
+        }
+
+        return -1;
+    }
+
+    public Bitmap resizeMapIcons(String iconName, int width, int height){
+        Bitmap decodeResource = BitmapFactory.decodeResource(this.getResources(),this.getResources().getIdentifier(iconName, "drawable", this.getPackageName()));
+        return Bitmap.createScaledBitmap(decodeResource, (int) (((double) decodeResource.getWidth()) * .25d), (int) (((double) decodeResource.getHeight()) * .25d), false);
     }
 }

@@ -1,5 +1,6 @@
 package __Firebase.FirebaseUtility;
 
+import android.location.Location;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.util.Pair;
@@ -18,6 +19,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 
+import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
 import __Firebase.FirebaseModel.RiderModel;
 import __Firebase.ICallBackInstance.IDistanceAndDuration;
 
@@ -43,7 +45,9 @@ public class ShortestDistanceMap {
         this.iDistanceAndDuration = iDistanceAndDuration;
         this.Rider = Rider;
 
-        Thread thread = new Thread(){
+        this.getNativeDistanceAndDuration();
+        /*
+        Thread thread =  new Thread(){
             @Override
             public void run(){
                 try {
@@ -54,7 +58,36 @@ public class ShortestDistanceMap {
             }
         };
         thread.start();
+        */
         return;
+    }
+
+    private void getNativeDistanceAndDuration(){
+
+        Location SourceLocation= new Location("GPS");
+        Location DestinationLocation = new Location("GPS");
+
+        SourceLocation.setLatitude(this.Source.latitude);
+        SourceLocation.setLongitude(this.Source.longitude);
+
+        DestinationLocation.setLatitude(this.Destination.latitude);
+        DestinationLocation.setLongitude(this.Destination.longitude);
+
+        this.Distance = Float.toString(SourceLocation.distanceTo(DestinationLocation));
+        this.Duration = getNativeDuration(this.Distance);
+
+        if (iDistanceAndDuration != null) {
+            iDistanceAndDuration.OnGetIDistanceAndDuration(
+                    Rider,
+                    Distance,
+                    Duration
+            );
+        }
+    }
+
+    private String getNativeDuration(String distance){
+        float _distance = Float.parseFloat(distance);
+        return "1";
     }
 
     private String getDirectionsUrl(LatLng origin, LatLng dest) {

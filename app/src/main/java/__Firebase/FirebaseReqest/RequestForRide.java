@@ -31,6 +31,7 @@ public class RequestForRide {
         this.Source = Source;
         this.Destination = Destination;
         this.callBackListener = callBackListener;
+        this.RiderList = new ArrayList<>();
 
         Request();
     }
@@ -38,43 +39,30 @@ public class RequestForRide {
     public void Request() {
 
         FirebaseWrapper firebaseWrapper = FirebaseWrapper.getInstance();
-        firebaseWrapper.FirebaseRootReference.child(FirebaseConstant.RIDER).orderByChild(FirebaseConstant.ONLINE_BUSY_RIDE).equalTo(FirebaseConstant.ONLINE_NOT_BUSY_NO_RIDE).addValueEventListener(new ValueEventListener() {
+        firebaseWrapper.FirebaseRootReference.child(FirebaseConstant.RIDER)
+                .orderByChild(FirebaseConstant.ONLINE_BUSY_RIDE)
+                .equalTo(FirebaseConstant.ONLINE_NOT_BUSY_NO_RIDE)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
 
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
 
-                if (dataSnapshot.exists() && dataSnapshot.hasChildren()) {
-                    RiderList = new ArrayList<>();
-
-                    for (DataSnapshot snp : dataSnapshot.getChildren()) {
-                        RiderModel riderModel = new RiderModel();
-                        riderModel.LoadData(snp);
-                        RiderList.add(riderModel);
+                        if (dataSnapshot.exists() && dataSnapshot.hasChildren()) {
+                            for (DataSnapshot snp : dataSnapshot.getChildren()) {
+                                RiderModel riderModel = new RiderModel();
+                                riderModel.LoadData(snp);
+                                RiderList.add(riderModel);
+                            }
+                            callBackListener.OnRequestForRide(RiderList);
+                        } else {
+                            callBackListener.OnRequestForRide(RiderList);
+                        }
                     }
-                }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d(FirebaseConstant.NEAREST_RIDER_ERROR, databaseError.toString());
-            }
-        });
-
-        firebaseWrapper.FirebaseRootReference.child(FirebaseConstant.RIDER).orderByChild(FirebaseConstant.ONLINE_BUSY_RIDE).equalTo(FirebaseConstant.ONLINE_NOT_BUSY_NO_RIDE).addListenerForSingleValueEvent(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    callBackListener.OnRequestForRide(RiderList);
-                } else {
-                    callBackListener.OnRequestForRide(RiderList);
-                }
-            }
-
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d(FirebaseConstant.NEAREST_RIDER_ERROR, databaseError.toString());
-                callBackListener.OnRequestForRide(RiderList);
-            }
-        });
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.d(FirebaseConstant.NEAREST_RIDER_ERROR, databaseError.toString());
+                    }
+                });
     }
 }

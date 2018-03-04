@@ -32,6 +32,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -66,10 +67,13 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -90,11 +94,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+
 import ContactWithFirebase.Main;
 
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.OnConnectionFailedListener, NavigationView.OnNavigationItemSelectedListener {
+
+
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -110,7 +117,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
         if (mLocationPermissionsGranted) {
-            //getDeviceLocation();
 
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
@@ -119,11 +125,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
+            if (connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected() && activityChangeForSearch == null) {
+                getDeviceLocation();
+
+            }
+
 
             init();
 
-
-            Toast.makeText(this, "Map is Ready", Toast.LENGTH_SHORT).show();
         }
 
 
@@ -132,10 +141,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
     private static final String TAG = "MapActivity";
+    private static final String TAGHEIGHT = "HEIGHTS";
 
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
+    public boolean sendtBtnClick =false;
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
             new LatLng(54.69726685890506, -2.7379201682812226), new LatLng(55.38942944437183, -1.2456105979687226));
     String CurrentLocation;
@@ -165,7 +176,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private ProgressBar spinner;
     private LoginData loginData;
     private UserInformation userInformation;
-    private MarkerOptions options;
+    private Marker sourceMarker,destinationMarker=null;
     TextView userFirstName;
     TextView userPhoneNumber;
     private Address address;
@@ -180,8 +191,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public static Context contextOfApplication;
     private BottomSheetBehavior mBottomSheetBehavior;
     private View bottomSheet;
+    private CoordinatorLayout elemnentsContainer;
+    private LinearLayout actionsConainer;
+    private LinearLayout searchContainer;
+    private TextView serviceNotAvailable;
+
 
     private LinearLayout linearLayout;
+
+    private boolean isTotalHeightFound = false;
+    private boolean isActionHeightFound = false;
+    private boolean isSearchHeightFound = false;
+
+    private double totalHeight, actionHeight, searchHeight,peekHeight;
 
 
     @Override
@@ -194,13 +216,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        elemnentsContainer = findViewById(R.id.elements_container);
+        actionsConainer = findViewById(R.id.actions_container);
+        searchContainer = findViewById(R.id.searchLinearLayout);
+        serviceNotAvailable =findViewById(R.id.service_not_available);
+        serviceNotAvailable.setVisibility(View.GONE);
+
 
 
         bottomSheet = findViewById( R.id.bottom_sheet );
+
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-        mBottomSheetBehavior.setPeekHeight(200);
-        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        mBottomSheetBehavior.setHideable(false);
+        getPeekHeightOfScrollBar();
 
         mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
@@ -226,17 +253,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     actionBar.show();
                     linearLayout.setVisibility(View.VISIBLE);
                 }else{
-                    mBottomSheetBehavior.setPeekHeight(200);
+                    mBottomSheetBehavior.setPeekHeight((int) peekHeight);
                     mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 }
 
             }
         });
 
-
+        getLocationPermission();
         InitializationAll();
 
-        getLocationPermission();
+
 
     }
 
@@ -250,7 +277,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         requestbtn = (Button) findViewById(R.id.pickupbtn);
         requestbtn.setVisibility(View.INVISIBLE);
         linearLayout.setVisibility(View.VISIBLE);
-        spinner = (ProgressBar) findViewById(R.id.progressBar);
+        //spinner = (ProgressBar) findViewById(R.id.progressBar);
         navigationView= (NavigationView) findViewById(R.id.nav_view);
 
         View v = navigationView.getHeaderView(0);
@@ -268,13 +295,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 .error(R.drawable.profile_image)
                 .into(avatarContainer);
 
-        spinner.setVisibility(View.GONE);
+        //spinner.setVisibility(View.GONE);
         sharedpreferences = this.getSharedPreferences("MyPref", 0);
 
         connectionCheck = new ConnectionCheck(this);
         editor = sharedpreferences.edit();
         main = new Main();
-        options = new MarkerOptions();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         if(AppConstant.FINISH_RIDE){
@@ -311,12 +337,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 .enableAutoManage(this, this)
                 .build();
 
-        if (connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected() && activityChangeForSearch == null) {
-            getDeviceLocation();
-
-        }
-
-
         mPlaceAutocompleteAdapter = new PlaceAutocompleteAdapter(this, mGoogleApiClient,
                 LAT_LNG_BOUNDS, null);
 
@@ -324,12 +344,28 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         sourceText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mMap.getUiSettings().setScrollGesturesEnabled(true);
-                mMap.getUiSettings().setZoomGesturesEnabled(true);
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-                builder.setLatLngBounds(AppConstant.LAT_LNG_BOUNDS);
+
                 try {
-                    startActivityForResult(builder.build(MapActivity.this), PLACE_PICKER_REQUEST);
+                    if(sendtBtnClick==true){
+                        mMap.clear();
+                        sendtBtnClick=false;
+
+                    }
+                    AutocompleteFilter filter =
+                            new AutocompleteFilter.Builder()
+                                    .setCountry("BD")
+                                    .build();
+//                    Intent intent =
+//                            new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN).
+//                                    setBoundsBias(AppConstant.LAT_LNG_BOUNDS).setFilter(filter)
+//                                    .build(MapActivity.this);
+                    Intent intent =
+                            new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+                                    .setBoundsBias(AppConstant.LAT_LNG_BOUNDS_CTG_3)
+                                    .setFilter(filter)
+                                    .build(MapActivity.this);
+                    startActivityForResult(intent, AppConstant.SEARCH_SOURCE_AUTOCOMPLETE);
                 } catch (GooglePlayServicesRepairableException e) {
                     e.printStackTrace();
                 } catch (GooglePlayServicesNotAvailableException e) {
@@ -341,17 +377,31 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         destinationText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mMap.getUiSettings().setScrollGesturesEnabled(true);
-                mMap.getUiSettings().setZoomGesturesEnabled(true);
-                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-                builder.setLatLngBounds(AppConstant.LAT_LNG_BOUNDS);
 
                 try {
-                    startActivityForResult(builder.build(MapActivity.this), PLACE_PICKER_REQUEST_DESTINATION);
+                    if(sendtBtnClick==true){
+                        mMap.clear();
+                        sendtBtnClick=false;
+
+                    }
+                    AutocompleteFilter filter =
+                            new AutocompleteFilter.Builder()
+                                    .setCountry("BD")
+                                    .build();
+//                    Intent intent =
+//                            new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN).
+//                                    setBoundsBias(AppConstant.LAT_LNG_BOUNDS).setFilter(filter)
+//                                    .build(MapActivity.this);
+                    Intent intent =
+                            new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+                                    .setBoundsBias(AppConstant.LAT_LNG_BOUNDS_CTG_3)
+                                    .setFilter(filter)
+                                    .build(MapActivity.this);
+                    startActivityForResult(intent, AppConstant.SEARCH_DESTINATION_AUTOCOMPLETE);
                 } catch (GooglePlayServicesRepairableException e) {
-                    e.printStackTrace();
+                    // TODO: Handle the error.
                 } catch (GooglePlayServicesNotAvailableException e) {
-                    e.printStackTrace();
+                    // TODO: Handle the error.
                 }
             }
         });
@@ -393,6 +443,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     downloadTask.execute(url);
                     sendButton.setVisibility(View.INVISIBLE);
                     requestbtn.setVisibility(View.VISIBLE);
+                    sendtBtnClick=true;
 
                 }
 
@@ -429,16 +480,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         if (task.isSuccessful()) {
                             Log.d(TAG, "onComplete: found location!");
                             Location currentLocation = (Location) task.getResult();
-
                             Geocoder myLocation = new Geocoder(MapActivity.this, Locale.getDefault());
                             try {
                                 List<Address> myList = myLocation.getFromLocation(currentLocation.getLatitude(), currentLocation.getLongitude(), 1);
                                 Address address = (Address) myList.get(0);
                                 // mapMarkerDragging = new MapMarkerDragging(MapActivity.this,source,dest,mMap);
-
                                 moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
                                         AppConstant.DEFAULT_ZOOM,
-                                        "My Location");
+
+                                        "Source");
                                 //checkLatLon();
                                 if (AppConstant.searchSorceLocationModel == null) {
                                     AppConstant.searchSorceLocationModel = new HomeLocationModel();
@@ -447,6 +497,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                 AppConstant.searchSorceLocationModel.homeLocationName = address.getAddressLine(0);
                                 AppConstant.searchSorceLocationModel.home = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());                                String sourceLocation = AppConstant .searchSorceLocationModel.homeLocationName;
                                 sourceText.setText(sourceLocation);
+
+                                if(!AppConstant.LAT_LNG_BOUNDS.contains(AppConstant.searchSorceLocationModel.home)){
+                                    serviceNotAvailable.setVisibility(View.VISIBLE);
+
+                                }
+                                else{
+                                    serviceNotAvailable.setVisibility(View.GONE);
+                                }
                                 checkButtonState();
 
                             } catch (IOException e) {
@@ -472,6 +530,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             requestbtn.setVisibility(View.INVISIBLE);
             destinationText.setText("");
         }
+        if(AppConstant.searchSorceLocationModel == null){
+            sendButton.setVisibility(View.INVISIBLE);
+            requestbtn.setVisibility(View.INVISIBLE);
+            sourceText.setText("");
+        }
         if(AppConstant.searchSorceLocationModel!=null && AppConstant.searchDestinationLocationModel !=null){
             sendButton.setVisibility(View.VISIBLE);
             sourceText.setText(AppConstant.searchSorceLocationModel.homeLocationName);
@@ -481,20 +544,36 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     private void moveCamera(LatLng latLng, float zoom, String title) {
-        Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude);
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+
 
         if (title.equals("Destination"))
         {
-            mMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromBitmap(this.resizeMapIcons("ic_marker_destination",200,200))).anchor(.5f,.5f));//.icon(BitmapDescriptorFactory.fromBitmap(resizedMarker(200,200) )));
+               if(destinationMarker !=null){
+                   destinationMarker.remove();
+               }
+
+                destinationMarker = mMap.addMarker(new MarkerOptions()
+                        .position(latLng)
+                        .title("Destination")
+                        .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("ic_marker_destination",200,200))).anchor(.5f,.5f));
+
+                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+
 
         }
         if (title.equals("Source"))
         {
-            mMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromBitmap(this.resizeMapIcons("ic_marker_pickup",200,200))).anchor(.5f,.5f));//.icon(BitmapDescriptorFactory.fromBitmap(resizedMarker(200,200) )));
+            if(sourceMarker !=null){
+                sourceMarker.remove();
+            }
+                sourceMarker = mMap.addMarker(new MarkerOptions()
+                        .position(latLng)
+                        .title("Source")
+                        .icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("ic_marker_pickup",200,200))).anchor(.5f,.5f));
 
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
         }
-        hideSoftKeyboard();
+
     }
 
     private void initMap() {
@@ -527,8 +606,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     LOCATION_PERMISSION_REQUEST_CODE);
         }
     }
-
-
 
     private void hideSoftKeyboard() {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -570,56 +647,63 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-
-
-
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         requestbtn.setVisibility(View.INVISIBLE);
-        sendButton.setVisibility(View.VISIBLE);
-        if (requestCode == PLACE_PICKER_REQUEST) {
-            if (resultCode == RESULT_OK) {
-                Place place = PlacePicker.getPlace(data, this);
-                if(AppConstant.LAT_LNG_BOUNDS.contains(place.getLatLng())){
+    if (requestCode == AppConstant.SEARCH_SOURCE_AUTOCOMPLETE) {
+        if (resultCode == RESULT_OK) {
+
+            if(AppConstant.searchSorceLocationModel !=null){
+                Place place = PlaceAutocomplete.getPlace(this, data);
+                if (AppConstant.LAT_LNG_BOUNDS_CTG_3.contains(place.getLatLng())) {
                     AppConstant.searchSorceLocationModel.homeLocationName = place.getAddress().toString();
                     AppConstant.searchSorceLocationModel.home = place.getLatLng();
                     String sourceLocation = AppConstant.searchSorceLocationModel.homeLocationName;
                     sourceText.setText(sourceLocation);
-                    moveCamera(AppConstant.searchSorceLocationModel.home,AppConstant.DEFAULT_ZOOM,"Source");
+                    moveCamera(AppConstant.searchSorceLocationModel.home, AppConstant.DEFAULT_ZOOM, "Source");
+                } else {
+                    Toast.makeText(getContextOfApplication(), "Service is out of bounds", Toast.LENGTH_SHORT).show();
                 }
-                else{
-                    Toast.makeText(getContextOfApplication(),"Service is not work now",Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        }
-
-        if (requestCode == PLACE_PICKER_REQUEST_DESTINATION) {
-            mMap.clear();
-            if (resultCode == RESULT_OK) {
-                Place place = PlacePicker.getPlace(data, this);
-                if(AppConstant.LAT_LNG_BOUNDS.contains(place.getLatLng())){
-                    if(AppConstant.searchDestinationLocationModel == null){
-                        AppConstant.searchDestinationLocationModel = new WorkLocationModel();
-                    }
-                    AppConstant.searchDestinationLocationModel.workLocationName = place.getAddress().toString();
-                    AppConstant.searchDestinationLocationModel.work = place.getLatLng();
-                    String destinationLocation = AppConstant.searchDestinationLocationModel.workLocationName;
-                    destinationText.setText(destinationLocation);
-                    moveCamera(AppConstant.searchDestinationLocationModel.work,AppConstant.DEFAULT_ZOOM,"Destination");
-                }
-                else{
-                    Toast.makeText(getContextOfApplication(),"Service is not work now",Toast.LENGTH_SHORT).show();
-                }
-
             }
 
+        } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+            Status status = PlaceAutocomplete.getStatus(this, data);
+            // TODO: Handle the error.
+            Log.i(TAG, status.getStatusMessage());
+
+        } else if (resultCode == RESULT_CANCELED) {
+            // The user canceled the operation.
         }
-        checkButtonState();
+    } else if (requestCode == AppConstant.SEARCH_DESTINATION_AUTOCOMPLETE) {
+        if (resultCode == RESULT_OK) {
+            Place place = PlaceAutocomplete.getPlace(this, data);
+            if (AppConstant.LAT_LNG_BOUNDS_CTG_3.contains(place.getLatLng())) {
+                if (AppConstant.searchDestinationLocationModel == null) {
+                    AppConstant.searchDestinationLocationModel = new WorkLocationModel();
+                }
+                AppConstant.searchDestinationLocationModel.workLocationName = place.getAddress().toString();
+                AppConstant.searchDestinationLocationModel.work = place.getLatLng();
+                String destinationLocation = AppConstant.searchDestinationLocationModel.workLocationName;
+                destinationText.setText(destinationLocation);
+                moveCamera(AppConstant.searchDestinationLocationModel.work, AppConstant.DEFAULT_ZOOM, "Destination");
+            } else {
+                Toast.makeText(getContextOfApplication(), "Service is out of bounds", Toast.LENGTH_SHORT).show();
+            }
 
+        }
+        else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+            Status status = PlaceAutocomplete.getStatus(this, data);
+            // TODO: Handle the error.
+            Log.i(TAG, status.getStatusMessage());
 
+        } else if (resultCode == RESULT_CANCELED) {
+            // The user canceled the operation.
+        }
     }
+    checkButtonState();
+}
+
+
 
 
     //Menu
@@ -636,8 +720,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onBackPressed() {
 
         mMap.clear();
+        moveCamera(AppConstant.searchSorceLocationModel.home,AppConstant.DEFAULT_ZOOM,"Source");
         requestbtn.setVisibility(View.INVISIBLE);
-        sendButton.setVisibility(View.VISIBLE);
+        AppConstant.searchDestinationLocationModel=null;
+        checkButtonState();
 
         if (back_pressed + 1000 > System.currentTimeMillis()) {
             super.onBackPressed();
@@ -655,7 +741,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        Toast.makeText(getApplicationContext(), "" + item.getItemId(), Toast.LENGTH_SHORT).show();
+
+
         switch (item.getItemId()) {
             case R.id.nav_settings:
                 Intent intent = new Intent(MapActivity.this, SettingActivity.class);
@@ -689,6 +776,66 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         return Bitmap.createScaledBitmap(decodeResource, (int) (((double) decodeResource.getWidth()) * .25d), (int) (((double) decodeResource.getHeight()) * .25d), false);
     }
 
+    public void getPeekHeightOfScrollBar(){
+
+
+        ViewTreeObserver observer = elemnentsContainer.getViewTreeObserver();
+        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @Override
+            public void onGlobalLayout() {
+                // TODO Auto-generated method stub
+                double elementsContainerHeight = elemnentsContainer.getHeight();
+                totalHeight = elementsContainerHeight;
+                isTotalHeightFound = true;
+                check();
+                Log.d(TAGHEIGHT,"A: "+ elementsContainerHeight);
+                elemnentsContainer.getViewTreeObserver().removeGlobalOnLayoutListener(
+                        this);
+            }
+        });
+
+        ViewTreeObserver observer2 = actionsConainer.getViewTreeObserver();
+        observer2.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @Override
+            public void onGlobalLayout() {
+                // TODO Auto-generated method stub
+                double actionsContainerHeight = actionsConainer.getHeight();
+                actionHeight = actionsContainerHeight;
+                isActionHeightFound = true;
+                check();
+                //Log.d(TAGHEIGHT,"B: "+ actionsContainerHeight);
+                actionsConainer.getViewTreeObserver().removeGlobalOnLayoutListener(
+                        this);
+            }
+        });
+
+        ViewTreeObserver observer3 = searchContainer.getViewTreeObserver();
+        observer3.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @Override
+            public void onGlobalLayout() {
+                // TODO Auto-generated method stub
+                double searchContainerHeight = searchContainer.getHeight();
+                searchHeight = searchContainerHeight;
+                isSearchHeightFound = true;
+                check();
+                actionsConainer.getViewTreeObserver().removeGlobalOnLayoutListener(
+                        this);
+            }
+        });
+    }
+
+    public void check(){
+
+        if(isActionHeightFound&&isSearchHeightFound&&isTotalHeightFound){
+            peekHeight = totalHeight - (actionHeight+searchHeight);
+            mBottomSheetBehavior.setPeekHeight((int) peekHeight);
+            mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            mBottomSheetBehavior.setHideable(false);
+        }
+    }
 }
 
 

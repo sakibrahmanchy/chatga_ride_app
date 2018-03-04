@@ -84,7 +84,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/black"
-                        android:text="How much do you love our client?"
+                        android:text="How much do you love our rider?"
                         android:textSize="20sp" />
                 </LinearLayout>
 
