@@ -87,6 +87,7 @@ public class LoginHelper {
                             Intent intent = new Intent(context, RegistrationActivity.class);
                             intent.putExtra("phoneNumber",phoneNumber);
                             intent.putExtra("loginStatus","REGISTRATION_REQUIRED");
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             context.startActivity(intent);
 
                         }

@@ -40,6 +40,7 @@ import java.util.ArrayList;
 
 import ContactWithFirebase.Main;
 import __Firebase.FirebaseResponse.NotificationModel;
+import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseWrapper;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -121,7 +122,7 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
 
                     FirebaseWrapper.getInstance().getRiderViewModelInstance().ClearData(true);
                     main.RequestForRide(Source, Destination, AppConstant.SOURCE_NAME, AppConstant.DESTINATION_NAME, totalCost, DiscountId);
-                    
+                    FirebaseConstant.VAR_CAN_REQUEST_FOR_RIDE = true;
                     Intent intent = new Intent(getContext(), FullMapSearching.class);
                     startActivity(intent);
                     dismiss();

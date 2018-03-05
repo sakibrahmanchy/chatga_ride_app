@@ -286,6 +286,7 @@ public class RegistrationActivity extends Activity {
 
                             Intent intent = new Intent(RegistrationActivity.this, UserCheckActivity.class);
                             intent.putExtra("phoneNumber",phoneNumber);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent);
 
                         }else{

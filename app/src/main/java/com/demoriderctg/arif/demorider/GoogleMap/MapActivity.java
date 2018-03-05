@@ -146,7 +146,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
-    public boolean sendtBtnClick =false;
+    public static boolean sendtBtnClick =false;
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
             new LatLng(54.69726685890506, -2.7379201682812226), new LatLng(55.38942944437183, -1.2456105979687226));
     String CurrentLocation;
@@ -441,9 +441,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     String url = getDirectionsUrl(AppConstant.SOURCE, AppConstant.DESTINATION);
                     DownloadTask downloadTask = new DownloadTask(MapActivity.this, mMap, AppConstant.SOURCE, AppConstant.DESTINATION);
                     downloadTask.execute(url);
-                    sendButton.setVisibility(View.INVISIBLE);
-                    requestbtn.setVisibility(View.VISIBLE);
-                    sendtBtnClick=true;
+
 
                 }
 
@@ -727,6 +725,7 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (back_pressed + 1000 > System.currentTimeMillis()) {
             super.onBackPressed();
+            finishAffinity();
         } else {
             //   Intent intent = getIntent();
             //   finish();
