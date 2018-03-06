@@ -7,7 +7,6 @@ import android.util.Pair;
 
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
 import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
-import com.demoriderctg.arif.demorider.MainActivity;
 
 import java.util.Map;
 
@@ -58,6 +57,7 @@ public class ThrdRequestAgainForRider {
     }
 
     public static boolean CanRequest() {
+        if (!FirebaseConstant.VAR_CAN_REQUEST_FOR_RIDE) return false;
 
         /*Initialize Shared Preferences*/
         Context context = MapActivity.getContextOfApplication();
@@ -124,7 +124,7 @@ public class ThrdRequestAgainForRider {
         if (runnable != null) runnable = null;
     }
 
-    private static void AddRiderIntoBlockList() {
+    public static void AddRiderIntoBlockList() {
 
         RiderModel riderModel = FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider;
         Map<Long, Boolean> requestedRider = FirebaseWrapper.getInstance().getRiderViewModelInstance().AlreadyRequestedRider;
@@ -150,5 +150,26 @@ public class ThrdRequestAgainForRider {
             DiscountId = AppConstant.userDiscount.getDiscountId();
         }
         new Main().RequestForRide(Source, Destination, AppConstant.SOURCE_NAME, AppConstant.DESTINATION_NAME, AppConstant.TOTAL_COST, DiscountId);
+    }
+
+    /* If the device token is invalid*/
+    public static void ReduceNumberOfRide() {
+
+        Context context = MapActivity.getContextOfApplication();
+        if (NumberOfRequestEdit == null) {
+            NumberOfRequestEdit = context.getSharedPreferences(FirebaseConstant.NUMBER_OF_REQUEST_PREF, MODE_PRIVATE).edit();
+        }
+        if (NumberOfRequestGet == null) {
+            NumberOfRequestGet = context.getSharedPreferences(FirebaseConstant.NUMBER_OF_REQUEST_PREF, MODE_PRIVATE);
+        }
+
+        String numberOfRequest = NumberOfRequestGet.getString(FirebaseConstant.LAST_REQUESTED_NUMBER, null);
+        if (numberOfRequest == null) {
+            return;
+        } else {
+            Pair<Integer, Long> P = FirebaseUtilMethod.GetNumberAndTime(numberOfRequest);
+            NumberOfRequestEdit.putString(FirebaseConstant.LAST_REQUESTED_NUMBER, Integer.toString(P.first - 1) + (" ") + P.second);
+            NumberOfRequestEdit.commit();
+        }
     }
 }

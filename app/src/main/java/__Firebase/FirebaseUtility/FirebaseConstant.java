@@ -136,6 +136,8 @@ public class FirebaseConstant {
     public static String LAST_REQUESTED_NUMBER = "LAST_REQUESTED_NUMBER";
     public static String LAST_REQUESTED_TIME = "LAST_REQUESTED_TIME";
     public static String ONE = ("1");
+    
+    public static boolean VAR_CAN_REQUEST_FOR_RIDE = true;
 
     public FirebaseConstant(){
     }
