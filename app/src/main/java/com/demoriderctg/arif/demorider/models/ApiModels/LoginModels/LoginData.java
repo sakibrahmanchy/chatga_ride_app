@@ -38,8 +38,11 @@ public class LoginData {
     @SerializedName("avatar")
     public String avatar;
 
+    @SerializedName("rating")
+    public float rating;
+
     public LoginData(String firstName, String lastName, String deviceToken, String birthDate, String gender, String userId,
-                     String clientId, String phone, String email,String avatar) {
+                     String clientId, String phone, String email,String avatar, float rating) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.deviceToken = deviceToken;
@@ -50,6 +53,7 @@ public class LoginData {
         this.deviceToken = deviceToken;
         this.phone = phone;
         this.email = email;
+        this.rating = rating;
     }
 
     public LoginData(){}
@@ -132,5 +136,13 @@ public class LoginData {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating; 
     }
 }
