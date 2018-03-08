@@ -195,7 +195,7 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
         return true;
     }
 
-    public boolean UpdateNameImageAndRatting(String newName, String newImageUrl, String newRatting, ICallbackMain callBackListener) {
+    public boolean UpdateNameImageAndRatting(String newName, String newImageUrl, String newRatting) {
 
         if (FirebaseUtilMethod.IsEmptyOrNull(newName) && FirebaseUtilMethod.IsEmptyOrNull(newImageUrl) && FirebaseUtilMethod.IsEmptyOrNull(newRatting))
             return false;
