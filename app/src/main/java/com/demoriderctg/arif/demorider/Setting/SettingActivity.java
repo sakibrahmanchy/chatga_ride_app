@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.demoriderctg.arif.demorider.FavoritePlaces.FavoritePlacesActivity;
 import com.demoriderctg.arif.demorider.FavoritePlaces.HomeLocationModel;
 import com.demoriderctg.arif.demorider.FavoritePlaces.WorkLocationModel;
+import com.demoriderctg.arif.demorider.FirstAppLoadingActivity.FirstAppLoadingActivity;
 import com.demoriderctg.arif.demorider.R;
 import com.demoriderctg.arif.demorider.UserInformation;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
@@ -23,6 +24,8 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.gson.Gson;
 import com.google.maps.model.LatLng;
 import com.squareup.picasso.Picasso;
+
+import java.util.Set;
 
 public class SettingActivity extends AppCompatActivity {
 
@@ -124,6 +127,16 @@ public class SettingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(SettingActivity.this,EditProfile.class);
                 startActivity(intent);
+            }
+        });
+        signOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userInformation.RemoveLoginData();
+                finishAffinity();
+                Intent intent = new Intent(SettingActivity.this, FirstAppLoadingActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 

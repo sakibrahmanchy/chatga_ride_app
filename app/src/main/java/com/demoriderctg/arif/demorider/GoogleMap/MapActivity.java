@@ -1,6 +1,5 @@
 package com.demoriderctg.arif.demorider.GoogleMap;
 
-
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -42,6 +41,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.demoriderctg.arif.demorider.About.AboutActivity;
 import com.demoriderctg.arif.demorider.Adapters.History.ClientHistoryActivity;
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
 import com.demoriderctg.arif.demorider.ClearData.ClearData;
@@ -51,6 +51,7 @@ import com.demoriderctg.arif.demorider.FavoritePlaces.FavoritePlacesActivity;
 import com.demoriderctg.arif.demorider.FavoritePlaces.HomeLocationModel;
 import com.demoriderctg.arif.demorider.FavoritePlaces.WorkLocationModel;
 import com.demoriderctg.arif.demorider.FinishRideActivity.FinishRideActivity;
+import com.demoriderctg.arif.demorider.Help.HelpActivity;
 import com.demoriderctg.arif.demorider.InternetConnection.ConnectionCheck;
 import com.demoriderctg.arif.demorider.InternetConnection.InternetCheckActivity;
 import com.demoriderctg.arif.demorider.MainActivity;
@@ -97,17 +98,13 @@ import java.util.Locale;
 
 import ContactWithFirebase.Main;
 
-
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.OnConnectionFailedListener, NavigationView.OnNavigationItemSelectedListener {
-
-
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -129,20 +126,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 getDeviceLocation();
 
             }
-
-
             init();
-
         }
-
-
     }
-
-
 
     private static final String TAG = "MapActivity";
     private static final String TAGHEIGHT = "HEIGHTS";
-
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
@@ -150,10 +139,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
             new LatLng(54.69726685890506, -2.7379201682812226), new LatLng(55.38942944437183, -1.2456105979687226));
     String CurrentLocation;
-
-
     //widgets
-
     private Button sendButton;
     private ImageView mGps;
     private Button requestbtn;
@@ -195,6 +181,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private LinearLayout actionsConainer;
     private LinearLayout searchContainer;
     private TextView serviceNotAvailable;
+    private  TextView userRating;
 
 
     private LinearLayout linearLayout;
@@ -286,8 +273,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         ImageView avatarContainer = (ImageView ) v.findViewById(R.id.profile_nav);
         userFirstName = (TextView) v.findViewById(R.id.user_full_name);
         userPhoneNumber =v.findViewById(R.id.user_phone_number);
+        userRating =v.findViewById(R.id.user_rating);
         userFirstName.setText(userInformation.getuserInformation().getFirstName() +" " + userInformation.getuserInformation().getLastName());
         userPhoneNumber.setText(userInformation.getuserInformation().phone);
+        userRating.setText(userInformation.getuserInformation().getRating()+"%");
         Picasso.with(this).invalidate(userInformation.getuserInformation().getAvatar());
         Picasso.with(this)
                 .load(userInformation.getuserInformation().getAvatar())
@@ -633,7 +622,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         return url;
     }
 
-
     public static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         //Find the currently focused view, so we can grab the correct window token from it.
@@ -701,9 +689,6 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     checkButtonState();
 }
 
-
-
-
     //Menu
 
     @Override
@@ -727,9 +712,6 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
             super.onBackPressed();
             finishAffinity();
         } else {
-            //   Intent intent = getIntent();
-            //   finish();
-            //   startActivity(intent);
             Toast.makeText(getBaseContext(),
                     "Press once again to exit!", Toast.LENGTH_SHORT)
                     .show();
@@ -737,12 +719,11 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         back_pressed = System.currentTimeMillis();
     }
 
-
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
-
         switch (item.getItemId()) {
+
             case R.id.nav_settings:
                 Intent intent = new Intent(MapActivity.this, SettingActivity.class);
                 startActivityForResult(intent, 0);
@@ -759,11 +740,19 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
                 Intent notificationIntent = new Intent(MapActivity.this, NotificationActivity.class);
                 startActivityForResult(notificationIntent, 0);
                 break;
+            case R.id.nav_about:
+                Intent aboutItent = new Intent(MapActivity.this, AboutActivity.class);
+                startActivityForResult(aboutItent, 0);
+                break;
+            case R.id.nav_help:
+                Intent HelpItent = new Intent(MapActivity.this, HelpActivity.class);
+                startActivityForResult(HelpItent, 0);
+                break;
             default:
                 break;
         }
-
         return true;
+
     }
 
     public static Context getContextOfApplication(){

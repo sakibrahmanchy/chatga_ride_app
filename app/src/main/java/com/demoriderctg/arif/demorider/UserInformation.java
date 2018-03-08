@@ -17,10 +17,12 @@ public class UserInformation {
     private  HomeLocationModel homeLocationModel;
     private WorkLocationModel workLocationModel;
     public static final String MyPREFERENCES = "MyPrefs";
+    private SharedPreferences.Editor editor;
 
     public UserInformation(Context context) {
         gson = new Gson();
         sharedpreferences = context.getSharedPreferences("MyPref", 0); // 0 - for private mode
+        editor = sharedpreferences.edit();
 
     }
 
@@ -46,5 +48,9 @@ public class UserInformation {
         String jsonString = sharedpreferences.getString("UserSetWorkLocation", null);
         workLocationModel = gson.fromJson(jsonString, WorkLocationModel.class);
         return workLocationModel;
+    }
+    public void RemoveLoginData(){
+        editor.remove("userData");
+        editor.commit();
     }
 }
