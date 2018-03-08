@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Log;
 import android.util.Pair;
 
-import com.demoriderctg.arif.demorider.MainActivity;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 
 import java.util.ArrayList;
@@ -101,7 +100,8 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
 
     public boolean SentNotificationToRider(/*Firebase Client Mode, rider Model*/RiderModel Rider, ClientModel Client, Pair<Double, Double> Source, Pair<Double, Double> Destination, String SourceName, String DestinationName, String ShortestTime, String ShortestDistance, long TotalCost, long DiscountID, long Time) {
 
-        if (Rider == null || Rider.RiderID < 1 || Rider.DeviceToken.isEmpty() || Client == null || Source == null || Destination == null || Time == 0) return false;
+        if (Rider == null || Rider.RiderID < 1 || Rider.DeviceToken.isEmpty() || Client == null || Source == null || Destination == null || Time == 0)
+            return false;
 
         this.riderModel = Rider;
         this.clientModel = Client;
@@ -127,7 +127,7 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
 
     public boolean GetCurrentRider(long RiderID, IGetCurrentRider iGetCurrentRider) {
 
-        if(RiderID < 1 || iGetCurrentRider == null) return false;
+        if (RiderID < 1 || iGetCurrentRider == null) return false;
 
         firebaseWrapper = FirebaseWrapper.getInstance();
         firebaseWrapper.getFirebaseRequestInstance().GetCurrentRider(RiderID, this, iGetCurrentRider);
@@ -136,7 +136,7 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
 
     public boolean GetCurrentRider(long RiderID, CallBackListener callBackListener) {
 
-        if(RiderID < 1 || callBackListener == null) return false;
+        if (RiderID < 1 || callBackListener == null) return false;
 
         firebaseWrapper = FirebaseWrapper.getInstance();
         firebaseWrapper.getFirebaseRequestInstance().GetCurrentRider(RiderID, callBackListener);
@@ -167,9 +167,9 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
         return true;
     }
 
-    public boolean GetCurrentRiderHistoryModel(long HistoryID, long ClientID, CallBackListener callBackListener){
+    public boolean GetCurrentRiderHistoryModel(long HistoryID, long ClientID, CallBackListener callBackListener) {
 
-        if(HistoryID < 1)   return false;
+        if (HistoryID < 1) return false;
 
         firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
         firebaseRequestInstance.GetCurrentRiderHistoryModel(HistoryID, ClientID, callBackListener);
@@ -195,6 +195,22 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
         return true;
     }
 
+    public boolean UpdateNameAndImage(String newName, String newImageUrl, ICallbackMain callBackListener) {
+
+        if (FirebaseUtilMethod.IsEmptyOrNull(newName) && FirebaseUtilMethod.IsEmptyOrNull(newImageUrl))
+            return false;
+
+        firebaseWrapper = FirebaseWrapper.getInstance();
+        firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
+        clientModel = firebaseWrapper.getClientModelInstance();
+
+        if (!FirebaseUtilMethod.IsEmptyOrNull(newName)) clientModel.FullName = newName;
+        if (!FirebaseUtilMethod.IsEmptyOrNull(newImageUrl)) clientModel.ImageUrl = newImageUrl;
+
+        firebaseRequestInstance.UpdateNameAndImage(clientModel, Main.this);
+        return true;
+    }
+
     public boolean GetCurrentRidingCost(ICallBackFinishedRide iCallBackFinishedRide) {
 
         firebaseWrapper = FirebaseWrapper.getInstance();
@@ -212,7 +228,7 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
 
     public boolean FinishRide(/*Firebase Client Model*/ClientModel Client) {
 
-        if(Client == null || Client.ClientID < 1)   return false;
+        if (Client == null || Client.ClientID < 1) return false;
 
         firebaseWrapper = FirebaseWrapper.getInstance();
         firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
@@ -271,7 +287,7 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
 
     public boolean CancelRideByClient(/*Firebase HistoryAdapter, Client Model*/CurrentRidingHistoryModel HistoryModel, ClientModel Client, long Time) {
 
-        if(HistoryModel.HistoryID < 1 || Client.ClientID < 1)   return false;
+        if (HistoryModel.HistoryID < 1 || Client.ClientID < 1) return false;
 
         firebaseWrapper = FirebaseWrapper.getInstance();
         firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
@@ -284,12 +300,12 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
     }
 
     /*Force Finish Ride*/
-    public void ForcedFinishRide(){
+    public void ForcedFinishRide() {
         FinishRide(FirebaseWrapper.getInstance().getClientModelInstance());
     }
 
     /*Force Cancel Ride*/
-    public void ForceCancelRide(){
+    public void ForceCancelRide() {
 
         FirebaseUtilMethod.getNetworkTime(
                 FirebaseConstant.RIDE_CANCELED_BY_CLIENT,
@@ -401,7 +417,7 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
         if (value == true) {
             ClientModel Client = FirebaseWrapper.getInstance().getClientModelInstance();
             Pair<Long, Long> P = FirebaseUtilMethod.GetHistoryAndTime(Client.CurrentRidingHistoryID, true);
-            if (P != null && P.first  > 0 && P.second > 0) {
+            if (P != null && P.first > 0 && P.second > 0) {
                 /*Rider has a ride*/
                 new RiderInRideMode(true, P.first);
             } else {
@@ -411,6 +427,11 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
         } else {
             new RiderInRideMode(false, FirebaseConstant.UNKNOWN);
         }
+    }
+
+    @Override
+    public void OnUpdateNameAndImage(boolean value) {
+        Log.d(FirebaseConstant.UPDATE_NAME_IMAGE, Boolean.toString(value));
     }
 
     @Override

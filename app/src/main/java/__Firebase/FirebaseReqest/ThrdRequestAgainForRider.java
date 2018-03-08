@@ -47,7 +47,7 @@ public class ThrdRequestAgainForRider {
             };
             handler.postDelayed(runnable, 66000 /*One minute ten second*/);
         } catch (Exception ex) {
-
+            ex.printStackTrace();
         }
     }
 
