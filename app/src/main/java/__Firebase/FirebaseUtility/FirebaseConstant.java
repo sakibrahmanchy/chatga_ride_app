@@ -8,6 +8,9 @@ public class FirebaseConstant {
 
     public static String CLIENT = "Client";
     public static String CLIENT_ID = "ClientID";
+    public static String FULL_NAME = "FullName";
+    public static String IMAGE_URL = "ImageUrl";
+    public static String RATTING = "Ratting";
     public static String CURRENT_RIDING_HISTORY_ID = "CurrentRidingHistoryID";
     public static String RIDE_REJECTED_BY_RIDER = "RideRejectedByRider";
     public static String RIDER = "Rider";
@@ -101,6 +104,7 @@ public class FirebaseConstant {
     public static String RIDER_LOADED = "RIDER_LOADED";
     public static String RESPONSE_CANCEL_RIDE_NOTF = "RESPONSE_CANCEL_RIDE_NOTF";
     public static String NOTIFICATION_RESPONSE = "NOTIFICATION_RESPONSE";
+    public static String UPDATE_NAME_IMAGE = "UPDATE_NAME_IMAGE";
 
     /*Toast Message*/
     public static String NO_RIDER_FOUND = "No rider found";
