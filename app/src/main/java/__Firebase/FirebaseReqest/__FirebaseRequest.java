@@ -262,11 +262,11 @@ public class __FirebaseRequest extends AppCompatActivity {
         thread.start();
     }
 
-    public void UpdateNameAndImage(ClientModel Client, ICallbackMain callBackListener) {
+    public void UpdateNameImageAndRatting(ClientModel Client, ICallbackMain callBackListener) {
         Thread thread = new Thread() {
             @Override
             public void run() {
-                new UpdateNameAndImage(Client, callBackListener);
+                new UpdateNameImageAndRatting(Client, callBackListener);
             }
         };
         thread.start();

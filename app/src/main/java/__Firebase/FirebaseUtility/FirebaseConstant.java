@@ -10,6 +10,7 @@ public class FirebaseConstant {
     public static String CLIENT_ID = "ClientID";
     public static String FULL_NAME = "FullName";
     public static String IMAGE_URL = "ImageUrl";
+    public static String RATTING = "Ratting";
     public static String CURRENT_RIDING_HISTORY_ID = "CurrentRidingHistoryID";
     public static String RIDE_REJECTED_BY_RIDER = "RideRejectedByRider";
     public static String RIDER = "Rider";
