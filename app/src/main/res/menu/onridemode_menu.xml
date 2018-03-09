@@ -4,6 +4,9 @@
     <item android:id="@+id/cancel_ride"
         android:title="@string/cancel_ride"
         app:showAsAction="never" />
+    <item android:id="@+id/refresh_ride"
+        android:title="Refresh"
+        app:showAsAction="never" />
     <item android:id="@+id/help"
         android:icon="@drawable/ic_help_black_24dp"
         android:title="@string/nav_help" />

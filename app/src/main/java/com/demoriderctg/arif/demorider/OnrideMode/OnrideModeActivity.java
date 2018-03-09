@@ -33,9 +33,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
+import com.demoriderctg.arif.demorider.ClearData.ClearData;
 import com.demoriderctg.arif.demorider.FirstAppLoadingActivity.FirstAppLoadingActivity;
 import com.demoriderctg.arif.demorider.GoogleMap.GetCurrentLocation;
 import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
+import com.demoriderctg.arif.demorider.Help.HelpActivity;
 import com.demoriderctg.arif.demorider.InternetConnection.ConnectionCheck;
 
 
@@ -361,6 +363,14 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
 
                 return true;
             case R.id.help:
+                Intent intent = new Intent(this, HelpActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.refresh_ride:
+                Intent intentRefresh = new Intent(this, FirstAppLoadingActivity.class);
+                startActivity(intentRefresh);
+                new ClearData();
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
