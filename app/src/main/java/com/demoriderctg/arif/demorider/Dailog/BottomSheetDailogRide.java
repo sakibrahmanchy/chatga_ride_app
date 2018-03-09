@@ -106,7 +106,7 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
         pickUpBotton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected()){
+                if( connectionCheck.isNetworkConnected()){
 
                     Double SourceLat = AppConstant.SOURCE.latitude;
                     Double SourceLan = AppConstant.SOURCE.longitude;
@@ -129,7 +129,7 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
 
                 }
                 else{
-                    Toast.makeText(getContext(), "Connection Lost", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "CONNECTION LOST", Toast.LENGTH_SHORT).show();
                 }
             }
         });
