@@ -41,6 +41,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+import ContactWithFirebase.Main;
 import __Firebase.FirebaseWrapper;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -70,7 +71,7 @@ public class EditProfile extends AppCompatActivity  {
     private String deviceToken,email,firstName,lastName,gender,birthDate,phone;
     //keep track of cropping intent
     final int PIC_CROP = 2;
-
+    private Main main;
 
     private static final int RESULT_LOAD_IMAGE = 1;
     private String imageEncodedToBase64;
@@ -104,6 +105,7 @@ public class EditProfile extends AppCompatActivity  {
         editPhoneNunber.setEnabled(false);
         male = (RadioButton) findViewById(R.id.male_radio_btn);
         female = (RadioButton) findViewById(R.id.female_radio_btn);
+        main = new Main();
         viewAndEditProfile();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -360,6 +362,10 @@ public class EditProfile extends AppCompatActivity  {
                         String json = gson.toJson(newLoginData);
                         editor.putString("userData",json);
                         editor.commit();
+                        if(newLoginData.getAvatar() !=null){
+                            main.UpdateNameImageAndRatting(newLoginData.getFirstName()+" "+newLoginData.getLastName(),
+                                    newLoginData.getAvatar(),newLoginData.getRating()+"");
+                        }
                         break;
                     default:
                         Snackbar.make(findViewById(android.R.id.content), "Sorry, network error.",
