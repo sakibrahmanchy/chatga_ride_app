@@ -59,13 +59,6 @@ public class FacebookAccountVerificationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_facebook_account_verification);
-//        AccessToken accessToken = AccountKit.getCurrentAccessToken();
-//
-//        if (accessToken != null) {
-//            //Handle Returning User
-//        } else {
-//            //Handle new or logged out user
-//        }
 
         Intent intent = getIntent();
         phoneNumber = intent.getStringExtra("phoneNumber");
@@ -117,21 +110,7 @@ public class FacebookAccountVerificationActivity extends AppCompatActivity {
             } else if (loginResult.wasCancelled()) {
                 toastMessage = "Login Cancelled";
             } else {
-                if (loginResult.getAccessToken() != null) {
-                    toastMessage = "Success:" + loginResult.getAccessToken().getAccountId();
 
-
-                } else {
-                    toastMessage = String.format(
-                            "Success:%s...",
-                            loginResult.getAuthorizationCode().substring(0, 10));
-                }
-
-                // If you have an authorization code, retrieve it from
-                // loginResult.getAuthorizationCode()
-                // and pass it to your server and exchange it for an access token.
-
-                // Success! Start your next activity...
                 AccountKit.getCurrentAccount(new AccountKitCallback<Account>() {
                     @Override
                     public void onSuccess(final Account account) {
@@ -151,8 +130,6 @@ public class FacebookAccountVerificationActivity extends AppCompatActivity {
                // deviceTokenCheck(phoneNumber);
             }
 
-            // Surface the result to your user in an appropriate way.
-            Toast.makeText(this, toastMessage, Toast.LENGTH_LONG).show();
         }
 
     }
