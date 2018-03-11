@@ -100,6 +100,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,23 +119,18 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         mBottomSheetBehavior.setPeekHeight(300);
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        notificationModel = FirebaseWrapper.getInstance().getNotificationModelInstance();
+        riderModel = FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider;
         OnrideModeContext = this;
-
-        if(notificationModel.riderId >0){
-            AppConstant.RIDER_NAME = notificationModel.riderName;
-            AppConstant.RIDER_PHONENUMBER = notificationModel.riderPhone;
-
-        }
         initMap();
         setUi();
 
     }
 
     void setUi(){
-        riderName.setText(AppConstant.RIDER_NAME);
-        rating.setText("100");
-        rider_phone_number.setText(AppConstant.RIDER_PHONENUMBER);
+        riderName.setText(riderModel.FullName);
+        rating.setText(riderModel.ImageUrl);
+
+        rider_phone_number.setText(riderModel.Ratting);
         contactRider.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
