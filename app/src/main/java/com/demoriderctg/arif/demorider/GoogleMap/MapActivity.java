@@ -185,6 +185,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private LinearLayout searchContainer;
     private TextView serviceNotAvailable;
     private  TextView userRating;
+    private GetCurrentLocation getCurrentLocation;
 
 
     private LinearLayout linearLayout;
@@ -212,6 +213,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         searchContainer = findViewById(R.id.searchLinearLayout);
         serviceNotAvailable =findViewById(R.id.service_not_available);
         serviceNotAvailable.setVisibility(View.GONE);
+        getCurrentLocation = new GetCurrentLocation(this);
 
 
 
@@ -455,103 +457,79 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private void getDeviceLocation() {
 
         if(connectionCheck.isGpsEnable()){
-            mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-            //   requestbtn.setVisibility(View.INVISIBLE);
-            //   mMap.clear();
+            Geocoder myLocation = new Geocoder(MapActivity.this, Locale.getDefault());
             try {
-                if (mLocationPermissionsGranted) {
+                vmCurrentLocation = new VmCurrentLocation();
+                vmCurrentLocation.latitude=getCurrentLocation.getLatitude();
+                vmCurrentLocation.logitude=getCurrentLocation.getLongitude();
+                List<Address> myList = myLocation.getFromLocation(vmCurrentLocation.latitude, vmCurrentLocation.logitude, 1);
+                Address address = (Address) myList.get(0);
+                // mapMarkerDragging = new MapMarkerDragging(MapActivity.this,source,dest,mMap);
 
-                    final Task location = mFusedLocationProviderClient.getLastLocation();
-                    location.addOnCompleteListener(new OnCompleteListener() {
-                        @Override
-                        public void onComplete(@NonNull Task task) {
-                            if (task.isSuccessful()) {
-                                Log.d(TAG, "onComplete: found location!");
-                                Location currentLocation = (Location) task.getResult();
-                                Geocoder myLocation = new Geocoder(MapActivity.this, Locale.getDefault());
-                                try {
-                                    List<Address> myList = myLocation.getFromLocation(currentLocation.getLatitude(), currentLocation.getLongitude(), 1);
-                                    Address address = (Address) myList.get(0);
-                                    // mapMarkerDragging = new MapMarkerDragging(MapActivity.this,source,dest,mMap);
-                                    moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
-                                            AppConstant.DEFAULT_ZOOM,
+                //checkLatLon();
 
-                                            "Source");
-                                    //checkLatLon();
-                                    vmCurrentLocation = new VmCurrentLocation();
-                                    vmCurrentLocation.latitude=currentLocation.getLatitude();
-                                    vmCurrentLocation.logitude=currentLocation.getLongitude();
-                                    vmCurrentLocation.locationName =address.getAddressLine(0);
+                vmCurrentLocation.locationName =address.getAddressLine(0);
 
-                                    Gson gson = new Gson();
-                                    String json = gson.toJson(vmCurrentLocation);
-                                    editor.putString("currentLocation",json);
-                                    editor.commit();
+                Gson gson = new Gson();
+                String json = gson.toJson(vmCurrentLocation);
+                editor.putString("currentLocation",json);
+                editor.commit();
 
-                                    if (AppConstant.searchSorceLocationModel == null) {
-                                        AppConstant.searchSorceLocationModel = new HomeLocationModel();
+                if (AppConstant.searchSorceLocationModel == null) {
+                    AppConstant.searchSorceLocationModel = new HomeLocationModel();
 
-                                    }
-
-                                    AppConstant.searchSorceLocationModel.homeLocationName = address.getAddressLine(0);
-                                    AppConstant.searchSorceLocationModel.home = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-                                    String sourceLocation = AppConstant .searchSorceLocationModel.homeLocationName;
-                                    sourceText.setText(sourceLocation);
-
-                                    if(!AppConstant.LAT_LNG_BOUNDS.contains(AppConstant.searchSorceLocationModel.home)){
-                                        serviceNotAvailable.setVisibility(View.VISIBLE);
-
-                                    }
-                                    else{
-                                        serviceNotAvailable.setVisibility(View.GONE);
-                                    }
-                                    checkButtonState();
-
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-
-
-                            } else {
-                                Log.d(TAG, "onComplete: current location is null");
-                                Toast.makeText(MapActivity.this, "unable to get current location", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
                 }
-            } catch (SecurityException e) {
-                Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage());
+
+                AppConstant.searchSorceLocationModel.homeLocationName = address.getAddressLine(0);
+                AppConstant.searchSorceLocationModel.home = new LatLng(vmCurrentLocation.latitude, vmCurrentLocation.logitude);
+                String sourceLocation = AppConstant .searchSorceLocationModel.homeLocationName;
+                sourceText.setText(sourceLocation);
+
+                if(!AppConstant.LAT_LNG_BOUNDS.contains(AppConstant.searchSorceLocationModel.home)){
+                    serviceNotAvailable.setVisibility(View.VISIBLE);
+
+                }
+                else{
+                    serviceNotAvailable.setVisibility(View.GONE);
+                }
+                moveCamera(new LatLng(vmCurrentLocation.latitude, vmCurrentLocation.logitude),
+                        AppConstant.DEFAULT_ZOOM, "Source");
+                checkButtonState();
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
-
         else {
-           vmCurrentLocation = userInformation.getUserCurrentLocation();
-           if(vmCurrentLocation !=null){
-               AppConstant.searchSorceLocationModel = new HomeLocationModel();
-               AppConstant.searchSorceLocationModel.homeLocationName = vmCurrentLocation.locationName;
-               AppConstant.searchSorceLocationModel.home = new LatLng(vmCurrentLocation.latitude,
-                       vmCurrentLocation.logitude);
-               String sourceLocation = AppConstant .searchSorceLocationModel.homeLocationName;
-               sourceText.setText(sourceLocation);
-               moveCamera(new LatLng(vmCurrentLocation.latitude, vmCurrentLocation.logitude),
-                       AppConstant.DEFAULT_ZOOM,
+            vmCurrentLocation = userInformation.getUserCurrentLocation();
+            if(vmCurrentLocation !=null){
+                AppConstant.searchSorceLocationModel = new HomeLocationModel();
+                AppConstant.searchSorceLocationModel.homeLocationName = vmCurrentLocation.locationName;
+                AppConstant.searchSorceLocationModel.home = new LatLng(vmCurrentLocation.latitude,
+                        vmCurrentLocation.logitude);
+                String sourceLocation = AppConstant .searchSorceLocationModel.homeLocationName;
+                sourceText.setText(sourceLocation);
+                moveCamera(new LatLng(vmCurrentLocation.latitude, vmCurrentLocation.logitude),
+                        AppConstant.DEFAULT_ZOOM,
 
-                       "Source");
-           }
-           else{
-               AppConstant.searchSorceLocationModel = new HomeLocationModel();
-               AppConstant.searchSorceLocationModel.homeLocationName = "UNKNOWN";
-               AppConstant.searchSorceLocationModel.home = new LatLng(AppConstant.LAT_LNG_BOUNDS_CTG.southwest.latitude,
-                       AppConstant.LAT_LNG_BOUNDS_CTG.southwest.longitude);
-               String sourceLocation = AppConstant .searchSorceLocationModel.homeLocationName;
-               sourceText.setText(sourceLocation);
-               moveCamera(AppConstant.LAT_LNG_BOUNDS_CTG.southwest,
-                       AppConstant.DEFAULT_ZOOM,
+                        "Source");
+            }
+            else{
+                AppConstant.searchSorceLocationModel = new HomeLocationModel();
+                AppConstant.searchSorceLocationModel.homeLocationName = "UNKNOWN";
+                AppConstant.searchSorceLocationModel.home = new LatLng(AppConstant.LAT_LNG_BOUNDS_CTG.southwest.latitude,
+                        AppConstant.LAT_LNG_BOUNDS_CTG.southwest.longitude);
+                String sourceLocation = AppConstant .searchSorceLocationModel.homeLocationName;
+                sourceText.setText(sourceLocation);
+                moveCamera(AppConstant.LAT_LNG_BOUNDS_CTG.southwest,
+                        AppConstant.DEFAULT_ZOOM,
 
-                       "Source");
-           }
-         Toast.makeText(getContextOfApplication(),"GPS OFF",Toast.LENGTH_SHORT).show();
+                        "Source");
+            }
+            Toast.makeText(getContextOfApplication(),"GPS OFF",Toast.LENGTH_SHORT).show();
         }
+
+
 
     }
 

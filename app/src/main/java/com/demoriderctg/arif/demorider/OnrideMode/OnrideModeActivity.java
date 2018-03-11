@@ -128,9 +128,15 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
 
     void setUi(){
         riderName.setText(riderModel.FullName);
-        rating.setText(riderModel.ImageUrl);
+        rating.setText(riderModel.Ratting );
+        rider_phone_number.setText(""+riderModel.PhoneNumber);
+        Picasso.with(this).invalidate(riderModel.ImageUrl);
+        Picasso.with(this)
+                .load(riderModel.ImageUrl)
+                .placeholder(R.drawable.profile_image)
+                .error(R.drawable.profile_image)
+                .into(riderImage);
 
-        rider_phone_number.setText(riderModel.Ratting);
         contactRider.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
