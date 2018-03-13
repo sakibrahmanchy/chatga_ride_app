@@ -4,6 +4,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import __Firebase.FirebaseModel.AppSettingsModel;
 import __Firebase.FirebaseModel.ClientModel;
 import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
 import __Firebase.FirebaseModel.RiderModel;
@@ -28,6 +29,7 @@ public class FirebaseWrapper {
     private RiderModel RiderModelInstance;
     private ClientModel ClientModel;
     private NotificationModel NotificationModel;
+    private AppSettingsModel AppSettingsModel;
 
     private FirebaseWrapper() {
         FirebaseRootReference = FirebaseDatabase.getInstance().getReference();
@@ -105,6 +107,16 @@ public class FirebaseWrapper {
             }
         }
         return NotificationModel;
+    }
+
+    public AppSettingsModel getAppSettingsModelInstance() {
+        if (AppSettingsModel == null) {
+            synchronized (FirebaseWrapper.class) {
+                if (AppSettingsModel == null)
+                    AppSettingsModel = new AppSettingsModel();
+            }
+        }
+        return AppSettingsModel;
     }
 
     public static String getDeviceToken() {

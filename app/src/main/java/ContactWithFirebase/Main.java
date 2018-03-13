@@ -72,6 +72,7 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
         clientModel.Ratting = "100%";
 
         this.IsClientAlreadyCreated(clientModel);
+        this.GetAppSettings();
         return true;
     }
 
@@ -224,6 +225,11 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
                 currentRidingHistoryModel,
                 iCallBackFinishedRide
         );
+        return true;
+    }
+
+    public boolean GetAppSettings(){
+        FirebaseWrapper.getInstance().getFirebaseRequestInstance().GetAppSettings(Main.this);
         return true;
     }
 
@@ -433,6 +439,11 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
     @Override
     public void OnUpdateNameAndImage(boolean value) {
         Log.d(FirebaseConstant.UPDATE_NAME_IMAGE, Boolean.toString(value));
+    }
+
+    @Override
+    public void OnAppSettingsLoaded(boolean value) {
+        Log.d(FirebaseConstant.APP_SETTINGS_LOADED, Boolean.toString(value));
     }
 
     @Override

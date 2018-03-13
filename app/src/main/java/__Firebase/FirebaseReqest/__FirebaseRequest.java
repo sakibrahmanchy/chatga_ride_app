@@ -272,6 +272,16 @@ public class __FirebaseRequest extends AppCompatActivity {
         thread.start();
     }
 
+    public void GetAppSettings(final ICallbackMain callBackListener) {
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                new GetAppSettings(callBackListener);
+            }
+        };
+        thread.start();
+    }
+
     public void setCallBackListener(CallBackListener callBackListener) {
         this.callBackListener = callBackListener;
     }
