@@ -143,6 +143,6 @@ public class LoginData {
     }
 
     public void setRating(float rating) {
-        this.rating = rating; 
+        this.rating = rating;
     }
 }

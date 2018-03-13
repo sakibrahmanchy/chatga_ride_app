@@ -69,7 +69,7 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
         clientModel.CurrentRidingHistoryID = FirebaseConstant.UNKNOWN_STRING;
         clientModel.RideRejectedByRider = FirebaseConstant.UNKNOWN_STRING;
         clientModel.ImageUrl = loginData.getAvatar();
-        clientModel.Ratting = "100%";
+        clientModel.Ratting = loginData.getRating()+"";
 
         this.IsClientAlreadyCreated(clientModel);
         this.GetAppSettings();

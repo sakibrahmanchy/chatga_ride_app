@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/grey_300"
     tools:context="com.demoriderctg.arif.demorider.Adapters.History.ClientHistoryActivity">
 
     <include layout="@layout/history_recycler_view" />

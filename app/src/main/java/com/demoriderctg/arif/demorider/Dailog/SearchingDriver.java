@@ -27,6 +27,7 @@ import java.util.Date;
 
 import ContactWithFirebase.Main;
 import __Firebase.FirebaseResponse.NotificationModel;
+import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseWrapper;
 
 
@@ -57,6 +58,7 @@ public class SearchingDriver extends AppCompatActivity {
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface arg0, int arg1) {
                                 new ClearData();
+                                FirebaseConstant.VAR_CAN_REQUEST_FOR_RIDE = true;
                                     Intent intent = new Intent(SearchingDriver.this, MapActivity.class);
                                     startActivity(intent);
                                     finish();

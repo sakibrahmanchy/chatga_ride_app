@@ -8,6 +8,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class RideHistory {
 
+
     @SerializedName("client_id")
     private int clientId;
     @SerializedName("rider_id")

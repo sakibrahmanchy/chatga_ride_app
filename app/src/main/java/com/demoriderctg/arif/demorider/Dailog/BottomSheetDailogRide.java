@@ -40,6 +40,7 @@ import java.util.ArrayList;
 
 import ContactWithFirebase.Main;
 import __Firebase.FirebaseResponse.NotificationModel;
+import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseWrapper;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -105,7 +106,7 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
         pickUpBotton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected()){
+                if( connectionCheck.isNetworkConnected()){
 
                     Double SourceLat = AppConstant.SOURCE.latitude;
                     Double SourceLan = AppConstant.SOURCE.longitude;
@@ -121,14 +122,14 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
 
                     FirebaseWrapper.getInstance().getRiderViewModelInstance().ClearData(true);
                     main.RequestForRide(Source, Destination, AppConstant.SOURCE_NAME, AppConstant.DESTINATION_NAME, totalCost, DiscountId);
-                    
+                    FirebaseConstant.VAR_CAN_REQUEST_FOR_RIDE = true;
                     Intent intent = new Intent(getContext(), FullMapSearching.class);
                     startActivity(intent);
                     dismiss();
 
                 }
                 else{
-                    Toast.makeText(getContext(), "Connection Lost", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "CONNECTION LOST", Toast.LENGTH_SHORT).show();
                 }
             }
         });

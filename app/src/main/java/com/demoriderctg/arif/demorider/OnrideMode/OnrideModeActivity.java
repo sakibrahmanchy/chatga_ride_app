@@ -33,9 +33,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
+import com.demoriderctg.arif.demorider.ClearData.ClearData;
 import com.demoriderctg.arif.demorider.FirstAppLoadingActivity.FirstAppLoadingActivity;
 import com.demoriderctg.arif.demorider.GoogleMap.GetCurrentLocation;
 import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
+import com.demoriderctg.arif.demorider.Help.HelpActivity;
 import com.demoriderctg.arif.demorider.InternetConnection.ConnectionCheck;
 
 
@@ -98,6 +100,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,23 +119,24 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         mBottomSheetBehavior.setPeekHeight(300);
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        notificationModel = FirebaseWrapper.getInstance().getNotificationModelInstance();
+        riderModel = FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider;
         OnrideModeContext = this;
-
-        if(notificationModel.riderId >0){
-            AppConstant.RIDER_NAME = notificationModel.riderName;
-            AppConstant.RIDER_PHONENUMBER = notificationModel.riderPhone;
-
-        }
         initMap();
         setUi();
 
     }
 
     void setUi(){
-        riderName.setText(AppConstant.RIDER_NAME);
-        rating.setText("100");
-        rider_phone_number.setText(AppConstant.RIDER_PHONENUMBER);
+        riderName.setText(riderModel.FullName);
+        rating.setText(riderModel.Ratting );
+        rider_phone_number.setText(""+riderModel.PhoneNumber);
+        Picasso.with(this).invalidate(riderModel.ImageUrl);
+        Picasso.with(this)
+                .load(riderModel.ImageUrl)
+                .placeholder(R.drawable.profile_image)
+                .error(R.drawable.profile_image)
+                .into(riderImage);
+
         contactRider.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,7 +148,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        if (connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected()) {
+        if (connectionCheck.isNetworkConnected()) {
 
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
@@ -182,9 +186,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
 
     void setUpMap(){
 
-        if(connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected()){
-            // Getting URL to the Google Directions API
-
+        if(connectionCheck.isNetworkConnected()){
             try{
 
                 mMap.addMarker(new MarkerOptions().position(AppConstant.DESTINATION).icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("ic_marker_destination",200,200))).anchor(.5f,.5f));//.icon(BitmapDescriptorFactory.fromBitmap(resizedMarker(200,200) )));
@@ -199,7 +201,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
 
         }
         else{
-           // Toast.makeText(OnRideModeActivity.this, "Connection Lost", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Connection Lost", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -343,7 +345,6 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
         switch (item.getItemId()) {
             case R.id.cancel_ride:
                 if(AppConstant.START_RIDE == false && AppConstant.FINISH_RIDE == false){
-
                     new AlertDialog.Builder(OnrideModeActivity.this)
                             .setTitle("Really Exit?")
                             .setMessage("Are you sure you want to Cancel the Ride?")
@@ -364,6 +365,14 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
 
                 return true;
             case R.id.help:
+                Intent intent = new Intent(this, HelpActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.refresh_ride:
+                Intent intentRefresh = new Intent(this, FirstAppLoadingActivity.class);
+                startActivity(intentRefresh);
+                new ClearData();
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

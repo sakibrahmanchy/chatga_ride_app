@@ -54,8 +54,8 @@ public class FinishRideActivity extends AppCompatActivity implements View.OnClic
                 }
                 Intent intent = new Intent(this,MainActivity.class);
                 startActivity(intent);
-                finish();
                 new ClearData();
+                finish();
 
                 break;
             default:
