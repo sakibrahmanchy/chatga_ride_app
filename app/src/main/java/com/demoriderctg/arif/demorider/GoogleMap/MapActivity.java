@@ -316,8 +316,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
         }
-
-
         loginData = userInformation.getuserInformation();
         phonemumber = userInformation.getRiderPhoneNumber();
 
@@ -497,9 +495,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 String sourceLocation = AppConstant .searchSorceLocationModel.homeLocationName;
                 sourceText.setText(sourceLocation);
 
-                if(!AppConstant.LAT_LNG_BOUNDS.contains(AppConstant.searchSorceLocationModel.home)){
+                if(!AppConstant.LAT_LNG_BOUNDS_CTG_3.contains(AppConstant.searchSorceLocationModel.home)){
                     serviceNotAvailable.setVisibility(View.VISIBLE);
-
                 }
                 else{
                     serviceNotAvailable.setVisibility(View.GONE);
@@ -537,7 +534,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 String sourceLocation = AppConstant .searchSorceLocationModel.homeLocationName;
                 sourceText.setText(sourceLocation);
                 moveCamera(AppConstant.LAT_LNG_BOUNDS_CTG.southwest,
-                        AppConstant.DEFAULT_ZOOM,
+                         AppConstant.DEFAULT_ZOOM,
 
                         "Source");
             }
