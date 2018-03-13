@@ -48,6 +48,7 @@ public class FirebaseConstant {
     public static String TIME = "time";
     public static String DATE = "date";
     public static String TIME_DATE_PATTERN = "yyyy-M-dd hh:mm:ss";
+    public static String APP_SETTINGS_INFO = "AppSettings";
 
     /* For Map */
     public static final String BASE_URL  = "http://139.59.90.128/chaatga_rider/";
@@ -105,6 +106,8 @@ public class FirebaseConstant {
     public static String RESPONSE_CANCEL_RIDE_NOTF = "RESPONSE_CANCEL_RIDE_NOTF";
     public static String NOTIFICATION_RESPONSE = "NOTIFICATION_RESPONSE";
     public static String UPDATE_NAME_IMAGE = "UPDATE_NAME_IMAGE";
+    public static String APP_SETTINGS = "APP_SETTINGS";
+    public static String APP_SETTINGS_LOADED = "APP_SETTINGS_LOADED";
 
     /*Toast Message*/
     public static String NO_RIDER_FOUND = "No rider found";
