@@ -43,7 +43,6 @@ public class ClientHistoryActivity extends AppCompatActivity {
 
     RecyclerView rv;
     SwipeRefreshLayout swiper;
-    HistoryAdapter adapter;
     private ApiInterface apiService;
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
@@ -52,6 +51,7 @@ public class ClientHistoryActivity extends AppCompatActivity {
     private UserInformation userInformation;
     ListView theListView;
     private ProgressDialog dialog;
+    private FoldingCellListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +73,15 @@ public class ClientHistoryActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
+        theListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
+                // toggle clicked cell state
+                ((FoldingCell) view).toggle(false);
+                // register in adapter that state for selected cell is toggled
+                adapter.registerToggle(pos);
+            }
+        });
 //        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 //            @Override
 //            public void onRefresh() {
@@ -117,18 +125,10 @@ public class ClientHistoryActivity extends AppCompatActivity {
                         boolean isSuccess = response.body().isSuccess();
                         if(isSuccess){
                             clientHistories = response.body().getData();
-                            final FoldingCellListAdapter adapter = new FoldingCellListAdapter(getApplicationContext(), clientHistories);
+                            adapter = new FoldingCellListAdapter(getApplicationContext(), clientHistories);
                             theListView.setAdapter(adapter);
 
-                            theListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
-                                    // toggle clicked cell state
-                                    ((FoldingCell) view).toggle(false);
-                                    // register in adapter that state for selected cell is toggled
-                                    adapter.registerToggle(pos);
-                                }
-                            });
+
                         }else{
                         }
                         break;
