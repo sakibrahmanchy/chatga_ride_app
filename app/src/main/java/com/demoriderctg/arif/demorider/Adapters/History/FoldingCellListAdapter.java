@@ -45,7 +45,8 @@ public class FoldingCellListAdapter extends ArrayAdapter<ClientHistory> {
             viewHolder = new ViewHolder();
             LayoutInflater vi = LayoutInflater.from(getContext());
             cell = (FoldingCell) vi.inflate(R.layout.cell, parent, false);
-            // binding view parts to view holder
+            // binding view parts to view
+
             viewHolder.price = cell.findViewById(R.id.title_price);
             viewHolder.durationInshort = cell.findViewById(R.id.tv_duration_short);
             viewHolder.date = cell.findViewById(R.id.title_time_label);
@@ -80,6 +81,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<ClientHistory> {
             return cell;
 
         // bind data from selected element to view through view holder
+        viewHolder.historyId.setText("#"+item.getTransactionId());
         viewHolder.price.setText(item.getTotalFare());
         viewHolder.date.setText(item.getTime());
         viewHolder.fromAddress.setText(item.getPickPointAddress());
@@ -87,13 +89,13 @@ public class FoldingCellListAdapter extends ArrayAdapter<ClientHistory> {
         viewHolder.avaterName.setText(item.getRiderName());
         viewHolder.rating.setRating(item.getRating());
         viewHolder.distance.setText(item.getDistance());
-        viewHolder.duration.setText("");
+        viewHolder.duration.setText(item.getDuration());
         viewHolder.fare.setText(item.getTotalFare());
         viewHolder.destinationAddress.setText(item.getDestinationAddress());
         viewHolder.sourceAddress.setText(item.getPickPointAddress());
         viewHolder.dateTiem.setText(item.getTime());
         viewHolder.distanceInshort.setText(item.getDistance());
-        viewHolder.durationInshort.setText("");
+        viewHolder.durationInshort.setText(item.getDuration());
         Picasso.with(getContext()).invalidate(item.getRiderAvatar());
         Picasso.with(getContext())
                 .load(item.getRiderAvatar())

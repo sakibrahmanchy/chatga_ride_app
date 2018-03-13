@@ -32,9 +32,11 @@ public class ClientHistory {
     private String transactionId;
     @SerializedName("rating")
     private float rating;
+    @SerializedName("duration")
+    private String duration;
 
     public ClientHistory(String dateTime, String distance, String pickPointAddress, String destinationAddress, String totalFare, int riderId,
-                         String riderName, String riderAvatar, String promotion, String time, String transactionId,float rating) {
+                         String riderName, String riderAvatar, String promotion, String time, String transactionId,float rating, String duration) {
         this.dateTime = dateTime;
         this.distance = distance;
         this.pickPointAddress = pickPointAddress;
@@ -47,6 +49,7 @@ public class ClientHistory {
         this.time = time;
         this.transactionId = transactionId;
         this.rating = rating;
+        this.duration = duration;
     }
 
     public String getDateTime() {
@@ -143,5 +146,13 @@ public class ClientHistory {
 
     public void setRating(float rating) {
         this.rating = rating;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
     }
 }
