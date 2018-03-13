@@ -18,4 +18,5 @@ public interface ICallbackMain {
     void OnGetCurrentRiderHistoryModel(boolean value, long Time, int ActionType);
     void OnGetCurrentRider(boolean value);
     void OnHasAnyRide(boolean value);
+    void OnUpdateNameAndImage(boolean value);
 }

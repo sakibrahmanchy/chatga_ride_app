@@ -1,12 +1,17 @@
 package com.demoriderctg.arif.demorider.GoogleMap;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
+import com.demoriderctg.arif.demorider.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -35,12 +40,16 @@ public class DownloadTask extends AsyncTask<String, Void, String> {
     private GoogleMap mMap;
     private ProgressDialog dailog;
     private Context mContext;
+    private Button sendButton;
+    private Button requestbtn;
 
     public DownloadTask(Context context, GoogleMap mMap, LatLng source, LatLng dest) {
         this.mMap = mMap;
         this.source = source;
         this.dest = dest;
         this.mContext=context;
+        sendButton  =(Button) ((Activity)context).findViewById(R.id.btnSend);
+        requestbtn  =(Button) ((Activity)context).findViewById(R.id.pickupbtn);
 
     }
 
@@ -126,6 +135,10 @@ public class DownloadTask extends AsyncTask<String, Void, String> {
 
 // Constrain the camera target to the Adelaide bounds.
             if(lineOptions !=null){
+
+                sendButton.setVisibility(View.INVISIBLE);
+                requestbtn.setVisibility(View.VISIBLE);
+                MapActivity.sendtBtnClick=true;
                 ShowDerectionInGoogleMap showDerectionInGoogleMap = new ShowDerectionInGoogleMap(mMap, lineOptions, source, dest);
                 showDerectionInGoogleMap.placeDirection();
 

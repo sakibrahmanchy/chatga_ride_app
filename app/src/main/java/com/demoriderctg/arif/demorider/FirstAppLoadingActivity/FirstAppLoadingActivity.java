@@ -36,7 +36,6 @@ public class FirstAppLoadingActivity extends AppCompatActivity {
 
         if(MainActivity.check && loginData == null){
             loginData = new LoginData();
-            loginData.clientId = "1010";
         }
 
         int GET_MY_PERMISSION = 1;
@@ -64,6 +63,7 @@ public class FirstAppLoadingActivity extends AppCompatActivity {
 
                        if(AppConstant.IS_RIDE == 0){
                            Intent intent = new Intent(FirstAppLoadingActivity.this, MainActivity.class);
+
                            startActivity(intent);
                            finish();
                        }

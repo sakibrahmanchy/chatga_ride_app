@@ -46,13 +46,11 @@ public class InitialAcceptanceOfRideResponse implements ICallBackCurrentServerTi
         AppConstant.INITIAL_RIDE_ACCEPT = 1;
         FirebaseConstant.IS_RIDE_ACCEPTED_BY_RIDER = 1;
         AppConstant.HISTORY_ID = (int)currentRidingHistoryModel.HistoryID;
-
-        if(AppConstant.SEARCH_ACTIVITY){
             Intent intent = new Intent(searchActivity,OnrideModeActivity.class);
             searchActivity.startActivity(intent);
             fullMapActivity.finish();
             searchActivity.finish();
-        }
+
 
 
         /*Do the stuff*/

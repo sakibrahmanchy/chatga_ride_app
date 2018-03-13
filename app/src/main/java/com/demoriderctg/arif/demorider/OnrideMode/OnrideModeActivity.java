@@ -144,7 +144,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        if (connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected()) {
+        if (connectionCheck.isNetworkConnected()) {
 
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
@@ -182,9 +182,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
 
     void setUpMap(){
 
-        if(connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected()){
-            // Getting URL to the Google Directions API
-
+        if(connectionCheck.isNetworkConnected()){
             try{
 
                 mMap.addMarker(new MarkerOptions().position(AppConstant.DESTINATION).icon(BitmapDescriptorFactory.fromBitmap(resizeMapIcons("ic_marker_destination",200,200))).anchor(.5f,.5f));//.icon(BitmapDescriptorFactory.fromBitmap(resizedMarker(200,200) )));
@@ -199,7 +197,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
 
         }
         else{
-           // Toast.makeText(OnRideModeActivity.this, "Connection Lost", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Connection Lost", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -343,7 +341,6 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
         switch (item.getItemId()) {
             case R.id.cancel_ride:
                 if(AppConstant.START_RIDE == false && AppConstant.FINISH_RIDE == false){
-
                     new AlertDialog.Builder(OnrideModeActivity.this)
                             .setTitle("Really Exit?")
                             .setMessage("Are you sure you want to Cancel the Ride?")

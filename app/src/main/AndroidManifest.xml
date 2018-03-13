@@ -30,7 +30,8 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCUlumoP9HNAHy8lSTHVWavcrihYe0vNm8" />
-        <meta-data android:name="com.facebook.accountkit.ApplicationName"
+        <meta-data
+            android:name="com.facebook.accountkit.ApplicationName"
             android:value="@string/app_name" />
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -42,37 +43,35 @@
         <activity
             android:name=".FirstAppLoadingActivity.FirstAppLoadingActivity"
             android:label="@string/app_name"
-            android:theme="@style/ThemeOverlay.MyNoTitleActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeOverlay.MyNoTitleActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity"
-            />
+        <activity android:name=".MainActivity" />
         <activity
             android:name=".GoogleMap.MapActivity"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".PhoneVerificationActivity"
             android:label="@string/title_activity_login"
             android:noHistory="true"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
-            android:windowSoftInputMode="adjustNothing"
-            android:screenOrientation="portrait"/>
+            android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".autoComplete"
             android:noHistory="true"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".FindingBickerActivity"
-            android:theme="@style/Theme.AppCompat.Light.Dialog"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
         <activity
             android:name=".UserCheckActivity"
             android:label="@string/title_activity_user_check"
@@ -83,45 +82,47 @@
             android:name=".RegistrationActivity"
             android:label="@string/title_activity_registration"
             android:noHistory="true"
-            android:screenOrientation="portrait"/>
-
-        <activity android:name=".FavoritePlaces.FavoritePlacesActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".FavoritePlaces.FavoritePlacesActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Dailog.SearchingDriver"
-            android:theme="@style/Theme.Transparent"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".InternetConnection.InternetCheckActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".OnrideMode.OnrideModeActivity"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Transparent" />
+        <activity
+            android:name=".InternetConnection.InternetCheckActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".OnrideMode.OnrideModeActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Adapters.History.ClientHistoryActivity"
             android:label="Ride Histories"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".PromotionActivity"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".PromotionActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Setting.SettingActivity"
-            android:label="User Setting"
-            android:screenOrientation="portrait"/>
+            android:label="Setting"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".NotificationActivity"
             android:label="Notifications"
             android:screenOrientation="portrait" />
-        <activity android:name=".Setting.EditProfile"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".FacebookAccountVerificationActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".Dailog.FullMapSearching"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".FinishRideActivity.FinishRideActivity"
-            >
+        <activity
+            android:name=".Setting.EditProfile"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".FacebookAccountVerificationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Dailog.FullMapSearching"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity android:name=".FinishRideActivity.FinishRideActivity" />
 
-        </activity>
         <service android:name="com.demoriderctg.arif.FirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
@@ -134,6 +135,10 @@
         </service>
         <service android:name=".OnLocationChange.GPS_Service" />
 
+        <activity
+            android:name=".About.AboutActivity"
+            android:label="About" />
+        <activity android:name=".Help.HelpActivity"></activity>
     </application>
 
 </manifest>
