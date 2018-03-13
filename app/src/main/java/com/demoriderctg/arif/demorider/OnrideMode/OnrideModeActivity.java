@@ -33,9 +33,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
+import com.demoriderctg.arif.demorider.ClearData.ClearData;
 import com.demoriderctg.arif.demorider.FirstAppLoadingActivity.FirstAppLoadingActivity;
 import com.demoriderctg.arif.demorider.GoogleMap.GetCurrentLocation;
 import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
+import com.demoriderctg.arif.demorider.Help.HelpActivity;
 import com.demoriderctg.arif.demorider.InternetConnection.ConnectionCheck;
 
 
@@ -98,6 +100,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,23 +119,24 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         mBottomSheetBehavior.setPeekHeight(300);
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        notificationModel = FirebaseWrapper.getInstance().getNotificationModelInstance();
+        riderModel = FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider;
         OnrideModeContext = this;
-
-        if(notificationModel.riderId >0){
-            AppConstant.RIDER_NAME = notificationModel.riderName;
-            AppConstant.RIDER_PHONENUMBER = notificationModel.riderPhone;
-
-        }
         initMap();
         setUi();
 
     }
 
     void setUi(){
-        riderName.setText(AppConstant.RIDER_NAME);
-        rating.setText("100");
-        rider_phone_number.setText(AppConstant.RIDER_PHONENUMBER);
+        riderName.setText(riderModel.FullName);
+        rating.setText(riderModel.Ratting );
+        rider_phone_number.setText(""+riderModel.PhoneNumber);
+        Picasso.with(this).invalidate(riderModel.ImageUrl);
+        Picasso.with(this)
+                .load(riderModel.ImageUrl)
+                .placeholder(R.drawable.profile_image)
+                .error(R.drawable.profile_image)
+                .into(riderImage);
+
         contactRider.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -361,6 +365,14 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
 
                 return true;
             case R.id.help:
+                Intent intent = new Intent(this, HelpActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.refresh_ride:
+                Intent intentRefresh = new Intent(this, FirstAppLoadingActivity.class);
+                startActivity(intentRefresh);
+                new ClearData();
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
