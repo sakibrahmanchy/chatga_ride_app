@@ -11,6 +11,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import com.demoriderctg.arif.demorider.PhoneVerificationActivity;
 import com.demoriderctg.arif.demorider.R;
@@ -22,6 +25,7 @@ import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginModel;
 import com.demoriderctg.arif.demorider.models.ApiModels.RideHistory.ClientHistory;
 import com.demoriderctg.arif.demorider.models.ApiModels.RideHistory.ClientHistoryResponse;
+import com.ramotion.foldingcell.FoldingCell;
 
 
 import java.util.ArrayList;
@@ -46,6 +50,8 @@ public class ClientHistoryActivity extends AppCompatActivity {
     private ArrayList<ClientHistory> clientHistories;;
     private SwipeRefreshLayout swipeRefreshLayout;
     private UserInformation userInformation;
+    ListView theListView;
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,11 +60,12 @@ public class ClientHistoryActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         pref = getApplicationContext().getSharedPreferences("MyPref", 0);
         userInformation = new UserInformation(this);
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
-        rv = (RecyclerView) findViewById(R.id.history_recycler_view);
-      //  dialog = new ProgressDialog(this);
+//        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+//        rv = (RecyclerView) findViewById(R.id.history_recycler_view);
+//      //  dialog = new ProgressDialog(this);
+       theListView = findViewById(R.id.mainListView);
 
-        rv.setLayoutManager(new LinearLayoutManager(this));
+       // rv.setLayoutManager(new LinearLayoutManager(this));
 
         try{
             getClientHistory();
@@ -67,22 +74,22 @@ public class ClientHistoryActivity extends AppCompatActivity {
         }
 
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-
-                // implement Handler to wait for 3 seconds and then update UI means update value of TextView
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        // cancle the Visual indication of a refresh
-                        swipeRefreshLayout.setRefreshing(false);
-                        // Generate a random integer number
-                        getClientHistory();
-                    }
-                }, 3000);
-            }
-        });
+//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//
+//                // implement Handler to wait for 3 seconds and then update UI means update value of TextView
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        // cancle the Visual indication of a refresh
+//                        swipeRefreshLayout.setRefreshing(false);
+//                        // Generate a random integer number
+//                        getClientHistory();
+//                    }
+//                }, 3000);
+//            }
+//        });
 
 
     }
@@ -90,6 +97,8 @@ public class ClientHistoryActivity extends AppCompatActivity {
     public void getClientHistory(){
         //String deviceToken = FirebaseWrapper.getDeviceToken();
         String authHeader = "Bearer "+pref.getString("access_token",null);
+
+      
 
         apiService =
                 ApiClient.getClient().create(ApiInterface.class);
@@ -108,8 +117,18 @@ public class ClientHistoryActivity extends AppCompatActivity {
                         boolean isSuccess = response.body().isSuccess();
                         if(isSuccess){
                             clientHistories = response.body().getData();
-                            adapter = new HistoryAdapter(getApplicationContext(),clientHistories);
-                            rv.setAdapter(adapter);
+                            final FoldingCellListAdapter adapter = new FoldingCellListAdapter(getApplicationContext(), clientHistories);
+                            theListView.setAdapter(adapter);
+
+                            theListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
+                                    // toggle clicked cell state
+                                    ((FoldingCell) view).toggle(false);
+                                    // register in adapter that state for selected cell is toggled
+                                    adapter.registerToggle(pos);
+                                }
+                            });
                         }else{
                         }
                         break;

@@ -10,8 +10,10 @@ public class ClientHistory {
 
     @SerializedName("date_time")
     private String dateTime;
-    @SerializedName("distance_time")
-    private String distanceTime;
+    @SerializedName("distance")
+    private String distance;
+    @SerializedName("time")
+    private String time;
     @SerializedName("pick_point_address")
     private String pickPointAddress;
     @SerializedName("destination_address")
@@ -26,11 +28,15 @@ public class ClientHistory {
     private String riderAvatar;
     @SerializedName("promotion")
     private String promotion;
+    @SerializedName("transaction_id")
+    private String transactionId;
+    @SerializedName("rating")
+    private float rating;
 
-    public ClientHistory(String dateTime, String distanceTime, String pickPointAddress, String destinationAddress, String totalFare, int riderId,
-                         String riderName, String riderAvatar, String promotion) {
+    public ClientHistory(String dateTime, String distance, String pickPointAddress, String destinationAddress, String totalFare, int riderId,
+                         String riderName, String riderAvatar, String promotion, String time, String transactionId,float rating) {
         this.dateTime = dateTime;
-        this.distanceTime = distanceTime;
+        this.distance = distance;
         this.pickPointAddress = pickPointAddress;
         this.destinationAddress = destinationAddress;
         this.totalFare = totalFare;
@@ -38,6 +44,9 @@ public class ClientHistory {
         this.riderName = riderName;
         this.riderAvatar = riderAvatar;
         this.promotion = promotion;
+        this.time = time;
+        this.transactionId = transactionId;
+        this.rating = rating;
     }
 
     public String getDateTime() {
@@ -46,14 +55,6 @@ public class ClientHistory {
 
     public void setDateTime(String dateTime) {
         this.dateTime = dateTime;
-    }
-
-    public String getDistanceTime() {
-        return distanceTime;
-    }
-
-    public void setDistanceTime(String distanceTime) {
-        this.distanceTime = distanceTime;
     }
 
     public String getPickPointAddress() {
@@ -110,5 +111,37 @@ public class ClientHistory {
 
     public void setPromotion(String promotion) {
         this.promotion = promotion;
+    }
+
+    public String getDistance() {
+        return distance;
+    }
+
+    public void setDistance(String distance) {
+        this.distance = distance;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
+    }
+
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
     }
 }

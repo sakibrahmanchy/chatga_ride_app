@@ -1,4 +1,4 @@
-package com.ramotion.foldingcell.examples.listview;
+package com.demoriderctg.arif.demorider.Adapters.History;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -6,10 +6,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.demoriderctg.arif.demorider.R;
+import com.demoriderctg.arif.demorider.models.ApiModels.RideHistory.ClientHistory;
 import com.ramotion.foldingcell.FoldingCell;
-import com.ramotion.foldingcell.examples.R;
+import com.squareup.picasso.Picasso;
+
 
 import java.util.HashSet;
 import java.util.List;
@@ -19,12 +24,12 @@ import java.util.List;
  * Adapter holds indexes of unfolded elements for correct work with default reusable views behavior
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
-public class FoldingCellListAdapter extends ArrayAdapter<Item> {
+public class FoldingCellListAdapter extends ArrayAdapter<ClientHistory> {
 
     private HashSet<Integer> unfoldedIndexes = new HashSet<>();
     private View.OnClickListener defaultRequestBtnClickListener;
 
-    public FoldingCellListAdapter(Context context, List<Item> objects) {
+    public FoldingCellListAdapter(Context context, List<ClientHistory> objects) {
         super(context, 0, objects);
     }
 
@@ -32,7 +37,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         // get item for selected view
-        Item item = getItem(position);
+        ClientHistory item = getItem(position);
         // if cell is exists - reuse it, if not - create the new one from resource
         FoldingCell cell = (FoldingCell) convertView;
         ViewHolder viewHolder;
@@ -42,13 +47,24 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
             cell = (FoldingCell) vi.inflate(R.layout.cell, parent, false);
             // binding view parts to view holder
             viewHolder.price = cell.findViewById(R.id.title_price);
-            viewHolder.time = cell.findViewById(R.id.title_time_label);
-            viewHolder.date = cell.findViewById(R.id.title_date_label);
+            viewHolder.durationInshort = cell.findViewById(R.id.tv_duration_short);
+            viewHolder.date = cell.findViewById(R.id.title_time_label);
             viewHolder.fromAddress = cell.findViewById(R.id.title_from_address);
             viewHolder.toAddress = cell.findViewById(R.id.title_to_address);
-            viewHolder.requestsCount = cell.findViewById(R.id.title_requests_count);
-            viewHolder.pledgePrice = cell.findViewById(R.id.title_pledge);
-            viewHolder.contentRequestBtn = cell.findViewById(R.id.content_request_btn);
+            viewHolder.duration = cell.findViewById(R.id.tv_duration_content);
+            viewHolder.driverImage = cell.findViewById(R.id.content_avatar);
+            viewHolder.avaterName = cell.findViewById(R.id.content_name_view);
+            viewHolder.rating = cell.findViewById(R.id.content_rating_stars);
+            viewHolder.sourceAddress = cell.findViewById(R.id.content_from_address_2);
+            viewHolder.destinationAddress = cell.findViewById(R.id.content_to_address_2);
+            viewHolder.distance=cell.findViewById(R.id.tv_distance_content);
+            viewHolder.fare = cell.findViewById(R.id.tv_fare_content);
+            viewHolder.dateTiem = cell.findViewById(R.id.content_delivery_date);
+            viewHolder.promocode = cell.findViewById(R.id.content_deadline_badge);
+            viewHolder.historyId=cell.findViewById(R.id.tv_history_id);
+            viewHolder.distanceInshort = cell.findViewById(R.id.tv_distance_short);
+            viewHolder.fareCost = cell.findViewById(R.id.tv_total_fare_short);
+
             cell.setTag(viewHolder);
         } else {
             // for existing cell set valid valid state(without animation)
@@ -64,21 +80,27 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
             return cell;
 
         // bind data from selected element to view through view holder
-        viewHolder.price.setText(item.getPrice());
-        viewHolder.time.setText(item.getTime());
-        viewHolder.date.setText(item.getDate());
-        viewHolder.fromAddress.setText(item.getFromAddress());
-        viewHolder.toAddress.setText(item.getToAddress());
-        viewHolder.requestsCount.setText(String.valueOf(item.getRequestsCount()));
-        viewHolder.pledgePrice.setText(item.getPledgePrice());
+        viewHolder.price.setText(item.getTotalFare());
+        viewHolder.date.setText(item.getTime());
+        viewHolder.fromAddress.setText(item.getPickPointAddress());
+        viewHolder.toAddress.setText(item.getDestinationAddress());
+        viewHolder.avaterName.setText(item.getRiderName());
+        viewHolder.rating.setRating(item.getRating());
+        viewHolder.distance.setText(item.getDistance());
+        viewHolder.duration.setText("");
+        viewHolder.fare.setText(item.getTotalFare());
+        viewHolder.destinationAddress.setText(item.getDestinationAddress());
+        viewHolder.sourceAddress.setText(item.getPickPointAddress());
+        viewHolder.dateTiem.setText(item.getTime());
+        viewHolder.distanceInshort.setText(item.getDistance());
+        viewHolder.durationInshort.setText("");
+        Picasso.with(getContext()).invalidate(item.getRiderAvatar());
+        Picasso.with(getContext())
+                .load(item.getRiderAvatar())
+                .placeholder(R.drawable.profile_image)
+                .error(R.drawable.profile_image)
+                .into(viewHolder.driverImage);
 
-        // set custom btn handler for list item from that item
-        if (item.getRequestBtnClickListener() != null) {
-            viewHolder.contentRequestBtn.setOnClickListener(item.getRequestBtnClickListener());
-        } else {
-            // (optionally) add "default" handler if no handler found in item
-            viewHolder.contentRequestBtn.setOnClickListener(defaultRequestBtnClickListener);
-        }
 
         return cell;
     }
@@ -99,13 +121,6 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
         unfoldedIndexes.add(position);
     }
 
-    public View.OnClickListener getDefaultRequestBtnClickListener() {
-        return defaultRequestBtnClickListener;
-    }
-
-    public void setDefaultRequestBtnClickListener(View.OnClickListener defaultRequestBtnClickListener) {
-        this.defaultRequestBtnClickListener = defaultRequestBtnClickListener;
-    }
 
     // View lookup cache
     private static class ViewHolder {
@@ -117,5 +132,20 @@ public class FoldingCellListAdapter extends ArrayAdapter<Item> {
         TextView requestsCount;
         TextView date;
         TextView time;
+        TextView historyId;
+        TextView duration;
+        ImageView driverImage;
+        RatingBar rating;
+        TextView promocode;
+        TextView avaterName;
+        TextView sourceAddress;
+        TextView destinationAddress;
+        TextView distance;
+        TextView fare;
+        TextView dateTiem;
+        TextView durationInshort;
+        TextView distanceInshort;
+        TextView fareCost;
+
     }
 }

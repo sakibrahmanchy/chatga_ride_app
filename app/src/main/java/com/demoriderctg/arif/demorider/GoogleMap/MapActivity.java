@@ -28,13 +28,16 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.ActionMenuItemView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -96,9 +99,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 
 import ContactWithFirebase.Main;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
+import uk.co.deanwild.materialshowcaseview.shape.Shape;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.OnConnectionFailedListener, NavigationView.OnNavigationItemSelectedListener {
@@ -126,6 +134,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
          //   if (connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected() && activityChangeForSearch == null) {
                 getDeviceLocation();
+
 
            // }
             init();
@@ -184,14 +193,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private LinearLayout actionsConainer;
     private LinearLayout searchContainer;
     private TextView serviceNotAvailable;
-    private  TextView userRating;
-
+    private TextView userRating;
+    private View v;
 
     private LinearLayout linearLayout;
 
     private boolean isTotalHeightFound = false;
     private boolean isActionHeightFound = false;
     private boolean isSearchHeightFound = false;
+    private boolean isAppShowCased = false;
     private VmCurrentLocation  vmCurrentLocation;
 
     private double totalHeight, actionHeight, searchHeight,peekHeight;
@@ -271,7 +281,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         //spinner = (ProgressBar) findViewById(R.id.progressBar);
         navigationView= (NavigationView) findViewById(R.id.nav_view);
 
-        View v = navigationView.getHeaderView(0);
+        v = navigationView.getHeaderView(0);
         userInformation = new UserInformation(this);
 
         ImageView avatarContainer = (ImageView ) v.findViewById(R.id.profile_nav);
@@ -506,6 +516,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                         serviceNotAvailable.setVisibility(View.GONE);
                                     }
                                     checkButtonState();
+                                    if(!sharedpreferences.getString("APP_SHOWCASED","").equals("true"))
+                                        showCaseApp();
 
                                 } catch (IOException e) {
                                     e.printStackTrace();
@@ -867,6 +879,40 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
             mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             mBottomSheetBehavior.setHideable(false);
         }
+    }
+
+    public void showCaseApp(){
+
+        editor.putString("APP_SHOWCASED","true");
+        editor.commit();
+
+        ShowcaseConfig config = new ShowcaseConfig();
+        config.setDelay(500); // half second between each showcase view
+        config.setShapePadding(-320);
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, "ShowCaseMain" );
+        sequence.setConfig(config);
+
+        drawerLayout.openDrawer(Gravity.START);
+        sequence.addSequenceItem(navigationView,
+                "Manage your information!", "GOT IT").setOnItemDismissedListener(new MaterialShowcaseSequence.OnSequenceItemDismissedListener() {
+            @Override
+            public void onDismiss(MaterialShowcaseView materialShowcaseView, int i) {
+                drawerLayout.closeDrawer(Gravity.START);
+            }
+        });
+       // drawerLayout.closeDrawer(Gravity.START);
+        config.setShapePadding(0);
+        sequence.addSequenceItem(destinationText,
+                "Choose your source and destination point and start off!", "GOT IT");
+
+        sequence.addSequenceItem(mGps,
+                "Get your current location on the fly!", "GOT IT");
+
+        config.setShapePadding(0);
+        sequence.addSequenceItem(bottomSheet,
+                "This widget helps you to show recent updates", "GOT IT");
+
+        sequence.start();
     }
 }
 

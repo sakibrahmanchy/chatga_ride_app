@@ -38,7 +38,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
         ClientHistory history = clientHistory.get(position);
         viewHolder.tv_date_time.setText(history.getDateTime());
-        viewHolder.tv_distance_minute.setText(history.getDistanceTime());
+        viewHolder.tv_distance_minute.setText(history.getDateTime());
         String pickPoint = "";
         if(history.getPickPointAddress().length()>18)
             pickPoint = history.getPickPointAddress().substring(18);
