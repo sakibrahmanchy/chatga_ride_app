@@ -41,6 +41,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -193,7 +194,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private LinearLayout actionsConainer;
     private LinearLayout searchContainer;
     private TextView serviceNotAvailable;
-    private TextView userRating;
+    private RatingBar userRating;
     private View v;
 
     private GetCurrentLocation getCurrentLocation;
@@ -294,7 +295,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         userRating =v.findViewById(R.id.user_rating);
         userFirstName.setText(userInformation.getuserInformation().getFirstName() +" " + userInformation.getuserInformation().getLastName());
         userPhoneNumber.setText(userInformation.getuserInformation().phone);
-        userRating.setText(userInformation.getuserInformation().getRating()+"%");
+        userRating.setRating( (float) (userInformation.getuserInformation().getRating()));
         Picasso.with(this).invalidate(userInformation.getuserInformation().getAvatar());
         Picasso.with(this)
                 .load(userInformation.getuserInformation().getAvatar())
