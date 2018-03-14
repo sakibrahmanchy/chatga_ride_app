@@ -1,7 +1,6 @@
 package __Firebase.FirebaseUtility;
 
 import android.location.Location;
-import android.os.AsyncTask;
 import android.util.Log;
 import android.util.Pair;
 
@@ -16,10 +15,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
 
-import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
 import __Firebase.FirebaseModel.RiderModel;
 import __Firebase.ICallBackInstance.IDistanceAndDuration;
 
@@ -75,6 +71,7 @@ public class ShortestDistanceMap {
 
         this.Distance = Float.toString(SourceLocation.distanceTo(DestinationLocation));
         this.Duration = getNativeDuration(this.Distance);
+        Rider.DistanceFromClient = Double.parseDouble(!FirebaseUtilMethod.IsEmptyOrNull(this.Distance) ? this.Distance : "0");
 
         if (iDistanceAndDuration != null) {
             iDistanceAndDuration.OnGetIDistanceAndDuration(

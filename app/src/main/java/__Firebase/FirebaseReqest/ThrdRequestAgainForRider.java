@@ -45,7 +45,7 @@ public class ThrdRequestAgainForRider {
                     AddRiderIntoBlockList();
                 }
             };
-            handler.postDelayed(runnable, 66000 /*One minute ten second*/);
+            handler.postDelayed(runnable, FirebaseConstant.CONSECUTIVE_REQUEST_INTERVAL /*One minute five second*/);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -81,12 +81,12 @@ public class ThrdRequestAgainForRider {
             /*
              * Can Request 3 times within five/ten minutes
              */
-            if (P.first < FirebaseConstant.REQUEST_LIMIT) {
+            if (P.first < FirebaseConstant.NUMBER_OF_CONSECUTIVE_REQUEST) {
                 /*
                  * Request is less than three, so can request
                  */
                 long currentTime = System.currentTimeMillis();
-                if (Math.abs(P.second - currentTime) > FirebaseConstant.REQUEST_INTERVAL_FIVE_MINUTE) {
+                if (Math.abs(P.second - currentTime) > FirebaseConstant.EACH_REQUEST_BUNDLE_INTERVAL) {
                     /*
                      * If last request is done more than five minute ago
                      * So, clear previous request make this request as first one
@@ -101,7 +101,7 @@ public class ThrdRequestAgainForRider {
                  * Request is ore than 3 times
                  */
                 long currentTime = System.currentTimeMillis();
-                if (Math.abs(P.second - currentTime) <= FirebaseConstant.REQUEST_INTERVAL_FIVE_MINUTE) {
+                if (Math.abs(P.second - currentTime) <= FirebaseConstant.EACH_REQUEST_BUNDLE_INTERVAL) {
                     /* Request is more than 3 and doesn't pass ten/five minutes*/
                     return false;
                 } else {
@@ -131,6 +131,7 @@ public class ThrdRequestAgainForRider {
         if (riderModel != null && riderModel.RiderID > 0) {
             requestedRider.put(riderModel.RiderID, true);
         }
+        FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider.ClearData();
         RequestAgain();
     }
 

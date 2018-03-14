@@ -10,6 +10,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
 
+import com.crashlytics.android.Crashlytics;
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
 import com.demoriderctg.arif.demorider.MainActivity;
 import com.demoriderctg.arif.demorider.OnrideMode.OnrideModeActivity;
@@ -20,6 +21,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 
 import ContactWithFirebase.Main;
+import io.fabric.sdk.android.Fabric;
 
 public class FirstAppLoadingActivity extends AppCompatActivity {
 
@@ -30,6 +32,7 @@ public class FirstAppLoadingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_first_app_loading);
         userInformation = new UserInformation(this);
         loginData = userInformation.getuserInformation();
