@@ -32,9 +32,6 @@
                     android:text="Ride Finished"
                     android:textColor="@android:color/white"
                     android:textSize="30sp" />
-
-
-
             </LinearLayout>
 
             <LinearLayout

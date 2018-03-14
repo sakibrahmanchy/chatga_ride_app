@@ -116,7 +116,6 @@
 
         <TextView
             android:id="@+id/tv_distance_short"
-            style="@style/TitleBadgeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -125,7 +124,6 @@
             android:layout_alignParentStart="true" />
 
         <TextView
-            style="@style/TitleBadgeTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@id/tv_distance_short"
@@ -135,14 +133,12 @@
 
         <TextView
             android:id="@+id/tv_duration_short"
-            style="@style/TitleBadgeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true" />
 
         <TextView
-            style="@style/TitleBadgeTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/tv_duration_short"
@@ -151,7 +147,6 @@
 
         <TextView
             android:id="@+id/tv_total_fare_short"
-            style="@style/TitleBadgeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -160,7 +155,6 @@
             android:text="@string/weight_mock" />
 
         <TextView
-            style="@style/TitleBadgeTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@id/tv_total_fare_short"
