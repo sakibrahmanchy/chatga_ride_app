@@ -7,10 +7,10 @@
             android:id="@+id/nav_history"
             android:icon="@drawable/ic_history_black_24dp"
             android:title="@string/nav_history"
-            app:actionViewClass="android.widget.ImageButton"/>
+            />
         <item
             android:id="@+id/nav_promotions"
-            android:icon="@drawable/ic_gps"
+            android:icon="@drawable/ic_attach_money_black_24dp"
             android:title="@string/nav_promotions" />
 
         <item
