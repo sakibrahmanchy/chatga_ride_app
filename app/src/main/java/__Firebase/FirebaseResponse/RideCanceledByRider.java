@@ -2,7 +2,6 @@ package __Firebase.FirebaseResponse;
 
 import android.content.Intent;
 
-import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
 import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
 
 import java.util.Map;
@@ -36,13 +35,13 @@ public class RideCanceledByRider implements ICallBackCurrentServerTime {
 
     private void Response() {
         AddRiderIntoBlockList();
-            Intent intent = new Intent(OnrideModeContext, MapActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            OnrideModeContext.startActivity(intent);
-            OnrideModeContext.finish();
+        Intent intent = new Intent(OnrideModeContext, MapActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        OnrideModeContext.startActivity(intent);
+        OnrideModeContext.finish();
     }
 
-    private void ResponseTimeOver(){
+    private void ResponseTimeOver() {
 
     }
 
@@ -53,6 +52,7 @@ public class RideCanceledByRider implements ICallBackCurrentServerTime {
         if (riderModel.RiderID > 0) {
             requestedRider.put(riderModel.RiderID, true);
         }
+        FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider.ClearData();
         /*Do no request again rather just notify client to request again*/
         //RequestAgain();
     }
@@ -64,7 +64,7 @@ public class RideCanceledByRider implements ICallBackCurrentServerTime {
                 Response();
             }
         } else {
-            ResponseTimeOver();
+            Response();
         }
     }
 }

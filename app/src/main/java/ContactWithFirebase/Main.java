@@ -382,6 +382,12 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
     public void OnNearestRiderFound(boolean value, String shortestTime, String shortestDistance) {
         if (value == true) {
 
+            Double _MinimumDistance = (double) FirebaseWrapper.getInstance().getAppSettingsModelInstance().ShortestDistance;
+
+            /* Nearest Rider Distance must be less than _MinimumDistance */
+            if (FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider.DistanceFromClient > _MinimumDistance)
+                return;
+
             Log.d(FirebaseConstant.NEAREST_RIDER_FOUND, FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider.FullName);
             ShortestTime = shortestTime;
             ShortestDistance = shortestDistance;
@@ -444,6 +450,18 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
     @Override
     public void OnAppSettingsLoaded(boolean value) {
         Log.d(FirebaseConstant.APP_SETTINGS_LOADED, Boolean.toString(value));
+        if (value == true) {
+            FirebaseWrapper firebaseWrapper = FirebaseWrapper.getInstance();
+
+            FirebaseConstant.CONSECUTIVE_REQUEST_INTERVAL = firebaseWrapper.getAppSettingsModelInstance().ConsecutiveRequestInterval; /* One minute five second */
+            FirebaseConstant.NUMBER_OF_CONSECUTIVE_REQUEST = firebaseWrapper.getAppSettingsModelInstance().NumberOfConsecutiveRequest; /* Five request */
+            FirebaseConstant.EACH_REQUEST_BUNDLE_INTERVAL = firebaseWrapper.getAppSettingsModelInstance().EachRequestBundleInterval; /* Five minute */
+            FirebaseConstant.CURRENT_VERSION = firebaseWrapper.getAppSettingsModelInstance().CurrentUpdateVersion;
+            FirebaseConstant.FORCE_UPDATE_INTERVAL = firebaseWrapper.getAppSettingsModelInstance().ForceUpdateInterval;
+            FirebaseConstant.SHORTEST_DISTANCE_TO_REQUEST = firebaseWrapper.getAppSettingsModelInstance().ShortestDistance;
+
+            String _Message = firebaseWrapper.getAppSettingsModelInstance().Message;
+        }
     }
 
     @Override
