@@ -94,6 +94,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -299,9 +301,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         Picasso.with(this).invalidate(userInformation.getuserInformation().getAvatar());
         Picasso.with(this)
                 .load(userInformation.getuserInformation().getAvatar())
+                .memoryPolicy(MemoryPolicy.NO_CACHE )
+                .networkPolicy(NetworkPolicy.NO_CACHE)
                 .placeholder(R.drawable.profile_image)
                 .error(R.drawable.profile_image)
+                .noFade()
                 .into(avatarContainer);
+
 
         //spinner.setVisibility(View.GONE);
         sharedpreferences = this.getSharedPreferences("MyPref", 0);
@@ -411,12 +417,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 }
             }
         });
+
         mGps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 linearLayout.setVisibility(View.VISIBLE);
                 if (!connectionCheck.isNetworkConnected()) {
-
                     Intent intent = new Intent(MapActivity.this, InternetCheckActivity.class);
                     startActivityForResult(intent, AppConstant.INTERNET_CHECK);
                 }  else {

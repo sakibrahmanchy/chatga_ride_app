@@ -24,6 +24,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
 import com.demoriderctg.arif.demorider.R;
 import com.demoriderctg.arif.demorider.RestAPI.ApiClient;
 import com.demoriderctg.arif.demorider.RestAPI.ApiInterface;
@@ -31,6 +32,8 @@ import com.demoriderctg.arif.demorider.UserInformation;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginModel;
 import com.google.gson.Gson;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
@@ -130,6 +133,9 @@ public class EditProfile extends AppCompatActivity  {
                 .load(url)
                 .placeholder(R.drawable.profile_image)
                 .error(R.drawable.profile_image)
+                .noFade()
+                .memoryPolicy(MemoryPolicy.NO_CACHE )
+                .networkPolicy(NetworkPolicy.NO_CACHE)
                 .into(editProfile);
         editProfileFirstName.setText(loginData.firstName);
         editProfileLastName.setText(loginData.lastName);
@@ -152,6 +158,7 @@ public class EditProfile extends AppCompatActivity  {
                // Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                // Intent pickImageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 Intent pickImageIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                pickImageIntent.setType("image/*");
                 startActivityForResult(pickImageIntent, RESULT_LOAD_IMAGE);
             }
         });
@@ -179,7 +186,7 @@ public class EditProfile extends AppCompatActivity  {
                 Calendar newDate = Calendar.getInstance();
                 Log.d(TAG, dayOfMonth+"");
                 newDate.set(year, monthOfYear, dayOfMonth);
-                editDate.setText(year+"-"+monthOfYear+"-"+dayOfMonth);
+                editDate.setText(year+"-"+(monthOfYear+1)+"-"+dayOfMonth);
             }
 
         },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
@@ -285,8 +292,6 @@ public class EditProfile extends AppCompatActivity  {
     }
 
     public boolean onOptionsItemSelected(MenuItem item){
-        Intent intent = new Intent(EditProfile.this,SettingActivity.class);
-        startActivity(intent);
         finish();
         return false;
     }
@@ -366,6 +371,11 @@ public class EditProfile extends AppCompatActivity  {
                             main.UpdateNameImageAndRatting(newLoginData.getFirstName()+" "+newLoginData.getLastName(),
                                     newLoginData.getAvatar(),newLoginData.getRating()+"");
                         }
+
+                        Intent intent = new Intent(EditProfile.this,MapActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        finish();
                         break;
                     default:
                         Snackbar.make(findViewById(android.R.id.content), "Sorry, network error.",

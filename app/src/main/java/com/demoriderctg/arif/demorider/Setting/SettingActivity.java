@@ -23,6 +23,8 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.gson.Gson;
 import com.google.maps.model.LatLng;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.Set;
@@ -85,8 +87,11 @@ public class SettingActivity extends AppCompatActivity {
         Picasso.with(this).invalidate(url);
         Picasso.with(this)
                 .load(url)
+                .memoryPolicy(MemoryPolicy.NO_CACHE )
+                .networkPolicy(NetworkPolicy.NO_CACHE)
                 .placeholder(R.drawable.profile_image)
                 .error(R.drawable.profile_image)
+                .noFade()
                 .into(profileImage);
 
     }
