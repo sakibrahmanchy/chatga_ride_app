@@ -25,7 +25,8 @@ public class FindNearestRider implements IDistanceAndDuration {
     private FirebaseWrapper firebaseWrapper = null;
     private RiderModel Rider = null;
     private ICallbackMain callBackListener = null;
-    private String _ShortestTime, _ShortestDistance;
+    private String _ShortestTime;
+    private double _ShortestDistance;
 
     public FindNearestRider(ArrayList<RiderModel> RiderList, Pair<Double, Double> _Source, final ICallbackMain callBackListener) {
         this.RiderList = RiderList;
@@ -35,7 +36,7 @@ public class FindNearestRider implements IDistanceAndDuration {
         this.Rider = firebaseWrapper.getRiderViewModelInstance().NearestRider;
         this.callBackListener = callBackListener;
         this._ShortestTime = FirebaseConstant.Empty;
-        this._ShortestDistance = FirebaseConstant.Empty;
+        this._ShortestDistance = FirebaseConstant.UNKNOWN;
 
         Request();
     }
@@ -50,13 +51,13 @@ public class FindNearestRider implements IDistanceAndDuration {
     }
 
     @Override
-    public void OnGetIDistanceAndDuration(RiderModel _Rider, String Distance, String Duration) {
-        Log.d(FirebaseConstant.NEAREST_RIDER, FirebaseConstant.NEAREST_RIDER);
+    public void OnGetIDistanceAndDuration(RiderModel _Rider, double Distance, String Duration) {
+        Log.d(FirebaseConstant.NEAREST_RIDER, _Rider.FullName + " :: " + Distance);
 
         this.numberOfRider -= 1;
-        if (FirebaseUtilMethod.IsEmptyOrNull(Distance) || FirebaseUtilMethod.IsEmptyOrNull(Duration) || _Rider == null) return;
+        if (FirebaseUtilMethod.IsEmptyOrNull(Duration) || _Rider == null) return;
 
-        _Rider.DistanceFromClient = FirebaseUtilMethod.GetDistanceInDouble(Distance);
+        _Rider.DistanceFromClient = Distance;
 
         /*
          * If no rider found so far and current searched rider is not in block list

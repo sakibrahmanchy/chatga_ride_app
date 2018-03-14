@@ -7,5 +7,5 @@ import __Firebase.FirebaseModel.RiderModel;
  */
 
 public interface IDistanceAndDuration {
-    void OnGetIDistanceAndDuration(RiderModel Rider, String Distance, String Duration);
+    void OnGetIDistanceAndDuration(RiderModel Rider, double Distance, String Duration);
 }

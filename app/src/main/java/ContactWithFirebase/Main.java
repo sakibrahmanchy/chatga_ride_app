@@ -43,7 +43,8 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
     private static String SourceName, DestinationName;
     private static long TotalCost;
     private static long DiscountID;
-    private static String ShortestTime, ShortestDistance;
+    private static String ShortestTime;
+    private double ShortestDistance;
     private static long HistoryID;
     private Context context = null;
 
@@ -379,7 +380,7 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
     }
 
     @Override
-    public void OnNearestRiderFound(boolean value, String shortestTime, String shortestDistance) {
+    public void OnNearestRiderFound(boolean value, String shortestTime, double shortestDistance) {
         if (value == true) {
 
             Double _MinimumDistance = (double) FirebaseWrapper.getInstance().getAppSettingsModelInstance().ShortestDistance;
@@ -477,7 +478,7 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
                             SourceName,
                             DestinationName,
                             ShortestTime,
-                            ShortestDistance,
+                            Double.toString(ShortestDistance),
                             TotalCost,
                             DiscountID,
                             Time

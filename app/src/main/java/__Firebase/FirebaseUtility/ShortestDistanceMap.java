@@ -25,7 +25,7 @@ import __Firebase.ICallBackInstance.IDistanceAndDuration;
 
 public class ShortestDistanceMap {
 
-    private String Distance;
+    private double Distance;
     private String Duration;
     private LatLng Source, Destination;
     private IDistanceAndDuration iDistanceAndDuration;
@@ -58,9 +58,9 @@ public class ShortestDistanceMap {
         return;
     }
 
-    private void getNativeDistanceAndDuration(){
+    private void getNativeDistanceAndDuration() {
 
-        Location SourceLocation= new Location("GPS");
+        Location SourceLocation = new Location("GPS");
         Location DestinationLocation = new Location("GPS");
 
         SourceLocation.setLatitude(this.Source.latitude);
@@ -69,9 +69,9 @@ public class ShortestDistanceMap {
         DestinationLocation.setLatitude(this.Destination.latitude);
         DestinationLocation.setLongitude(this.Destination.longitude);
 
-        this.Distance = Float.toString(SourceLocation.distanceTo(DestinationLocation));
+        this.Distance = (double) SourceLocation.distanceTo(DestinationLocation);
         this.Duration = getNativeDuration(this.Distance);
-        Rider.DistanceFromClient = Double.parseDouble(!FirebaseUtilMethod.IsEmptyOrNull(this.Distance) ? this.Distance : "0");
+        Rider.DistanceFromClient = this.Distance;
 
         if (iDistanceAndDuration != null) {
             iDistanceAndDuration.OnGetIDistanceAndDuration(
@@ -82,8 +82,8 @@ public class ShortestDistanceMap {
         }
     }
 
-    private String getNativeDuration(String distance){
-        float _distance = Float.parseFloat(distance);
+    private String getNativeDuration(Double distance) {
+        double _distance = distance;
         return "1";
     }
 
@@ -99,12 +99,12 @@ public class ShortestDistanceMap {
         return url;
     }
 
-    private void getDistanceAndDuration(String jsonData){
+    private void getDistanceAndDuration(String jsonData) {
         JSONObject jObject;
         try {
             jObject = new JSONObject(jsonData);
             DirectionsJSONParser parser = new DirectionsJSONParser(jObject);
-            Distance = parser.getDistance();
+            Distance = Double.parseDouble(parser.getDistance());
             Duration = parser.getDuration();
         } catch (Exception e) {
             e.printStackTrace();
