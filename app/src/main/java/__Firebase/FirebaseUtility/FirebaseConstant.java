@@ -138,6 +138,13 @@ public class FirebaseConstant {
     public static long REQUEST_INTERVAL_TEN_MINUTE = 600000l;
     public static int REQUEST_LIMIT = 100;
 
+    public static int CONSECUTIVE_REQUEST_INTERVAL = 65000; /* One minute five second */
+    public static int NUMBER_OF_CONSECUTIVE_REQUEST = 5; /* Five request */
+    public static long EACH_REQUEST_BUNDLE_INTERVAL = 300000; /* Five minute */
+    public static int CURRENT_VERSION = 1000;
+    public static int FORCE_UPDATE_INTERVAL = 20;
+    public static long SHORTEST_DISTANCE_TO_REQUEST = 500;
+
     /*Firebase Shared-Preference*/
     public static String NUMBER_OF_REQUEST_PREF = "NUMBER_OF_REQUEST_PREF";
     public static String LAST_REQUESTED_NUMBER = "LAST_REQUESTED_NUMBER";
