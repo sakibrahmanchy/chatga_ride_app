@@ -53,13 +53,13 @@
                 android:layout_weight="1"
                 android:text="Phone"
                 android:textSize="12dp" />
-            <TextView
+
+            <RatingBar
                 android:id="@+id/user_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
-                android:textSize="12dp"
-                android:text="100%"
+                style="?android:attr/ratingBarStyleSmall"
                 android:layout_weight="1"/>
 
         </LinearLayout>
