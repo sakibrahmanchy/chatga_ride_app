@@ -13,7 +13,7 @@ public interface ICallbackMain {
     void OnRequestForRide(ArrayList<RiderModel> RiderLIst);
     void OnSentNotificationToRider(boolean value);
     void OnIsClientAlreadyCreated(boolean value);
-    void OnNearestRiderFound(boolean value, String shortestTime, String shortestDistance);
+    void OnNearestRiderFound(boolean value, String shortestTime, double shortestDistance);
     void OnSetDeviceTokenToRiderTable(boolean value);
     void OnGetCurrentRiderHistoryModel(boolean value, long Time, int ActionType);
     void OnGetCurrentRider(boolean value);

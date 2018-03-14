@@ -93,6 +93,7 @@ public class RiderModel {
         this.CurrentRidingHistoryID = riderModel.CurrentRidingHistoryID;
         this.OnlineBusyOnRide = riderModel.OnlineBusyOnRide;
         this.CurrentRiderLocation = riderModel.CurrentRiderLocation;
+        this.DistanceFromClient = riderModel.DistanceFromClient;
         this.ImageUrl = riderModel.ImageUrl;
         this.Ratting = riderModel.Ratting;
     }
