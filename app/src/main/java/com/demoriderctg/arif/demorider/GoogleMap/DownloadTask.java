@@ -42,6 +42,7 @@ public class DownloadTask extends AsyncTask<String, Void, String> {
     private Context mContext;
     private Button sendButton;
     private Button requestbtn;
+    private ImageView defaultMarker;
 
     public DownloadTask(Context context, GoogleMap mMap, LatLng source, LatLng dest) {
         this.mMap = mMap;
@@ -50,6 +51,7 @@ public class DownloadTask extends AsyncTask<String, Void, String> {
         this.mContext=context;
         sendButton  =(Button) ((Activity)context).findViewById(R.id.btnSend);
         requestbtn  =(Button) ((Activity)context).findViewById(R.id.pickupbtn);
+        defaultMarker = (ImageView) ((Activity)context).findViewById(R.id.default_image_Marker);
 
     }
 
@@ -139,6 +141,9 @@ public class DownloadTask extends AsyncTask<String, Void, String> {
                 sendButton.setVisibility(View.INVISIBLE);
                 requestbtn.setVisibility(View.VISIBLE);
                 MapActivity.sendtBtnClick=true;
+                mMap.getUiSettings().setZoomGesturesEnabled(false);
+                mMap.getUiSettings().setScrollGesturesEnabled(false);
+                defaultMarker.setVisibility(View.GONE);
                 ShowDerectionInGoogleMap showDerectionInGoogleMap = new ShowDerectionInGoogleMap(mMap, lineOptions, source, dest);
                 showDerectionInGoogleMap.placeDirection();
 

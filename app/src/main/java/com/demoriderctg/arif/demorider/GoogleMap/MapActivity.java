@@ -29,9 +29,11 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.ActionMenuItemView;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
@@ -87,6 +89,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -99,6 +102,7 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -125,7 +129,35 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         Log.d(TAG, "onMapReady: map is ready");
         mMap = googleMap;
 
+        mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
 
+            @Override
+            public void onCameraChange(CameraPosition cameraPosition) {
+                Log.d("Camera postion change" + "", cameraPosition + "");
+                getSupportActionBar().show();
+                LatLng changeLocation = cameraPosition.target;
+              //  sourceMarker.setPosition(changeLocation);
+                CheckService(changeLocation);
+                    try {
+                        List<Address> myList = myLocation.getFromLocation(changeLocation.latitude, changeLocation.longitude, 1);
+                        if(myList.size()>0){
+                            Address address = (Address) myList.get(0);
+                            if(AppConstant.SOURCE_SELECT){
+                                AppConstant.searchSorceLocationModel.homeLocationName = address.getAddressLine(0);
+                                AppConstant.searchSorceLocationModel.home = changeLocation;
+                            }
+                            else{
+                                AppConstant.searchDestinationLocationModel.workLocationName = address.getAddressLine(0);
+                                AppConstant.searchDestinationLocationModel.work = changeLocation;
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+
+            }
+        });
         if (mLocationPermissionsGranted) {
 
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -133,6 +165,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
+
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
          //   if (connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected() && activityChangeForSearch == null) {
@@ -182,6 +215,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private Address address;
     private int PLACE_PICKER_REQUEST = 1;
     private int PLACE_PICKER_REQUEST_DESTINATION = 2;
+    private  ImageView defaultImageMarker;
 
 
     private Main main;
@@ -209,6 +243,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private boolean isSearchHeightFound = false;
     private boolean isAppShowCased = false;
     private VmCurrentLocation  vmCurrentLocation;
+    Geocoder myLocation;
 
     private double totalHeight, actionHeight, searchHeight,peekHeight;
 
@@ -227,10 +262,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         actionsConainer = findViewById(R.id.actions_container);
         searchContainer = findViewById(R.id.searchLinearLayout);
         serviceNotAvailable =findViewById(R.id.service_not_available);
-        serviceNotAvailable.setVisibility(View.GONE);
+        serviceNotAvailable.setVisibility(View.INVISIBLE);
         getCurrentLocation = new GetCurrentLocation(this);
 
-
+         defaultImageMarker = findViewById(R.id.default_image_Marker);
 
         bottomSheet = findViewById( R.id.bottom_sheet );
 
@@ -287,7 +322,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         linearLayout.setVisibility(View.VISIBLE);
         //spinner = (ProgressBar) findViewById(R.id.progressBar);
         navigationView= (NavigationView) findViewById(R.id.nav_view);
-
+        destinationText.didTouchFocusSelect();
         v = navigationView.getHeaderView(0);
         userInformation = new UserInformation(this);
 
@@ -363,7 +398,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         mMap.clear();
                         sendtBtnClick=false;
 
+
                     }
+
+
+
                     AutocompleteFilter filter =
                             new AutocompleteFilter.Builder()
                                     .setCountry("BD")
@@ -385,6 +424,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 }
             }
         });
+
+
 
         destinationText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -436,11 +477,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
 
-                if (!connectionCheck.isNetworkConnected()) {
-
-                    Intent intent = new Intent(MapActivity.this, InternetCheckActivity.class);
-                    startActivityForResult(intent, AppConstant.INTERNET_CHECK);
-                }  else {
+                if (connectionCheck.isNetworkConnected() && CheckService(AppConstant.searchSorceLocationModel.home)&& CheckService(AppConstant.searchDestinationLocationModel.work)) {
                     new DiscountCalculation(MapActivity.this).getClientPromotions();
                     AppConstant.SOURCE = AppConstant.searchSorceLocationModel.home;
                     AppConstant.DESTINATION = AppConstant.searchDestinationLocationModel.work;
@@ -449,8 +486,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     String url = getDirectionsUrl(AppConstant.SOURCE, AppConstant.DESTINATION);
                     DownloadTask downloadTask = new DownloadTask(MapActivity.this, mMap, AppConstant.SOURCE, AppConstant.DESTINATION);
                     downloadTask.execute(url);
-
-
+                }
+                else{
+                    serviceNotAvailable.setVisibility(View.VISIBLE);
                 }
 
             }
@@ -465,52 +503,80 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
 
+        sourceText.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(sourceMarker !=null){
+                    sourceMarker.remove();
+                }
+                mapStateChange(true);
+                moveCamera(AppConstant.searchSorceLocationModel.home,AppConstant.DEFAULT_ZOOM,"Default");
+                AppConstant.SOURCE_SELECT = true;
+                AppConstant.DESTINATION_SELECT = false;
+                defaultImageMarker.setImageResource(R.drawable.ic_marker_pickup);
+                return false;
+            }
+        });
 
+        destinationText.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(destinationMarker !=null){
+                    destinationMarker.remove();
+                }
+                mapStateChange(true);
+                moveCamera(AppConstant.searchDestinationLocationModel.work,AppConstant.DEFAULT_ZOOM,"Default");
+                AppConstant.SOURCE_SELECT = false;
+                AppConstant.DESTINATION_SELECT = true;
+
+                defaultImageMarker.setImageResource(R.drawable.ic_marker_destination);
+                return false;
+            }
+        });
 
         hideSoftKeyboard();
     }
 
 
     private void getDeviceLocation() {
-
+        myLocation = new Geocoder(MapActivity.this, Locale.getDefault());
         if(connectionCheck.isGpsEnable()){
-            Geocoder myLocation = new Geocoder(MapActivity.this, Locale.getDefault());
+
             try {
                 vmCurrentLocation = new VmCurrentLocation();
                 vmCurrentLocation.latitude=getCurrentLocation.getLatitude();
                 vmCurrentLocation.logitude=getCurrentLocation.getLongitude();
                 List<Address> myList = myLocation.getFromLocation(vmCurrentLocation.latitude, vmCurrentLocation.logitude, 1);
-                Address address = (Address) myList.get(0);
-                // mapMarkerDragging = new MapMarkerDragging(MapActivity.this,source,dest,mMap);
+               if(myList.size()>0){
 
-                //checkLatLon();
+                   Address address = myList.get(0);
+                   Gson gson = new Gson();
+                   String json = gson.toJson(vmCurrentLocation);
+                   editor.putString("currentLocation",json);
+                   editor.commit();
 
-                vmCurrentLocation.locationName =address.getAddressLine(0);
+                   if (AppConstant.searchSorceLocationModel == null) {
+                       AppConstant.searchSorceLocationModel = new HomeLocationModel();
 
-                Gson gson = new Gson();
-                String json = gson.toJson(vmCurrentLocation);
-                editor.putString("currentLocation",json);
-                editor.commit();
+                   }
 
-                if (AppConstant.searchSorceLocationModel == null) {
-                    AppConstant.searchSorceLocationModel = new HomeLocationModel();
+                   AppConstant.searchSorceLocationModel.homeLocationName = address.getAddressLine(0);
+                   AppConstant.searchSorceLocationModel.home = new LatLng(vmCurrentLocation.latitude, vmCurrentLocation.logitude);
+                   if(AppConstant.searchDestinationLocationModel == null){
+                       AppConstant.searchDestinationLocationModel = new WorkLocationModel();
+                       AppConstant.searchDestinationLocationModel.workLocationName = AppConstant.searchSorceLocationModel.homeLocationName;
+                       AppConstant.searchDestinationLocationModel.work =AppConstant.searchSorceLocationModel.home;
+                   }
+                   String sourceLocation = AppConstant .searchSorceLocationModel.homeLocationName;
+                   sourceText.setText(sourceLocation);
 
-                }
 
-                AppConstant.searchSorceLocationModel.homeLocationName = address.getAddressLine(0);
-                AppConstant.searchSorceLocationModel.home = new LatLng(vmCurrentLocation.latitude, vmCurrentLocation.logitude);
-                String sourceLocation = AppConstant .searchSorceLocationModel.homeLocationName;
-                sourceText.setText(sourceLocation);
+                   moveCamera(new LatLng(vmCurrentLocation.latitude, vmCurrentLocation.logitude),
+                           AppConstant.DEFAULT_ZOOM, "Default");
+               }
 
-                if(!AppConstant.LAT_LNG_BOUNDS_CTG_3.contains(AppConstant.searchSorceLocationModel.home)){
-                    serviceNotAvailable.setVisibility(View.VISIBLE);
-                }
-                else{
-                    serviceNotAvailable.setVisibility(View.GONE);
-                }
-                moveCamera(new LatLng(vmCurrentLocation.latitude, vmCurrentLocation.logitude),
-                        AppConstant.DEFAULT_ZOOM, "Source");
-                checkButtonState();
+
+                 CheckService(AppConstant.searchSorceLocationModel.home);
                 if(!sharedpreferences.getString("APP_SHOWCASED","").equals("true"))
                     showCaseApp();
 
@@ -601,6 +667,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
         }
+        else{
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+
+        }
 
     }
 
@@ -682,15 +752,13 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
             if(AppConstant.searchSorceLocationModel !=null){
                 Place place = PlaceAutocomplete.getPlace(this, data);
-                if (AppConstant.LAT_LNG_BOUNDS_CTG_3.contains(place.getLatLng())) {
                     AppConstant.searchSorceLocationModel.homeLocationName = place.getAddress().toString();
                     AppConstant.searchSorceLocationModel.home = place.getLatLng();
                     String sourceLocation = AppConstant.searchSorceLocationModel.homeLocationName;
                     sourceText.setText(sourceLocation);
-                    moveCamera(AppConstant.searchSorceLocationModel.home, AppConstant.DEFAULT_ZOOM, "Source");
-                } else {
-                    Toast.makeText(getContextOfApplication(), "Service is out of bounds", Toast.LENGTH_SHORT).show();
-                }
+                    CheckService(AppConstant.searchSorceLocationModel.home);
+                    moveCamera(AppConstant.searchSorceLocationModel.home, AppConstant.DEFAULT_ZOOM, "default");
+
             }
 
         } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
@@ -704,7 +772,6 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     } else if (requestCode == AppConstant.SEARCH_DESTINATION_AUTOCOMPLETE) {
         if (resultCode == RESULT_OK) {
             Place place = PlaceAutocomplete.getPlace(this, data);
-            if (AppConstant.LAT_LNG_BOUNDS_CTG_3.contains(place.getLatLng())) {
                 if (AppConstant.searchDestinationLocationModel == null) {
                     AppConstant.searchDestinationLocationModel = new WorkLocationModel();
                 }
@@ -712,10 +779,9 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
                 AppConstant.searchDestinationLocationModel.work = place.getLatLng();
                 String destinationLocation = AppConstant.searchDestinationLocationModel.workLocationName;
                 destinationText.setText(destinationLocation);
-                moveCamera(AppConstant.searchDestinationLocationModel.work, AppConstant.DEFAULT_ZOOM, "Destination");
-            } else {
-                Toast.makeText(getContextOfApplication(), "Service is out of bounds", Toast.LENGTH_SHORT).show();
-            }
+                CheckService(AppConstant.searchDestinationLocationModel.work);
+                moveCamera(AppConstant.searchDestinationLocationModel.work, AppConstant.DEFAULT_ZOOM, "default");
+
 
         }
         else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
@@ -727,7 +793,8 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
             // The user canceled the operation.
         }
     }
-    checkButtonState();
+
+
 }
 
     //Menu
@@ -743,11 +810,12 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     @Override
     public void onBackPressed() {
 
+        mapStateChange(true);
+        defaultImageMarker.setVisibility(View.VISIBLE);
         mMap.clear();
-        moveCamera(AppConstant.searchSorceLocationModel.home,AppConstant.DEFAULT_ZOOM,"Source");
+        moveCamera(AppConstant.searchSorceLocationModel.home,AppConstant.DEFAULT_ZOOM,"default");
         requestbtn.setVisibility(View.INVISIBLE);
-        AppConstant.searchDestinationLocationModel=null;
-        checkButtonState();
+
 
         if (back_pressed + 1000 > System.currentTimeMillis()) {
             super.onBackPressed();
@@ -899,6 +967,27 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         sequence.start();
     }
+
+    void mapStateChange(boolean state){
+        mMap.getUiSettings().setScrollGesturesEnabled(state);
+        mMap.getUiSettings().setZoomGesturesEnabled(state);
+        defaultImageMarker.setVisibility(View.VISIBLE);
+    }
+
+
+    boolean CheckService(LatLng latLng){
+        if(!AppConstant.LAT_LNG_BOUNDS_CTG_3.contains(latLng)){
+            serviceNotAvailable.setVisibility(View.VISIBLE);
+            sendButton.setVisibility(View.INVISIBLE);
+            return false;
+        }
+        else{
+            serviceNotAvailable.setVisibility(View.INVISIBLE);
+            checkButtonState();
+            return true;
+        }
+    }
+
 }
 
 
