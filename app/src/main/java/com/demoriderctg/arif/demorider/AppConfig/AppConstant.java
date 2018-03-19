@@ -110,5 +110,7 @@ public class AppConstant {
     public static final int GET_SMS_PERMISSION = 1;
     public static final int SEARCH_SOURCE_AUTOCOMPLETE=1;
     public static final int SEARCH_DESTINATION_AUTOCOMPLETE=2;
+    public static boolean SOURCE_SELECT=false;
+    public  static boolean DESTINATION_SELECT = true;
 
 }
