@@ -25,7 +25,8 @@ import __Firebase.FirebaseWrapper;
  * Created by User on 11/16/2017.
  */
 
-public class FirebaseMessagingServices extends FirebaseMessagingService {
+public class
+FirebaseMessagingServices extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {

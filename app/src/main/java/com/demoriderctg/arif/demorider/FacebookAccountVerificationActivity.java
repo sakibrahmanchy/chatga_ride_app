@@ -70,9 +70,6 @@ public class FacebookAccountVerificationActivity extends AppCompatActivity {
         else{
             startAccountVerification();
         }
-
-
-
     }
 
     public void startAccountVerification(){

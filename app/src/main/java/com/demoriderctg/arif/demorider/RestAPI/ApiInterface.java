@@ -136,4 +136,7 @@ public interface ApiInterface {
     @GET("api/v1/new_cards/clients")
     Call<NewsCardResponse> getClientNewsCards(@Header("Authorization") String authHeader);
 
+    @GET("api/v1/client/all_informations")
+    Call<LoginModel> getClientAllInformations(@Header("Authorization") String authHeader,
+                                             @Query("client_id") String clientId);
 }
