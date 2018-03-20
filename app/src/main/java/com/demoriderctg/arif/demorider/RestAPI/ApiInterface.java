@@ -5,6 +5,7 @@ package com.demoriderctg.arif.demorider.RestAPI;
  */
 
 import com.demoriderctg.arif.demorider.models.ApiModels.AccessTokenModels.AuthToken;
+import com.demoriderctg.arif.demorider.models.ApiModels.AppPreloadModel.PreloadResponse;
 import com.demoriderctg.arif.demorider.models.ApiModels.DateTimeModel.DateTimeResponse;
 import com.demoriderctg.arif.demorider.models.ApiModels.DeviceTokenModels.UpdateDeviceTokenData;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginModel;
@@ -139,4 +140,8 @@ public interface ApiInterface {
     @GET("api/v1/client/all_informations")
     Call<LoginModel> getClientAllInformations(@Header("Authorization") String authHeader,
                                              @Query("client_id") String clientId);
+
+    @GET("http://139.59.90.128/chaatga_rider/api/v1/preload/client")
+    Call<PreloadResponse> preloadAppData(@Header("Authorization") String authHeader,
+                                         @Query("client_id") String client_id);
 }
