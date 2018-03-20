@@ -40,6 +40,7 @@ public class FareCostInfo  extends Dialog implements android.view.View.OnClickLi
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.fare_cost_info);
+
         btnOk = (Button) findViewById(R.id.btnOK);
         btnOk.setOnClickListener(this);
 
