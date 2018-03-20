@@ -13,6 +13,7 @@ public class CostEstimation {
     private double distance;
     private double duration;
     private double total;
+
     public CostEstimation() {
 
     }

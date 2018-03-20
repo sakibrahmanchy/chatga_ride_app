@@ -74,6 +74,7 @@ import com.demoriderctg.arif.demorider.R;
 import com.demoriderctg.arif.demorider.Setting.SettingActivity;
 import com.demoriderctg.arif.demorider.UserInformation;
 import com.demoriderctg.arif.demorider.VmModels.VmCurrentLocation;
+import com.demoriderctg.arif.demorider.models.ApiModels.LatLongBound;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 import com.demoriderctg.arif.demorider.models.ApiModels.NewsCardModels.NewsCard;
 import com.demoriderctg.arif.demorider.models.ApiModels.RideHistory.ClientHistory;
@@ -254,6 +255,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private double totalHeight, actionHeight, searchHeight,peekHeight;
     private RecyclerView newsCardListView;
     private ArrayList<NewsCard> newsCards;
+    private ArrayList<LatLongBound>regionLatlonBounds;
 
 
     @Override
@@ -354,6 +356,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 .noFade()
                 .into(avatarContainer);
 
+        //Region LatLonBounds
+
+        regionLatlonBounds = userInformation.getLatLongBounds();
 
         newsCards = userInformation.getNewsCards();
         NewsCardAdapter adapter = new NewsCardAdapter(this, newsCards);
@@ -989,16 +994,23 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 
     boolean CheckService(LatLng latLng){
-        if(!AppConstant.LAT_LNG_BOUNDS_CTG_3.contains(latLng)){
+
+        LatLngBounds latLngBounds ;
+        for(int i =0; i<regionLatlonBounds.size(); i++){
+            latLngBounds = new LatLngBounds(
+                    new LatLng(regionLatlonBounds.get(i).getNorthLatitude(),regionLatlonBounds.get(i).getNorthLongitude()),
+                    new LatLng(regionLatlonBounds.get(i).getSouthLatitude(),regionLatlonBounds.get(i).getSouthLongitude()));
+               if(latLngBounds.contains(latLng)){
+                   serviceNotAvailable.setVisibility(View.INVISIBLE);
+                   checkButtonState();
+                   return true;
+               }
+        }
+
             serviceNotAvailable.setVisibility(View.VISIBLE);
             sendButton.setVisibility(View.INVISIBLE);
             return false;
-        }
-        else{
-            serviceNotAvailable.setVisibility(View.INVISIBLE);
-            checkButtonState();
-            return true;
-        }
+
     }
 
 }
