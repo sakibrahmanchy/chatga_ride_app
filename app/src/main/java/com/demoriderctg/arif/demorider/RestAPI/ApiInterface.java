@@ -7,8 +7,8 @@ package com.demoriderctg.arif.demorider.RestAPI;
 import com.demoriderctg.arif.demorider.models.ApiModels.AccessTokenModels.AuthToken;
 import com.demoriderctg.arif.demorider.models.ApiModels.DateTimeModel.DateTimeResponse;
 import com.demoriderctg.arif.demorider.models.ApiModels.DeviceTokenModels.UpdateDeviceTokenData;
-import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginModel;
+import com.demoriderctg.arif.demorider.models.ApiModels.NewsCardModels.NewsCardResponse;
 import com.demoriderctg.arif.demorider.models.ApiModels.NotificationModels.NotificationResponse;
 import com.demoriderctg.arif.demorider.models.ApiModels.Rating.RateDriver;
 import com.demoriderctg.arif.demorider.models.ApiModels.Rating.Rating;
@@ -20,9 +20,6 @@ import com.demoriderctg.arif.demorider.models.ApiModels.User;
 import com.demoriderctg.arif.demorider.models.ApiModels.UserCheckResponse;
 import com.demoriderctg.arif.demorider.models.ApiModels.UserDiscounts.ApplyPromoCodeResponse;
 import com.demoriderctg.arif.demorider.models.ApiModels.UserDiscounts.UserDiscountResponse;
-import com.demoriderctg.arif.demorider.models.ApiModels.UserDiscounts.UserDiscounts;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -31,7 +28,6 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.GET;
-import retrofit2.http.HEAD;
 import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
@@ -137,4 +133,10 @@ public interface ApiInterface {
                                          @Part MultipartBody.Part avatar,
                                          @Part("phone") RequestBody phone);
 
+    @GET("api/v1/new_cards/clients")
+    Call<NewsCardResponse> getClientNewsCards(@Header("Authorization") String authHeader);
+
+    @GET("api/v1/client/all_informations")
+    Call<LoginModel> getClientAllInformations(@Header("Authorization") String authHeader,
+                                             @Query("client_id") String clientId);
 }

@@ -29,6 +29,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.ActionMenuItemView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
@@ -38,10 +40,12 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -49,6 +53,7 @@ import android.widget.Toast;
 
 import com.demoriderctg.arif.demorider.About.AboutActivity;
 import com.demoriderctg.arif.demorider.Adapters.History.ClientHistoryActivity;
+import com.demoriderctg.arif.demorider.Adapters.NewsCard.NewsCardAdapter;
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
 import com.demoriderctg.arif.demorider.ClearData.ClearData;
 import com.demoriderctg.arif.demorider.Dailog.BottomSheetDailogRide;
@@ -70,6 +75,7 @@ import com.demoriderctg.arif.demorider.Setting.SettingActivity;
 import com.demoriderctg.arif.demorider.UserInformation;
 import com.demoriderctg.arif.demorider.VmModels.VmCurrentLocation;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
+import com.demoriderctg.arif.demorider.models.ApiModels.NewsCardModels.NewsCard;
 import com.demoriderctg.arif.demorider.models.ApiModels.RideHistory.ClientHistory;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -246,6 +252,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     Geocoder myLocation;
 
     private double totalHeight, actionHeight, searchHeight,peekHeight;
+    private RecyclerView newsCardListView;
+    private ArrayList<NewsCard> newsCards;
 
 
     @Override
@@ -264,8 +272,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         serviceNotAvailable =findViewById(R.id.service_not_available);
         serviceNotAvailable.setVisibility(View.INVISIBLE);
         getCurrentLocation = new GetCurrentLocation(this);
+        defaultImageMarker = findViewById(R.id.default_image_Marker);
 
-         defaultImageMarker = findViewById(R.id.default_image_Marker);
+
+        newsCardListView = findViewById(R.id.news_card_listview);
+
 
         bottomSheet = findViewById( R.id.bottom_sheet );
 
@@ -343,6 +354,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 .noFade()
                 .into(avatarContainer);
 
+
+        newsCards = userInformation.getNewsCards();
+        NewsCardAdapter adapter = new NewsCardAdapter(this, newsCards);
+        newsCardListView.setLayoutManager(new LinearLayoutManager(this));
+        newsCardListView.setAdapter(adapter);
 
         //spinner.setVisibility(View.GONE);
         sharedpreferences = this.getSharedPreferences("MyPref", 0);
