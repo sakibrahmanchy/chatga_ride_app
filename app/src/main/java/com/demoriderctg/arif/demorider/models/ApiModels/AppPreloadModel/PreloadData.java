@@ -1,6 +1,7 @@
 package com.demoriderctg.arif.demorider.models.ApiModels.AppPreloadModel;
 
 import com.demoriderctg.arif.demorider.UserInformation;
+import com.demoriderctg.arif.demorider.models.ApiModels.AppSettingModels.AppSettings;
 import com.demoriderctg.arif.demorider.models.ApiModels.LatLongBound;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 import com.demoriderctg.arif.demorider.models.ApiModels.NewsCardModels.NewsCard;
@@ -20,11 +21,14 @@ public class PreloadData {
     ArrayList<NewsCard> newsCards;
     @SerializedName("latLongBounds")
     ArrayList<LatLongBound> latLongBounds;
+    @SerializedName("appSettings")
+    AppSettings appSettings;
 
-    public PreloadData(LoginData userInformations, ArrayList<NewsCard> newsCards, ArrayList<LatLongBound> latLongBounds) {
+    public PreloadData(LoginData userInformations, ArrayList<NewsCard> newsCards, ArrayList<LatLongBound> latLongBounds,AppSettings appSettings) {
         this.userInformations = userInformations;
         this.newsCards = newsCards;
         this.latLongBounds = latLongBounds;
+        this.appSettings = appSettings;
     }
 
     public LoginData getUserInformations() {
@@ -49,5 +53,13 @@ public class PreloadData {
 
     public void setLatLongBounds(ArrayList<LatLongBound> latLongBounds) {
         this.latLongBounds = latLongBounds;
+    }
+
+    public AppSettings getAppSettings() {
+        return appSettings;
+    }
+
+    public void setAppSettings(AppSettings appSettings) {
+        this.appSettings = appSettings;
     }
 }

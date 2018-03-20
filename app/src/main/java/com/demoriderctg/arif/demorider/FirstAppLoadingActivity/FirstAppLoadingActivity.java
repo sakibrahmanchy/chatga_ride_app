@@ -24,6 +24,7 @@ import com.demoriderctg.arif.demorider.RestAPI.ApiClient;
 import com.demoriderctg.arif.demorider.RestAPI.ApiInterface;
 import com.demoriderctg.arif.demorider.UserInformation;
 import com.demoriderctg.arif.demorider.models.ApiModels.AppPreloadModel.PreloadResponse;
+import com.demoriderctg.arif.demorider.models.ApiModels.AppSettingModels.AppSettings;
 import com.demoriderctg.arif.demorider.models.ApiModels.LatLongBound;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginModel;
@@ -159,6 +160,7 @@ public class FirstAppLoadingActivity extends AppCompatActivity {
                         LoginData newLoginData = response.body().getData().getUserInformations();
                         ArrayList<NewsCard> newsCards = response.body().getData().getNewsCards();
                         ArrayList<LatLongBound> latLongBounds = response.body().getData().getLatLongBounds();
+                        AppSettings appSettings = response.body().getData().getAppSettings();
 
                         Gson userData = new Gson();
                         String userJson = userData.toJson(newLoginData);
@@ -173,6 +175,11 @@ public class FirstAppLoadingActivity extends AppCompatActivity {
                         Gson latLongBoundData = new Gson();
                         String latLongBoundJson = latLongBoundData.toJson(latLongBounds);
                         editor.putString("latLongData",latLongBoundJson);
+                        editor.commit();
+
+                        Gson appSettingsData = new Gson();
+                        String appSettingsJson = appSettingsData.toJson(appSettings);
+                        editor.putString("appSettingsData",appSettingsJson);
                         editor.commit();
 
                         main.HasAnyRide(Long.parseLong(loginData.getClientId()));
