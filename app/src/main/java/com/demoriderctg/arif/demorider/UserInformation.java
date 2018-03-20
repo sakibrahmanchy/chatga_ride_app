@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import com.demoriderctg.arif.demorider.FavoritePlaces.HomeLocationModel;
 import com.demoriderctg.arif.demorider.FavoritePlaces.WorkLocationModel;
 import com.demoriderctg.arif.demorider.VmModels.VmCurrentLocation;
+import com.demoriderctg.arif.demorider.models.ApiModels.LatLongBound;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 import com.demoriderctg.arif.demorider.models.ApiModels.NewsCardModels.NewsCard;
 import com.google.gson.Gson;
@@ -21,6 +22,7 @@ public class UserInformation {
     private SharedPreferences sharedpreferences;
     private LoginData loginData;
     private ArrayList<NewsCard> newsCardData;
+    private ArrayList<LatLongBound> latLongBoundData;
     private  HomeLocationModel homeLocationModel;
     private WorkLocationModel workLocationModel;
     public static final String MyPREFERENCES = "MyPrefs";
@@ -71,5 +73,12 @@ public class UserInformation {
         String jsonString = sharedpreferences.getString("newsCardData", null);
         newsCardData = gson.fromJson(jsonString,  new TypeToken<List<NewsCard>>(){}.getType());
         return newsCardData;
+    }
+
+    public ArrayList<LatLongBound> getLatLongBounds() {
+
+        String jsonString = sharedpreferences.getString("latLongData", null);
+        latLongBoundData = gson.fromJson(jsonString,  new TypeToken<List<LatLongBound>>(){}.getType());
+        return latLongBoundData;
     }
 }

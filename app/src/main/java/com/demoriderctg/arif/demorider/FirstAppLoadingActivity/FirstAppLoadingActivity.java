@@ -23,6 +23,8 @@ import com.demoriderctg.arif.demorider.R;
 import com.demoriderctg.arif.demorider.RestAPI.ApiClient;
 import com.demoriderctg.arif.demorider.RestAPI.ApiInterface;
 import com.demoriderctg.arif.demorider.UserInformation;
+import com.demoriderctg.arif.demorider.models.ApiModels.AppPreloadModel.PreloadResponse;
+import com.demoriderctg.arif.demorider.models.ApiModels.LatLongBound;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginModel;
 import com.demoriderctg.arif.demorider.models.ApiModels.NewsCardModels.NewsCard;
@@ -64,8 +66,7 @@ public class FirstAppLoadingActivity extends AppCompatActivity {
         int GET_MY_PERMISSION = 1;
 
         if(loginData != null){
-
-            GetClientsAllInformations(loginData.getClientId());
+            preLoadAppData(loginData.getClientId());
         }
         else{
             Intent intent = new Intent(FirstAppLoadingActivity.this, MainActivity.class);
@@ -135,6 +136,61 @@ public class FirstAppLoadingActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         }
+    }
+
+    public void preLoadAppData(String client_id){
+
+        pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+        editor = pref.edit();
+
+        apiService =
+                ApiClient.getClient().create(ApiInterface.class);
+
+        String authHeader = "Bearer "+pref.getString("access_token",null);
+
+        Call<PreloadResponse> call = apiService.preloadAppData(authHeader,client_id);
+        call.enqueue(new Callback<PreloadResponse>() {
+            @Override
+            public void onResponse(Call<PreloadResponse> call, Response<PreloadResponse> response) {
+
+                int statusCode = response.code();
+                switch(statusCode){
+                    case 200:
+                        LoginData newLoginData = response.body().getData().getUserInformations();
+                        ArrayList<NewsCard> newsCards = response.body().getData().getNewsCards();
+                        ArrayList<LatLongBound> latLongBounds = response.body().getData().getLatLongBounds();
+
+                        Gson userData = new Gson();
+                        String userJson = userData.toJson(newLoginData);
+                        editor.putString("userData",userJson);
+                        editor.commit();
+
+                        Gson newsCardData = new Gson();
+                        String newsCardJson = newsCardData.toJson(newsCards);
+                        editor.putString("newsCardData",newsCardJson);
+                        editor.commit();
+
+                        Gson latLongBoundData = new Gson();
+                        String latLongBoundJson = latLongBoundData.toJson(latLongBounds);
+                        editor.putString("latLongData",latLongBoundJson);
+                        editor.commit();
+
+                        main.HasAnyRide(Long.parseLong(loginData.getClientId()));
+                        InitializeApp();
+                        break;
+                    default:
+                        Snackbar.make(findViewById(android.R.id.content), "Sorry, network error.",
+                                Snackbar.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PreloadResponse> call, Throwable t) {
+                // Log error here since request failed
+                Log.e(TAG, t.toString());
+            }
+        });
     }
 
     public void GetClientsAllInformations(String client_id){
