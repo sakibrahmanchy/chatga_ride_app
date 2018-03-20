@@ -574,8 +574,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                    moveCamera(new LatLng(vmCurrentLocation.latitude, vmCurrentLocation.logitude),
                            AppConstant.DEFAULT_ZOOM, "Default");
                }
-
-
                  CheckService(AppConstant.searchSorceLocationModel.home);
                 if(!sharedpreferences.getString("APP_SHOWCASED","").equals("true"))
                     showCaseApp();
@@ -944,7 +942,6 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         config.setShapePadding(-320);
         MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, "ShowCaseMain" );
         sequence.setConfig(config);
-
         drawerLayout.openDrawer(Gravity.START);
         sequence.addSequenceItem(navigationView,
                 "Manage your information!", "GOT IT").setOnItemDismissedListener(new MaterialShowcaseSequence.OnSequenceItemDismissedListener() {

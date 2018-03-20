@@ -112,5 +112,7 @@ public class AppConstant {
     public static final int SEARCH_DESTINATION_AUTOCOMPLETE=2;
     public static boolean SOURCE_SELECT=false;
     public  static boolean DESTINATION_SELECT = true;
+    public  static double ESTIMATE_FARE_WITHOUT_DISCOUNT=0;
+    public  static double ESTIMATED_FARE_AFTER_DISCOUNT=0;
 
 }

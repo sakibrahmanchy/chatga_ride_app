@@ -65,8 +65,26 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:text="Estimated Distance: 5.6km \nEstimated Time: 10mins \nEstimated Fare: ৳150"
-                android:padding="10dp"
+                android:text="Estimated Distance: 5.6km \nEstimated Time: 10mins"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="0dp"
+                android:textColor="@android:color/white"
+                android:textSize="15sp" />
+            <TextView
+                android:id="@+id/total_estimated_fare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="Estimated Fare: ৳150"
+                android:textColor="@android:color/white"
+                android:textSize="15sp" />
+            <TextView
+                android:id="@+id/total_estimated_fare_after_discount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="Estimated Fare After Discount: ৳150"
                 android:textColor="@android:color/white"
                 android:textSize="15sp" />
 

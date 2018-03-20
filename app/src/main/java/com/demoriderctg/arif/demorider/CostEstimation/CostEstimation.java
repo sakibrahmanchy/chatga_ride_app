@@ -17,28 +17,31 @@ public class CostEstimation {
 
     }
 
-   public double getTotalCost(String Stringdistance,String Stringduration){
+   public void getTotalCost(String Stringdistance,String Stringduration){
         double distance = getDistance(Stringdistance);
         double duration = getDuration(Stringduration);
         double totalCost=0;
         if(AppConstant.userDiscount !=null){
             if(AppConstant.userDiscount.getDiscountPercentage()>0){
-                 totalCost =  AppConstant.BASE_TAKA+AppConstant.PER_KILOMITTER*distance + AppConstant.DURATION_PER_KILOMITTER*duration;
-                 totalCost = totalCost-(totalCost *(AppConstant.userDiscount.getDiscountPercentage()/100.0));
+                AppConstant.ESTIMATE_FARE_WITHOUT_DISCOUNT= totalCost =  AppConstant.BASE_TAKA+AppConstant.PER_KILOMITTER*distance + AppConstant.DURATION_PER_KILOMITTER*duration;
+                AppConstant.ESTIMATED_FARE_AFTER_DISCOUNT= totalCost = totalCost-(totalCost *(AppConstant.userDiscount.getDiscountPercentage()/100.0));
             }
             else if(AppConstant.userDiscount.getDiscountAmount()>0){
-                totalCost =  AppConstant.BASE_TAKA+AppConstant.PER_KILOMITTER*distance + AppConstant.DURATION_PER_KILOMITTER*duration;
-                totalCost = totalCost - AppConstant.userDiscount.getDiscountAmount();
+              AppConstant.ESTIMATE_FARE_WITHOUT_DISCOUNT=  totalCost =  AppConstant.BASE_TAKA+AppConstant.PER_KILOMITTER*distance + AppConstant.DURATION_PER_KILOMITTER*duration;
+               AppConstant.ESTIMATED_FARE_AFTER_DISCOUNT= totalCost = totalCost - AppConstant.userDiscount.getDiscountAmount();
             }
         }
         else{
-            totalCost =  AppConstant.BASE_TAKA+AppConstant.PER_KILOMITTER*distance + AppConstant.DURATION_PER_KILOMITTER*duration;
+            AppConstant.ESTIMATE_FARE_WITHOUT_DISCOUNT=totalCost =  AppConstant.BASE_TAKA+AppConstant.PER_KILOMITTER*distance + AppConstant.DURATION_PER_KILOMITTER*duration;
         }
-        if(totalCost<39){
-            totalCost =40;
+        if(AppConstant.ESTIMATE_FARE_WITHOUT_DISCOUNT<40){
+            AppConstant.ESTIMATE_FARE_WITHOUT_DISCOUNT =40;
+        }
+        if(AppConstant.ESTIMATED_FARE_AFTER_DISCOUNT<40 && AppConstant.ESTIMATED_FARE_AFTER_DISCOUNT !=0  ){
+            AppConstant.ESTIMATED_FARE_AFTER_DISCOUNT=40;
         }
 
-        return totalCost;
+
     }
 
     public double getDistance(String StringDistance){
