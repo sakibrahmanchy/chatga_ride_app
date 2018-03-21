@@ -66,7 +66,7 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
     private ConnectionCheck connectionCheck;
     private Main main;
     private long totalCost;
-    private CostEstimation costEstimation = new CostEstimation();
+    private CostEstimation costEstimation ;
     private ProgressDialog dialog;
     private ApiInterface apiService;
     private TextView EstimateFare,EstimatedFareAfterDiscount;
@@ -83,6 +83,7 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mString = getArguments().getString("string");
+        costEstimation = new CostEstimation(getActivity());
     }
 
     @Override

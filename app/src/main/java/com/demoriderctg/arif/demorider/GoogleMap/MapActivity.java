@@ -56,6 +56,7 @@ import com.demoriderctg.arif.demorider.Adapters.History.ClientHistoryActivity;
 import com.demoriderctg.arif.demorider.Adapters.NewsCard.NewsCardAdapter;
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
 import com.demoriderctg.arif.demorider.ClearData.ClearData;
+import com.demoriderctg.arif.demorider.CostEstimation.CostEstimation;
 import com.demoriderctg.arif.demorider.Dailog.BottomSheetDailogRide;
 import com.demoriderctg.arif.demorider.Dailog.RideFinishDailog;
 import com.demoriderctg.arif.demorider.FavoritePlaces.FavoritePlacesActivity;
@@ -74,6 +75,7 @@ import com.demoriderctg.arif.demorider.R;
 import com.demoriderctg.arif.demorider.Setting.SettingActivity;
 import com.demoriderctg.arif.demorider.UserInformation;
 import com.demoriderctg.arif.demorider.VmModels.VmCurrentLocation;
+import com.demoriderctg.arif.demorider.models.ApiModels.AppSettingModels.AppSettings;
 import com.demoriderctg.arif.demorider.models.ApiModels.LatLongBound;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 import com.demoriderctg.arif.demorider.models.ApiModels.NewsCardModels.NewsCard;
@@ -519,8 +521,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         requestbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final BottomSheetDialogFragment myBottomSheet = BottomSheetDailogRide.newInstance("Modal Bottom Sheet");
-                myBottomSheet.show(getSupportFragmentManager(), myBottomSheet.getTag());
+                double x = new CostEstimation(getApplicationContext()).getDistance(AppConstant.DISTANCE);
+                if(x<50){
+                    final BottomSheetDialogFragment myBottomSheet = BottomSheetDailogRide.newInstance("Modal Bottom Sheet");
+                    myBottomSheet.show(getSupportFragmentManager(), myBottomSheet.getTag());
+                }
+                else{
+                    serviceNotAvailable.setVisibility(View.VISIBLE);
+                }
+
             }
         });
 
