@@ -3,6 +3,7 @@ package __Firebase.FirebaseReqest;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Pair;
 
+import __Firebase.Exception.UncaughtException;
 import __Firebase.FirebaseModel.ClientModel;
 import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
 import __Firebase.FirebaseModel.RiderModel;
@@ -33,6 +34,7 @@ public class __FirebaseRequest extends AppCompatActivity {
                 new CreateClientFirstTime(Client, callBackListener);
             }
         };
+        thread.setUncaughtExceptionHandler(new UncaughtException());
         thread.start();
     }
 
@@ -44,6 +46,7 @@ public class __FirebaseRequest extends AppCompatActivity {
                 new IsClientAlreadyCreated(ClientID, callBackListener);
             }
         };
+        thread.setUncaughtExceptionHandler(new UncaughtException());
         thread.start();
     }
 
@@ -55,6 +58,7 @@ public class __FirebaseRequest extends AppCompatActivity {
                 new RequestForRide(Source, Destination, callBackListener);
             }
         };
+        thread.setUncaughtExceptionHandler(new UncaughtException());
         thread.start();
     }
 
@@ -95,6 +99,7 @@ public class __FirebaseRequest extends AppCompatActivity {
                 new SetDeviceTokenToRiderTable(Client, callBackListener);
             }
         };
+        thread.setUncaughtExceptionHandler(new UncaughtException());
         thread.start();
     }
 
@@ -106,6 +111,7 @@ public class __FirebaseRequest extends AppCompatActivity {
                 new CancelRideByClient(HistoryModel, Client, callBackListener);
             }
         };
+        thread.setUncaughtExceptionHandler(new UncaughtException());
         thread.start();
     }
 
@@ -117,6 +123,7 @@ public class __FirebaseRequest extends AppCompatActivity {
                 new SetHistoryIDToClient(HistoryModel, Client, Time, callBackListener);
             }
         };
+        thread.setUncaughtExceptionHandler(new UncaughtException());
         thread.start();
     }
 
@@ -128,6 +135,7 @@ public class __FirebaseRequest extends AppCompatActivity {
                 new GetCurrentRider(RiderID, callBackListener, iGetCurrentRider);
             }
         };
+        thread.setUncaughtExceptionHandler(new UncaughtException());
         thread.start();
     }
 
@@ -139,6 +147,7 @@ public class __FirebaseRequest extends AppCompatActivity {
                 new GetCurrentRider(RiderID, callBackListener);
             }
         };
+        thread.setUncaughtExceptionHandler(new UncaughtException());
         thread.start();
     }
 
@@ -150,6 +159,7 @@ public class __FirebaseRequest extends AppCompatActivity {
                 new GetRiderLocation(Rider, iGerRiderLocation);
             }
         };
+        thread.setUncaughtExceptionHandler(new UncaughtException());
         thread.start();
     }
 
@@ -161,6 +171,7 @@ public class __FirebaseRequest extends AppCompatActivity {
                 new GetCurrentRiderHistoryModel(HistoryID, ClientID, Time, ActionType, callBackListener);
             }
         };
+        thread.setUncaughtExceptionHandler(new UncaughtException());
         thread.start();
     }
 
@@ -172,6 +183,7 @@ public class __FirebaseRequest extends AppCompatActivity {
                 new GetCurrentRiderHistoryModel(HistoryID, ClientID, callBackListener);
             }
         };
+        thread.setUncaughtExceptionHandler(new UncaughtException());
         thread.start();
     }
 
@@ -183,6 +195,7 @@ public class __FirebaseRequest extends AppCompatActivity {
                 new HasAnyRide(RiderID, callBackListener);
             }
         };
+        thread.setUncaughtExceptionHandler(new UncaughtException());
         thread.start();
     }
 
@@ -194,6 +207,7 @@ public class __FirebaseRequest extends AppCompatActivity {
                 new SetRidingCostSoFar(Client, callBackListener);
             }
         };
+        thread.setUncaughtExceptionHandler(new UncaughtException());
         thread.start();
     }
 
@@ -205,6 +219,7 @@ public class __FirebaseRequest extends AppCompatActivity {
                 new ChangeDestinationLocation(HistoryModel, ClientModel, callBackListener);
             }
         };
+        thread.setUncaughtExceptionHandler(new UncaughtException());
         thread.start();
     }
 
@@ -216,6 +231,7 @@ public class __FirebaseRequest extends AppCompatActivity {
                 new GetCurrentRidingHistoryID(Client, callBackListener);
             }
         };
+        thread.setUncaughtExceptionHandler(new UncaughtException());
         thread.start();
     }
 
@@ -227,6 +243,7 @@ public class __FirebaseRequest extends AppCompatActivity {
                 new UpdateCostForCurrentRide(Client, callBackListener);
             }
         };
+        thread.setUncaughtExceptionHandler(new UncaughtException());
         thread.start();
     }
 
@@ -238,6 +255,7 @@ public class __FirebaseRequest extends AppCompatActivity {
                 new FinishRide(Client, callBackListener);
             }
         };
+        thread.setUncaughtExceptionHandler(new UncaughtException());
         thread.start();
     }
 
@@ -249,36 +267,43 @@ public class __FirebaseRequest extends AppCompatActivity {
                 new RequestForRiderLocation(Rider, callBackListener);
             }
         };
+        thread.setUncaughtExceptionHandler(new UncaughtException());
         thread.start();
     }
 
     public void GetCurrentRidingCost(final ClientModel Client, final CurrentRidingHistoryModel History, final ICallBackFinishedRide iCallBackFinishedRide) {
+
         Thread thread = new Thread() {
             @Override
             public void run() {
                 new GetCurrentRidingCost(Client, History, iCallBackFinishedRide);
             }
         };
+        thread.setUncaughtExceptionHandler(new UncaughtException());
         thread.start();
     }
 
     public void UpdateNameImageAndRatting(ClientModel Client, ICallbackMain callBackListener) {
+
         Thread thread = new Thread() {
             @Override
             public void run() {
                 new UpdateNameImageAndRatting(Client, callBackListener);
             }
         };
+        thread.setUncaughtExceptionHandler(new UncaughtException());
         thread.start();
     }
 
     public void GetAppSettings(final ICallbackMain callBackListener) {
+
         Thread thread = new Thread() {
             @Override
             public void run() {
                 new GetAppSettings(callBackListener);
             }
         };
+        thread.setUncaughtExceptionHandler(new UncaughtException());
         thread.start();
     }
 

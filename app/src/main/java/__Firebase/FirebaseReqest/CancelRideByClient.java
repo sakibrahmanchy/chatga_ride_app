@@ -8,6 +8,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 
+import __Firebase.Exception.FabricExceptionLog;
 import __Firebase.ICallBackInstance.ICallbackMain;
 import __Firebase.FirebaseModel.ClientModel;
 import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
@@ -38,30 +39,34 @@ public class CancelRideByClient {
         * If Rider == model Notify rider
         */
 
-        FirebaseWrapper firebaseWrapper = FirebaseWrapper.getInstance();
-        firebaseWrapper.FirebaseRootReference.child(FirebaseConstant.HISTORY)
-                .orderByChild(FirebaseConstant.CLIENT_HISTORY).
-                equalTo(Client.ClientID + FirebaseConstant.JOIN + HistoryModel.HistoryID).addListenerForSingleValueEvent(new ValueEventListener() {
+        try {
+            FirebaseWrapper firebaseWrapper = FirebaseWrapper.getInstance();
+            firebaseWrapper.FirebaseRootReference.child(FirebaseConstant.HISTORY)
+                    .orderByChild(FirebaseConstant.CLIENT_HISTORY).
+                    equalTo(Client.ClientID + FirebaseConstant.JOIN + HistoryModel.HistoryID).addListenerForSingleValueEvent(new ValueEventListener() {
 
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
 
-                if(dataSnapshot.exists() && dataSnapshot.hasChildren()) {
-                    if (dataSnapshot.getChildren().iterator().hasNext()) {
+                    if(dataSnapshot.exists() && dataSnapshot.hasChildren()) {
+                        if (dataSnapshot.getChildren().iterator().hasNext()) {
 
-                        HashMap<String, Object> CancelRideByRider = new HashMap<>();
-                        CancelRideByRider.put(FirebaseConstant.CANCEL_RIDE_BY_CLIENT, HistoryModel.RideCanceledByClient);
-                        dataSnapshot.getChildren().iterator().next().getRef().updateChildren(CancelRideByRider);
+                            HashMap<String, Object> CancelRideByRider = new HashMap<>();
+                            CancelRideByRider.put(FirebaseConstant.CANCEL_RIDE_BY_CLIENT, HistoryModel.RideCanceledByClient);
+                            dataSnapshot.getChildren().iterator().next().getRef().updateChildren(CancelRideByRider);
 
-                        Log.d(FirebaseConstant.CANCEL_RIDE_BY_CLIENT, FirebaseConstant.CANCEL_RIDE_BY_CLIENT);
+                            FabricExceptionLog.printLog(this.getClass().getSimpleName(), FirebaseConstant.CANCEL_RIDE_BY_CLIENT);
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    FabricExceptionLog.sendLogToFabric(true, this.getClass().getSimpleName(), databaseError.toString());
+                }
+            });
+        } catch (Exception e) {
+            FabricExceptionLog.sendLogToFabric(true, this.getClass().getSimpleName(), e.toString());
+        }
     }
 }

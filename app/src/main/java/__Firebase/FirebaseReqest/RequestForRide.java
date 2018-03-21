@@ -1,6 +1,5 @@
 package __Firebase.FirebaseReqest;
 
-import android.util.Log;
 import android.util.Pair;
 
 import com.google.firebase.database.DataSnapshot;
@@ -8,11 +7,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
+import __Firebase.Exception.FabricExceptionLog;
 import __Firebase.FirebaseModel.RiderModel;
 import __Firebase.FirebaseUtility.FirebaseConstant;
-import __Firebase.FirebaseUtility.ShortestDistanceMap;
 import __Firebase.FirebaseWrapper;
 import __Firebase.ICallBackInstance.ICallbackMain;
 
@@ -38,31 +36,35 @@ public class RequestForRide {
 
     public void Request() {
 
-        FirebaseWrapper firebaseWrapper = FirebaseWrapper.getInstance();
-        firebaseWrapper.FirebaseRootReference.child(FirebaseConstant.RIDER)
-                .orderByChild(FirebaseConstant.ONLINE_BUSY_RIDE)
-                .equalTo(FirebaseConstant.ONLINE_NOT_BUSY_NO_RIDE)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+        try {
+            FirebaseWrapper firebaseWrapper = FirebaseWrapper.getInstance();
+            firebaseWrapper.FirebaseRootReference.child(FirebaseConstant.RIDER)
+                    .orderByChild(FirebaseConstant.ONLINE_BUSY_RIDE)
+                    .equalTo(FirebaseConstant.ONLINE_NOT_BUSY_NO_RIDE)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
 
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        if (dataSnapshot.exists() && dataSnapshot.hasChildren()) {
-                            for (DataSnapshot snp : dataSnapshot.getChildren()) {
-                                RiderModel riderModel = new RiderModel();
-                                riderModel.LoadData(snp);
-                                RiderList.add(riderModel);
+                            if (dataSnapshot.exists() && dataSnapshot.hasChildren()) {
+                                for (DataSnapshot snp : dataSnapshot.getChildren()) {
+                                    RiderModel riderModel = new RiderModel();
+                                    riderModel.LoadData(snp);
+                                    RiderList.add(riderModel);
+                                }
+                                callBackListener.OnRequestForRide(RiderList);
+                            } else {
+                                callBackListener.OnRequestForRide(RiderList);
                             }
-                            callBackListener.OnRequestForRide(RiderList);
-                        } else {
-                            callBackListener.OnRequestForRide(RiderList);
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Log.d(FirebaseConstant.NEAREST_RIDER_ERROR, databaseError.toString());
-                    }
-                });
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            FabricExceptionLog.sendLogToFabric(true, this.getClass().getSimpleName(), databaseError.toString());
+                        }
+                    });
+        } catch (Exception e) {
+            FabricExceptionLog.sendLogToFabric(true, this.getClass().getSimpleName(), e.toString());
+        }
     }
 }

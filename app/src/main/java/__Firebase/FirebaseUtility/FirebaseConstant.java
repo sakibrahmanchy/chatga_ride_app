@@ -111,6 +111,8 @@ public class FirebaseConstant {
 
     /*Toast Message*/
     public static String NO_RIDER_FOUND = "No rider found";
+    public static String NO_TAG_CLASS_FOUND = "NO_TAG_CLASS_FOUND";
+    public static String NO_TAG_MESSAGE_FOUND = "NO_TAG_MESSAGE_FOUND";
 
     /*Notification Action Type*/
     public static final String CLIENT_TO_RIDER = ("3021");
@@ -152,6 +154,9 @@ public class FirebaseConstant {
     public static String ONE = ("1");
     
     public static boolean VAR_CAN_REQUEST_FOR_RIDE = true;
+
+    /* Crash */
+    public static String UNCAUGHT_EXCEPTION = "UNCAUGHT_EXCEPTION";
 
     public FirebaseConstant(){
     }

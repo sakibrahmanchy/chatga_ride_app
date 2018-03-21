@@ -8,11 +8,12 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 
-import __Firebase.ICallBackInstance.ICallbackMain;
+import __Firebase.Exception.FabricExceptionLog;
 import __Firebase.FirebaseModel.ClientModel;
 import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
 import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseWrapper;
+import __Firebase.ICallBackInstance.ICallbackMain;
 
 /**
  * Created by User on 11/24/2017.
@@ -24,7 +25,7 @@ public class ChangeDestinationLocation {
     private ClientModel ClientModel = null;
     private ICallbackMain callBackListener = null;
 
-    public ChangeDestinationLocation(final CurrentRidingHistoryModel HistoryModel, ClientModel ClientModel, ICallbackMain callBackListener){
+    public ChangeDestinationLocation(final CurrentRidingHistoryModel HistoryModel, ClientModel ClientModel, ICallbackMain callBackListener) {
         this.HistoryModel = HistoryModel;
         this.ClientModel = ClientModel;
         this.callBackListener = callBackListener;
@@ -32,33 +33,36 @@ public class ChangeDestinationLocation {
         Request();
     }
 
-    public void Request(){
+    public void Request() {
 
         FirebaseWrapper firebaseWrapper = FirebaseWrapper.getInstance();
-        firebaseWrapper.FirebaseRootReference.child(FirebaseConstant.HISTORY).orderByChild(FirebaseConstant.CLIENT_HISTORY).equalTo(ClientModel.ClientID + FirebaseConstant.JOIN + HistoryModel.HistoryID).addListenerForSingleValueEvent(new ValueEventListener() {
+        try {
+            firebaseWrapper.FirebaseRootReference.child(FirebaseConstant.HISTORY).orderByChild(FirebaseConstant.CLIENT_HISTORY).equalTo(ClientModel.ClientID + FirebaseConstant.JOIN + HistoryModel.HistoryID).addListenerForSingleValueEvent(new ValueEventListener() {
 
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
 
-                if(dataSnapshot.getChildren().iterator().hasNext()) {
+                    if (dataSnapshot.getChildren().iterator().hasNext()) {
 
-                    HashMap<String, Object> Latitude = new HashMap<>();
-                    Latitude.put(FirebaseConstant.LATITUDE, HistoryModel.EndingLocation.Latitude);
-                    dataSnapshot.getChildren().iterator().next().child(FirebaseConstant.ENDING_LOCATION).getRef().updateChildren(Latitude);
+                        HashMap<String, Object> Latitude = new HashMap<>();
+                        Latitude.put(FirebaseConstant.LATITUDE, HistoryModel.EndingLocation.Latitude);
+                        dataSnapshot.getChildren().iterator().next().child(FirebaseConstant.ENDING_LOCATION).getRef().updateChildren(Latitude);
 
-                    HashMap<String, Object> Longitude = new HashMap<>();
-                    Longitude.put(FirebaseConstant.LONGITUDE, HistoryModel.EndingLocation.Longitude);
-                    dataSnapshot.getChildren().iterator().next().child(FirebaseConstant.ENDING_LOCATION).getRef().updateChildren(Longitude);
+                        HashMap<String, Object> Longitude = new HashMap<>();
+                        Longitude.put(FirebaseConstant.LONGITUDE, HistoryModel.EndingLocation.Longitude);
+                        dataSnapshot.getChildren().iterator().next().child(FirebaseConstant.ENDING_LOCATION).getRef().updateChildren(Longitude);
 
-                    Log.d(FirebaseConstant.UPDATE_LOCATION, FirebaseConstant.UPDATE_LOCATION);
+                        FabricExceptionLog.printLog(this.getClass().getSimpleName(), FirebaseConstant.UPDATE_LOCATION);
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    FabricExceptionLog.sendLogToFabric(true, this.getClass().getSimpleName(), databaseError.toString());
+                }
+            });
+        } catch (Exception e) {
+            FabricExceptionLog.sendLogToFabric(true, this.getClass().getSimpleName(), e.toString());
+        }
     }
-
 }

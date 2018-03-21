@@ -3,12 +3,10 @@ package __Firebase.FirebaseResponse;
 import android.content.Intent;
 import android.util.Log;
 
-import ContactWithFirebase.Main;
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
-import com.demoriderctg.arif.demorider.Dailog.SearchingDriver;
 import com.demoriderctg.arif.demorider.OnrideMode.OnrideModeActivity;
-import com.demoriderctg.arif.demorider.OnrideMode.SendNotification;
 
+import ContactWithFirebase.Main;
 import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
 import __Firebase.FirebaseModel.RiderModel;
 import __Firebase.FirebaseUtility.FirebaseConstant;
@@ -45,29 +43,29 @@ public class InitialAcceptanceOfRideResponse implements ICallBackCurrentServerTi
     private void Response() {
         AppConstant.INITIAL_RIDE_ACCEPT = 1;
         FirebaseConstant.IS_RIDE_ACCEPTED_BY_RIDER = 1;
-        AppConstant.HISTORY_ID = (int)currentRidingHistoryModel.HistoryID;
-            Intent intent = new Intent(searchActivity,OnrideModeActivity.class);
-            searchActivity.startActivity(intent);
-            fullMapActivity.finish();
-            searchActivity.finish();
+        AppConstant.HISTORY_ID = (int) currentRidingHistoryModel.HistoryID;
+        Intent intent = new Intent(searchActivity, OnrideModeActivity.class);
+        searchActivity.startActivity(intent);
+        fullMapActivity.finish();
+        searchActivity.finish();
 
 
 
         /*Do the stuff*/
     }
 
-    private void ParseDataFromHistoryToNotification(){
+    private void ParseDataFromHistoryToNotification() {
 
         notificationModel.riderPhone = String.valueOf(riderModel.PhoneNumber);
         notificationModel.riderName = riderModel.FullName;
         notificationModel.riderId = currentRidingHistoryModel.RiderID;
     }
 
-    private void CheckValidity(){
+    private void CheckValidity() {
 
         currentRidingHistoryModel = FirebaseWrapper.getInstance().getCurrentRidingHistoryModelInstance();
 
-        if(FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider.RiderID == currentRidingHistoryModel.RiderID) {
+        if (FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider.RiderID == currentRidingHistoryModel.RiderID) {
             riderModel = FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider;
             notificationModel = FirebaseWrapper.getInstance().getNotificationModelInstance();
             ParseDataFromHistoryToNotification();
@@ -79,8 +77,8 @@ public class InitialAcceptanceOfRideResponse implements ICallBackCurrentServerTi
 
     @Override
     public void OnResponseServerTime(long value, int type) {
-        if(value > 0 && type == FirebaseConstant.INITIAL_AC_OF_RIDE_NOTIFY){
-            if(Math.abs(value - Time) <= FirebaseConstant.ONE_MINUTE_IN_MILLISECOND){
+        if (value > 0 && type == FirebaseConstant.INITIAL_AC_OF_RIDE_NOTIFY) {
+            if (Math.abs(value - Time) <= FirebaseConstant.ONE_MINUTE_IN_MILLISECOND) {
                 CheckValidity();
             }
         }
@@ -94,6 +92,4 @@ public class InitialAcceptanceOfRideResponse implements ICallBackCurrentServerTi
             Response();
         }
     }
-
-
 }
