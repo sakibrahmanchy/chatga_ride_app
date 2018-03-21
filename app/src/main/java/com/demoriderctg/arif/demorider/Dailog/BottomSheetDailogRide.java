@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -65,9 +66,10 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
     private ConnectionCheck connectionCheck;
     private Main main;
     private long totalCost;
-    private CostEstimation costEstimation = new CostEstimation();
+    private CostEstimation costEstimation ;
     private ProgressDialog dialog;
     private ApiInterface apiService;
+    private TextView EstimateFare,EstimatedFareAfterDiscount;
 
     public static BottomSheetDailogRide newInstance(String string) {
         BottomSheetDailogRide f = new BottomSheetDailogRide();
@@ -81,6 +83,7 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mString = getArguments().getString("string");
+        costEstimation = new CostEstimation(getActivity());
     }
 
     @Override
@@ -92,11 +95,20 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
         pickUpBotton = (Button) v.findViewById(R.id.pickupbtn);
         connectionCheck = new ConnectionCheck(getContext());
         fare_info = (ImageView) v.findViewById(R.id.fareInfo);
-
+        EstimateFare = v.findViewById(R.id.total_estimated_fare);
+        EstimatedFareAfterDiscount = v.findViewById(R.id.total_estimated_fare_after_discount);
+        EstimatedFareAfterDiscount.setVisibility(View.GONE);
         //pathLocation.setText(AppConstant.SOURCE_NAME + " To "+AppConstant.DESTINATION_NAME);
 
-        totalCost = (long)costEstimation.getTotalCost(AppConstant.DISTANCE, AppConstant.DURATION);
-        total_cost.setText("Estimated Distance: "+AppConstant.DISTANCE+" \nEstimated Time: "+AppConstant.DURATION+" \nEstimated Fare: ৳"+totalCost);
+
+        costEstimation.getTotalCost(AppConstant.DISTANCE, AppConstant.DURATION);
+        total_cost.setText("Estimated Distance: "+AppConstant.DISTANCE+" \nEstimated Time: "+AppConstant.DURATION);
+        EstimateFare.setText("Estimated Fare: ৳"+AppConstant.ESTIMATE_FARE_WITHOUT_DISCOUNT);
+        if(AppConstant.ESTIMATED_FARE_AFTER_DISCOUNT !=0){
+            EstimatedFareAfterDiscount.setVisibility(View.VISIBLE);
+            EstimateFare.setPaintFlags(EstimateFare.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            EstimatedFareAfterDiscount.setText("Estimated Fare After Discount: ৳"+AppConstant.ESTIMATED_FARE_AFTER_DISCOUNT);
+        }
         main = new Main();
         init();
         return v;
@@ -118,10 +130,15 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
                     if( AppConstant.userDiscount !=null && AppConstant.userDiscount.getDiscountId()>0){
                         DiscountId =AppConstant.userDiscount.getDiscountId();
                     }
-                    AppConstant.TOTAL_COST = totalCost;
+                    AppConstant.TOTAL_COST = (long)AppConstant.ESTIMATE_FARE_WITHOUT_DISCOUNT;
+                    if(AppConstant.ESTIMATED_FARE_AFTER_DISCOUNT !=0){
+                        AppConstant.TOTAL_COST = (long)AppConstant.ESTIMATED_FARE_AFTER_DISCOUNT;
+
+                    }
+
 
                     FirebaseWrapper.getInstance().getRiderViewModelInstance().ClearData(true);
-                    main.RequestForRide(Source, Destination, AppConstant.SOURCE_NAME, AppConstant.DESTINATION_NAME, totalCost, DiscountId);
+                    main.RequestForRide(Source, Destination, AppConstant.SOURCE_NAME, AppConstant.DESTINATION_NAME, AppConstant.TOTAL_COST, DiscountId);
                     FirebaseConstant.VAR_CAN_REQUEST_FOR_RIDE = true;
                     Intent intent = new Intent(getContext(), FullMapSearching.class);
                     startActivity(intent);

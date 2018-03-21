@@ -7,14 +7,24 @@ import android.preference.PreferenceManager;
 import com.demoriderctg.arif.demorider.FavoritePlaces.HomeLocationModel;
 import com.demoriderctg.arif.demorider.FavoritePlaces.WorkLocationModel;
 import com.demoriderctg.arif.demorider.VmModels.VmCurrentLocation;
+import com.demoriderctg.arif.demorider.models.ApiModels.AppSettingModels.AppSettings;
+import com.demoriderctg.arif.demorider.models.ApiModels.LatLongBound;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
+import com.demoriderctg.arif.demorider.models.ApiModels.NewsCardModels.NewsCard;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserInformation {
 
     private Gson gson;
     private SharedPreferences sharedpreferences;
     private LoginData loginData;
+    private ArrayList<NewsCard> newsCardData;
+    private ArrayList<LatLongBound> latLongBoundData;
+    private AppSettings appSettings;
     private  HomeLocationModel homeLocationModel;
     private WorkLocationModel workLocationModel;
     public static final String MyPREFERENCES = "MyPrefs";
@@ -25,7 +35,6 @@ public class UserInformation {
         gson = new Gson();
         sharedpreferences = context.getSharedPreferences("MyPref", 0); // 0 - for private mode
         editor = sharedpreferences.edit();
-
     }
 
     public LoginData getuserInformation() {
@@ -59,5 +68,25 @@ public class UserInformation {
     public void RemoveLoginData(){
         editor.remove("userData");
         editor.commit();
+    }
+
+    public ArrayList<NewsCard> getNewsCards() {
+
+        String jsonString = sharedpreferences.getString("newsCardData", null);
+        newsCardData = gson.fromJson(jsonString,  new TypeToken<List<NewsCard>>(){}.getType());
+        return newsCardData;
+    }
+
+    public ArrayList<LatLongBound> getLatLongBounds() {
+
+        String jsonString = sharedpreferences.getString("latLongData", null);
+        latLongBoundData = gson.fromJson(jsonString,  new TypeToken<List<LatLongBound>>(){}.getType());
+        return latLongBoundData;
+    }
+
+    public AppSettings getAppSettings(){
+        String jsonString = sharedpreferences.getString("appSettingsData", null);
+        appSettings = gson.fromJson(jsonString,  AppSettings.class);
+        return appSettings;
     }
 }
