@@ -102,6 +102,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -138,7 +139,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         Log.d(TAG, "onMapReady: map is ready");
         mMap = googleMap;
-
+        mMap.setMapStyle(
+                MapStyleOptions.loadRawResourceStyle(
+                        this, R.raw.style_json));
         mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
 
             @Override
