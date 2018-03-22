@@ -20,6 +20,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -196,9 +197,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             new LatLng(54.69726685890506, -2.7379201682812226), new LatLng(55.38942944437183, -1.2456105979687226));
     String CurrentLocation;
     //widgets
-    private Button sendButton;
+    private FloatingActionButton sendButton;
     private ImageView mGps;
-    private Button requestbtn;
+    private FloatingActionButton requestbtn;
     private TextView sourceText;
     private TextView destinationText;
     private SharedPreferences sharedpreferences;
@@ -331,8 +332,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         destinationText = (TextView) findViewById(R.id.destinationText);
         linearLayout = (LinearLayout) findViewById(R.id.searchLinearLayout);
         mGps = (ImageView) findViewById(R.id.ic_gps);
-        sendButton = (Button) findViewById(R.id.btnSend);
-        requestbtn = (Button) findViewById(R.id.pickupbtn);
+        sendButton = (FloatingActionButton) findViewById(R.id.btnSend);
+        requestbtn = (FloatingActionButton) findViewById(R.id.pickupbtn);
         requestbtn.setVisibility(View.INVISIBLE);
         linearLayout.setVisibility(View.VISIBLE);
         //spinner = (ProgressBar) findViewById(R.id.progressBar);
