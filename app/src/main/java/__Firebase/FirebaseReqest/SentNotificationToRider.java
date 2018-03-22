@@ -19,6 +19,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import __Firebase.Exception.FabricExceptionLog;
 import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.ICallBackInstance.ICallbackMain;
 
@@ -88,7 +89,7 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
             discountID = params[17];
             time = params[18];
         } catch (ExceptionInInitializerError e) {
-            e.printStackTrace();
+            FabricExceptionLog.sendLogToFabric(true, this.getClass().getSimpleName(), e.toString());
         }
 
         try {
@@ -137,15 +138,15 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
             try {
                 jsonObject = new JSONObject(responseStrBuilder.toString());
             } catch (JSONException e) {
-                e.printStackTrace();
+                FabricExceptionLog.sendLogToFabric(true, this.getClass().getSimpleName(), e.toString());
             }
             inputStream.close();
             return responseStrBuilder.toString();
 
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            FabricExceptionLog.sendLogToFabric(true, this.getClass().getSimpleName(), e.toString());
         } catch (IOException e) {
-            e.printStackTrace();
+            FabricExceptionLog.sendLogToFabric(true, this.getClass().getSimpleName(), e.toString());
         }
         return null;
     }
@@ -165,7 +166,7 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
                 return;
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            FabricExceptionLog.sendLogToFabric(true, this.getClass().getSimpleName(), e.toString());
         }
 
         FirebaseConstant.IS_RIDE_ACCEPTED_BY_RIDER = 0;

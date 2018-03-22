@@ -16,6 +16,8 @@ import __Firebase.FirebaseModel.RiderModel;
 
 public class AppConstant {
 
+    public static final boolean IS_LOG_ENABLE = true;
+
     public static final String BASE_URL  = "http://139.59.90.128/chaatga_rider/";
     public static final String Empty = ("");
     public static final String Latitude = "lat";
