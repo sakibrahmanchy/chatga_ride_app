@@ -26,6 +26,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -49,6 +50,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -142,6 +144,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mMap.setMapStyle(
                 MapStyleOptions.loadRawResourceStyle(
                         this, R.raw.style_json));
+
+        mMap.getUiSettings().setCompassEnabled(false);
         mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
 
             @Override
@@ -261,7 +265,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private RecyclerView newsCardListView;
     private ArrayList<NewsCard> newsCards;
     private ArrayList<LatLongBound>regionLatlonBounds;
-
+    private float bottomSheetMinimumSize = 0.9f;
+    private float bottomSheetCurrentSize;
+    private ImageView navBarToggle;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -280,13 +286,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         serviceNotAvailable.setVisibility(View.INVISIBLE);
         getCurrentLocation = new GetCurrentLocation(this);
         defaultImageMarker = findViewById(R.id.default_image_Marker);
-
-
+        navBarToggle = findViewById(R.id.nav_drawer_toggle);
+        navBarToggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.openDrawer(Gravity.START);
+            }
+        });
         newsCardListView = findViewById(R.id.news_card_listview);
 
 
         bottomSheet = findViewById( R.id.bottom_sheet );
-
+        bottomSheet.setScaleX(bottomSheetMinimumSize);
+        bottomSheetCurrentSize = bottomSheetMinimumSize;
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         getPeekHeightOfScrollBar();
 
@@ -294,8 +306,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
 
-                switch (newState){
-
+                if (newState == BottomSheetBehavior.STATE_COLLAPSED)
+                {
+                    findViewById(R.id.bg).setVisibility(View.GONE);
+                    bottomSheetCurrentSize = bottomSheetMinimumSize;
                 }
 
             }
@@ -303,12 +317,31 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
                 // React to dragging events
-                if(slideOffset>=0.8){
 
+                findViewById(R.id.bg).setVisibility(View.VISIBLE);
+                findViewById(R.id.bg).setAlpha(slideOffset);
+                if(slideOffset>=bottomSheetMinimumSize){
+                    bottomSheet.setScaleX(bottomSheetCurrentSize);
+                }
+                else if(slideOffset>=0.3f && slideOffset<=0.9f){
+                    if(bottomSheetCurrentSize<=0.99f)
+                        bottomSheet.setScaleX(bottomSheetCurrentSize+=0.01f);
+                    else
+                        bottomSheetCurrentSize = 1;
+                }
+                else
+                    bottomSheet.setScaleX(bottomSheetMinimumSize);
+
+                if(slideOffset>=0.8){
+                    findViewById(R.id.bg).setBackgroundColor(Color.BLACK);
                 }
                 else if(slideOffset>=0.7 ){
                     linearLayout.setVisibility(View.GONE);
                 }else if(slideOffset>=0 && slideOffset<0.7){
+//                    if(slideOffset>=0 && slideOffset<=3)
+//                        bottomSheet.setScaleX(0.92f);
+//                    else
+//                        bottomSheet.setScaleX(1f);
 
                     linearLayout.setVisibility(View.VISIBLE);
                 }else{
