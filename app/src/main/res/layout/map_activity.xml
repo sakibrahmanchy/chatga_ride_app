@@ -46,6 +46,12 @@
                 android:padding="10dp"
                 android:weightSum="2">
 
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_nav_drawer_black"
+                    android:layout_marginBottom="5dp"/>
+
                 <TextView
                     android:id="@+id/sourceText"
                     android:layout_width="match_parent"

@@ -146,7 +146,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void onCameraChange(CameraPosition cameraPosition) {
                 Log.d("Camera postion change" + "", cameraPosition + "");
-                getSupportActionBar().show();
                 LatLng changeLocation = cameraPosition.target;
               //  sourceMarker.setPosition(changeLocation);
                 CheckService(changeLocation);
@@ -304,14 +303,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
                 // React to dragging events
                 if(slideOffset>=0.8){
-                    ActionBar actionBar = getSupportActionBar();
-                    actionBar.hide();
+
                 }
                 else if(slideOffset>=0.7 ){
                     linearLayout.setVisibility(View.GONE);
                 }else if(slideOffset>=0 && slideOffset<0.7){
-                    ActionBar actionBar = getSupportActionBar();
-                    actionBar.show();
+
                     linearLayout.setVisibility(View.VISIBLE);
                 }else{
                     mBottomSheetBehavior.setPeekHeight((int) peekHeight);
@@ -324,7 +321,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         getLocationPermission();
         InitializationAll();
 
-
+        getSupportActionBar().hide();
 
     }
 

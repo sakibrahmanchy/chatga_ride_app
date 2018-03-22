@@ -145,22 +145,7 @@
             android:layout_centerHorizontal="true"
             android:text="DURATION" />
 
-        <TextView
-            android:id="@+id/tv_total_fare_short"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:text="@string/weight_mock" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/tv_total_fare_short"
-            android:layout_alignLeft="@id/tv_total_fare_short"
-            android:layout_alignStart="@id/tv_total_fare_short"
-            android:text="FARE" />
 
     </RelativeLayout>
 </LinearLayout>

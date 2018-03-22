@@ -64,7 +64,6 @@ public class FoldingCellListAdapter extends ArrayAdapter<ClientHistory> {
             viewHolder.promocode = cell.findViewById(R.id.content_deadline_badge);
             viewHolder.historyId=cell.findViewById(R.id.tv_history_id);
             viewHolder.distanceInshort = cell.findViewById(R.id.tv_distance_short);
-            viewHolder.fareCost = cell.findViewById(R.id.tv_total_fare_short);
 
             cell.setTag(viewHolder);
         } else {
