@@ -573,7 +573,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 if(sourceMarker !=null){
                     sourceMarker.remove();
                 }
+                mMap.clear();
+                requestbtn.setVisibility(View.GONE);
+                sendButton.setVisibility(View.VISIBLE);
                 mapStateChange(true);
+                sourceText.setBackgroundColor(getResources().getColor(R.color.grey_100));
+                destinationText.setBackgroundColor(getResources().getColor(R.color.white));
                 moveCamera(AppConstant.searchSorceLocationModel.home,AppConstant.DEFAULT_ZOOM,"Default");
                 AppConstant.SOURCE_SELECT = true;
                 AppConstant.DESTINATION_SELECT = false;
@@ -588,6 +593,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 if(destinationMarker !=null){
                     destinationMarker.remove();
                 }
+                mMap.clear();
+                requestbtn.setVisibility(View.GONE);
+                sendButton.setVisibility(View.VISIBLE);
+                destinationText.setBackgroundColor(getResources().getColor(R.color.grey_100));
+                sourceText.setBackgroundColor(getResources().getColor(R.color.white));
                 mapStateChange(true);
                 moveCamera(AppConstant.searchDestinationLocationModel.work,AppConstant.DEFAULT_ZOOM,"Default");
                 AppConstant.SOURCE_SELECT = false;
@@ -618,22 +628,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                    String json = gson.toJson(vmCurrentLocation);
                    editor.putString("currentLocation",json);
                    editor.commit();
-
-                   if (AppConstant.searchSorceLocationModel == null) {
-                       AppConstant.searchSorceLocationModel = new HomeLocationModel();
-
-                   }
-
+                   AppConstant.searchSorceLocationModel = new HomeLocationModel();
                    AppConstant.searchSorceLocationModel.homeLocationName = address.getAddressLine(0);
                    AppConstant.searchSorceLocationModel.home = new LatLng(vmCurrentLocation.latitude, vmCurrentLocation.logitude);
-                   if(AppConstant.searchDestinationLocationModel == null){
+                   if(AppConstant.searchDestinationLocationModel == null) {
                        AppConstant.searchDestinationLocationModel = new WorkLocationModel();
                        AppConstant.searchDestinationLocationModel.workLocationName = AppConstant.searchSorceLocationModel.homeLocationName;
                        AppConstant.searchDestinationLocationModel.work =AppConstant.searchSorceLocationModel.home;
                    }
                    String sourceLocation = AppConstant .searchSorceLocationModel.homeLocationName;
                    sourceText.setText(sourceLocation);
-
 
                    moveCamera(new LatLng(vmCurrentLocation.latitude, vmCurrentLocation.logitude),
                            AppConstant.DEFAULT_ZOOM, "Default");
