@@ -18,10 +18,13 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.NotificationCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,9 +32,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.demoriderctg.arif.demorider.Adapters.NewsCard.NewsCardAdapter;
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
 import com.demoriderctg.arif.demorider.ClearData.ClearData;
 import com.demoriderctg.arif.demorider.FirstAppLoadingActivity.FirstAppLoadingActivity;
@@ -41,6 +46,8 @@ import com.demoriderctg.arif.demorider.Help.HelpActivity;
 import com.demoriderctg.arif.demorider.InternetConnection.ConnectionCheck;
 
 
+import com.demoriderctg.arif.demorider.UserInformation;
+import com.demoriderctg.arif.demorider.models.ApiModels.NewsCardModels.NewsCard;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.demoriderctg.arif.demorider.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -51,10 +58,12 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import ContactWithFirebase.Main;
@@ -97,8 +106,10 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
     private float v;
     private double lat,lng;
     private TextView rider_phone_number;
-
-
+    private RecyclerView newsCardListView;
+    private UserInformation userInformation;
+    private ArrayList<NewsCard> newsCards;
+    private RatingBar ratingBar;
 
 
     @Override
@@ -112,15 +123,16 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
         riderImage = (ImageView) findViewById(R.id.Rider_profile_pic);
         riderName = (TextView) findViewById(R.id.rider_name);
         contactRider = (TextView) findViewById(R.id.contact_with_rider);
-        rating = (TextView) findViewById(R.id.rider_rating);
-        rider_phone_number =findViewById(R.id.rider_number);
+        ratingBar = (RatingBar) findViewById(R.id.rider_rating);
+        rider_phone_number =(TextView) findViewById(R.id.rider_number);
+        newsCardListView = findViewById(R.id.news_card_2_listview);
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         bottomSheet = findViewById( R.id.bottom_sheet );
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         mBottomSheetBehavior.setPeekHeight(300);
-        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         riderModel = FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider;
         OnrideModeContext = this;
+        userInformation = new UserInformation(this);
         initMap();
         setUi();
 
@@ -128,8 +140,8 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
 
     void setUi(){
         riderName.setText(riderModel.FullName);
-        rating.setText(riderModel.Ratting );
-        rider_phone_number.setText(""+riderModel.PhoneNumber);
+        ratingBar.setRating((float) Double.parseDouble(riderModel.Ratting));
+        rider_phone_number.setText("8"+riderModel.PhoneNumber);
         Picasso.with(this).invalidate(riderModel.ImageUrl);
         Picasso.with(this)
                 .load(riderModel.ImageUrl)
@@ -137,12 +149,18 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
                 .error(R.drawable.profile_image)
                 .into(riderImage);
 
+        newsCards = userInformation.getNewsCards();
+        NewsCardAdapter adapter = new NewsCardAdapter(this, newsCards);
+        newsCardListView.setLayoutManager(new LinearLayoutManager(this));
+        newsCardListView.setAdapter(adapter);
+
         contactRider.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onCall();
             }
         });
+
 
     }
     @Override
@@ -172,7 +190,9 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
             uiSettings.setMapToolbarEnabled(false);
             googleMap.setMyLocationEnabled(true);
             mMap.setOnMyLocationButtonClickListener( OnrideModeActivity.this);
-
+            mMap.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                            this, R.raw.style_json));
             setUpMap();
 
         }

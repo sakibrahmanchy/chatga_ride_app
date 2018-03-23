@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -40,8 +41,8 @@ public class DownloadTask extends AsyncTask<String, Void, String> {
     private GoogleMap mMap;
     private ProgressDialog dailog;
     private Context mContext;
-    private Button sendButton;
-    private Button requestbtn;
+    private FloatingActionButton sendButton;
+    private FloatingActionButton requestbtn;
     private ImageView defaultMarker;
 
     public DownloadTask(Context context, GoogleMap mMap, LatLng source, LatLng dest) {
@@ -49,8 +50,8 @@ public class DownloadTask extends AsyncTask<String, Void, String> {
         this.source = source;
         this.dest = dest;
         this.mContext=context;
-        sendButton  =(Button) ((Activity)context).findViewById(R.id.btnSend);
-        requestbtn  =(Button) ((Activity)context).findViewById(R.id.pickupbtn);
+        sendButton  =(FloatingActionButton) ((Activity)context).findViewById(R.id.btnSend);
+        requestbtn  =(FloatingActionButton) ((Activity)context).findViewById(R.id.pickupbtn);
         defaultMarker = (ImageView) ((Activity)context).findViewById(R.id.default_image_Marker);
 
     }
