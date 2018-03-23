@@ -5,6 +5,7 @@ import android.util.Pair;
 
 import java.util.ArrayList;
 
+import __Firebase.Exception.FabricExceptionLog;
 import __Firebase.FirebaseModel.RiderModel;
 import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseUtility.FirebaseUtilMethod;
@@ -52,7 +53,7 @@ public class FindNearestRider implements IDistanceAndDuration {
 
     @Override
     public void OnGetIDistanceAndDuration(RiderModel _Rider, double Distance, String Duration) {
-        Log.d(FirebaseConstant.NEAREST_RIDER, _Rider.FullName + " :: " + Distance);
+        FabricExceptionLog.printLog(this.getClass().getSimpleName(), _Rider.FullName + " :: " + Distance);
 
         this.numberOfRider -= 1;
         if (FirebaseUtilMethod.IsEmptyOrNull(Duration) || _Rider == null) return;
@@ -83,7 +84,7 @@ public class FindNearestRider implements IDistanceAndDuration {
                 this._ShortestTime = Duration;
                 this._ShortestDistance = Distance;
             }
-            Log.d(FirebaseConstant.SHORTEST_DISTANCE, Rider.RiderID + " : " + Rider.DistanceFromClient + " " + this.Rider.RiderID + " : " + this.Rider.DistanceFromClient);
+            FabricExceptionLog.printLog(this.getClass().getSimpleName(), Rider.RiderID + " : " + Rider.DistanceFromClient + " " + this.Rider.RiderID + " : " + this.Rider.DistanceFromClient);
         }
 
         if (this.numberOfRider == 0) {
