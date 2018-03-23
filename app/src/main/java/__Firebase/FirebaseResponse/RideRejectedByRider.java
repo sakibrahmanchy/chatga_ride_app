@@ -40,16 +40,14 @@ public class RideRejectedByRider implements ICallBackCurrentServerTime {
     }
 
     private void AddRiderIntoBlockList(){
-        /*
-        * riderModel = FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider;
-        * requestedRider = FirebaseWrapper.getInstance().getRiderViewModelInstance().AlreadyRequestedRider;
-        * if(riderModel.RiderID > 0){
-        *     requestedRider.put(riderModel.RiderID, true);
-        * }
-        */
-        /*
-        * Do not request again, a timer is on which will automatically do another request within 70 sec
-        */
+
+        this.riderModel = FirebaseWrapper.getInstance().getRiderViewModelInstance().NearestRider;
+        this.requestedRider = FirebaseWrapper.getInstance().getRiderViewModelInstance().AlreadyRequestedRider;
+        if (riderModel.RiderID > 0) {
+            requestedRider.put(riderModel.RiderID, true);
+        }
+        ThrdRequestAgainForRider.Destroy();
+        this.RequestAgain();
     }
 
     private void RequestAgain(){
@@ -60,14 +58,13 @@ public class RideRejectedByRider implements ICallBackCurrentServerTime {
         Double SourceLan = AppConstant.SOURCE.longitude;
         Double DestinationLat = AppConstant.DESTINATION.latitude;
         Double DestinationLan = AppConstant.DESTINATION.longitude;
-        Pair Source = Pair.create(SourceLat,SourceLan);
-        Pair Destination = Pair.create(DestinationLat,DestinationLan);
+        Pair Source = Pair.create(SourceLat, SourceLan);
+        Pair Destination = Pair.create(DestinationLat, DestinationLan);
         int DiscountId = 0;
         if( AppConstant.userDiscount != null && AppConstant.userDiscount.getDiscountId() > 0){
             DiscountId = AppConstant.userDiscount.getDiscountId();
         }
         new Main().RequestForRide(Source, Destination, AppConstant.SOURCE_NAME, AppConstant.DESTINATION_NAME, AppConstant.TOTAL_COST, DiscountId);
-
     }
 
     @Override

@@ -11,6 +11,7 @@ import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
 import java.util.Map;
 
 import ContactWithFirebase.Main;
+import __Firebase.Exception.FabricExceptionLog;
 import __Firebase.FirebaseModel.RiderModel;
 import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseUtility.FirebaseUtilMethod;
@@ -41,19 +42,29 @@ public class ThrdRequestAgainForRider {
                         Destroy();
                         return;
                     }
-                    Destroy();
                     AddRiderIntoBlockList();
+                    Destroy();
                 }
             };
             handler.postDelayed(runnable, FirebaseConstant.CONSECUTIVE_REQUEST_INTERVAL /*One minute five second*/);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            FabricExceptionLog.sendLogToFabric(true, ThrdRequestAgainForRider.class.getSimpleName(), ex.getMessage());
         }
     }
 
     public static void Initiate() {
         handler = new Handler();
         Run();
+    }
+
+    public static void RemoveHandlerCallback() {
+        try {
+            if (handler != null && runnable != null) {
+                handler.removeCallbacks(runnable);
+            }
+        } catch (Exception e) {
+            FabricExceptionLog.sendLogToFabric(true, ThrdRequestAgainForRider.class.getSimpleName(), e.getMessage());
+        }
     }
 
     public static boolean CanRequest() {
@@ -115,11 +126,19 @@ public class ThrdRequestAgainForRider {
                 }
             }
         }
-
         return true;
     }
 
     public static void Destroy() {
+
+        RemoveHandlerCallback();
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            FabricExceptionLog.sendLogToFabric(true, ThrdRequestAgainForRider.class.getSimpleName(), e.getMessage());
+        }
+
         if (handler != null) handler = null;
         if (runnable != null) runnable = null;
     }

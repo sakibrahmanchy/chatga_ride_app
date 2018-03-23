@@ -10,6 +10,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import ContactWithFirebase.Main;
+import __Firebase.Exception.FabricExceptionLog;
 import __Firebase.FirebaseModel.ClientModel;
 import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseUtility.FirebaseUtilMethod;
@@ -254,7 +255,7 @@ public class FirebaseResponse {
                                             }
                                         }
                                         IS_INITIALIZED_RIDE_REJECTED = true;
-                                        Log.d(FirebaseConstant.RIDE_IS_REJECTED_BY_RIDER, ":: " + dataSnapshot.getValue().toString());
+                                        FabricExceptionLog.printLog(FirebaseConstant.RIDE_IS_REJECTED_BY_RIDER, ":: " + dataSnapshot.getValue().toString());
                                     }
                                 }
 
