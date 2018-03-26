@@ -39,7 +39,7 @@
                         android:background="@color/colorAccent"
                         android:text="APPLY PROMO CODE"
                         android:textColor="@android:color/white"
-                        android:textSize="20dp" />
+                        android:textSize="20sp" />
 
                 </LinearLayout>
 
@@ -49,7 +49,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="MY PROMO CODES"
-                android:textSize="25sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textColor="@color/colorPrimaryDark"

@@ -146,31 +146,38 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         this, R.raw.style_json));
 
         mMap.getUiSettings().setCompassEnabled(false);
-        mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
 
+        mMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
             @Override
-            public void onCameraChange(CameraPosition cameraPosition) {
-                Log.d("Camera postion change" + "", cameraPosition + "");
-                LatLng changeLocation = cameraPosition.target;
-              //  sourceMarker.setPosition(changeLocation);
-                CheckService(changeLocation);
-                    try {
-                        List<Address> myList = myLocation.getFromLocation(changeLocation.latitude, changeLocation.longitude, 1);
-                        if(myList.size()>0){
-                            Address address = (Address) myList.get(0);
-                            if(AppConstant.SOURCE_SELECT){
-                                AppConstant.searchSorceLocationModel.homeLocationName = address.getAddressLine(0);
-                                AppConstant.searchSorceLocationModel.home = changeLocation;
-                            }
-                            else{
-                                AppConstant.searchDestinationLocationModel.workLocationName = address.getAddressLine(0);
-                                AppConstant.searchDestinationLocationModel.work = changeLocation;
-                            }
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+            public void onCameraMoveStarted(int i) {
 
+            }
+        });
+
+        mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+            @Override
+            public void onCameraIdle() {
+                // Cleaning all the markers.
+
+
+                LatLng changeLocation = mMap.getCameraPosition().target;
+                CheckService(changeLocation);
+                try {
+                    List<Address> myList = myLocation.getFromLocation(changeLocation.latitude, changeLocation.longitude, 1);
+                    if(myList.size()>0){
+                        Address address = (Address) myList.get(0);
+                        if(AppConstant.SOURCE_SELECT){
+                            AppConstant.searchSorceLocationModel.homeLocationName = address.getAddressLine(0);
+                            AppConstant.searchSorceLocationModel.home = changeLocation;
+                        }
+                        else{
+                            AppConstant.searchDestinationLocationModel.workLocationName = address.getAddressLine(0);
+                            AppConstant.searchDestinationLocationModel.work = changeLocation;
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
             }
         });
@@ -613,10 +620,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
     private void getDeviceLocation() {
-        myLocation = new Geocoder(MapActivity.this, Locale.getDefault());
+
         if(connectionCheck.isGpsEnable()){
 
             try {
+                myLocation = new Geocoder(MapActivity.this, Locale.getDefault());
                 vmCurrentLocation = new VmCurrentLocation();
                 vmCurrentLocation.latitude=getCurrentLocation.getLatitude();
                 vmCurrentLocation.logitude=getCurrentLocation.getLongitude();

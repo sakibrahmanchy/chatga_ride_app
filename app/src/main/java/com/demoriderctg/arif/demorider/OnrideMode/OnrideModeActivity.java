@@ -408,7 +408,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
                     new String[]{Manifest.permission.CALL_PHONE},
                     123);
         } else {
-            startActivity(new Intent(Intent.ACTION_CALL).setData(Uri.parse("tel:0"+AppConstant.RIDER_PHONENUMBER)));
+            startActivity(new Intent(Intent.ACTION_CALL).setData(Uri.parse("tel:0"+riderModel.PhoneNumber)));
         }
     }
 
