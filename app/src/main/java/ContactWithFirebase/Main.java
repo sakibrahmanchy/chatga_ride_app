@@ -61,7 +61,7 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
         firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
 
         clientModel.ClientID = Long.parseLong(loginData.getClientId());
-        clientModel.FullName = loginData.firstName;
+        clientModel.FullName = loginData.firstName +" " + loginData.getLastName();
         clientModel.PhoneNumber = Long.parseLong(phoneNumber);
 
         clientModel.DeviceToken = FirebaseWrapper.getDeviceToken();

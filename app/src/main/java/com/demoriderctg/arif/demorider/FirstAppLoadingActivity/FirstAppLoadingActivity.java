@@ -87,7 +87,8 @@ public class FirstAppLoadingActivity extends AppCompatActivity {
 
                        if(AppConstant.IS_RIDE == 0){
                            Intent intent = new Intent(FirstAppLoadingActivity.this, MainActivity.class);
-
+                           main.UpdateNameImageAndRatting(loginData.getFirstName()+" "+loginData.getLastName(),
+                                   loginData.getAvatar(),loginData.getRating()+"");
                            startActivity(intent);
                            finish();
                        }
