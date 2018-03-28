@@ -41,8 +41,11 @@ public class LoginData {
     @SerializedName("rating")
     public float rating;
 
+    @SerializedName("referral_code")
+    public String referralCode;
+
     public LoginData(String firstName, String lastName, String deviceToken, String birthDate, String gender, String userId,
-                     String clientId, String phone, String email,String avatar, float rating) {
+                     String clientId, String phone, String email,String avatar, float rating, String referralCode) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.deviceToken = deviceToken;
@@ -54,6 +57,7 @@ public class LoginData {
         this.phone = phone;
         this.email = email;
         this.rating = rating;
+        this.referralCode = referralCode;
     }
 
     public LoginData(){}
@@ -144,5 +148,13 @@ public class LoginData {
 
     public void setRating(float rating) {
         this.rating = rating;
+    }
+
+    public String getReferralCode() {
+        return referralCode;
+    }
+
+    public void setReferralCode(String referralCode) {
+        this.referralCode = referralCode;
     }
 }
