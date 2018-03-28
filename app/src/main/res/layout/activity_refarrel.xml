@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey_100"
-    tools:context="com.demoriderctg.arif.demorider.Refarrel.Refarrel">
+    tools:context="com.demoriderctg.arif.demorider.Referral.Refarrel">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
-                android:background="@mipmap/home" />
+                android:src="@drawable/ic_coupon_code" />
         </LinearLayout>
 
         <LinearLayout
@@ -48,6 +48,7 @@
                     android:layout_height="wrap_content"
                     android:padding="10dp">
                     <TextView
+                        android:id="@+id/referral_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -56,6 +57,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/copy"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right|center"
@@ -78,10 +80,11 @@
                 android:layout_height="wrap_content" />
         </LinearLayout>
         <Button
-            android:id="@+id/startBtn"
+            android:id="@+id/invite_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="10dp"
+            android:padding="10dp"
             android:text="INVITE FRIENDS"
             android:layout_alignParentBottom="true"
             android:textSize="@dimen/large_font_size"

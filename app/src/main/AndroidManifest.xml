@@ -144,7 +144,7 @@
             android:name="io.fabric.ApiKey"
             android:value="e8cd72fce93bff8f1f3bdef92f592af0978a34e8" />
 
-        <activity android:name=".Refarrel.Refarrel"></activity>
+        <activity android:name=".Referral.Refarrel"></activity>
     </application>
 
 </manifest>
