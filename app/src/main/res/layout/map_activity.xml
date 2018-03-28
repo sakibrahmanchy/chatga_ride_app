@@ -67,7 +67,7 @@
                         android:padding="10dp"
                         android:focusable="true"
                         android:focusableInTouchMode="true"
-                        android:textSize="18sp" />
+                        android:textSize="@dimen/small_font_size" />
 
 
                 <TextView
@@ -85,7 +85,7 @@
                     android:maxLines="1"
                     android:padding="10dp"
                     android:focusable="true"
-                    android:textSize="18sp" />
+                    android:textSize="@dimen/small_font_size" />
 
                 <TextView
                     android:id="@+id/service_not_available"
@@ -96,7 +96,7 @@
                     android:padding="10dp"
                     android:text="Service is not available in your area."
                     android:textColor="@android:color/white"
-                    android:textSize="18sp" />
+                    android:textSize="@dimen/small_font_size" />
 
             </LinearLayout>
 

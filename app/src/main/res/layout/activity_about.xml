@@ -25,11 +25,13 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="Version "
+                android:textSize="@dimen/small_font_size"
                 android:layout_height="match_parent" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_gravity="center"
                 android:gravity="center"
+                android:textSize="@dimen/tinny_font_size"
                 android:text="1.0.1 "
                 android:layout_height="match_parent" />
             <TextView
@@ -38,6 +40,7 @@
                 android:gravity="center"
                 android:maxLines="4"
                 android:singleLine="false"
+                android:textSize="@dimen/tinny_font_size"
                 android:textColor="@color/colorButtonBlack"
                 android:textStyle="bold"
                 android:text="Chatga ride and the chatga ride logos are trademarks of chatga ride Inc.All right reserved."

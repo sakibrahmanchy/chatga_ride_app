@@ -28,6 +28,7 @@
                         android:id="@+id/edit_text_promo_code"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textSize="@dimen/tinny_font_size"
                         android:hint="Try out your promotions!" />
 
                     <Button
@@ -39,7 +40,7 @@
                         android:background="@color/colorAccent"
                         android:text="APPLY PROMO CODE"
                         android:textColor="@android:color/white"
-                        android:textSize="20sp" />
+                        android:textSize="@dimen/midum_font_size" />
 
                 </LinearLayout>
 
@@ -49,7 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="MY PROMO CODES"
-                android:textSize="20sp"
+                android:textSize="@dimen/small_font_size"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textColor="@color/colorPrimaryDark"

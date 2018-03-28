@@ -26,7 +26,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:textColor="@android:color/white"
-            android:textSize="20sp" />
+            android:textSize="@dimen/large_font_size" />
 
         <TextView
             android:id="@+id/title_time_label"
@@ -37,8 +37,7 @@
             android:layout_alignParentStart="true"
             android:textColor="@android:color/white"
             android:text="dsfsdfsdf"
-
-            android:textSize="14sp" />
+            android:textSize="@dimen/tinny_font_size" />
 
         <TextView
             android:id="@+id/title_date_label"
@@ -48,7 +47,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:textColor="@android:color/white"
-            android:textSize="12sp" />
+            android:textSize="@dimen/tinny_font_size" />
 
 
     </RelativeLayout>
@@ -87,7 +86,7 @@
             android:fadingEdge="horizontal"
             android:singleLine="true"
             android:textColor="@android:color/black"
-            android:textSize="14sp" />
+            android:textSize="@dimen/small_font_size" />
 
         <ImageView
             android:id="@+id/title_from_to_dots_divider"
@@ -111,7 +110,7 @@
             android:fadingEdge="horizontal"
             android:singleLine="true"
             android:textColor="@android:color/black"
-            android:textSize="16sp" />
+            android:textSize="@dimen/small_font_size" />
 
 
         <TextView
@@ -121,6 +120,7 @@
             android:layout_alignParentBottom="true"
             android:text="50km"
             android:layout_alignParentLeft="true"
+            android:textSize="@dimen/tinny_font_size"
             android:layout_alignParentStart="true" />
 
         <TextView
@@ -129,6 +129,7 @@
             android:layout_above="@id/tv_distance_short"
             android:layout_alignLeft="@id/tv_distance_short"
             android:layout_alignStart="@id/tv_distance_short"
+            android:textSize="@dimen/tinny_font_size"
             android:text="@string/requests_count_badge" />
 
         <TextView
@@ -136,6 +137,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:textSize="@dimen/tinny_font_size"
             android:layout_centerHorizontal="true" />
 
         <TextView
@@ -143,6 +145,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/tv_duration_short"
             android:layout_centerHorizontal="true"
+            android:textSize="@dimen/tinny_font_size"
             android:text="DURATION" />
 
 

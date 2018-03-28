@@ -64,7 +64,7 @@
                                    android:layout_height="wrap_content"
                                    android:text="Rider Info"
                                    android:textColor="@color/colorPrimary"
-                                   android:textSize="25dp" />
+                                   android:textSize="@dimen/large_font_size" />
                            </LinearLayout>
                        </TableRow>
                        <TableRow>
@@ -100,7 +100,7 @@
                                        android:layout_width="wrap_content"
                                        android:layout_height="wrap_content"
                                        android:layout_gravity="left"
-                                       android:textSize="15dp"
+                                       android:textSize="@dimen/midum_font_size"
                                        android:paddingTop="25dp"
                                        android:text="Sakibur Rahman"
                                        android:layout_weight="1"/>
@@ -112,7 +112,7 @@
                                        android:layout_gravity="left"
                                        android:layout_weight="1"
                                        android:text="Phone"
-                                       android:textSize="12dp" />
+                                       android:textSize="@dimen/small_font_size" />
 
                                    <RatingBar
                                        android:id="@+id/rider_rating"
@@ -147,7 +147,7 @@
                            android:gravity="right"
                            android:text="Contact Rider"
                            android:textColor="#000"
-                           android:textSize="18sp" />
+                           android:textSize="@dimen/midum_font_size" />
 
                    </LinearLayout>
 
