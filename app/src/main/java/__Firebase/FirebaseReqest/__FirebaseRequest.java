@@ -103,6 +103,18 @@ public class __FirebaseRequest extends AppCompatActivity {
         thread.start();
     }
 
+    public void SetDeviceIdToClientTable(final long clientID, final ICallbackMain callBackListener) {
+
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                new SetDeviceIDToClientTable(clientID, callBackListener);
+            }
+        };
+        thread.setUncaughtExceptionHandler(new UncaughtException());
+        thread.start();
+    }
+
     public void CancelRideByClient(final CurrentRidingHistoryModel HistoryModel, final ClientModel Client, final ICallbackMain callBackListener) {
 
         Thread thread = new Thread() {
@@ -147,6 +159,18 @@ public class __FirebaseRequest extends AppCompatActivity {
                 new GetCurrentRider(RiderID, callBackListener);
             }
         };
+        thread.setUncaughtExceptionHandler(new UncaughtException());
+        thread.start();
+    }
+
+    public void GetCurrentSessionKey(long clientID, ICallbackMain iCallbackMain){
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                new GetCurrentSessionKey(clientID, iCallbackMain);
+            }
+        });
         thread.setUncaughtExceptionHandler(new UncaughtException());
         thread.start();
     }

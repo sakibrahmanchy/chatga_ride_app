@@ -9,6 +9,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import __Firebase.FirebaseModel.ClientModel;
 import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
 import __Firebase.FirebaseModel.RiderModel;
+import __Firebase.FirebaseUtility.FirebaseConstant;
 
 /**
  * Created by User on 12/17/2017.
@@ -116,5 +117,8 @@ public class AppConstant {
     public  static boolean DESTINATION_SELECT = true;
     public  static double ESTIMATE_FARE_WITHOUT_DISCOUNT=0;
     public  static double ESTIMATED_FARE_AFTER_DISCOUNT=0;
+
+    /*Session ID */
+    public static String SESSION_KEY = FirebaseConstant.Empty;
 
 }
