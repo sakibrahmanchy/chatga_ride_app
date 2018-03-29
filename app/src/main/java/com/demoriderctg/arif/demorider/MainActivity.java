@@ -41,14 +41,26 @@ public class MainActivity extends AppCompatActivity {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     public static boolean IS_MAP_INITIALIZE = false;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        connectionCheck = new ConnectionCheck(this);
         pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
         if (pref.getString("userData", null) != null) {
-            Intent intent = new Intent(MainActivity.this, MapActivity.class);
-            startActivity(intent);
-            finish();
+            if(connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected())
+            {
+                Intent intent = new Intent(MainActivity.this, MapActivity.class);
+                startActivity(intent);
+                finish();
+            }
+            else{
+                Intent intent = new Intent(this,InternetCheckActivity.class);
+                startActivity(intent);
+                finish();
+            }
+
+
         } else {
             setContentView(R.layout.activity_main);
             if (isServiceOk()) {

@@ -309,7 +309,7 @@
                     android:text="Promocode Applied" />
 
                 <TextView
-                    android:id="@+id/content_deadline_time"
+                    android:id="@+id/history_promotion_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@id/content_deadline_badge"
@@ -318,15 +318,15 @@
                     android:text="None"
                     android:textColor="@color/mainTextColor"
                     android:textSize="@dimen/small_font_size"
-                    android:textStyle="bold" />
+                    />
 
                 <TextView
                     android:id="@+id/content_deadline_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/content_deadline_time"
-                    android:layout_alignStart="@id/content_deadline_time"
-                    android:layout_below="@id/content_deadline_time"
+                    android:layout_alignLeft="@id/history_promotion_text"
+                    android:layout_alignStart="@id/history_promotion_text"
+                    android:layout_below="@id/history_promotion_text"
                     android:text=""
                     android:textColor="@color/mainTextColor"
                     android:textSize="14sp" />

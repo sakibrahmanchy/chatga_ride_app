@@ -487,7 +487,6 @@ public class Main extends Activity implements ICallbackMain, ICallBackCurrentSer
         Log.d(FirebaseConstant.APP_SETTINGS_LOADED, Boolean.toString(value));
         if (value == true) {
             FirebaseWrapper firebaseWrapper = FirebaseWrapper.getInstance();
-
             FirebaseConstant.CONSECUTIVE_REQUEST_INTERVAL = firebaseWrapper.getAppSettingsModelInstance().ConsecutiveRequestInterval; /* One minute five second */
             FirebaseConstant.NUMBER_OF_CONSECUTIVE_REQUEST = firebaseWrapper.getAppSettingsModelInstance().NumberOfConsecutiveRequest; /* Five request */
             FirebaseConstant.EACH_REQUEST_BUNDLE_INTERVAL = firebaseWrapper.getAppSettingsModelInstance().EachRequestBundleInterval; /* Five minute */
@@ -510,10 +509,10 @@ public class Main extends Activity implements ICallbackMain, ICallBackCurrentSer
                 this.SetDeviceIdToClientTable();
             } else {
                 // LogOut
-                new LogOut(this).logOutFromApp();
-                Intent intent = new Intent(MapActivity.contextOfApplication, FirstAppLoadingActivity.class);
-                MapActivity.getContextOfApplication().startActivity(intent);
-                ActivityCompat.finishAffinity(this);
+//                new LogOut(this).logOutFromApp();
+//                Intent intent = new Intent(MapActivity.contextOfApplication, FirstAppLoadingActivity.class);
+//                MapActivity.getContextOfApplication().startActivity(intent);
+//                ActivityCompat.finishAffinity(this);
             }
             RequestForDeviceKey = false;
         }

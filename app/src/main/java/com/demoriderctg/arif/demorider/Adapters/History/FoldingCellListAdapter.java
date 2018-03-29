@@ -61,7 +61,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<ClientHistory> {
             viewHolder.distance=cell.findViewById(R.id.tv_distance_content);
             viewHolder.fare = cell.findViewById(R.id.tv_fare_content);
             viewHolder.dateTiem = cell.findViewById(R.id.content_delivery_date);
-            viewHolder.promocode = cell.findViewById(R.id.content_deadline_badge);
+            viewHolder.promocode = cell.findViewById(R.id.history_promotion_text);
             viewHolder.historyId=cell.findViewById(R.id.tv_history_id);
             viewHolder.distanceInshort = cell.findViewById(R.id.tv_distance_short);
 
@@ -95,6 +95,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<ClientHistory> {
         viewHolder.dateTiem.setText(item.getTime());
         viewHolder.distanceInshort.setText(item.getDistance());
         viewHolder.durationInshort.setText(item.getDuration());
+        viewHolder.promocode.setText(item.getPromotion());
         Picasso.with(getContext()).invalidate(item.getRiderAvatar());
         Picasso.with(getContext())
                 .load(item.getRiderAvatar())
