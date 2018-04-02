@@ -62,15 +62,16 @@ public class RegistrationActivity extends Activity {
 
 
     // UI references.
-    private AutoCompleteTextView mEmailView;
+    private EditText mEmailView;
     private EditText mPasswordView;
     private EditText firstName;
     private EditText lastName;
+    private EditText promocode;
     private View mProgressView;
     private View mLoginFormView;
     private RadioGroup mGender;
     private EditText mConfirmPasswordView;
-    private  String email,phoneNumber, userFirstName,userLastName,password,gender,deviceToken,birthDate;
+    private  String email,phoneNumber, userFirstName,userLastName,password,gender,deviceToken,birthDate,referralCode;
     private   ApiInterface apiService ;
     private ProgressDialog dialog;
     private EditText birthDayText;
@@ -86,10 +87,11 @@ public class RegistrationActivity extends Activity {
         setContentView(R.layout.activity_registration);
         // Set up the login form.
 
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mEmailView = (EditText) findViewById(R.id.email);
         mGender = (RadioGroup) findViewById(R.id.gender_radio_group);
         firstName = (EditText) findViewById(R.id.userFirstName);
         lastName =  (EditText) findViewById(R.id.userLastName);
+        promocode = (EditText) findViewById(R.id.referral_code);
 
         dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         phoneNumber = getIntent().getStringExtra("phoneNumber");
@@ -155,6 +157,7 @@ public class RegistrationActivity extends Activity {
         userLastName = lastName.getText().toString();
         deviceToken = FirebaseWrapper.getDeviceToken();
         birthDate = birthDayText.getText().toString();
+        referralCode = promocode.getText().toString();
 
         int selectedId = mGender.getCheckedRadioButtonId();
 
