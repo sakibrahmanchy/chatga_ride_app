@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         if (pref.getString("userData", null) != null) {
             if(connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected())
             {
+                this.getDeviceID();
                 Intent intent = new Intent(MainActivity.this, MapActivity.class);
                 startActivity(intent);
                 finish();
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 init();
             }
         }
-        this.getDeviceID();
+
     }
 
     private void init() {

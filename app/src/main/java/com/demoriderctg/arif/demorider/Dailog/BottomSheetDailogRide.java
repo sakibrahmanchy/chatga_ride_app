@@ -10,6 +10,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.util.Log;
 import android.util.Pair;
@@ -73,6 +74,7 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
 
     public static BottomSheetDailogRide newInstance(String string) {
         BottomSheetDailogRide f = new BottomSheetDailogRide();
+
         Bundle args = new Bundle();
         args.putString("string", string);
         f.setArguments(args);

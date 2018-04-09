@@ -71,9 +71,6 @@ public class ShowDerectionInGoogleMap {
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(builder.build(), 100);
         mMap.animateCamera(cameraUpdate);
 
-
-
-
     }
 
     public Bitmap resizeMapIcons(String iconName,int width, int height){
