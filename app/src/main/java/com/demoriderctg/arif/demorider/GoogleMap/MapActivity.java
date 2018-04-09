@@ -992,7 +992,7 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         ShowcaseConfig config = new ShowcaseConfig();
         config.setDelay(500); // half second between each showcase view
-        config.setShapePadding(-320);
+        config.setShapePadding(-400);
         MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, "ShowCaseMain" );
         sequence.setConfig(config);
         drawerLayout.openDrawer(Gravity.START);
