@@ -14,11 +14,14 @@
         tools:ignore="MissingConstraints">
 
 
-        <ProgressBar
-            android:layout_width="80dp"
+        <pl.droidsonroids.gif.GifTextView
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_centerHorizontal="true"
-            android:theme="@style/CircularProgress" />
+            android:drawableTop="@drawable/loading_bar2"
+            android:drawableStart="@drawable/loading_bar2"
+            android:background="@drawable/loading_bar2"
+            android:scaleType="centerCrop"
+            />
 
 
         <TextView
@@ -30,6 +33,7 @@
             android:layout_alignParentTop="true"
             android:textColor="@color/colorAccent"
             android:layout_marginTop="19dp"
+            android:paddingRight="20dp"
             android:ems="10"
             android:inputType="textPersonName"
                 android:text="Cancel" />
