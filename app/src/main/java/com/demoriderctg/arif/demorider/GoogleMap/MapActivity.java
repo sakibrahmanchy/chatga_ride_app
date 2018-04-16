@@ -2,7 +2,6 @@ package com.demoriderctg.arif.demorider.GoogleMap;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,10 +9,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,18 +19,13 @@ import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -42,15 +34,10 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Adapter;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,38 +45,31 @@ import com.demoriderctg.arif.demorider.About.AboutActivity;
 import com.demoriderctg.arif.demorider.Adapters.History.ClientHistoryActivity;
 import com.demoriderctg.arif.demorider.Adapters.NewsCard.NewsCardAdapter;
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
-import com.demoriderctg.arif.demorider.ClearData.ClearData;
 import com.demoriderctg.arif.demorider.CostEstimation.CostEstimation;
 import com.demoriderctg.arif.demorider.Dailog.BottomSheetDailogRide;
-import com.demoriderctg.arif.demorider.Dailog.RideFinishDailog;
-import com.demoriderctg.arif.demorider.FavoritePlaces.FavoritePlacesActivity;
 import com.demoriderctg.arif.demorider.FavoritePlaces.HomeLocationModel;
 import com.demoriderctg.arif.demorider.FavoritePlaces.WorkLocationModel;
 import com.demoriderctg.arif.demorider.FinishRideActivity.FinishRideActivity;
 import com.demoriderctg.arif.demorider.Help.HelpActivity;
 import com.demoriderctg.arif.demorider.InternetConnection.ConnectionCheck;
 import com.demoriderctg.arif.demorider.InternetConnection.InternetCheckActivity;
-import com.demoriderctg.arif.demorider.MainActivity;
 import com.demoriderctg.arif.demorider.NotificationActivity;
-import com.demoriderctg.arif.demorider.OnrideMode.OnrideModeActivity;
 import com.demoriderctg.arif.demorider.PlaceAutocompleteAdapter;
 import com.demoriderctg.arif.demorider.PromotionActivity;
 import com.demoriderctg.arif.demorider.R;
+import com.demoriderctg.arif.demorider.Referral.Refarrel;
 import com.demoriderctg.arif.demorider.Setting.SettingActivity;
 import com.demoriderctg.arif.demorider.UserInformation;
 import com.demoriderctg.arif.demorider.VmModels.VmCurrentLocation;
-import com.demoriderctg.arif.demorider.models.ApiModels.AppSettingModels.AppSettings;
 import com.demoriderctg.arif.demorider.models.ApiModels.LatLongBound;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 import com.demoriderctg.arif.demorider.models.ApiModels.NewsCardModels.NewsCard;
-import com.demoriderctg.arif.demorider.models.ApiModels.RideHistory.ClientHistory;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.Places;
@@ -99,34 +79,27 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 
 import ContactWithFirebase.Main;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
-import uk.co.deanwild.materialshowcaseview.shape.Shape;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.OnConnectionFailedListener, NavigationView.OnNavigationItemSelectedListener {
@@ -146,31 +119,38 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         this, R.raw.style_json));
 
         mMap.getUiSettings().setCompassEnabled(false);
-        mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
 
+        mMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
             @Override
-            public void onCameraChange(CameraPosition cameraPosition) {
-                Log.d("Camera postion change" + "", cameraPosition + "");
-                LatLng changeLocation = cameraPosition.target;
-              //  sourceMarker.setPosition(changeLocation);
-                CheckService(changeLocation);
-                    try {
-                        List<Address> myList = myLocation.getFromLocation(changeLocation.latitude, changeLocation.longitude, 1);
-                        if(myList.size()>0){
-                            Address address = (Address) myList.get(0);
-                            if(AppConstant.SOURCE_SELECT){
-                                AppConstant.searchSorceLocationModel.homeLocationName = address.getAddressLine(0);
-                                AppConstant.searchSorceLocationModel.home = changeLocation;
-                            }
-                            else{
-                                AppConstant.searchDestinationLocationModel.workLocationName = address.getAddressLine(0);
-                                AppConstant.searchDestinationLocationModel.work = changeLocation;
-                            }
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+            public void onCameraMoveStarted(int i) {
 
+            }
+        });
+
+        mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+            @Override
+            public void onCameraIdle() {
+                // Cleaning all the markers.
+
+
+                LatLng changeLocation = mMap.getCameraPosition().target;
+                CheckService(changeLocation);
+                try {
+                    List<Address> myList = myLocation.getFromLocation(changeLocation.latitude, changeLocation.longitude, 1);
+                    if(myList.size()>0){
+                        Address address = (Address) myList.get(0);
+                        if(AppConstant.SOURCE_SELECT){
+                            AppConstant.searchSorceLocationModel.homeLocationName = address.getAddressLine(0);
+                            AppConstant.searchSorceLocationModel.home = changeLocation;
+                        }
+                        else{
+                            AppConstant.searchDestinationLocationModel.workLocationName = address.getAddressLine(0);
+                            AppConstant.searchDestinationLocationModel.work = changeLocation;
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
             }
         });
@@ -573,7 +553,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 if(sourceMarker !=null){
                     sourceMarker.remove();
                 }
+                mMap.clear();
+                requestbtn.setVisibility(View.GONE);
+                sendButton.setVisibility(View.VISIBLE);
                 mapStateChange(true);
+                sourceText.setBackgroundColor(getResources().getColor(R.color.grey_100));
+                destinationText.setBackgroundColor(getResources().getColor(R.color.white));
                 moveCamera(AppConstant.searchSorceLocationModel.home,AppConstant.DEFAULT_ZOOM,"Default");
                 AppConstant.SOURCE_SELECT = true;
                 AppConstant.DESTINATION_SELECT = false;
@@ -588,6 +573,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 if(destinationMarker !=null){
                     destinationMarker.remove();
                 }
+                mMap.clear();
+                requestbtn.setVisibility(View.GONE);
+                sendButton.setVisibility(View.VISIBLE);
+                destinationText.setBackgroundColor(getResources().getColor(R.color.grey_100));
+                sourceText.setBackgroundColor(getResources().getColor(R.color.white));
                 mapStateChange(true);
                 moveCamera(AppConstant.searchDestinationLocationModel.work,AppConstant.DEFAULT_ZOOM,"Default");
                 AppConstant.SOURCE_SELECT = false;
@@ -603,10 +593,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
     private void getDeviceLocation() {
-        myLocation = new Geocoder(MapActivity.this, Locale.getDefault());
+
         if(connectionCheck.isGpsEnable()){
 
             try {
+                myLocation = new Geocoder(MapActivity.this, Locale.getDefault());
                 vmCurrentLocation = new VmCurrentLocation();
                 vmCurrentLocation.latitude=getCurrentLocation.getLatitude();
                 vmCurrentLocation.logitude=getCurrentLocation.getLongitude();
@@ -618,22 +609,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                    String json = gson.toJson(vmCurrentLocation);
                    editor.putString("currentLocation",json);
                    editor.commit();
-
-                   if (AppConstant.searchSorceLocationModel == null) {
-                       AppConstant.searchSorceLocationModel = new HomeLocationModel();
-
-                   }
-
+                   AppConstant.searchSorceLocationModel = new HomeLocationModel();
                    AppConstant.searchSorceLocationModel.homeLocationName = address.getAddressLine(0);
                    AppConstant.searchSorceLocationModel.home = new LatLng(vmCurrentLocation.latitude, vmCurrentLocation.logitude);
-                   if(AppConstant.searchDestinationLocationModel == null){
+                   if(AppConstant.searchDestinationLocationModel == null) {
                        AppConstant.searchDestinationLocationModel = new WorkLocationModel();
                        AppConstant.searchDestinationLocationModel.workLocationName = AppConstant.searchSorceLocationModel.homeLocationName;
                        AppConstant.searchDestinationLocationModel.work =AppConstant.searchSorceLocationModel.home;
                    }
                    String sourceLocation = AppConstant .searchSorceLocationModel.homeLocationName;
                    sourceText.setText(sourceLocation);
-
 
                    moveCamera(new LatLng(vmCurrentLocation.latitude, vmCurrentLocation.logitude),
                            AppConstant.DEFAULT_ZOOM, "Default");
@@ -919,6 +904,10 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
                 Intent HelpItent = new Intent(MapActivity.this, HelpActivity.class);
                 startActivityForResult(HelpItent, 0);
                 break;
+            case R.id.nav_referral:
+                Intent Referral = new Intent(MapActivity.this, Refarrel.class);
+                startActivityForResult(Referral, 0);
+                break;
             default:
                 break;
         }
@@ -1003,7 +992,7 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         ShowcaseConfig config = new ShowcaseConfig();
         config.setDelay(500); // half second between each showcase view
-        config.setShapePadding(-320);
+        config.setShapePadding(-400);
         MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, "ShowCaseMain" );
         sequence.setConfig(config);
         drawerLayout.openDrawer(Gravity.START);

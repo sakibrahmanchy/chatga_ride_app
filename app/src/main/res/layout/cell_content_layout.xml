@@ -22,7 +22,7 @@
             android:layout_centerInParent="true"
             android:text="@string/order_id_mock"
             android:textColor="@android:color/white"
-            android:textSize="20sp" />
+            android:textSize="@dimen/midum_font_size" />
 
 
 
@@ -50,6 +50,7 @@
 
         <TextView
             android:id="@+id/tv_distance_content"
+            style="@style/ContentImageBadgeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/head_image"
@@ -58,6 +59,7 @@
             android:paddingBottom="10dp"
             android:paddingLeft="20dp"
             android:paddingStart="20dp"
+            android:textSize="@dimen/small_font_size"
             android:text="@string/requests_count_mock" />
 
         <TextView
@@ -69,6 +71,7 @@
             android:layout_alignStart="@id/tv_distance_content"
             android:paddingLeft="20dp"
             android:paddingStart="20dp"
+            android:textSize="@dimen/tinny_font_size"
             android:text="DISTANCE" />
 
         <TextView
@@ -82,6 +85,7 @@
             android:paddingBottom="10dp"
             android:paddingEnd="20dp"
             android:paddingRight="20dp"
+            android:textSize="@dimen/small_font_size"
             android:text="@string/weight_mock" />
 
         <TextView
@@ -91,6 +95,7 @@
             android:layout_above="@id/tv_fare_content"
             android:layout_alignLeft="@id/tv_fare_content"
             android:layout_alignStart="@id/tv_fare_content"
+            android:textSize="@dimen/tinny_font_size"
             android:text="FARE" />
 
         <TextView
@@ -101,6 +106,7 @@
             android:layout_alignBottom="@id/head_image"
             android:layout_centerHorizontal="true"
             android:paddingBottom="10dp"
+            android:textSize="@dimen/small_font_size"
             android:text="@string/pledge_mock" />
 
         <TextView
@@ -109,6 +115,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/tv_duration_content"
             android:layout_alignStart="@+id/tv_duration_content"
+            android:textSize="@dimen/tinny_font_size"
             android:text="DURATION" />
 
 
@@ -138,6 +145,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginBottom="5dp"
+                android:textSize="@dimen/tinny_font_size"
                 android:text="DRIVER" />
 
             <ImageView
@@ -160,7 +168,7 @@
                 android:layout_toRightOf="@id/content_avatar"
                 android:text="@string/client_name_mock"
                 android:textColor="@color/mainTextColor"
-                android:textSize="18sp"
+                android:textSize="@dimen/midum_font_size"
                 android:textStyle="bold" />
 
             <RatingBar
@@ -202,6 +210,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
+                    android:textSize="@dimen/tinny_font_size"
                     android:text="@string/from_badge" />
 
                 <TextView
@@ -211,7 +220,7 @@
                     android:layout_below="@id/content_from_badge"
                     android:text="@string/content_from2_mock"
                     android:textColor="@color/mainTextColor"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/tinny_font_size" />
 
             </RelativeLayout>
 
@@ -227,6 +236,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
+                    android:textSize="@dimen/tinny_font_size"
                     android:text="@string/to_badge" />
 
                 <TextView
@@ -236,7 +246,7 @@
                     android:layout_below="@id/content_to_badge"
                     android:text="@string/content_to2_mock"
                     android:textColor="@color/mainTextColor"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/tinny_font_size" />
 
             </RelativeLayout>
 
@@ -269,6 +279,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
+                    android:textSize="@dimen/tinny_font_size"
                     android:text="Ride Date" />
 
                 <TextView
@@ -278,7 +289,7 @@
                     android:layout_below="@id/content_delivery_date_badge"
                     android:text="@string/delivery_date_mock"
                     android:textColor="@color/mainTextColor"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/small_font_size" />
 
             </RelativeLayout>
 
@@ -294,10 +305,11 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
+                    android:textSize="@dimen/tinny_font_size"
                     android:text="Promocode Applied" />
 
                 <TextView
-                    android:id="@+id/content_deadline_time"
+                    android:id="@+id/history_promotion_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@id/content_deadline_badge"
@@ -305,16 +317,16 @@
                     android:layout_below="@id/content_deadline_badge"
                     android:text="None"
                     android:textColor="@color/mainTextColor"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/small_font_size"
+                    />
 
                 <TextView
                     android:id="@+id/content_deadline_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/content_deadline_time"
-                    android:layout_alignStart="@id/content_deadline_time"
-                    android:layout_below="@id/content_deadline_time"
+                    android:layout_alignLeft="@id/history_promotion_text"
+                    android:layout_alignStart="@id/history_promotion_text"
+                    android:layout_below="@id/history_promotion_text"
                     android:text=""
                     android:textColor="@color/mainTextColor"
                     android:textSize="14sp" />
@@ -333,7 +345,7 @@
             android:text="REPORT"
             android:textAlignment="center"
             android:textColor="@color/mainTextColor"
-            android:textSize="20sp" />
+            android:textSize="@dimen/midum_font_size" />
 
     </LinearLayout>
 

@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -40,20 +41,33 @@ public class MainActivity extends AppCompatActivity {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     public static boolean IS_MAP_INITIALIZE = false;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-            pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
-            if (pref.getString("userData", null) != null) {
+        connectionCheck = new ConnectionCheck(this);
+        pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+        if (pref.getString("userData", null) != null) {
+            if(connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected())
+            {
+                this.getDeviceID();
                 Intent intent = new Intent(MainActivity.this, MapActivity.class);
                 startActivity(intent);
                 finish();
-            } else {
-                setContentView(R.layout.activity_main);
-                if (isServiceOk()) {
-                   init();
-                }
             }
+            else{
+                Intent intent = new Intent(this,InternetCheckActivity.class);
+                startActivity(intent);
+                finish();
+            }
+
+
+        } else {
+            setContentView(R.layout.activity_main);
+            if (isServiceOk()) {
+                init();
+            }
+        }
 
     }
 
@@ -64,22 +78,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                    int MyVersion = Build.VERSION.SDK_INT;
-                    if (MyVersion > Build.VERSION_CODES.LOLLIPOP_MR1) {
-                        if (!checkIfAlreadyhavePermission()) {
-                            requestForSpecificPermission();
-                        }
-                        else{
-                            Intent intent = new Intent(MainActivity.this, FacebookAccountVerificationActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
-                    }
-                    else{
+                int MyVersion = Build.VERSION.SDK_INT;
+                if (MyVersion > Build.VERSION_CODES.LOLLIPOP_MR1) {
+                    if (!checkIfAlreadyhavePermission()) {
+                        requestForSpecificPermission();
+                    } else {
                         Intent intent = new Intent(MainActivity.this, FacebookAccountVerificationActivity.class);
                         startActivity(intent);
                         finish();
                     }
+                } else {
+                    Intent intent = new Intent(MainActivity.this, FacebookAccountVerificationActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
 
 
             }
@@ -119,23 +131,24 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
     }
+
     private void requestForSpecificPermission() {
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_SMS,
-                Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.CALL_PHONE}, 101);
+                Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.CALL_PHONE}, 101);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case 101:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1]==PackageManager.PERMISSION_GRANTED &&
-                        grantResults[2]==PackageManager.PERMISSION_GRANTED) {
-                        Intent intent = new Intent(MainActivity.this, FacebookAccountVerificationActivity.class);
-                       startActivity(intent);
-                       finish();
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED &&
+                        grantResults[2] == PackageManager.PERMISSION_GRANTED) {
+                    Intent intent = new Intent(MainActivity.this, FacebookAccountVerificationActivity.class);
+                    startActivity(intent);
+                    finish();
                 } else {
                     //not granted
-                    Toast.makeText(getApplicationContext(),"Please Restart Application",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Please Restart Application", Toast.LENGTH_SHORT).show();
                 }
                 break;
             default:
@@ -143,8 +156,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
+    private void getDeviceID() {
+        AppConstant.SESSION_KEY = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+    }
 }
 
 

@@ -32,6 +32,9 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
             <EditText
                 android:id="@+id/userFirstName"
                 android:layout_width="match_parent"
@@ -39,25 +42,35 @@
                 android:hint="First Name"
                 android:inputType="text"
                 android:maxLines="1"
+                android:textSize="@dimen/midum_font_size"
                 android:singleLine="true" />
-
+            </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
             <EditText
                 android:id="@+id/userLastName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Last Name"
                 android:inputType="text"
+                android:textSize="@dimen/midum_font_size"
                 android:maxLines="1"
                 android:singleLine="true" />
-
-            <AutoCompleteTextView
+            </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <EditText
                 android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/prompt_email"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
+                android:textSize="@dimen/midum_font_size"
                 android:singleLine="true" />
+            </android.support.design.widget.TextInputLayout>
 
             <RadioGroup
                 android:id="@+id/gender_radio_group"
@@ -71,21 +84,39 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
+                    android:textSize="@dimen/midum_font_size"
                     android:text="male" />
 
                 <RadioButton
                     android:id="@+id/female_radio_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="@dimen/midum_font_size"
                     android:text="female" />
             </RadioGroup>
 
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
             <EditText
                 android:id="@+id/birthday_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight=".5"
+                android:textSize="@dimen/midum_font_size"
                 android:hint="Birth Date" />
+            </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/referral_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".5"
+                    android:textSize="@dimen/midum_font_size"
+                    android:hint="Referral" />
+            </android.support.design.widget.TextInputLayout>
 
             <Button
                 android:id="@+id/email_sign_in_button"
@@ -93,6 +124,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:textSize="@dimen/large_font_size"
                 android:background="@color/colorAccent"
                 android:text="@string/action_sign_in" />
 

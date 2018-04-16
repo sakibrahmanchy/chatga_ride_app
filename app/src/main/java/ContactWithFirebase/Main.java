@@ -1,17 +1,27 @@
 package ContactWithFirebase;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.util.Pair;
 
+import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
+import com.demoriderctg.arif.demorider.FirstAppLoadingActivity.FirstAppLoadingActivity;
+import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
+import com.demoriderctg.arif.demorider.LogOut;
+import com.demoriderctg.arif.demorider.UserInformation;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 
 import java.util.ArrayList;
 
+import __Firebase.Exception.FabricExceptionLog;
 import __Firebase.FirebaseModel.ClientModel;
 import __Firebase.FirebaseModel.CurrentRidingHistoryModel;
 import __Firebase.FirebaseModel.RiderModel;
 import __Firebase.FirebaseReqest.FindNearestRider;
+import __Firebase.FirebaseReqest.GetCurrentSessionKey;
 import __Firebase.FirebaseReqest.__FirebaseRequest;
 import __Firebase.FirebaseResponse.FirebaseResponse;
 import __Firebase.FirebaseResponse.InitialAcceptanceOfRideResponse;
@@ -31,7 +41,7 @@ import __Firebase.Notification.NotificationWrapper;
  * Created by User on 12/9/2017.
  */
 
-public class Main implements ICallbackMain, ICallBackCurrentServerTime {
+public class Main extends Activity implements ICallbackMain, ICallBackCurrentServerTime {
 
     private FirebaseWrapper firebaseWrapper = null;
     private RiderModel riderModel = null;
@@ -47,6 +57,7 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
     private double ShortestDistance;
     private static long HistoryID;
     private Context context = null;
+    private static boolean RequestForDeviceKey = true;
 
     public Main() {
         firebaseWrapper = FirebaseWrapper.getInstance();
@@ -61,7 +72,7 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
         firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
 
         clientModel.ClientID = Long.parseLong(loginData.getClientId());
-        clientModel.FullName = loginData.firstName;
+        clientModel.FullName = loginData.firstName + " " + loginData.getLastName();
         clientModel.PhoneNumber = Long.parseLong(phoneNumber);
 
         clientModel.DeviceToken = FirebaseWrapper.getDeviceToken();
@@ -70,7 +81,8 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
         clientModel.CurrentRidingHistoryID = FirebaseConstant.UNKNOWN_STRING;
         clientModel.RideRejectedByRider = FirebaseConstant.UNKNOWN_STRING;
         clientModel.ImageUrl = loginData.getAvatar();
-        clientModel.Ratting = loginData.getRating()+"";
+        clientModel.Ratting = Float.toString(loginData.getRating());
+        clientModel.SessionKey = AppConstant.SESSION_KEY;
 
         this.IsClientAlreadyCreated(clientModel);
         this.GetAppSettings();
@@ -127,6 +139,15 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
         return true;
     }
 
+    public boolean SetDeviceIdToClientTable() {
+
+        this.firebaseWrapper = FirebaseWrapper.getInstance();
+        long clientID = FirebaseWrapper.getInstance().getClientModelInstance().ClientID;
+        firebaseWrapper.getFirebaseRequestInstance().SetDeviceIdToClientTable(clientID, Main.this);
+
+        return true;
+    }
+
     public boolean GetCurrentRider(long RiderID, IGetCurrentRider iGetCurrentRider) {
 
         if (RiderID < 1 || iGetCurrentRider == null) return false;
@@ -142,6 +163,15 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
 
         firebaseWrapper = FirebaseWrapper.getInstance();
         firebaseWrapper.getFirebaseRequestInstance().GetCurrentRider(RiderID, callBackListener);
+        return true;
+    }
+
+    public boolean GetCurrentSessionKey() {
+
+        firebaseWrapper = FirebaseWrapper.getInstance();
+        firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
+        firebaseRequestInstance.GetCurrentSessionKey(FirebaseWrapper.getInstance().getClientModelInstance().ClientID, this);
+
         return true;
     }
 
@@ -208,7 +238,7 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
 
         if (!FirebaseUtilMethod.IsEmptyOrNull(newName)) clientModel.FullName = newName;
         if (!FirebaseUtilMethod.IsEmptyOrNull(newImageUrl)) clientModel.ImageUrl = newImageUrl;
-        if(!FirebaseUtilMethod.IsEmptyOrNull(newRatting))   clientModel.Ratting = newRatting;
+        if (!FirebaseUtilMethod.IsEmptyOrNull(newRatting)) clientModel.Ratting = newRatting;
 
         firebaseRequestInstance.UpdateNameImageAndRatting(clientModel, Main.this);
         return true;
@@ -229,7 +259,7 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
         return true;
     }
 
-    public boolean GetAppSettings(){
+    public boolean GetAppSettings() {
         FirebaseWrapper.getInstance().getFirebaseRequestInstance().GetAppSettings(Main.this);
         return true;
     }
@@ -348,6 +378,8 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
         if (value == true) {
             FirebaseResponse.InitialAcceptanceOfRideResponse(FirebaseWrapper.getInstance().getClientModelInstance());
             FirebaseResponse.RideRejectedByRiderResponse(FirebaseWrapper.getInstance().getClientModelInstance());
+
+            this.GetCurrentSessionKey();
         }
         Log.d(FirebaseConstant.NEW_USER_CREATED, Boolean.toString(value));
     }
@@ -374,6 +406,8 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
             );
             FirebaseResponse.InitialAcceptanceOfRideResponse(FirebaseWrapper.getInstance().getClientModelInstance());
             FirebaseResponse.RideRejectedByRiderResponse(FirebaseWrapper.getInstance().getClientModelInstance());
+
+            this.GetCurrentSessionKey();
             return;
         }
         firebaseRequestInstance.CreateClientFirstTime(clientModel, Main.this);
@@ -453,7 +487,6 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
         Log.d(FirebaseConstant.APP_SETTINGS_LOADED, Boolean.toString(value));
         if (value == true) {
             FirebaseWrapper firebaseWrapper = FirebaseWrapper.getInstance();
-
             FirebaseConstant.CONSECUTIVE_REQUEST_INTERVAL = firebaseWrapper.getAppSettingsModelInstance().ConsecutiveRequestInterval; /* One minute five second */
             FirebaseConstant.NUMBER_OF_CONSECUTIVE_REQUEST = firebaseWrapper.getAppSettingsModelInstance().NumberOfConsecutiveRequest; /* Five request */
             FirebaseConstant.EACH_REQUEST_BUNDLE_INTERVAL = firebaseWrapper.getAppSettingsModelInstance().EachRequestBundleInterval; /* Five minute */
@@ -462,6 +495,33 @@ public class Main implements ICallbackMain, ICallBackCurrentServerTime {
             FirebaseConstant.SHORTEST_DISTANCE_TO_REQUEST = firebaseWrapper.getAppSettingsModelInstance().ShortestDistance;
 
             String _Message = firebaseWrapper.getAppSettingsModelInstance().Message;
+        }
+    }
+
+    @Override
+    public void OnGetSessionKey(boolean value, String sessionKey) {
+        if (value == true) {
+            if (sessionKey.equals(AppConstant.SESSION_KEY)) {
+                RequestForDeviceKey = false;
+                return;
+            }
+            if (RequestForDeviceKey == true) {
+                this.SetDeviceIdToClientTable();
+            } else {
+                // LogOut
+//                new LogOut(this).logOutFromApp();
+//                Intent intent = new Intent(MapActivity.contextOfApplication, FirstAppLoadingActivity.class);
+//                MapActivity.getContextOfApplication().startActivity(intent);
+//                ActivityCompat.finishAffinity(this);
+            }
+            RequestForDeviceKey = false;
+        }
+    }
+
+    @Override
+    public void OnSessionKeyUpdate(boolean value) {
+        if (value == true) {
+            FabricExceptionLog.printLog(this.getClass().getSimpleName(), Boolean.toString(value));
         }
     }
 

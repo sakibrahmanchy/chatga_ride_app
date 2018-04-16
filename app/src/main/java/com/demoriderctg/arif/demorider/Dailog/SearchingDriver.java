@@ -46,8 +46,6 @@ public class SearchingDriver extends AppCompatActivity {
 
         cancel = (TextView) findViewById(R.id.cancel_search);
         searchActivity=this;
-
-
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

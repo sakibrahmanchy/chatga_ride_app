@@ -13,6 +13,7 @@ public class FirebaseConstant {
     public static String RATTING = "Ratting";
     public static String REQUEST = "Request";
     public static String CURRENT_RIDING_HISTORY_ID = "CurrentRidingHistoryID";
+    public static String SESSION_KEY = "SessionKey";
     public static String RIDE_REJECTED_BY_RIDER = "RideRejectedByRider";
     public static String RIDER = "Rider";
     public static String RIDER_LOCATION = "RiderLocation";
@@ -145,7 +146,7 @@ public class FirebaseConstant {
     public static int CONSECUTIVE_REQUEST_INTERVAL = 65000; /* One minute five second */
     public static int NUMBER_OF_CONSECUTIVE_REQUEST = 5; /* Five request */
     public static long EACH_REQUEST_BUNDLE_INTERVAL = 300000; /* Five minute */
-    public static int CURRENT_VERSION = 1000;
+    public static int CURRENT_VERSION = 101;
     public static int FORCE_UPDATE_INTERVAL = 20;
     public static long SHORTEST_DISTANCE_TO_REQUEST = 500;
 

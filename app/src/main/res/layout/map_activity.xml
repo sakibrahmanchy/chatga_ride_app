@@ -14,10 +14,6 @@
         android:layout_alignBottom="@+id/btnSend"
         android:layout_alignParentStart="true"
         tools:context=".MapsActivity" />
-
-
-
-
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/elements_container"
         android:layout_width="match_parent"
@@ -52,23 +48,23 @@
                     android:id="@+id/nav_drawer_toggle"
                     android:src="@drawable/ic_nav_drawer_black"
                     android:layout_marginBottom="5dp"/>
+                    <TextView
+                        android:id="@+id/sourceText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:background="@android:color/white"
+                        android:drawableLeft="@drawable/red"
+                        android:drawablePadding="10dp"
+                        android:elevation="3dp"
+                        android:ems="10"
+                        android:hint="Your current location"
+                        android:maxLines="1"
+                        android:padding="10dp"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:textSize="@dimen/small_font_size" />
 
-                <TextView
-                    android:id="@+id/sourceText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:background="@android:color/white"
-                    android:drawableLeft="@drawable/red"
-                    android:drawablePadding="10dp"
-                    android:elevation="3dp"
-                    android:ems="10"
-                    android:hint="Your current location"
-                    android:maxLines="1"
-                    android:padding="10dp"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/destinationText"
@@ -85,7 +81,7 @@
                     android:maxLines="1"
                     android:padding="10dp"
                     android:focusable="true"
-                    android:textSize="18sp" />
+                    android:textSize="@dimen/small_font_size" />
 
                 <TextView
                     android:id="@+id/service_not_available"
@@ -96,7 +92,7 @@
                     android:padding="10dp"
                     android:text="Service is not available in your area."
                     android:textColor="@android:color/white"
-                    android:textSize="18sp" />
+                    android:textSize="@dimen/small_font_size" />
 
             </LinearLayout>
 
@@ -133,7 +129,7 @@
                         android:layout_marginRight="10dp"
                         android:layout_marginTop="15dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/ic_action_done"
+                        android:src="@drawable/icon_go"
                         android:visibility="visible"
                         app:backgroundTint="@color/colorPrimary" />
 
@@ -145,8 +141,8 @@
                         android:layout_marginRight="10dp"
                         android:layout_marginTop="15dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/ic_action_request"
-                        app:backgroundTint="@android:color/holo_green_light" />
+                        android:src="@drawable/icon_ok"
+                        app:backgroundTint="#006622" />
                        <Button
                            android:layout_width="wrap_content"
                            android:layout_height="wrap_content"

@@ -20,11 +20,12 @@ public class ClientModel {
     public String RideRejectedByRider;
     public String ImageUrl;
     public String Ratting;
+    public String SessionKey;
 
     public ClientModel(){
 
     }
-    public ClientModel(long _ClientID, long _PhoneNumber, String _DeviceToken, String _FullName, int _IsSearchingOrOnRide, long _CostOfCurrentRide, String _CurrentRidingHistoryID, String _RideRejectedByRider, String _ImageUrl, String _Ratting){
+    public ClientModel(long _ClientID, long _PhoneNumber, String _DeviceToken, String _FullName, int _IsSearchingOrOnRide, long _CostOfCurrentRide, String _CurrentRidingHistoryID, String _RideRejectedByRider, String _ImageUrl, String _Ratting, String _SessionKey){
         this.ClientID = _ClientID;
         this.PhoneNumber = _PhoneNumber;
         this.DeviceToken = _DeviceToken;
@@ -35,6 +36,7 @@ public class ClientModel {
         this.RideRejectedByRider = _RideRejectedByRider;
         this.ImageUrl = _ImageUrl;
         this.Ratting = _Ratting;
+        this.SessionKey = _SessionKey;
     }
 
     public void LoadData(DataSnapshot snapshot){
@@ -50,5 +52,6 @@ public class ClientModel {
         this.RideRejectedByRider = clientModel.RideRejectedByRider;
         this.ImageUrl = clientModel.ImageUrl;
         this.Ratting = clientModel.Ratting;
+        this.SessionKey = clientModel.SessionKey;
     }
 }

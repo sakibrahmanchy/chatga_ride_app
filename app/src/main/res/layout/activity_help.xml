@@ -38,6 +38,7 @@
                 android:gravity="center"
                 android:maxLines="4"
                 android:singleLine="false"
+                android:textSize="@dimen/tinny_font_size"
                 android:textColor="@color/colorButtonBlack"
                 android:textStyle="bold"
                 android:text="Please Contact +8801675908553"

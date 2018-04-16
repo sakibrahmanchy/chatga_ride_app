@@ -28,9 +28,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/alart_image"
             android:layout_centerHorizontal="true"
-            android:text="Check Internet Connection!!!"
+            android:text="Check Internet Connection and GPS!!!"
             android:textColor="#FFFF"
-            android:textSize="2.5mm" />
+            android:textSize="@dimen/large_font_size" />
 
         <ImageView
             android:id="@+id/internet_check"

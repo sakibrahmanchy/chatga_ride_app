@@ -28,13 +28,14 @@ public class InternetCheckActivity extends AppCompatActivity {
         restorImage =(ImageView) findViewById(R.id.internet_check);
         connectionCheck = new ConnectionCheck(this);
 
+
         restorImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog = new ProgressDialog(InternetCheckActivity.this);
-                dialog.setMessage("Internet Conection Checking...");
+                dialog.setMessage("Internet or GPS Conection Checking...");
                 dialog.show();
-                  if(connectionCheck.isNetworkConnected()){
+                  if(connectionCheck.isNetworkConnected()) {
                       dialog.dismiss();
                       Intent returnIntent = new Intent(InternetCheckActivity.this, FirstAppLoadingActivity.class);
                       startActivity(returnIntent);

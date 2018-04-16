@@ -70,7 +70,7 @@
                 android:paddingTop="10dp"
                 android:paddingBottom="0dp"
                 android:textColor="@android:color/white"
-                android:textSize="15sp" />
+                android:textSize="@dimen/small_font_size" />
             <TextView
                 android:id="@+id/total_estimated_fare"
                 android:layout_width="wrap_content"
@@ -78,7 +78,7 @@
                 android:layout_centerHorizontal="true"
                 android:text="Estimated Fare: ৳150"
                 android:textColor="@android:color/white"
-                android:textSize="15sp" />
+                android:textSize="@dimen/small_font_size" />
             <TextView
                 android:id="@+id/total_estimated_fare_after_discount"
                 android:layout_width="wrap_content"
@@ -86,7 +86,7 @@
                 android:layout_centerHorizontal="true"
                 android:text="Estimated Fare After Discount: ৳150"
                 android:textColor="@android:color/white"
-                android:textSize="15sp" />
+                android:textSize="@dimen/small_font_size" />
 
             <Button
                 android:id="@+id/pickupbtn"

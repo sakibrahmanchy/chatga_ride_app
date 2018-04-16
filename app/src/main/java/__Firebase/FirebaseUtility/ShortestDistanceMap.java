@@ -69,7 +69,7 @@ public class ShortestDistanceMap {
         DestinationLocation.setLatitude(this.Destination.latitude);
         DestinationLocation.setLongitude(this.Destination.longitude);
 
-        float[] result = new float[2];
+        float[] result = new float[10];
         Location.distanceBetween(SourceLocation.getLatitude(), SourceLocation.getLongitude(), DestinationLocation.getLatitude(), DestinationLocation.getLongitude(), result);
         this.Distance = result[0];
         this.Duration = getNativeDuration(this.Distance);

@@ -20,4 +20,6 @@ public interface ICallbackMain {
     void OnHasAnyRide(boolean value);
     void OnUpdateNameAndImage(boolean value);
     void OnAppSettingsLoaded(boolean value);
+    void OnGetSessionKey(boolean value, String sessionKey);
+    void OnSessionKeyUpdate(boolean value);
 }
