@@ -68,7 +68,7 @@ public class ShowDerectionInGoogleMap {
         }
 
 
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(builder.build(), 100);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(builder.build(), googleMapPadding+300);
         mMap.animateCamera(cameraUpdate);
 
     }
