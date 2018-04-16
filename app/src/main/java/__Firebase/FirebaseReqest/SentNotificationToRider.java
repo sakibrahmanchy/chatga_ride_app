@@ -30,7 +30,8 @@ import __Firebase.ICallBackInstance.ICallbackMain;
 
 public class SentNotificationToRider extends AsyncTask<String, Void, String> {
 
-    private String path = ("http://139.59.90.128/notification.php");
+   private String path = ("http://139.59.90.128/notification.php");
+    //private String path = FirebaseConstant.BASE_URL+"api/v1/notification/ride/request"
     private Context context;
     private ICallbackMain callbackListener;
     private JSONObject jsonObject;
@@ -95,7 +96,7 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
             requestDTO = new RequestDTO(1,
                     Long.parseLong(clientId),
                     Long.parseLong(riderId),
-                    Long.parseLong(shortestDistance),
+                    (long) Double.parseDouble(shortestDistance),
                     sourceName,
                     destinationName,
                     sourceLatitude + FirebaseConstant.JOIN + sourceLongitude,
