@@ -69,7 +69,9 @@ public class ShortestDistanceMap {
         DestinationLocation.setLatitude(this.Destination.latitude);
         DestinationLocation.setLongitude(this.Destination.longitude);
 
-        this.Distance = (double) SourceLocation.distanceTo(DestinationLocation);
+        float[] result = new float[2];
+        Location.distanceBetween(SourceLocation.getLatitude(), SourceLocation.getLongitude(), DestinationLocation.getLatitude(), DestinationLocation.getLongitude(), result);
+        this.Distance = result[0];
         this.Duration = getNativeDuration(this.Distance);
         Rider.DistanceFromClient = this.Distance;
 

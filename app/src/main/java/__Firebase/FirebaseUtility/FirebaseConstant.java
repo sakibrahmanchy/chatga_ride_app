@@ -11,6 +11,7 @@ public class FirebaseConstant {
     public static String FULL_NAME = "FullName";
     public static String IMAGE_URL = "ImageUrl";
     public static String RATTING = "Ratting";
+    public static String REQUEST = "Request";
     public static String CURRENT_RIDING_HISTORY_ID = "CurrentRidingHistoryID";
     public static String RIDE_REJECTED_BY_RIDER = "RideRejectedByRider";
     public static String RIDER = "Rider";
@@ -108,6 +109,7 @@ public class FirebaseConstant {
     public static String UPDATE_NAME_IMAGE = "UPDATE_NAME_IMAGE";
     public static String APP_SETTINGS = "APP_SETTINGS";
     public static String APP_SETTINGS_LOADED = "APP_SETTINGS_LOADED";
+    public static String REQUEST_ADDED_TO_SERVER = "REQUEST_ADDED_TO_SERVER";
 
     /*Toast Message*/
     public static String NO_RIDER_FOUND = "No rider found";

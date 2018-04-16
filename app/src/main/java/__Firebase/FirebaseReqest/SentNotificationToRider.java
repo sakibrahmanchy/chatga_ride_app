@@ -20,6 +20,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 import __Firebase.Exception.FabricExceptionLog;
+import __Firebase.FirebaseModel.RequestDTO;
 import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.ICallBackInstance.ICallbackMain;
 
@@ -33,6 +34,7 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
     private Context context;
     private ICallbackMain callbackListener;
     private JSONObject jsonObject;
+    private RequestDTO requestDTO;
 
     public SentNotificationToRider(Context context, ICallbackMain callbackListener) {
         this.context = context;
@@ -88,6 +90,17 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
             totalCost = params[16];
             discountID = params[17];
             time = params[18];
+
+            requestDTO = null;
+            requestDTO = new RequestDTO(1,
+                    Long.parseLong(clientId),
+                    Long.parseLong(riderId),
+                    Long.parseLong(shortestDistance),
+                    sourceName,
+                    destinationName,
+                    sourceLatitude + FirebaseConstant.JOIN + sourceLongitude,
+                    destinationLatitude + FirebaseConstant.JOIN + destinationLongitude
+            );
         } catch (ExceptionInInitializerError e) {
             FabricExceptionLog.sendLogToFabric(true, this.getClass().getSimpleName(), e.toString());
         }
@@ -169,8 +182,13 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
             FabricExceptionLog.sendLogToFabric(true, this.getClass().getSimpleName(), e.toString());
         }
 
+        this.saveRequest();
         FirebaseConstant.IS_RIDE_ACCEPTED_BY_RIDER = 0;
         ThrdRequestAgainForRider.Initiate();
         this.callbackListener.OnSentNotificationToRider(true);
+    }
+
+    private void saveRequest() {
+        this.requestDTO.request();
     }
 }
