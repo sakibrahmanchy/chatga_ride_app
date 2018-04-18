@@ -60,6 +60,7 @@ public class Main extends Activity implements ICallbackMain, ICallBackCurrentSer
     private static boolean RequestForDeviceKey = true;
 
     public Main() {
+
         firebaseWrapper = FirebaseWrapper.getInstance();
     }
 
