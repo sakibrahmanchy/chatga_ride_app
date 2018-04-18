@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,20 +50,63 @@ public class SearchingDriver extends AppCompatActivity {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(SearchingDriver.this)
-                        .setTitle("Really Exit?")
-                        .setMessage("Are you sure you want to finish?")
-                        .setNegativeButton(android.R.string.no, null)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface arg0, int arg1) {
-                                new ClearData();
-                                FirebaseConstant.VAR_CAN_REQUEST_FOR_RIDE = true;
-                                    Intent intent = new Intent(SearchingDriver.this, MapActivity.class);
-                                    startActivity(intent);
-                                    finish();
+//                new AlertDialog.Builder(SearchingDriver.this)
+//                        .setTitle("Really Exit?")
+//                        .setMessage("Are you sure you want to finish?")
+//                        .setNegativeButton(android.R.string.no, null)
+//                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface arg0, int arg1) {
+//                                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(SearchingDriver.this, android.R.layout.select_dialog_singlechoice);
+//                                arrayAdapter.add("Hardik");
+//                                arrayAdapter.add("Archit");
+//                                arrayAdapter.add("Jignesh");
+//                                arrayAdapter.add("Umang");
+//                                arrayAdapter.add("Gatti");
+//
+//                                new ClearData();
+//                                FirebaseConstant.VAR_CAN_REQUEST_FOR_RIDE = true;
+//                                    Intent intent = new Intent(SearchingDriver.this, MapActivity.class);
+//                                    startActivity(intent);
+//                                    finish();
+//
+//                            }
+//                        }).create().show();
 
+                AlertDialog.Builder builderSingle = new AlertDialog.Builder(SearchingDriver.this);
+                builderSingle.setIcon(R.drawable.ic_launcher);
+                builderSingle.setTitle("Select One Name:-");
+
+                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(SearchingDriver.this, android.R.layout.select_dialog_singlechoice);
+                arrayAdapter.add("Hardik");
+                arrayAdapter.add("Archit");
+                arrayAdapter.add("Jignesh");
+                arrayAdapter.add("Umang");
+                arrayAdapter.add("Gatti");
+
+                builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String strName = arrayAdapter.getItem(which);
+                        AlertDialog.Builder builderInner = new AlertDialog.Builder(SearchingDriver.this);
+                        builderInner.setMessage(strName);
+                        builderInner.setTitle("Your Selected Item is");
+                        builderInner.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog,int which) {
+                                dialog.dismiss();
                             }
-                        }).create().show();
+                        });
+                        builderInner.show();
+                    }
+                });
+                builderSingle.show();
             }
         });
     }
