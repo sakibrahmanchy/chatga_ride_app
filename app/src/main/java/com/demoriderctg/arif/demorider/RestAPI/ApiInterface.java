@@ -26,6 +26,7 @@ import java.util.ArrayList;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.GET;
@@ -145,4 +146,11 @@ public interface ApiInterface {
     @GET("http://139.59.90.128/chaatga_rider/api/v1/preload/client")
     Call<PreloadResponse> preloadAppData(@Header("Authorization") String authHeader,
                                          @Query("client_id") String client_id);
+
+    @POST("api/v1/ride/cancel/log")
+    @FormUrlEncoded
+    Call<ResponseBody> logRideCancel(@Field("ride_cancel_id") String rideCancelId,
+                                     @Field("user_id") String userId,
+                                     @Field("cancel_reason") String cancelReason,
+                                     @Field("area_name") String areaName);
 }
