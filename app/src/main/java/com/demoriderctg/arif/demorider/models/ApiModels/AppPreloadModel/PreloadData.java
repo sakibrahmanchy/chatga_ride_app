@@ -5,6 +5,7 @@ import com.demoriderctg.arif.demorider.models.ApiModels.AppSettingModels.AppSett
 import com.demoriderctg.arif.demorider.models.ApiModels.LatLongBound;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 import com.demoriderctg.arif.demorider.models.ApiModels.NewsCardModels.NewsCard;
+import com.demoriderctg.arif.demorider.models.RideCancelModels.RideCancelReason;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
@@ -23,12 +24,19 @@ public class PreloadData {
     ArrayList<LatLongBound> latLongBounds;
     @SerializedName("appSettings")
     AppSettings appSettings;
+    @SerializedName("rideCancelReasons")
+    ArrayList<RideCancelReason> rideCancelReasons;
 
-    public PreloadData(LoginData userInformations, ArrayList<NewsCard> newsCards, ArrayList<LatLongBound> latLongBounds,AppSettings appSettings) {
+    public PreloadData(LoginData userInformations,
+                       ArrayList<NewsCard> newsCards,
+                       ArrayList<LatLongBound> latLongBounds,
+                       AppSettings appSettings,
+                       ArrayList<RideCancelReason> rideCancelReasons) {
         this.userInformations = userInformations;
         this.newsCards = newsCards;
         this.latLongBounds = latLongBounds;
         this.appSettings = appSettings;
+        this.rideCancelReasons = rideCancelReasons;
     }
 
     public LoginData getUserInformations() {
@@ -61,5 +69,13 @@ public class PreloadData {
 
     public void setAppSettings(AppSettings appSettings) {
         this.appSettings = appSettings;
+    }
+
+    public ArrayList<RideCancelReason> getRideCancelReasons() {
+        return rideCancelReasons;
+    }
+
+    public void setRideCancelReasons(ArrayList<RideCancelReason> rideCancelReasons) {
+        this.rideCancelReasons = rideCancelReasons;
     }
 }
