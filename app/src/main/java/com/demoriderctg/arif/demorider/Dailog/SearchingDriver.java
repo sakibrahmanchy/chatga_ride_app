@@ -73,7 +73,6 @@ public class SearchingDriver extends AppCompatActivity {
                     reasonMap.put(rideCancelReasons.get(i).getCancelReason(),rideCancelReasons.get(i).getId());
                 }
 
-
                 builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
