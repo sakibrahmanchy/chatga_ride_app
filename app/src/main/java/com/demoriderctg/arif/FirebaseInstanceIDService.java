@@ -2,6 +2,7 @@ package com.demoriderctg.arif;
 
 import android.util.Log;
 
+import com.demoriderctg.arif.demorider.UserInformation;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
@@ -15,13 +16,18 @@ import __Firebase.FirebaseWrapper;
 
 public class FirebaseInstanceIDService extends FirebaseInstanceIdService {
 
+
     @Override
     public void onTokenRefresh() {
-        String recentToken = FirebaseInstanceId.getInstance().getToken();
-        new Main().SetDeviceTokenToRiderTable(
-                FirebaseWrapper.getInstance().getClientModelInstance(),
-                recentToken
-        );
-        Log.d(FirebaseConstant.FIREBASE_REG_TOKEN, recentToken);
+         UserInformation userInformation = new UserInformation(this);
+        if(userInformation.getuserInformation() !=null){
+            String recentToken = FirebaseInstanceId.getInstance().getToken();
+            new Main().SetDeviceTokenToRiderTable(
+                    FirebaseWrapper.getInstance().getClientModelInstance(),
+                    recentToken
+            );
+            Log.d(FirebaseConstant.FIREBASE_REG_TOKEN, recentToken);
+        }
+
     }
 }

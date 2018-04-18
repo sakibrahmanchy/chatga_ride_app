@@ -47,7 +47,7 @@ public class FirstAppLoadingActivity extends AppCompatActivity {
    private UserInformation userInformation;
    private LoginData loginData;
     private Handler handler = new Handler();
-    private Main main = new Main();;
+    private Main main = new Main();
 
     private ProgressDialog dialog;
     private ApiInterface apiService ;
