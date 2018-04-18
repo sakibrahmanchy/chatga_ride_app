@@ -11,6 +11,7 @@ import com.demoriderctg.arif.demorider.models.ApiModels.AppSettingModels.AppSett
 import com.demoriderctg.arif.demorider.models.ApiModels.LatLongBound;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 import com.demoriderctg.arif.demorider.models.ApiModels.NewsCardModels.NewsCard;
+import com.demoriderctg.arif.demorider.models.RideCancelModels.RideCancelReason;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -24,6 +25,7 @@ public class UserInformation {
     private LoginData loginData;
     private ArrayList<NewsCard> newsCardData;
     private ArrayList<LatLongBound> latLongBoundData;
+    private ArrayList<RideCancelReason> rideCancelReasons;
     private AppSettings appSettings;
     private  HomeLocationModel homeLocationModel;
     private WorkLocationModel workLocationModel;
@@ -88,5 +90,12 @@ public class UserInformation {
         String jsonString = sharedpreferences.getString("appSettingsData", null);
         appSettings = gson.fromJson(jsonString,  AppSettings.class);
         return appSettings;
+    }
+
+    public ArrayList<RideCancelReason> getRideCancelReasons() {
+
+        String jsonString = sharedpreferences.getString("rideCancelReasons", null);
+        rideCancelReasons = gson.fromJson(jsonString,  new TypeToken<List<RideCancelReason>>(){}.getType());
+        return rideCancelReasons;
     }
 }
