@@ -163,6 +163,7 @@ public class FirstAppLoadingActivity extends AppCompatActivity {
                         ArrayList<LatLongBound> latLongBounds = response.body().getData().getLatLongBounds();
                         AppSettings appSettings = response.body().getData().getAppSettings();
 
+
                         Gson userData = new Gson();
                         String userJson = userData.toJson(newLoginData);
                         editor.putString("userData",userJson);
