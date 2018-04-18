@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,12 +22,19 @@ import com.demoriderctg.arif.demorider.MainActivity;
 import com.demoriderctg.arif.demorider.OnrideMode.OnrideModeActivity;
 import com.demoriderctg.arif.demorider.OnrideMode.SendNotification;
 import com.demoriderctg.arif.demorider.R;
+import com.demoriderctg.arif.demorider.UserInformation;
+import com.demoriderctg.arif.demorider.models.RideCancelModels.RideCancelReason;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import ContactWithFirebase.Main;
 import __Firebase.FirebaseResponse.NotificationModel;
+import __Firebase.FirebaseResponse.RideCanceledByRider;
 import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseWrapper;
 
@@ -38,10 +46,16 @@ public class SearchingDriver extends AppCompatActivity {
     private Handler handler = new Handler();
     private TextView cancel;
     public static Activity searchActivity;
+    private UserInformation  userInformation;
+    private ArrayList<RideCancelReason> rideCancelReasons;
+    private HashMap<String,String> reasonMap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_searching_driver);
+        userInformation = new UserInformation(this);
+        rideCancelReasons = userInformation.getRideCancelReasons();
+        reasonMap = new HashMap<String,String>();
       //  getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         cancel = (TextView) findViewById(R.id.cancel_search);
@@ -49,20 +63,39 @@ public class SearchingDriver extends AppCompatActivity {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(SearchingDriver.this)
-                        .setTitle("Really Exit?")
-                        .setMessage("Are you sure you want to finish?")
-                        .setNegativeButton(android.R.string.no, null)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface arg0, int arg1) {
-                                new ClearData();
-                                FirebaseConstant.VAR_CAN_REQUEST_FOR_RIDE = true;
-                                    Intent intent = new Intent(SearchingDriver.this, MapActivity.class);
-                                    startActivity(intent);
-                                    finish();
+                AlertDialog.Builder builderSingle = new AlertDialog.Builder(SearchingDriver.this);
+                builderSingle.setTitle("Cancellation reason?");
 
-                            }
-                        }).create().show();
+                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(SearchingDriver.this, android.R.layout.simple_list_item_1);
+
+                for(int i=0; i<rideCancelReasons.size(); i++){
+                    arrayAdapter.add(rideCancelReasons.get(i).getCancelReason());
+                    reasonMap.put(rideCancelReasons.get(i).getCancelReason(),rideCancelReasons.get(i).getId());
+                }
+
+
+                builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String reason = arrayAdapter.getItem(which);
+                        AlertDialog.Builder builderInner = new AlertDialog.Builder(SearchingDriver.this);
+                        String currentId = reasonMap.get(reason);
+                        new ClearData();
+                        FirebaseConstant.VAR_CAN_REQUEST_FOR_RIDE = true;
+                        Intent intent = new Intent(SearchingDriver.this, MapActivity.class);
+                        startActivity(intent);
+                        finish();
+                        dialog.dismiss();
+                    }
+                });
+                builderSingle.show();
             }
         });
     }

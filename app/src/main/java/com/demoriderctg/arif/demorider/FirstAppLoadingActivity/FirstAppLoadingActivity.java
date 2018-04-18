@@ -165,6 +165,7 @@ public class FirstAppLoadingActivity extends AppCompatActivity {
                         AppSettings appSettings = response.body().getData().getAppSettings();
                         ArrayList<RideCancelReason> rideCancelReasons = response.body().getData().getRideCancelReasons();
 
+
                         Gson userData = new Gson();
                         String userJson = userData.toJson(newLoginData);
                         editor.putString("userData",userJson);
