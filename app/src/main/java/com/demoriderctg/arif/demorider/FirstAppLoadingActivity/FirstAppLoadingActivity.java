@@ -30,6 +30,7 @@ import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginModel;
 import com.demoriderctg.arif.demorider.models.ApiModels.NewsCardModels.NewsCard;
 import com.demoriderctg.arif.demorider.models.ApiModels.NewsCardModels.NewsCardResponse;
+import com.demoriderctg.arif.demorider.models.RideCancelModels.RideCancelReason;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 
@@ -162,6 +163,7 @@ public class FirstAppLoadingActivity extends AppCompatActivity {
                         ArrayList<NewsCard> newsCards = response.body().getData().getNewsCards();
                         ArrayList<LatLongBound> latLongBounds = response.body().getData().getLatLongBounds();
                         AppSettings appSettings = response.body().getData().getAppSettings();
+                        ArrayList<RideCancelReason> rideCancelReasons = response.body().getData().getRideCancelReasons();
 
                         Gson userData = new Gson();
                         String userJson = userData.toJson(newLoginData);
@@ -181,6 +183,11 @@ public class FirstAppLoadingActivity extends AppCompatActivity {
                         Gson appSettingsData = new Gson();
                         String appSettingsJson = appSettingsData.toJson(appSettings);
                         editor.putString("appSettingsData",appSettingsJson);
+                        editor.commit();
+
+                        Gson rideCancelReasonsData = new Gson();
+                        String rideCancelReasonsJSON = rideCancelReasonsData.toJson(rideCancelReasons);
+                        editor.putString("rideCancelReasons",rideCancelReasonsJSON);
                         editor.commit();
 
                         main.HasAnyRide(Long.parseLong(loginData.getClientId()));
