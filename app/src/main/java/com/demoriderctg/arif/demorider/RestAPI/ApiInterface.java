@@ -147,9 +147,10 @@ public interface ApiInterface {
     Call<PreloadResponse> preloadAppData(@Header("Authorization") String authHeader,
                                          @Query("client_id") String client_id);
 
-    @POST("api/v1/ride/cancel/log")
+    @POST("http://139.59.90.128/chaatga_rider/api/v1/ride/cancel/log")
     @FormUrlEncoded
-    Call<ResponseBody> logRideCancel(@Field("ride_cancel_id") String rideCancelId,
+    Call<Void> logRideCancel(@Header("Authorization") String authHeader,
+                            @Field("ride_cancel_id") String rideCancelId,
                                      @Field("user_id") String userId,
                                      @Field("cancel_reason") String cancelReason,
                                      @Field("area_name") String areaName);

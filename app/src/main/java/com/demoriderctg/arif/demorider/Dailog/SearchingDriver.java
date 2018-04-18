@@ -1,9 +1,12 @@
 package com.demoriderctg.arif.demorider.Dailog;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,13 +21,22 @@ import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
 import com.demoriderctg.arif.demorider.ClearData.ClearData;
 import com.demoriderctg.arif.demorider.FirstAppLoadingActivity.FirstAppLoadingActivity;
 import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
+import com.demoriderctg.arif.demorider.LoginHelper;
 import com.demoriderctg.arif.demorider.MainActivity;
 import com.demoriderctg.arif.demorider.OnrideMode.OnrideModeActivity;
 import com.demoriderctg.arif.demorider.OnrideMode.SendNotification;
 import com.demoriderctg.arif.demorider.R;
+import com.demoriderctg.arif.demorider.RegistrationActivity;
+import com.demoriderctg.arif.demorider.RestAPI.ApiClient;
+import com.demoriderctg.arif.demorider.RestAPI.ApiInterface;
+import com.demoriderctg.arif.demorider.UserCheckActivity;
 import com.demoriderctg.arif.demorider.UserInformation;
+import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
+import com.demoriderctg.arif.demorider.models.ApiModels.UserCheckResponse;
 import com.demoriderctg.arif.demorider.models.RideCancelModels.RideCancelReason;
 import com.google.firebase.database.ValueEventListener;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,9 +49,14 @@ import __Firebase.FirebaseResponse.NotificationModel;
 import __Firebase.FirebaseResponse.RideCanceledByRider;
 import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseWrapper;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 import static com.demoriderctg.arif.demorider.Dailog.FullMapSearching.fullMapActivity;
+import static com.demoriderctg.arif.demorider.MainActivity.TAG;
 
 public class SearchingDriver extends AppCompatActivity {
 
@@ -49,6 +66,11 @@ public class SearchingDriver extends AppCompatActivity {
     private UserInformation  userInformation;
     private ArrayList<RideCancelReason> rideCancelReasons;
     private HashMap<String,String> reasonMap;
+    private ProgressDialog dialog;
+    private   ApiInterface apiService ;
+    private LoginData loginData;
+    private SharedPreferences pref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +78,8 @@ public class SearchingDriver extends AppCompatActivity {
         userInformation = new UserInformation(this);
         rideCancelReasons = userInformation.getRideCancelReasons();
         reasonMap = new HashMap<String,String>();
+        loginData = userInformation.getuserInformation();
+        pref = getSharedPreferences("MyPref", 0);
       //  getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         cancel = (TextView) findViewById(R.id.cancel_search);
@@ -85,7 +109,8 @@ public class SearchingDriver extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         String reason = arrayAdapter.getItem(which);
                         AlertDialog.Builder builderInner = new AlertDialog.Builder(SearchingDriver.this);
-                        String currentId = reasonMap.get(reason);
+                        int currentId = Integer.parseInt(reasonMap.get(reason));
+                        CancelReason(currentId,Integer.parseInt(loginData.getClientId()),reason,AppConstant.SOURCE_NAME);
                         new ClearData();
                         FirebaseConstant.VAR_CAN_REQUEST_FOR_RIDE = true;
                         Intent intent = new Intent(SearchingDriver.this, MapActivity.class);
@@ -115,5 +140,26 @@ public class SearchingDriver extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         AppConstant.SEARCH_ACTIVITY=false;
+    }
+
+    public void CancelReason(int cancelId, int userId, String cancelReason, String areaName ){
+
+        apiService = ApiClient.getClient().create(ApiInterface.class);
+        String authHeader = "Bearer "+pref.getString("access_token",null);
+        Call<Void> call = apiService.logRideCancel(authHeader,cancelId+"",userId+"",cancelReason,areaName);
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+
+                int statusCode = response.code();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                // Log error here since request failed
+                Log.e(TAG, t.toString());
+            }
+        });
     }
 }
