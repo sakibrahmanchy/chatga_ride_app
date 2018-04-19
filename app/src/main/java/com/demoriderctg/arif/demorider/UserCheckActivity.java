@@ -75,7 +75,6 @@ public class UserCheckActivity extends Activity {
                 }
                 else
                     UserExists(phoneNumber);
-
             }
         });
 
