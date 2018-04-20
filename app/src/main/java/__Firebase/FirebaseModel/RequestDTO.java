@@ -34,13 +34,13 @@ public class RequestDTO {
         this.destinationLatLng = _destinationLatLan;
     }
 
-    public void request() {
+    public void request(RequestDTO requestDTO) {
 
         FirebaseWrapper firebaseWrapper = FirebaseWrapper.getInstance();
         try {
             firebaseWrapper.FirebaseRootReference.child(FirebaseConstant.REQUEST)
                     .push()
-                    .setValue(this, new DatabaseReference.CompletionListener() {
+                    .setValue(requestDTO, new DatabaseReference.CompletionListener() {
                         @Override
                         public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                             FabricExceptionLog.printLog(this.getClass().getSimpleName(), FirebaseConstant.REQUEST_ADDED_TO_SERVER);
