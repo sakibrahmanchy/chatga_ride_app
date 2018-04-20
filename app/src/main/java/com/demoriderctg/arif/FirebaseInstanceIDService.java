@@ -16,11 +16,10 @@ import __Firebase.FirebaseWrapper;
 
 public class FirebaseInstanceIDService extends FirebaseInstanceIdService {
 
-
     @Override
     public void onTokenRefresh() {
-         UserInformation userInformation = new UserInformation(this);
-        if(userInformation.getuserInformation() !=null){
+        UserInformation userInformation = new UserInformation(this);
+        if (userInformation.getuserInformation() != null) {
             String recentToken = FirebaseInstanceId.getInstance().getToken();
             new Main().SetDeviceTokenToRiderTable(
                     FirebaseWrapper.getInstance().getClientModelInstance(),
@@ -28,6 +27,5 @@ public class FirebaseInstanceIDService extends FirebaseInstanceIdService {
             );
             Log.d(FirebaseConstant.FIREBASE_REG_TOKEN, recentToken);
         }
-
     }
 }

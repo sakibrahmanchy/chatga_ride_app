@@ -4,8 +4,10 @@ import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
+import com.demoriderctg.arif.demorider.MainActivity;
 
 import __Firebase.FirebaseUtility.FirebaseConstant;
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by User on 3/22/2018.
@@ -25,11 +27,13 @@ public class FabricExceptionLog {
         }
 
         Throwable throwable = new Exception(message);
+        Fabric.with(MainActivity.getMainActivityContext(), new Crashlytics());
         Crashlytics.logException(throwable);
     }
 
     public static void sendLogToFabric(String message) {
         Throwable throwable = new Exception(message);
+        Fabric.with(MainActivity.getMainActivityContext(), new Crashlytics());
         Crashlytics.logException(throwable);
     }
 
