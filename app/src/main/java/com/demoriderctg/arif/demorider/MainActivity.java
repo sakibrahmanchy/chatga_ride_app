@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
 import com.demoriderctg.arif.demorider.CurrentDateTimeFromServer.CurrentDateTime;
 import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
@@ -28,6 +29,8 @@ import com.demoriderctg.arif.demorider.InternetConnection.InternetCheckActivity;
 import com.facebook.accountkit.AccountKit;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+
+import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,11 +43,14 @@ public class MainActivity extends AppCompatActivity {
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     public static boolean IS_MAP_INITIALIZE = false;
-
+    public static Context context = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = getApplicationContext();
+        Fabric.with(this, new Crashlytics());
+
         connectionCheck = new ConnectionCheck(this);
         pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
         if (pref.getString("userData", null) != null) {
@@ -158,6 +164,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void getDeviceID() {
         AppConstant.SESSION_KEY = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+    }
+
+    public static Context getMainActivityContext(){
+        return context;
     }
 }
 

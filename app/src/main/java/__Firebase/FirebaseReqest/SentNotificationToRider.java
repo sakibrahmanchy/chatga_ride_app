@@ -190,6 +190,7 @@ public class SentNotificationToRider extends AsyncTask<String, Void, String> {
     }
 
     private void saveRequest() {
-        this.requestDTO.request();
+        Thread thread = new Thread(() -> requestDTO.request(requestDTO));
+        thread.start();
     }
 }
