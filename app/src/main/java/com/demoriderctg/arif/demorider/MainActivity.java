@@ -27,6 +27,7 @@ import com.demoriderctg.arif.demorider.CurrentDateTimeFromServer.CurrentDateTime
 import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
 import com.demoriderctg.arif.demorider.InternetConnection.ConnectionCheck;
 import com.demoriderctg.arif.demorider.InternetConnection.InternetCheckActivity;
+import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 import com.facebook.accountkit.AccountKit;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -47,26 +48,19 @@ public class MainActivity extends AppCompatActivity {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     public static boolean IS_MAP_INITIALIZE = false;
     public static Context context = null;
-
+    private LoginData loginData;
+    private  UserInformation userInformation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getApplicationContext();
         Fabric.with(this, new Crashlytics());
-
+        userInformation = new UserInformation(this);
+        loginData = userInformation.getuserInformation();
         connectionCheck = new ConnectionCheck(this);
         pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
         if (pref.getString("userData", null) != null) {
-            this.getDeviceID();
-            if (connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected()) {
-                Intent intent = new Intent(MainActivity.this, MapActivity.class);
-                startActivity(intent);
-                finish();
-            } else {
-                Intent intent = new Intent(this, InternetCheckActivity.class);
-                startActivity(intent);
-                finish();
-            }
+            requestForSpecificPermission();
 
 
         } else {
@@ -150,9 +144,25 @@ public class MainActivity extends AppCompatActivity {
             case 101:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED &&
                         grantResults[2] == PackageManager.PERMISSION_GRANTED && grantResults[3]==PackageManager.PERMISSION_GRANTED) {
-                    Intent intent = new Intent(MainActivity.this, FacebookAccountVerificationActivity.class);
-                    startActivity(intent);
-                    finish();
+                   if(loginData !=null){
+                       this.getDeviceID();
+                       if (connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected()) {
+                           Intent intent = new Intent(MainActivity.this, MapActivity.class);
+                           startActivity(intent);
+                           finish();
+                       } else {
+                           Intent intent = new Intent(this, InternetCheckActivity.class);
+                           startActivity(intent);
+                           finish();
+                       }
+
+                   }
+                   else{
+                       Intent intent = new Intent(MainActivity.this, FacebookAccountVerificationActivity.class);
+                       startActivity(intent);
+                       finish();
+                   }
+
                 } else {
                     //not granted
                     Toast.makeText(getApplicationContext(), "Please Restart Application", Toast.LENGTH_SHORT).show();
