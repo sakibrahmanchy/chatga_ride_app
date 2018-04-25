@@ -128,7 +128,6 @@ public class ClientHistoryActivity extends AppCompatActivity {
                             adapter = new FoldingCellListAdapter(getApplicationContext(), clientHistories);
                             theListView.setAdapter(adapter);
 
-
                         }else{
                         }
                         break;

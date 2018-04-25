@@ -142,7 +142,7 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
                     FirebaseWrapper.getInstance().getRiderViewModelInstance().ClearData(true);
                     main.RequestForRide(Source, Destination, AppConstant.SOURCE_NAME, AppConstant.DESTINATION_NAME, AppConstant.TOTAL_COST, DiscountId);
                     FirebaseConstant.VAR_CAN_REQUEST_FOR_RIDE = true;
-                    Intent intent = new Intent(getContext(), FullMapSearching.class);
+                    Intent intent = new Intent(getContext(), SearchingDriver.class);
                     startActivity(intent);
                     dismiss();
 
