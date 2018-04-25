@@ -15,6 +15,7 @@ import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -26,9 +27,12 @@ import com.demoriderctg.arif.demorider.CurrentDateTimeFromServer.CurrentDateTime
 import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
 import com.demoriderctg.arif.demorider.InternetConnection.ConnectionCheck;
 import com.demoriderctg.arif.demorider.InternetConnection.InternetCheckActivity;
+import com.demoriderctg.arif.demorider.models.ApiModels.LoginModels.LoginData;
 import com.facebook.accountkit.AccountKit;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+
+import java.util.UUID;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -44,28 +48,19 @@ public class MainActivity extends AppCompatActivity {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     public static boolean IS_MAP_INITIALIZE = false;
     public static Context context = null;
-
+    private LoginData loginData;
+    private  UserInformation userInformation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getApplicationContext();
         Fabric.with(this, new Crashlytics());
-
+        userInformation = new UserInformation(this);
+        loginData = userInformation.getuserInformation();
         connectionCheck = new ConnectionCheck(this);
         pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
         if (pref.getString("userData", null) != null) {
-            if(connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected())
-            {
-                this.getDeviceID();
-                Intent intent = new Intent(MainActivity.this, MapActivity.class);
-                startActivity(intent);
-                finish();
-            }
-            else{
-                Intent intent = new Intent(this,InternetCheckActivity.class);
-                startActivity(intent);
-                finish();
-            }
+            requestForSpecificPermission();
 
 
         } else {
@@ -140,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void requestForSpecificPermission() {
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_SMS,
-                Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.CALL_PHONE}, 101);
+                Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.CALL_PHONE,Manifest.permission.READ_PHONE_STATE}, 101);
     }
 
     @Override
@@ -148,10 +143,26 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case 101:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED &&
-                        grantResults[2] == PackageManager.PERMISSION_GRANTED) {
-                    Intent intent = new Intent(MainActivity.this, FacebookAccountVerificationActivity.class);
-                    startActivity(intent);
-                    finish();
+                        grantResults[2] == PackageManager.PERMISSION_GRANTED && grantResults[3]==PackageManager.PERMISSION_GRANTED) {
+                   if(loginData !=null){
+                       this.getDeviceID();
+                       if (connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected()) {
+                           Intent intent = new Intent(MainActivity.this, MapActivity.class);
+                           startActivity(intent);
+                           finish();
+                       } else {
+                           Intent intent = new Intent(this, InternetCheckActivity.class);
+                           startActivity(intent);
+                           finish();
+                       }
+
+                   }
+                   else{
+                       Intent intent = new Intent(MainActivity.this, FacebookAccountVerificationActivity.class);
+                       startActivity(intent);
+                       finish();
+                   }
+
                 } else {
                     //not granted
                     Toast.makeText(getApplicationContext(), "Please Restart Application", Toast.LENGTH_SHORT).show();
@@ -163,7 +174,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getDeviceID() {
-        AppConstant.SESSION_KEY = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        final TelephonyManager tm = (TelephonyManager) getBaseContext().getSystemService(Context.TELEPHONY_SERVICE);
+
+        final String tmDevice, tmSerial, androidId;
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.   
+            return;
+        }
+        tmDevice = "" + tm.getDeviceId();
+        tmSerial = "" + tm.getSimSerialNumber();
+        androidId = "" + android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+
+        UUID deviceUuid = new UUID(androidId.hashCode(), ((long)tmDevice.hashCode() << 32) | tmSerial.hashCode());
+        String deviceId = deviceUuid.toString();
+       // AppConstant.SESSION_KEY = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        AppConstant.SESSION_KEY =deviceId;
     }
 
     public static Context getMainActivityContext(){

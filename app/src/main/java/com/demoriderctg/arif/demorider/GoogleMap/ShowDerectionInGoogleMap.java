@@ -67,15 +67,16 @@ public class ShowDerectionInGoogleMap {
             googleMapPadding = TypedValue.complexToDimensionPixelSize(tv.data,contextOfApplication.getResources().getDisplayMetrics());
         }
 
-
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(builder.build(), googleMapPadding+300);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(builder.build(),googleMapPadding+100);
         mMap.animateCamera(cameraUpdate);
 
     }
 
     public Bitmap resizeMapIcons(String iconName,int width, int height){
+
         Bitmap decodeResource = BitmapFactory.decodeResource(contextOfApplication.getResources(),contextOfApplication.getResources().getIdentifier(iconName, "drawable", contextOfApplication.getPackageName()));
         return Bitmap.createScaledBitmap(decodeResource, (int) (((double) decodeResource.getWidth()) * .25d), (int) (((double) decodeResource.getHeight()) * .25d), false);
+
     }
 
 

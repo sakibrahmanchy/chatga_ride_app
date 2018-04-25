@@ -46,7 +46,6 @@ public class InitialAcceptanceOfRideResponse implements ICallBackCurrentServerTi
         AppConstant.HISTORY_ID = (int) currentRidingHistoryModel.HistoryID;
         Intent intent = new Intent(searchActivity, OnrideModeActivity.class);
         searchActivity.startActivity(intent);
-        fullMapActivity.finish();
         searchActivity.finish();
 
 

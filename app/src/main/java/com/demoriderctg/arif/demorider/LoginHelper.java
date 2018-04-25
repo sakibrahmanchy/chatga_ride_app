@@ -241,6 +241,32 @@ public class LoginHelper {
 
     }
 
+    public void updateDeviceToken(String phone,String deviceToken){
+
+        final String phoneNumner = phone;
+        SharedPreferences pref = context.getSharedPreferences("MyPref",0);
+        ApiInterface apiService =
+                ApiClient.getClient().create(ApiInterface.class);
+        String authHeader = "Bearer "+pref.getString("access_token",null);;
+        Call<UpdateDeviceTokenData> call = apiService.updateDeviceToken(authHeader,phoneNumner, deviceToken);
+
+        call.enqueue(new Callback<UpdateDeviceTokenData>() {
+            @Override
+            public void onResponse(Call<UpdateDeviceTokenData> call, Response<UpdateDeviceTokenData> response) {
+
+                int statusCode = response.code();
+
+            }
+
+            @Override
+            public void onFailure(Call<UpdateDeviceTokenData> call, Throwable t) {
+                // Log error here since request failed
+                Log.e(TAG, "Failure "+t.toString());
+            }
+        });
+
+
+    }
 }
 
 

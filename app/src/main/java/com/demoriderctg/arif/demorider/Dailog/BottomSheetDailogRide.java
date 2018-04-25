@@ -122,10 +122,10 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
             public void onClick(View v) {
                 if( connectionCheck.isNetworkConnected()){
 
-                    Double SourceLat = AppConstant.SOURCE.latitude;
-                    Double SourceLan = AppConstant.SOURCE.longitude;
-                    Double DestinationLat = AppConstant.DESTINATION.latitude;
-                    Double DestinationLan = AppConstant.DESTINATION.longitude;
+                    Double SourceLat = AppConstant.searchSorceLocationModel.home.latitude;
+                    Double SourceLan = AppConstant.searchSorceLocationModel.home.longitude;
+                    Double DestinationLat = AppConstant.searchDestinationLocationModel.work.latitude;
+                    Double DestinationLan = AppConstant.searchDestinationLocationModel.work.longitude;
                     Pair Source = Pair.create(SourceLat,SourceLan);
                     Pair Destination = Pair.create(DestinationLat,DestinationLan);
                     int DiscountId=0;
@@ -142,7 +142,7 @@ public class BottomSheetDailogRide extends BottomSheetDialogFragment {
                     FirebaseWrapper.getInstance().getRiderViewModelInstance().ClearData(true);
                     main.RequestForRide(Source, Destination, AppConstant.SOURCE_NAME, AppConstant.DESTINATION_NAME, AppConstant.TOTAL_COST, DiscountId);
                     FirebaseConstant.VAR_CAN_REQUEST_FOR_RIDE = true;
-                    Intent intent = new Intent(getContext(), FullMapSearching.class);
+                    Intent intent = new Intent(getContext(), SearchingDriver.class);
                     startActivity(intent);
                     dismiss();
 
