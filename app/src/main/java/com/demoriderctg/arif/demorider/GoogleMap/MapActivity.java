@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
@@ -54,6 +55,7 @@ import com.demoriderctg.arif.demorider.Help.HelpActivity;
 import com.demoriderctg.arif.demorider.InternetConnection.ConnectionCheck;
 import com.demoriderctg.arif.demorider.InternetConnection.InternetCheckActivity;
 import com.demoriderctg.arif.demorider.NotificationActivity;
+import com.demoriderctg.arif.demorider.OnrideMode.OnrideModeActivity;
 import com.demoriderctg.arif.demorider.PlaceAutocompleteAdapter;
 import com.demoriderctg.arif.demorider.PromotionActivity;
 import com.demoriderctg.arif.demorider.R;
@@ -193,7 +195,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private NavigationView navigationView;
-
+    private Handler getLocationNameHandler = new Handler();
     //vars
     private Boolean mLocationPermissionsGranted = false;
     private GoogleMap mMap;
@@ -602,28 +604,63 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 vmCurrentLocation.latitude=getCurrentLocation.getLatitude();
                 vmCurrentLocation.logitude=getCurrentLocation.getLongitude();
                 List<Address> myList = myLocation.getFromLocation(vmCurrentLocation.latitude, vmCurrentLocation.logitude, 1);
-               if(myList.size()>0){
+                if(myList.size()>0){
 
-                   Address address = myList.get(0);
-                   Gson gson = new Gson();
-                   String json = gson.toJson(vmCurrentLocation);
-                   editor.putString("currentLocation",json);
-                   editor.commit();
-                   AppConstant.searchSorceLocationModel = new HomeLocationModel();
-                   AppConstant.searchSorceLocationModel.homeLocationName = address.getAddressLine(0);
-                   AppConstant.searchSorceLocationModel.home = new LatLng(vmCurrentLocation.latitude, vmCurrentLocation.logitude);
-                   if(AppConstant.searchDestinationLocationModel == null) {
-                       AppConstant.searchDestinationLocationModel = new WorkLocationModel();
-                       AppConstant.searchDestinationLocationModel.workLocationName = AppConstant.searchSorceLocationModel.homeLocationName;
-                       AppConstant.searchDestinationLocationModel.work =AppConstant.searchSorceLocationModel.home;
-                   }
-                   String sourceLocation = AppConstant .searchSorceLocationModel.homeLocationName;
-                   sourceText.setText(sourceLocation);
+                    Address address = myList.get(0);
+                    Gson gson = new Gson();
+                    String json = gson.toJson(vmCurrentLocation);
+                    editor.putString("currentLocation",json);
+                    editor.commit();
+                    AppConstant.searchSorceLocationModel = new HomeLocationModel();
+                    AppConstant.searchDestinationLocationModel = new WorkLocationModel();
+                    AppConstant.searchSorceLocationModel.homeLocationName = address.getAddressLine(0);
+                    AppConstant.searchSorceLocationModel.home = new LatLng(vmCurrentLocation.latitude, vmCurrentLocation.logitude);
+                    AppConstant.searchDestinationLocationModel.workLocationName = AppConstant.searchSorceLocationModel.homeLocationName;
+                    AppConstant.searchDestinationLocationModel.work =AppConstant.searchSorceLocationModel.home;
 
-                   moveCamera(new LatLng(vmCurrentLocation.latitude, vmCurrentLocation.logitude),
-                           AppConstant.DEFAULT_ZOOM, "Default");
-               }
-                 CheckService(AppConstant.searchSorceLocationModel.home);
+                    String sourceLocation = AppConstant .searchSorceLocationModel.homeLocationName;
+                    sourceText.setText(sourceLocation);
+
+                    moveCamera(new LatLng(vmCurrentLocation.latitude, vmCurrentLocation.logitude),
+                            AppConstant.DEFAULT_ZOOM, "Default");
+                    CheckService(AppConstant.searchSorceLocationModel.home);
+                }
+                Runnable runnableForStartRide = new Runnable() {
+                    @Override
+                    public void run() {
+                        if(myList.size()>0){
+
+                            Address address = myList.get(0);
+                            Gson gson = new Gson();
+                            String json = gson.toJson(vmCurrentLocation);
+                            editor.putString("currentLocation",json);
+                            editor.commit();
+                            AppConstant.searchSorceLocationModel = new HomeLocationModel();
+                            AppConstant.searchDestinationLocationModel = new WorkLocationModel();
+                            AppConstant.searchSorceLocationModel.homeLocationName = address.getAddressLine(0);
+                            AppConstant.searchSorceLocationModel.home = new LatLng(vmCurrentLocation.latitude, vmCurrentLocation.logitude);
+                            AppConstant.searchDestinationLocationModel.workLocationName = AppConstant.searchSorceLocationModel.homeLocationName;
+                            AppConstant.searchDestinationLocationModel.work =AppConstant.searchSorceLocationModel.home;
+
+                            String sourceLocation = AppConstant .searchSorceLocationModel.homeLocationName;
+                            sourceText.setText(sourceLocation);
+
+                            moveCamera(new LatLng(vmCurrentLocation.latitude, vmCurrentLocation.logitude),
+                                    AppConstant.DEFAULT_ZOOM, "Default");
+                            CheckService(AppConstant.searchSorceLocationModel.home);
+                        }
+                        else {
+                            getLocationNameHandler.postDelayed(this, 1000);
+                        }
+
+
+                    }
+                };
+                if(myList.size()==0){
+                    getLocationNameHandler.postDelayed(runnableForStartRide,1000);
+                }
+
+
                 if(!sharedpreferences.getString("APP_SHOWCASED","").equals("true"))
                     showCaseApp();
 
