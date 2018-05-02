@@ -58,6 +58,7 @@
             android:paddingBottom="10dp"
             android:paddingLeft="20dp"
             android:paddingStart="20dp"
+            android:textColor="@color/white"
             android:textSize="@dimen/small_font_size"
             android:text="@string/requests_count_mock" />
 
@@ -82,6 +83,7 @@
             android:paddingBottom="10dp"
             android:paddingEnd="20dp"
             android:paddingRight="20dp"
+            android:textColor="@color/white"
             android:textSize="@dimen/small_font_size"
             android:text="@string/weight_mock" />
 
