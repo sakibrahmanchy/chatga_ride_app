@@ -109,7 +109,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
     private RecyclerView newsCardListView;
     private UserInformation userInformation;
     private ArrayList<NewsCard> newsCards;
-    private RatingBar ratingBar;
+
 
 
     @Override
@@ -120,11 +120,11 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
         getCurrentLocation = new GetCurrentLocation(this);
         sendNotification = new SendNotification(this);
         notification = new NotificationCompat.Builder(this);
-        riderImage = (ImageView) findViewById(R.id.Rider_profile_pic);
+        riderImage = (ImageView) findViewById(R.id.rider_profile_pic);
         riderName = (TextView) findViewById(R.id.rider_name);
         contactRider = (TextView) findViewById(R.id.contact_with_rider);
-        ratingBar = (RatingBar) findViewById(R.id.rider_rating);
-        rider_phone_number =(TextView) findViewById(R.id.rider_number);
+        rating = (TextView) findViewById(R.id.rider_rating);
+        rider_phone_number =(TextView) findViewById(R.id.phone_number);
         newsCardListView = findViewById(R.id.news_card_2_listview);
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         bottomSheet = findViewById( R.id.bottom_sheet );
@@ -140,8 +140,8 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
 
     void setUi(){
         riderName.setText(riderModel.FullName);
-        ratingBar.setRating((float) Double.parseDouble(riderModel.Ratting));
-        rider_phone_number.setText("8"+riderModel.PhoneNumber);
+        rider_phone_number.setText("880"+riderModel.PhoneNumber);
+        rating.setText(riderModel.Ratting);
         Picasso.with(this).invalidate(riderModel.ImageUrl);
         Picasso.with(this)
                 .load(riderModel.ImageUrl)
@@ -254,8 +254,6 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
                 else {
                     handlerForFinishRide.postDelayed(this, 1000);
                 }
-
-
             }
         };
 

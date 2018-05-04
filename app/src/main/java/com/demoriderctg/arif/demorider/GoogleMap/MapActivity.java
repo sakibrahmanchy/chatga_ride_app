@@ -1,6 +1,7 @@
 package com.demoriderctg.arif.demorider.GoogleMap;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -111,6 +112,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
@@ -121,6 +123,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         this, R.raw.style_json));
 
         mMap.getUiSettings().setCompassEnabled(false);
+        mMap.setMyLocationEnabled(true);
 
         mMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
             @Override
@@ -166,12 +169,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
-         //   if (connectionCheck.isGpsEnable() && connectionCheck.isNetworkConnected() && activityChangeForSearch == null) {
-                getDeviceLocation();
-
-
-           // }
             init();
+            getDeviceLocation();
         }
     }
 
@@ -413,6 +412,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         main.CreateNewClientFirebase(loginData, phonemumber);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void init() {
         Log.d(TAG, "init: initializing");
 
@@ -555,13 +555,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 if(sourceMarker !=null){
                     sourceMarker.remove();
                 }
+
                 mMap.clear();
                 requestbtn.setVisibility(View.GONE);
                 sendButton.setVisibility(View.VISIBLE);
                 mapStateChange(true);
                 sourceText.setBackgroundColor(getResources().getColor(R.color.grey_100));
                 destinationText.setBackgroundColor(getResources().getColor(R.color.white));
-                moveCamera(AppConstant.searchSorceLocationModel.home,AppConstant.DEFAULT_ZOOM,"Default");
+                if(AppConstant.searchSorceLocationModel !=null){
+                    moveCamera(AppConstant.searchSorceLocationModel.home,AppConstant.DEFAULT_ZOOM,"Default");
+                }
+
                 AppConstant.SOURCE_SELECT = true;
                 AppConstant.DESTINATION_SELECT = false;
                 defaultImageMarker.setImageResource(R.drawable.ic_marker_pickup);
@@ -581,7 +585,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 destinationText.setBackgroundColor(getResources().getColor(R.color.grey_100));
                 sourceText.setBackgroundColor(getResources().getColor(R.color.white));
                 mapStateChange(true);
-                moveCamera(AppConstant.searchDestinationLocationModel.work,AppConstant.DEFAULT_ZOOM,"Default");
+                if(AppConstant.searchDestinationLocationModel!=null){
+                    moveCamera(AppConstant.searchDestinationLocationModel.work,AppConstant.DEFAULT_ZOOM,"Default");
+                }
+
                 AppConstant.SOURCE_SELECT = false;
                 AppConstant.DESTINATION_SELECT = true;
 
@@ -834,6 +841,9 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     if (requestCode == AppConstant.SEARCH_SOURCE_AUTOCOMPLETE) {
         if (resultCode == RESULT_OK) {
 
+            if (AppConstant.searchSorceLocationModel == null) {
+                AppConstant.searchSorceLocationModel = new HomeLocationModel();
+            }
             if(AppConstant.searchSorceLocationModel !=null){
                 Place place = PlaceAutocomplete.getPlace(this, data);
                     AppConstant.searchSorceLocationModel.homeLocationName = place.getAddress().toString();
