@@ -16,6 +16,7 @@ import android.util.Log;
 
 
 import com.crashlytics.android.Crashlytics;
+import com.demoriderctg.arif.demorider.ActiveContext;
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
 import com.demoriderctg.arif.demorider.MainActivity;
 import com.demoriderctg.arif.demorider.OnrideMode.OnrideModeActivity;
@@ -48,7 +49,7 @@ public class FirstAppLoadingActivity extends AppCompatActivity {
    private UserInformation userInformation;
    private LoginData loginData;
     private Handler handler = new Handler();
-    private Main main = new Main();
+    private Main main;
 
     private ProgressDialog dialog;
     private ApiInterface apiService ;
@@ -64,7 +65,8 @@ public class FirstAppLoadingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_first_app_loading);
         userInformation = new UserInformation(this);
         loginData = userInformation.getuserInformation();
-
+        new ActiveContext(this);
+        new Main();
         int GET_MY_PERMISSION = 1;
 
         if(loginData != null){
@@ -94,7 +96,6 @@ public class FirstAppLoadingActivity extends AppCompatActivity {
                            finish();
                        }
                        if(AppConstant.IS_RIDE==1){
-
 
                            AppConstant.SOURCE = new LatLng(AppConstant.currentRidingHistoryModel.StartingLocation.Latitude,
                                    AppConstant.currentRidingHistoryModel.StartingLocation.Longitude);
@@ -165,11 +166,10 @@ public class FirstAppLoadingActivity extends AppCompatActivity {
                         AppSettings appSettings = response.body().getData().getAppSettings();
                         ArrayList<RideCancelReason> rideCancelReasons = response.body().getData().getRideCancelReasons();
 
-
                         Gson userData = new Gson();
                         String userJson = userData.toJson(newLoginData);
                         editor.putString("userData",userJson);
-                        editor.commit();
+                        editor.apply();
 
                         Gson newsCardData = new Gson();
                         String newsCardJson = newsCardData.toJson(newsCards);
@@ -190,7 +190,7 @@ public class FirstAppLoadingActivity extends AppCompatActivity {
                         String rideCancelReasonsJSON = rideCancelReasonsData.toJson(rideCancelReasons);
                         editor.putString("rideCancelReasons",rideCancelReasonsJSON);
                         editor.commit();
-
+                        main = new Main();
                         main.HasAnyRide(Long.parseLong(loginData.getClientId()));
                         InitializeApp();
                         break;
@@ -231,8 +231,7 @@ public class FirstAppLoadingActivity extends AppCompatActivity {
                         Gson gson = new Gson();
                         String json = gson.toJson(newLoginData);
                         editor.putString("userData",json);
-                        editor.commit();
-
+                        editor.apply();
                         getNewsCards();
                         break;
                     default:
@@ -273,8 +272,7 @@ public class FirstAppLoadingActivity extends AppCompatActivity {
                         Gson gson = new Gson();
                         String json = gson.toJson(newsCard);
                         editor.putString("newsCardData",json);
-                        editor.commit();
-
+                        editor.apply();
                         main.HasAnyRide(Long.parseLong(loginData.getClientId()));
                         InitializeApp();
                         break;

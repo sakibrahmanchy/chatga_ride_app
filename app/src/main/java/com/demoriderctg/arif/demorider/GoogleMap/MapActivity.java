@@ -44,6 +44,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.demoriderctg.arif.demorider.About.AboutActivity;
+import com.demoriderctg.arif.demorider.ActiveContext;
 import com.demoriderctg.arif.demorider.Adapters.History.ClientHistoryActivity;
 import com.demoriderctg.arif.demorider.Adapters.NewsCard.NewsCardAdapter;
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
@@ -166,8 +167,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
-
-            mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
             init();
             getDeviceLocation();
@@ -276,7 +275,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         });
         newsCardListView = findViewById(R.id.news_card_listview);
 
-
+        new ActiveContext(this);
         bottomSheet = findViewById( R.id.bottom_sheet );
         bottomSheet.setScaleX(bottomSheetMinimumSize);
         bottomSheetCurrentSize = bottomSheetMinimumSize;

@@ -36,6 +36,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.demoriderctg.arif.demorider.ActiveContext;
 import com.demoriderctg.arif.demorider.Adapters.NewsCard.NewsCardAdapter;
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
 import com.demoriderctg.arif.demorider.ClearData.ClearData;
@@ -116,6 +117,7 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_onride_mode);
+        new ActiveContext(this);
         connectionCheck = new ConnectionCheck(this);
         getCurrentLocation = new GetCurrentLocation(this);
         sendNotification = new SendNotification(this);
@@ -140,14 +142,20 @@ public class OnrideModeActivity extends AppCompatActivity implements OnMapReadyC
 
     void setUi(){
         riderName.setText(riderModel.FullName);
-        rider_phone_number.setText("880"+riderModel.PhoneNumber);
+        rider_phone_number.setText("+880"+riderModel.PhoneNumber);
         rating.setText(riderModel.Ratting);
-        Picasso.with(this).invalidate(riderModel.ImageUrl);
-        Picasso.with(this)
-                .load(riderModel.ImageUrl)
-                .placeholder(R.drawable.profile_image)
-                .error(R.drawable.profile_image)
-                .into(riderImage);
+        try{
+            Picasso.with(this).invalidate(riderModel.ImageUrl);
+            Picasso.with(this)
+                    .load(riderModel.ImageUrl)
+                    .placeholder(R.drawable.profile_image)
+                    .error(R.drawable.profile_image)
+                    .into(riderImage);
+        }catch (Exception e){
+              riderImage.setImageURI(Uri.parse(riderModel.ImageUrl));
+            e.printStackTrace();
+        }
+
 
         newsCards = userInformation.getNewsCards();
         NewsCardAdapter adapter = new NewsCardAdapter(this, newsCards);

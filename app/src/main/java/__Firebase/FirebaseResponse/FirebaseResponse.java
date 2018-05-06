@@ -4,6 +4,7 @@ import android.util.Log;
 import android.util.Pair;
 
 import com.demoriderctg.arif.demorider.Dailog.BottomSheetDailogRide;
+import com.demoriderctg.arif.demorider.FirstAppLoadingActivity.FirstAppLoadingActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;

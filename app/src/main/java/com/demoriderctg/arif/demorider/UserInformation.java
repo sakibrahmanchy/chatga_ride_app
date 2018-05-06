@@ -98,4 +98,8 @@ public class UserInformation {
         rideCancelReasons = gson.fromJson(jsonString,  new TypeToken<List<RideCancelReason>>(){}.getType());
         return rideCancelReasons;
     }
+    public String GetDeviceToken(){
+        String token = sharedpreferences.getString("DeviceToken", null);
+        return token;
+    }
 }

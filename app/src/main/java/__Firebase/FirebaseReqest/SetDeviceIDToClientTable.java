@@ -12,7 +12,6 @@ import __Firebase.Exception.FabricExceptionLog;
 import __Firebase.FirebaseUtility.FirebaseConstant;
 import __Firebase.FirebaseWrapper;
 import __Firebase.ICallBackInstance.ICallbackMain;
-
 /**
  * Created by Arif on 3/29/2018.
  */
@@ -36,14 +35,11 @@ public class SetDeviceIDToClientTable {
 
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-
                     if (dataSnapshot.exists() && dataSnapshot.hasChildren()) {
                         if (dataSnapshot.getChildren().iterator().hasNext()) {
-
                             Map<String, Object> update = new HashMap<>();
                             update.put(FirebaseConstant.SESSION_KEY, AppConstant.SESSION_KEY);
                             dataSnapshot.getChildren().iterator().next().getRef().updateChildren(update);
-
                             FabricExceptionLog.printLog(this.getClass().getSimpleName(), FirebaseConstant.SESSION_KEY);
                             iCallbackMain.OnSessionKeyUpdate(true);
                         }

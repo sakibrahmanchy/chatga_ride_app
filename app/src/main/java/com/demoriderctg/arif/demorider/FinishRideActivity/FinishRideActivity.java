@@ -10,6 +10,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 
+import com.demoriderctg.arif.demorider.ActiveContext;
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
 import com.demoriderctg.arif.demorider.ClearData.ClearData;
 import com.demoriderctg.arif.demorider.MainActivity;
@@ -33,13 +34,13 @@ public class FinishRideActivity extends AppCompatActivity implements View.OnClic
         btnOk.setOnClickListener(this);
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         main = new Main();
+        new ActiveContext(this);
         total_cost.setText("৳"+ AppConstant.TOTAL_COST);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 AppConstant.RATING = ratingBar.getRating();
-
             }
         });
 
@@ -56,12 +57,10 @@ public class FinishRideActivity extends AppCompatActivity implements View.OnClic
                 startActivity(intent);
                 new ClearData();
                 finish();
-
                 break;
             default:
                 break;
         }
-
     }
 
     public boolean onOptionsItemSelected(MenuItem item){
@@ -69,6 +68,5 @@ public class FinishRideActivity extends AppCompatActivity implements View.OnClic
         startActivity(intent);
         finish();
         return true;
-
     }
 }

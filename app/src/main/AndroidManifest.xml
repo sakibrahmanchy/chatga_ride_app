@@ -18,8 +18,6 @@
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
 
     <uses-sdk
-        android:minSdkVersion="17"
-         android:targetSdkVersion="27"
         android:maxSdkVersion="27"/>
     <application
         android:allowBackup="true"
