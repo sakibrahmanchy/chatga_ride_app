@@ -32,6 +32,7 @@ import android.widget.TextView;
 import com.demoriderctg.arif.demorider.models.ApiModels.RegistrationModels.RegistrationModel;
 import com.demoriderctg.arif.demorider.RestAPI.ApiClient;
 import com.demoriderctg.arif.demorider.RestAPI.ApiInterface;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 
 import org.json.JSONArray;
@@ -80,13 +81,14 @@ public class RegistrationActivity extends Activity {
 
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
+    private UserInformation userInformation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
         // Set up the login form.
-
+        userInformation = new UserInformation(this);
         mEmailView = (EditText) findViewById(R.id.email);
         mGender = (RadioGroup) findViewById(R.id.gender_radio_group);
         firstName = (EditText) findViewById(R.id.userFirstName);
@@ -155,7 +157,13 @@ public class RegistrationActivity extends Activity {
         email = mEmailView.getText().toString();
         userFirstName = firstName.getText().toString();
         userLastName = lastName.getText().toString();
-        deviceToken = FirebaseWrapper.getDeviceToken();
+        if(userInformation.GetDeviceToken()!=null){
+            deviceToken = userInformation.GetDeviceToken();
+        }
+        else {
+            deviceToken= FirebaseWrapper.getDeviceToken();
+        }
+
         birthDate = birthDayText.getText().toString();
         referralCode = promocode.getText().toString();
 

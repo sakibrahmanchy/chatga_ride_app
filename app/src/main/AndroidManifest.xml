@@ -6,7 +6,6 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -18,11 +17,7 @@
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
 
-
-
     <uses-sdk
-        android:minSdkVersion="17"
-         android:targetSdkVersion="27"
         android:maxSdkVersion="27"/>
     <application
         android:allowBackup="true"
@@ -151,6 +146,8 @@
             android:value="e8cd72fce93bff8f1f3bdef92f592af0978a34e8" />
 
         <activity android:name=".Referral.Refarrel"></activity>
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat"/> <!-- optional (needed if default theme has no action bar) -->
     </application>
 
 </manifest>

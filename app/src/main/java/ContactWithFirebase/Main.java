@@ -7,6 +7,7 @@ import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.util.Pair;
 
+import com.demoriderctg.arif.demorider.ActiveContext;
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
 import com.demoriderctg.arif.demorider.FirstAppLoadingActivity.FirstAppLoadingActivity;
 import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
@@ -58,9 +59,15 @@ public class Main extends Activity implements ICallbackMain, ICallBackCurrentSer
     private static long HistoryID;
     private Context context = null;
     private static boolean RequestForDeviceKey = true;
+    private UserInformation userInformation;
 
     public Main() {
         firebaseWrapper = FirebaseWrapper.getInstance();
+
+        if(ActiveContext.activeContext!=null){
+            userInformation= new UserInformation(ActiveContext.activeContext);
+        }
+
     }
 
     public boolean CreateNewClientFirebase(LoginData loginData, String phoneNumber) {
@@ -75,7 +82,13 @@ public class Main extends Activity implements ICallbackMain, ICallBackCurrentSer
         clientModel.FullName = loginData.firstName + " " + loginData.getLastName();
         clientModel.PhoneNumber = Long.parseLong(phoneNumber);
 
-        clientModel.DeviceToken = FirebaseWrapper.getDeviceToken();
+        if(userInformation.GetDeviceToken()!=null){
+            clientModel.DeviceToken = userInformation.GetDeviceToken();
+        }
+        else{
+            clientModel.DeviceToken = FirebaseWrapper.getDeviceToken();
+        }
+
         clientModel.IsSearchingOrOnRide = FirebaseConstant.UNDEFINE;
         clientModel.CostOfCurrentRide = FirebaseConstant.UNDEFINE;
         clientModel.CurrentRidingHistoryID = FirebaseConstant.UNKNOWN_STRING;
@@ -144,7 +157,6 @@ public class Main extends Activity implements ICallbackMain, ICallBackCurrentSer
         this.firebaseWrapper = FirebaseWrapper.getInstance();
         long clientID = FirebaseWrapper.getInstance().getClientModelInstance().ClientID;
         firebaseWrapper.getFirebaseRequestInstance().SetDeviceIdToClientTable(clientID, Main.this);
-
         return true;
     }
 
@@ -194,7 +206,6 @@ public class Main extends Activity implements ICallbackMain, ICallBackCurrentSer
         firebaseWrapper = FirebaseWrapper.getInstance();
         firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
         this.clientModel = Client;
-
         firebaseRequestInstance.GetCurrentRiderHistoryModel(HistoryId, this.clientModel.ClientID, Time, ActionType, Main.this);
         return true;
     }
@@ -304,7 +315,6 @@ public class Main extends Activity implements ICallbackMain, ICallBackCurrentSer
         firebaseRequestInstance = firebaseWrapper.getFirebaseRequestInstance();
         this.currentRidingHistoryModel = HistoryModel;
         this.clientModel = Client;
-
         this.currentRidingHistoryModel.EndingLocation.Latitude = newEndingLocation.first;
         this.currentRidingHistoryModel.EndingLocation.Longitude = newEndingLocation.second;
 
@@ -344,7 +354,6 @@ public class Main extends Activity implements ICallbackMain, ICallBackCurrentSer
 
     /*Force Cancel Ride*/
     public void ForceCancelRide() {
-
         FirebaseUtilMethod.getNetworkTime(
                 FirebaseConstant.RIDE_CANCELED_BY_CLIENT,
                 null,

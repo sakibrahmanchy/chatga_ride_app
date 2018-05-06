@@ -1,5 +1,6 @@
 package com.demoriderctg.arif.demorider;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -50,11 +51,14 @@ public class LoginHelper {
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
     private Context context;
+    private UserInformation userInformation;
 
+    @SuppressLint("CommitPrefEdits")
     public LoginHelper(Context context) {
         this.context = context;
         pref = this.context.getSharedPreferences("MyPref", 0);
         editor = pref.edit();
+        userInformation = new UserInformation(this.context);
     }
 
     public void AccessTokenCall(String clientId,String clientSecret,final String phoneNumber){
@@ -117,8 +121,13 @@ public class LoginHelper {
         dialog = new ProgressDialog(context);
         dialog.setMessage("Logging in To App..");
         dialog.show();
-
-        String deviceToken = FirebaseWrapper.getDeviceToken();
+        String deviceToken;
+        if(userInformation.GetDeviceToken()!=null){
+             deviceToken = userInformation.GetDeviceToken();
+        }
+        else{
+            deviceToken = FirebaseWrapper.getDeviceToken();
+        }
         String authHeader = "Bearer "+pref.getString("access_token",null);
         Call<LoginModel> call = apiService.loginUser(authHeader,phoneNumber, deviceToken);
 

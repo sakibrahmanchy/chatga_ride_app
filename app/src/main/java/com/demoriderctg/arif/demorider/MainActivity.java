@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         userInformation = new UserInformation(this);
         loginData = userInformation.getuserInformation();
         connectionCheck = new ConnectionCheck(this);
+        new ActiveContext(this);
         pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
         if (pref.getString("userData", null) != null) {
             requestForSpecificPermission();

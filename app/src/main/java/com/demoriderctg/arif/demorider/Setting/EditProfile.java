@@ -1,11 +1,16 @@
 package com.demoriderctg.arif.demorider.Setting;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -35,11 +40,13 @@ import com.google.gson.Gson;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -155,11 +162,7 @@ public class EditProfile extends AppCompatActivity  {
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-               // Intent pickImageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                Intent pickImageIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                pickImageIntent.setType("image/*");
-                startActivityForResult(pickImageIntent, RESULT_LOAD_IMAGE);
+                startCropImageActivity();
             }
         });
 
@@ -193,24 +196,41 @@ public class EditProfile extends AppCompatActivity  {
 
     }
 
+    private void startCropImageActivity() {
+        CropImage.activity()
+                .start(this);
+    }
+
+    public void onSelectImageClick(View view) {
+        CropImage.startPickImageActivity(this);
+    }
+
     @Override
+    @SuppressLint("NewApi")
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        // handle result of pick image chooser
+        if (requestCode == CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            Uri imageUri = data.getData();
 
-        if (resultCode == RESULT_OK ){
-            if(requestCode==RESULT_LOAD_IMAGE){
-                picUri = data.getData();
-                performCrop();
+            // For API >= 23 we need to check specifically that we have permissions to read external storage.
+            if (CropImage.isReadExternalStoragePermissionsRequired(this, imageUri)) {
+                // request permissions and handle the result in onRequestPermissionsResult()
+                picUri = imageUri;
+                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},   CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE);
+            } else {
+                // no permissions required or already granted, can start crop image activity
+                startCropImageActivity(imageUri);
             }
-            else if(requestCode == PIC_CROP){
-//get the returned data
-                Bundle extras = data.getExtras();
-//get the cropped bitmap
+        }
 
-                if(extras !=null){
-                    
-                    Bitmap thePic = extras.getParcelable("data");
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri resultUri = result.getUri();
 
+                try {
+                    InputStream image_stream = getContentResolver().openInputStream(resultUri);
+                    Bitmap thePic= BitmapFactory.decodeStream(image_stream );
                     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                     thePic.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
                     byte[] byteArray = byteArrayOutputStream .toByteArray();
@@ -226,16 +246,34 @@ public class EditProfile extends AppCompatActivity  {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
-                    //imageEncodedToBase64 = Base64.encodeToString(byteArray, Base64.DEFAULT);
-
                     editProfile.setImageBitmap(thePic);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
 
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
             }
         }
 
     }
+
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        if (requestCode == CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE) {
+            if (picUri != null && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // required permissions granted, start crop image activity
+                startCropImageActivity(picUri);
+            } else {
+                Toast.makeText(this, "Cancelling, required permissions are not granted", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+    private void startCropImageActivity(Uri imageUri) {
+        CropImage.activity(imageUri)
+                .start(this);
+    }
+
+
 
     private boolean attemptLogin() {
 
