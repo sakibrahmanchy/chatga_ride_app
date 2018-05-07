@@ -250,19 +250,15 @@ public class RegistrationActivity extends Activity {
         dialog.show();
 
         String password = "";
-        Call<RegistrationModel> call = apiService.signUpClient(userFirstName, userLastName,email,phoneNumber, password, deviceToken, birthDate,referralCode);
+        Call<RegistrationModel> call = apiService.signUpClient(userFirstName, userLastName,email,phoneNumber, password, deviceToken, gender, birthDate,referralCode);
 
         call.enqueue(new Callback<RegistrationModel>() {
             @Override
             public void onResponse(Call<RegistrationModel> call, Response<RegistrationModel> response) {
 
                 int statusCode = response.code();
-                String testStatusCode = statusCode+"";
-                Snackbar.make(findViewById(android.R.id.content), testStatusCode,
-                        Snackbar.LENGTH_SHORT).show();
                 dialog.dismiss();
                 switch(statusCode){
-
                     case 201:
                         String responseCode = response.body().getSuccess();
 
@@ -306,8 +302,6 @@ public class RegistrationActivity extends Activity {
                         break;
                     case 500:
                         try {
-                            //JSONObject error = new JSONObject(response.errorBody().string());
-                            //String errorCode = error.getString("message");
                             String error = response.errorBody().string();
                             Log.d(TAG, error);
                             Snackbar.make(findViewById(android.R.id.content), error,
