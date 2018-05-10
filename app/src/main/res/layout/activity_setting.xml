@@ -9,50 +9,50 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/layout">
+        android:id="@+id/layout"
+        >
 
-                 <LinearLayout
-                     android:layout_height="wrap_content"
-                     android:layout_width="match_parent"
-                     android:id="@+id/linear_layout"
-                     android:orientation="vertical">
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:id="@+id/linear_layout"
+            android:orientation="vertical"
+            android:paddingTop="20dp"
+            android:background="@color/colorPrimary">
 
-                     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                         android:id="@+id/profile_pic"
-                         android:layout_width="100dp"
-                         android:layout_height="100dp"
-                         android:clickable="true"
-                         android:elevation="5dp"
-                         android:layout_gravity="center"
-                         android:src="@drawable/profile_image"
-                         app:civ_border_color="#FFFFFFFF"
-                         app:civ_border_width="3dp" />
-                     <TextView
-                         android:id="@+id/profile_name"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:layout_gravity="center"
-                         android:text="NAME"
-                         android:textSize="@dimen/midum_font_size" />
+            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/profile_pic"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:clickable="true"
+                android:elevation="5dp"
+                android:layout_gravity="center"
+                android:src="@drawable/profile_image"
+                app:civ_border_color="#FFFFFFFF"
+                app:civ_border_width="3dp" />
+            <TextView
+                android:id="@+id/profile_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="NAME"
+                android:paddingTop="10dp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/x_large_font_size" />
 
-                     <TextView
-                         android:id="@+id/profile_phone"
-                         android:layout_width="wrap_content"
-                         android:layout_height="match_parent"
-                         android:layout_gravity="center"
-                         android:text="PHONE"
-                         android:textColor="@color/colorPrimary"
-                         android:textSize="@dimen/small_font_size" />
+            <TextView
+                android:id="@+id/profile_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:text="PHONE"
+                android:textColor="@color/white"
+                android:textSize="@dimen/small_font_size"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"/>
 
-                     <ImageView
-                         android:id="@+id/edit_profile"
-                         android:layout_width="20dp"
-                         android:layout_height="20dp"
-                         android:layout_gravity="center"
-                         android:background="@android:color/holo_orange_dark"
-                         android:src="@drawable/ic_action_edit" />
 
-                 </LinearLayout>
+        </LinearLayout>
 
 
         <TableLayout
@@ -60,13 +60,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/linear_layout"
-            android:background="#fff"
-            android:elevation="4dp"
-
+            android:background="@color/white"
             android:orientation="vertical">
 
 
-            <TableRow android:background="@drawable/profile_border">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -136,41 +136,44 @@
 
 
                 </LinearLayout>
-            </TableRow>
-
-            <TableRow
-                android:layout_marginTop="50dp"
-                android:background="@drawable/profile_border"
+            </FrameLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:background="@color/colorAccent"
+                android:gravity="bottom"
+                android:layout_marginTop="20dp"
                 android:paddingLeft="10dp">
 
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/icon_login_50" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/icon_login_50" />
-
-                    <TextView
-                        android:id="@+id/action_logout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="20dp"
-                        android:text="Sign Out"
-                        android:theme="@style/PrimaryFlatButton"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="@dimen/midum_font_size" />
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/action_logout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="20dp"
+                    android:text="Sign Out"
+                    android:theme="@style/PrimaryFlatButton"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/midum_font_size" />
+            </LinearLayout>
 
 
-            </TableRow>
         </TableLayout>
-
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/edit_profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_action_edit"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="10dp"/>
 
     </RelativeLayout>
+
 </ScrollView>

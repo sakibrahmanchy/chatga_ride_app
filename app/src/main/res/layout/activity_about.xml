@@ -4,8 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.demoriderctg.arif.demorider.About.AboutActivity">
-    <LinearLayout
+    tools:context="com.demoriderctg.arif.demorider.About.AboutActivity"
+    android:background="@color/grey_300">
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp">
+        <LinearLayout
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:gravity="center"
@@ -43,9 +48,12 @@
                 android:textSize="@dimen/tinny_font_size"
                 android:textColor="@color/colorButtonBlack"
                 android:textStyle="bold"
+                android:padding="20dp"
                 android:text="Chatga ride and the chatga ride logos are trademarks of chatga ride Inc.All right reserved."
                 android:layout_height="match_parent" />
         </LinearLayout>
     </LinearLayout>
+    </android.support.v7.widget.CardView>
+
 
 </android.support.constraint.ConstraintLayout>

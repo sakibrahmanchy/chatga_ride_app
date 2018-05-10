@@ -36,7 +36,7 @@ import java.util.UUID;
 
 import io.fabric.sdk.android.Fabric;
 
-public class MainActivity extends AppCompatActivity {
+public class    MainActivity extends AppCompatActivity {
 
     public static final String TAG = "Mainactivity";
     private static final int ERROR_DIALOG_REQUEST = 9001;
