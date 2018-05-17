@@ -38,14 +38,6 @@ import static com.demoriderctg.arif.demorider.MainActivity.TAG;
 
 public class LoginHelper {
 
-    String clientId;
-    String clientSecret;
-    String grantType;
-    String APP_ID;
-
-    EditText mPhoneNumberField;
-    Button mStartButton;
-
     private ProgressDialog dialog;
     private ApiInterface apiService;
     private SharedPreferences pref;

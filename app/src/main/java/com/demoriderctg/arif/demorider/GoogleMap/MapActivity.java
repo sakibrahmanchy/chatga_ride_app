@@ -3,6 +3,7 @@ package com.demoriderctg.arif.demorider.GoogleMap;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,10 +13,13 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
@@ -74,6 +78,9 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.Places;
@@ -105,8 +112,10 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
+import static com.demoriderctg.arif.demorider.AppConfig.AppConstant.MY_PERMISSIONS_REQUEST_LOCATION;
+
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback,
-        GoogleApiClient.OnConnectionFailedListener, NavigationView.OnNavigationItemSelectedListener {
+        GoogleApiClient.OnConnectionFailedListener, NavigationView.OnNavigationItemSelectedListener,GoogleApiClient.ConnectionCallbacks, LocationListener {
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -124,64 +133,69 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         this, R.raw.style_json));
 
         mMap.getUiSettings().setCompassEnabled(false);
+        mMap.getUiSettings().setMyLocationButtonEnabled(false);
+        if (Build.VERSION.SDK_INT  >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this,
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+                buildGoogleApiClient();
+                // Although the user’s location will update automatically on a regular basis, you can also
+                // give your users a way of triggering a location update manually. Here, we’re adding a
+                // ‘My Location’ button to the upper-right corner of our app; when the user taps this button,
+                // the camera will update and center on the user’s current location//
+
+                mMap.setMyLocationEnabled(true);
+            }
+        }
+  else {
+            buildGoogleApiClient();
+            mMap.setMyLocationEnabled(true);
+        }
         mMap.setMyLocationEnabled(true);
 
-        mMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
-            @Override
-            public void onCameraMoveStarted(int i) {
+        mMap.setOnCameraMoveStartedListener(i -> {
 
-            }
         });
 
-        mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
-            @Override
-            public void onCameraIdle() {
-                // Cleaning all the markers.
-
-
-                LatLng changeLocation = mMap.getCameraPosition().target;
-                CheckService(changeLocation);
-                try {
-                    List<Address> myList = myLocation.getFromLocation(changeLocation.latitude, changeLocation.longitude, 1);
-                    if(myList.size()>0){
-                        Address address = (Address) myList.get(0);
-                        if(AppConstant.SOURCE_SELECT){
-                            AppConstant.searchSorceLocationModel.homeLocationName = address.getAddressLine(0);
-                            AppConstant.searchSorceLocationModel.home = changeLocation;
-                        }
-                        else{
-                            AppConstant.searchDestinationLocationModel.workLocationName = address.getAddressLine(0);
-                            AppConstant.searchDestinationLocationModel.work = changeLocation;
-                        }
+        mMap.setOnCameraIdleListener(() -> {
+            // Cleaning all the markers.
+            LatLng changeLocation = mMap.getCameraPosition().target;
+            CheckService(changeLocation);
+            try {
+                List<Address> myList = myLocation.getFromLocation(changeLocation.latitude, changeLocation.longitude, 1);
+                if(myList.size()>0){
+                    Address address = (Address) myList.get(0);
+                    if(AppConstant.SOURCE_SELECT){
+                        AppConstant.searchSorceLocationModel.homeLocationName = address.getAddressLine(0);
+                        AppConstant.searchSorceLocationModel.home = changeLocation;
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    else{
+                        AppConstant.searchDestinationLocationModel.workLocationName = address.getAddressLine(0);
+                        AppConstant.searchDestinationLocationModel.work = changeLocation;
+                    }
                 }
-
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+
         });
-        if (mLocationPermissionsGranted) {
-
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
-                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
-            mMap.getUiSettings().setMyLocationButtonEnabled(false);
-            init();
-            getDeviceLocation();
-        }
+//        if (mLocationPermissionsGranted) {
+//
+//            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+//                    != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+//                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//                return;
+//            }
+//            mMap.getUiSettings().setMyLocationButtonEnabled(false);
+//            init();
+//           // getDeviceLocation();
+//        }
     }
 
     private static final String TAG = "MapActivity";
     private static final String TAGHEIGHT = "HEIGHTS";
-    private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
-    private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
+
     public static boolean sendtBtnClick =false;
-    private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
-            new LatLng(54.69726685890506, -2.7379201682812226), new LatLng(55.38942944437183, -1.2456105979687226));
-    String CurrentLocation;
     //widgets
     private FloatingActionButton sendButton;
     private ImageView mGps;
@@ -194,23 +208,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private NavigationView navigationView;
     private Handler getLocationNameHandler = new Handler();
-    //vars
-    private Boolean mLocationPermissionsGranted = false;
     private GoogleMap mMap;
-    private FusedLocationProviderClient mFusedLocationProviderClient;
-    private PlaceAutocompleteAdapter mPlaceAutocompleteAdapter;
     private GoogleApiClient mGoogleApiClient;
-    private LatLng source, dest;
     private String phonemumber;
-    private ProgressBar spinner;
     private LoginData loginData;
     private UserInformation userInformation;
     private Marker sourceMarker,destinationMarker=null;
     TextView userFirstName;
     TextView userPhoneNumber;
-    private Address address;
-    private int PLACE_PICKER_REQUEST = 1;
-    private int PLACE_PICKER_REQUEST_DESTINATION = 2;
     private  ImageView defaultImageMarker;
 
 
@@ -218,7 +223,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public long back_pressed;
     private ConnectionCheck connectionCheck;
     private SharedPreferences.Editor editor;
-    private String activityChangeForSearch = null;
     public static Context contextOfApplication;
     private BottomSheetBehavior mBottomSheetBehavior;
     private View bottomSheet;
@@ -228,16 +232,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private TextView serviceNotAvailable;
     private RatingBar userRating;
     private View v;
-
-    private GetCurrentLocation getCurrentLocation;
-
-
     private LinearLayout linearLayout;
 
     private boolean isTotalHeightFound = false;
     private boolean isActionHeightFound = false;
     private boolean isSearchHeightFound = false;
-    private boolean isAppShowCased = false;
     private VmCurrentLocation  vmCurrentLocation;
     Geocoder myLocation;
 
@@ -248,11 +247,23 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private float bottomSheetMinimumSize = 0.9f;
     private float bottomSheetCurrentSize;
     private ImageView navBarToggle;
+    LocationRequest mLocationRequest;
+    private ProgressDialog dialog;
 
+    private boolean FirstLoad = true;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map_activity);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            checkLocationPermission();
+        }
+
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(MapActivity.this);
+
         contextOfApplication = getApplicationContext();
         drawerLayout = (DrawerLayout) findViewById(R.id.drawLayout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.app_name, R.string.app_name);
@@ -264,7 +275,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         searchContainer = findViewById(R.id.searchLinearLayout);
         serviceNotAvailable =findViewById(R.id.service_not_available);
         serviceNotAvailable.setVisibility(View.INVISIBLE);
-        getCurrentLocation = new GetCurrentLocation(this);
         defaultImageMarker = findViewById(R.id.default_image_Marker);
         navBarToggle = findViewById(R.id.nav_drawer_toggle);
         navBarToggle.setOnClickListener(new View.OnClickListener() {
@@ -280,6 +290,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         bottomSheet.setScaleX(bottomSheetMinimumSize);
         bottomSheetCurrentSize = bottomSheetMinimumSize;
         mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        dialog = new ProgressDialog(this);
+        dialog.setMessage("Loading map.....");
+        dialog.setCancelable(false);
+        dialog.show();
         getPeekHeightOfScrollBar();
 
         mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
@@ -297,7 +311,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
                 // React to dragging events
-
                 findViewById(R.id.bg).setVisibility(View.VISIBLE);
                 findViewById(R.id.bg).setAlpha(slideOffset);
                 if(slideOffset>=bottomSheetMinimumSize){
@@ -331,15 +344,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             }
         });
-
-        getLocationPermission();
         InitializationAll();
-
+        init();
         getSupportActionBar().hide();
 
     }
 
 
+    @SuppressLint("SetTextI18n")
     private void InitializationAll() {
         sourceText = (TextView) findViewById(R.id.sourceText);
         destinationText = (TextView) findViewById(R.id.destinationText);
@@ -421,9 +433,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 .addApi(Places.PLACE_DETECTION_API)
                 .enableAutoManage(this, this)
                 .build();
-
-        mPlaceAutocompleteAdapter = new PlaceAutocompleteAdapter(this, mGoogleApiClient,
-                LAT_LNG_BOUNDS, null);
 
 
         sourceText.setOnClickListener(new View.OnClickListener() {
@@ -601,110 +610,38 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
     private void getDeviceLocation() {
-
         if(connectionCheck.isGpsEnable()){
-
-            try {
-                myLocation = new Geocoder(MapActivity.this, Locale.getDefault());
-                vmCurrentLocation = new VmCurrentLocation();
-                vmCurrentLocation.latitude=getCurrentLocation.getLatitude();
-                vmCurrentLocation.logitude=getCurrentLocation.getLongitude();
-                List<Address> myList = myLocation.getFromLocation(vmCurrentLocation.latitude, vmCurrentLocation.logitude, 1);
-                if(myList.size()>0){
-
-                    Address address = myList.get(0);
-                    Gson gson = new Gson();
-                    String json = gson.toJson(vmCurrentLocation);
-                    editor.putString("currentLocation",json);
-                    editor.commit();
-                    AppConstant.searchSorceLocationModel = new HomeLocationModel();
-                    AppConstant.searchDestinationLocationModel = new WorkLocationModel();
-                    AppConstant.searchSorceLocationModel.homeLocationName = address.getAddressLine(0);
-                    AppConstant.searchSorceLocationModel.home = new LatLng(vmCurrentLocation.latitude, vmCurrentLocation.logitude);
-                    AppConstant.searchDestinationLocationModel.workLocationName = AppConstant.searchSorceLocationModel.homeLocationName;
-                    AppConstant.searchDestinationLocationModel.work =AppConstant.searchSorceLocationModel.home;
-
-                    String sourceLocation = AppConstant .searchSorceLocationModel.homeLocationName;
-                    sourceText.setText(sourceLocation);
-
-                    moveCamera(new LatLng(vmCurrentLocation.latitude, vmCurrentLocation.logitude),
-                            AppConstant.DEFAULT_ZOOM, "Default");
-                    CheckService(AppConstant.searchSorceLocationModel.home);
-                }
-                Runnable runnableForStartRide = new Runnable() {
-                    @Override
-                    public void run() {
-                        if(myList.size()>0){
-
-                            Address address = myList.get(0);
-                            Gson gson = new Gson();
-                            String json = gson.toJson(vmCurrentLocation);
-                            editor.putString("currentLocation",json);
-                            editor.commit();
-                            AppConstant.searchSorceLocationModel = new HomeLocationModel();
-                            AppConstant.searchDestinationLocationModel = new WorkLocationModel();
-                            AppConstant.searchSorceLocationModel.homeLocationName = address.getAddressLine(0);
-                            AppConstant.searchSorceLocationModel.home = new LatLng(vmCurrentLocation.latitude, vmCurrentLocation.logitude);
-                            AppConstant.searchDestinationLocationModel.workLocationName = AppConstant.searchSorceLocationModel.homeLocationName;
-                            AppConstant.searchDestinationLocationModel.work =AppConstant.searchSorceLocationModel.home;
-
-                            String sourceLocation = AppConstant .searchSorceLocationModel.homeLocationName;
-                            sourceText.setText(sourceLocation);
-
-                            moveCamera(new LatLng(vmCurrentLocation.latitude, vmCurrentLocation.logitude),
-                                    AppConstant.DEFAULT_ZOOM, "Default");
-                            CheckService(AppConstant.searchSorceLocationModel.home);
-                        }
-                        else {
-                            getLocationNameHandler.postDelayed(this, 1000);
-                        }
-
-
+            Runnable runnableForStartRide = new Runnable() {
+                @Override
+                public void run() {
+                    List<Address> myList = null;
+                    try {
+                        myList = myLocation.getFromLocation(vmCurrentLocation.latitude, vmCurrentLocation.logitude, 1);
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                };
-                if(myList.size()==0){
-                    getLocationNameHandler.postDelayed(runnableForStartRide,1000);
+                    if (myList.size() > 0) {
+
+                        Address address = myList.get(0);
+                        AppConstant.searchSorceLocationModel = new HomeLocationModel();
+                        AppConstant.searchDestinationLocationModel = new WorkLocationModel();
+                        AppConstant.searchSorceLocationModel.homeLocationName = address.getAddressLine(0);
+                        AppConstant.searchSorceLocationModel.home = new LatLng(vmCurrentLocation.latitude, vmCurrentLocation.logitude);
+                        AppConstant.searchDestinationLocationModel.workLocationName = AppConstant.searchSorceLocationModel.homeLocationName;
+                        AppConstant.searchDestinationLocationModel.work = AppConstant.searchSorceLocationModel.home;
+                        String sourceLocation = AppConstant.searchSorceLocationModel.homeLocationName;
+                        sourceText.setText(sourceLocation);
+                        moveCamera(new LatLng(vmCurrentLocation.latitude, vmCurrentLocation.logitude),
+                                AppConstant.DEFAULT_ZOOM, "Default");
+                        CheckService(AppConstant.searchSorceLocationModel.home);
+                    } else {
+                        getLocationNameHandler.postDelayed(this, 1000);
+                    }
                 }
+            };
+            getLocationNameHandler.postDelayed(runnableForStartRide,1000);
 
-
-                if(!sharedpreferences.getString("APP_SHOWCASED","").equals("true"))
-                    showCaseApp();
-
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
-        else {
-            vmCurrentLocation = userInformation.getUserCurrentLocation();
-            if(vmCurrentLocation !=null){
-                AppConstant.searchSorceLocationModel = new HomeLocationModel();
-                AppConstant.searchSorceLocationModel.homeLocationName = vmCurrentLocation.locationName;
-                AppConstant.searchSorceLocationModel.home = new LatLng(vmCurrentLocation.latitude,
-                        vmCurrentLocation.logitude);
-                String sourceLocation = AppConstant .searchSorceLocationModel.homeLocationName;
-                sourceText.setText(sourceLocation);
-                moveCamera(new LatLng(vmCurrentLocation.latitude, vmCurrentLocation.logitude),
-                        AppConstant.DEFAULT_ZOOM,
-
-                        "Source");
-            }
-            else{
-                AppConstant.searchSorceLocationModel = new HomeLocationModel();
-                AppConstant.searchSorceLocationModel.homeLocationName = "UNKNOWN";
-                AppConstant.searchSorceLocationModel.home = new LatLng(AppConstant.LAT_LNG_BOUNDS_CTG.southwest.latitude,
-                        AppConstant.LAT_LNG_BOUNDS_CTG.southwest.longitude);
-                String sourceLocation = AppConstant .searchSorceLocationModel.homeLocationName;
-                sourceText.setText(sourceLocation);
-                moveCamera(AppConstant.LAT_LNG_BOUNDS_CTG.southwest,
-                         AppConstant.DEFAULT_ZOOM,
-
-                        "Source");
-            }
-            Toast.makeText(getContextOfApplication(),"GPS OFF",Toast.LENGTH_SHORT).show();
-        }
-
-
 
     }
 
@@ -764,36 +701,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
-    private void initMap() {
-        Log.d(TAG, "initMap: initializing map");
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
-        mapFragment.getMapAsync(MapActivity.this);
-
-    }
-
-    private void getLocationPermission() {
-        Log.d(TAG, "getLocationPermission: getting location permissions");
-        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION};
-
-        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                    COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                mLocationPermissionsGranted = true;
-                initMap();
-            } else {
-                ActivityCompat.requestPermissions(this,
-                        permissions,
-                        LOCATION_PERMISSION_REQUEST_CODE);
-            }
-        } else {
-            ActivityCompat.requestPermissions(this,
-                    permissions,
-                    LOCATION_PERMISSION_REQUEST_CODE);
-        }
-    }
 
     private void hideSoftKeyboard() {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -823,16 +731,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         return url;
     }
 
-    public static void hideKeyboard(Activity activity) {
-        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        //Find the currently focused view, so we can grab the correct window token from it.
-        View view = activity.getCurrentFocus();
-        //If no view currently has focus, create a new one, just so we can grab a window token from it
-        if (view == null) {
-            view = new View(activity);
-        }
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
+
 
 @Override
 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -1038,7 +937,7 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         ShowcaseConfig config = new ShowcaseConfig();
         config.setDelay(500); // half second between each showcase view
-        config.setShapePadding(-400);
+        config.setShapePadding(-450);
         MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, "ShowCaseMain" );
         sequence.setConfig(config);
         drawerLayout.openDrawer(Gravity.START);
@@ -1088,9 +987,155 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
             serviceNotAvailable.setVisibility(View.VISIBLE);
             sendButton.setVisibility(View.INVISIBLE);
             return false;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public boolean checkLocationPermission() {
+
+        // In Android 6.0 and higher you need to request permissions at runtime, and the user has
+        // the ability to grant or deny each permission. Users can also revoke a previously-granted
+        // permission at any time, so your app must always check that it has access to each
+        // permission, before trying to perform actions that require that permission. Here, we’re using
+        // ContextCompat.checkSelfPermission to check whether this app currently has the
+        // ACCESS_COARSE_LOCATION permission
+
+        if (ContextCompat.checkSelfPermission(this,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                // If your app does have access to COARSE_LOCATION, then this method will return
+                // PackageManager.PERMISSION_GRANTED//
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                // If your app doesn’t have this permission, then you’ll need to request it by calling
+                // the ActivityCompat.requestPermissions method//
+                requestPermissions(new String[]{
+                                android.Manifest.permission.ACCESS_COARSE_LOCATION
+                        },
+                        AppConstant.MY_PERMISSIONS_REQUEST_LOCATION);
+            } else {
+                // Request the permission by launching Android’s standard permissions dialog.
+                // If you want to provide any additional information, such as why your app requires this
+                // particular permission, then you’ll need to add this information before calling
+                // requestPermission //
+                requestPermissions(new String[]{
+                                android.Manifest.permission.ACCESS_COARSE_LOCATION
+                        },
+                        AppConstant.MY_PERMISSIONS_REQUEST_LOCATION);
+            }
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        // Use the GoogleApiClient.Builder class to create an instance of the
+        // Google Play Services API client//
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addApi(LocationServices.API)
+                .build();
+
+        // Connect to Google Play Services, by calling the connect() method//
+        mGoogleApiClient.connect();
+    }
+
+    @SuppressLint("RestrictedApi")
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(2000);
+        if (ContextCompat.checkSelfPermission(this,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            // Retrieve the user’s last known location//
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
+                    mLocationRequest, this);
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
 
     }
 
+    @Override
+    public void onLocationChanged(Location location) {
+        List<Address> myList = null;
+        myLocation = new Geocoder(MapActivity.this, Locale.getDefault());
+        vmCurrentLocation = new VmCurrentLocation();
+        if(location !=null){
+            vmCurrentLocation.latitude=location.getLatitude();
+            vmCurrentLocation.logitude=location.getLongitude();
+        }
+        if(FirstLoad && location!=null){
+            moveCamera(new LatLng(vmCurrentLocation.latitude, vmCurrentLocation.logitude),
+                    AppConstant.DEFAULT_ZOOM, "Default");
+        }
+
+        Runnable runnableForStartRide = new Runnable() {
+            @Override
+            public void run() {
+                List<Address> myList = null;
+                try {
+                    myList = myLocation.getFromLocation(vmCurrentLocation.latitude, vmCurrentLocation.logitude, 1);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if (myList !=null) {
+                    dialog.cancel();
+                    Address address = myList.get(0);
+                    AppConstant.searchSorceLocationModel = new HomeLocationModel();
+                    AppConstant.searchDestinationLocationModel = new WorkLocationModel();
+                    AppConstant.searchSorceLocationModel.homeLocationName = address.getAddressLine(0);
+                    AppConstant.searchSorceLocationModel.home = new LatLng(vmCurrentLocation.latitude, vmCurrentLocation.logitude);
+                    AppConstant.searchDestinationLocationModel.workLocationName = AppConstant.searchSorceLocationModel.homeLocationName;
+                    AppConstant.searchDestinationLocationModel.work = AppConstant.searchSorceLocationModel.home;
+                    String sourceLocation = AppConstant.searchSorceLocationModel.homeLocationName;
+                    sourceText.setText(sourceLocation);
+                    if(!sharedpreferences.getString("APP_SHOWCASED","").equals("true"))
+                        showCaseApp();
+                    CheckService(AppConstant.searchSorceLocationModel.home);
+                } else {
+                    getLocationNameHandler.postDelayed(this, 1000);
+                }
+            }
+        };
+        if(myList == null && location!=null && FirstLoad){
+            FirstLoad=false;
+            getLocationNameHandler.postDelayed(runnableForStartRide,1000);
+
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_LOCATION:
+            {
+
+                // If the request is cancelled, the result array will be empty (0)//
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // If the user has granted your permission request, then your app can now perform all its
+                    // location-related tasks, including displaying the user’s location on the map//
+                    if (ContextCompat.checkSelfPermission(this,
+                            android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                            == PackageManager.PERMISSION_GRANTED) {
+                        if (mGoogleApiClient == null) {
+                            buildGoogleApiClient();
+                        }
+                        mMap.setMyLocationEnabled(true);
+                    }
+                } else {
+                    // If the user has denied your permission request, then at this point you may want to
+                    // disable any functionality that depends on this permission//
+                }
+                return;
+            }
+        }
+    }
 }
 
 

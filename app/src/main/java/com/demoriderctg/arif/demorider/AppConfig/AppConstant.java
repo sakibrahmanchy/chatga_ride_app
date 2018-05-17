@@ -120,5 +120,7 @@ public class AppConstant {
 
     /*Session ID */
     public static String SESSION_KEY = FirebaseConstant.Empty;
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
+
 
 }
