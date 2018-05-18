@@ -16,6 +16,7 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="profile_width">75dp</dimen>
     <dimen name="profile_height">75dp</dimen>
+    <dimen name="x_large_font_size">24sp</dimen>
     <dimen name="large_font_size">18sp</dimen>
     <dimen name="midum_font_size">16sp</dimen>
     <dimen name="small_font_size">14sp</dimen>

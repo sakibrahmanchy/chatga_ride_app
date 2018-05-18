@@ -72,6 +72,7 @@ public interface ApiInterface {
                                          @Field("phone_number") String phoneNumber,
                                          @Field("password") String password,
                                          @Field("device_token") String deviceToken,
+                                         @Field("gender") String gender,
                                          @Field("birth_date") String birthDate,
                                          @Field("referral_code") String referral_code);
 

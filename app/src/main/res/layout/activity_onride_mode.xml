@@ -175,7 +175,7 @@
                            android:layout_marginBottom="8dp"
                            android:gravity="right"
                            android:text="Contact Rider"
-                           android:textColor="#000"
+                           android:textColor="@color/white"
                            android:textSize="@dimen/large_font_size" />
 
                    </LinearLayout>

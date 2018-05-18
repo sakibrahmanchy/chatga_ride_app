@@ -74,7 +74,8 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     private void setAllInformation(){
-        profileName.setText(loginData.firstName);
+        String name = loginData.getFirstName()+" "+loginData.getLastName();
+        profileName.setText(name);
         phoneNumber.setText("+88"+ loginData.phone);
         if(userInformation.getUserHomeLocation() !=null){
             homeLocation.setText(userInformation.getUserHomeLocation().homeLocationName);
