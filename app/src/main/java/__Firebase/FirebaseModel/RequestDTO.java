@@ -13,14 +13,14 @@ import __Firebase.FirebaseWrapper;
 
 public class RequestDTO {
 
-    private long requestID;
-    private long clientID;
-    private long riderID;
-    private long distance;
-    private String sourceName;
-    private String destinationName;
-    private String sourceLatLng;
-    private String destinationLatLng;
+    public long requestID;
+    public long clientID;
+    public long riderID;
+    public long distance;
+    public String sourceName;
+    public String destinationName;
+    public String sourceLatLng;
+    public String destinationLatLng;
 
     public RequestDTO(long _requestID, long _clientID, long _riderID, long _distance, String _sourceName, String _destinationName, String _sourceLatLng, String _destinationLatLan) {
         this.requestID = _requestID;

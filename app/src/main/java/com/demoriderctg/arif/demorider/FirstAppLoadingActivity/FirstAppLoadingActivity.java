@@ -12,12 +12,17 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.widget.Toast;
 
 
 import com.crashlytics.android.Crashlytics;
 import com.demoriderctg.arif.demorider.ActiveContext;
 import com.demoriderctg.arif.demorider.AppConfig.AppConstant;
+import com.demoriderctg.arif.demorider.FacebookAccountVerificationActivity;
+import com.demoriderctg.arif.demorider.GoogleMap.MapActivity;
+import com.demoriderctg.arif.demorider.InternetConnection.InternetCheckActivity;
 import com.demoriderctg.arif.demorider.MainActivity;
 import com.demoriderctg.arif.demorider.OnrideMode.OnrideModeActivity;
 import com.demoriderctg.arif.demorider.R;
@@ -37,6 +42,7 @@ import com.google.gson.Gson;
 
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import ContactWithFirebase.Main;
 import io.fabric.sdk.android.Fabric;
@@ -89,11 +95,9 @@ public class FirstAppLoadingActivity extends AppCompatActivity {
                    if(AppConstant.IS_RIDE !=2 ){
 
                        if(AppConstant.IS_RIDE == 0){
-                           Intent intent = new Intent(FirstAppLoadingActivity.this, MainActivity.class);
                            main.UpdateNameImageAndRatting(loginData.getFirstName()+" "+loginData.getLastName(),
                                    loginData.getAvatar(),loginData.getRating()+"");
-                           startActivity(intent);
-                           finish();
+                           requestForSpecificPermission();
                        }
                        if(AppConstant.IS_RIDE==1){
 
@@ -291,4 +295,63 @@ public class FirstAppLoadingActivity extends AppCompatActivity {
         });
 
     }
+
+    private void requestForSpecificPermission() {
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_SMS,
+                Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.CALL_PHONE,Manifest.permission.READ_PHONE_STATE}, 101);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case 101:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED &&
+                        grantResults[2] == PackageManager.PERMISSION_GRANTED && grantResults[3]==PackageManager.PERMISSION_GRANTED) {
+                    if(loginData !=null){
+                        getDeviceID();
+
+                            Intent intent = new Intent(FirstAppLoadingActivity.this, MapActivity.class);
+                            startActivity(intent);
+                            finish();
+                    }
+
+                } else {
+                    //not granted
+                    Toast.makeText(getApplicationContext(), "Please Restart Application", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+    public void getDeviceID() {
+
+        try{
+            final TelephonyManager tm = (TelephonyManager) getBaseContext().getSystemService(Context.TELEPHONY_SERVICE);
+
+            final String tmDevice, tmSerial, androidId;
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            tmDevice = "" + tm.getDeviceId();
+            tmSerial = "" + tm.getSimSerialNumber();
+            androidId = "" + android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+
+            UUID deviceUuid = new UUID(androidId.hashCode(), ((long)tmDevice.hashCode() << 32) | tmSerial.hashCode());
+            String deviceId = deviceUuid.toString();
+            // AppConstant.SESSION_KEY = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+            AppConstant.SESSION_KEY =deviceId;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
 }

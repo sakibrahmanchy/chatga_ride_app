@@ -20,8 +20,8 @@ public class FabricExceptionLog {
 
     public static void sendLogToFabric(boolean isLogEnable, String... tagMessage) {
 
-        String tagClass = tagMessage.length > 1 ? tagMessage[0] : FirebaseConstant.NO_TAG_CLASS_FOUND;
-        String message = tagMessage.length > 2 ? tagMessage[1] : FirebaseConstant.NO_TAG_MESSAGE_FOUND;
+        String tagClass = tagMessage.length >= 1 ? tagMessage[0] : FirebaseConstant.NO_TAG_CLASS_FOUND;
+        String message = tagMessage.length >= 2 ? tagMessage[1] : FirebaseConstant.NO_TAG_MESSAGE_FOUND;
 
         if (isLogEnable && AppConstant.IS_LOG_ENABLE) {
             Log.d(tagClass, message);

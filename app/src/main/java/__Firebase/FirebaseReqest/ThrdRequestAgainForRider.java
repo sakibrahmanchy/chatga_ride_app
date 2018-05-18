@@ -159,10 +159,12 @@ public class ThrdRequestAgainForRider {
         FirebaseWrapper.getInstance().getRiderViewModelInstance().ClearData(false);
 
         /*Request for another ride*/
-        Double SourceLat = AppConstant.SOURCE.latitude;
-        Double SourceLan = AppConstant.SOURCE.longitude;
-        Double DestinationLat = AppConstant.DESTINATION.latitude;
-        Double DestinationLan = AppConstant.DESTINATION.longitude;
+
+        Double SourceLat = AppConstant.searchSorceLocationModel.home.latitude;
+        Double SourceLan = AppConstant.searchSorceLocationModel.home.longitude;
+        Double DestinationLat = AppConstant.searchDestinationLocationModel.work.latitude;
+        Double DestinationLan = AppConstant.searchDestinationLocationModel.work.longitude;
+
         Pair Source = Pair.create(SourceLat, SourceLan);
         Pair Destination = Pair.create(DestinationLat, DestinationLan);
         int DiscountId = 0;

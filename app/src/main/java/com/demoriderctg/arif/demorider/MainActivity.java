@@ -174,7 +174,7 @@ public class    MainActivity extends AppCompatActivity {
         }
     }
 
-    private void getDeviceID() {
+    public void getDeviceID() {
         final TelephonyManager tm = (TelephonyManager) getBaseContext().getSystemService(Context.TELEPHONY_SERVICE);
 
         final String tmDevice, tmSerial, androidId;
